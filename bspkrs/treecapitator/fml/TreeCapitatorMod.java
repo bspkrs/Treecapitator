@@ -23,7 +23,7 @@ import bspkrs.fml.util.Config;
 import bspkrs.treecapitator.*;
 import bspkrs.util.ModVersionChecker;
 
-@Mod(name="TreeCapitator", modid="TreeCapitator", version="FML 1.3.2.r06", useMetadata=true)
+@Mod(name="TreeCapitator", modid="TreeCapitator", version="FML 1.3.2.r07", useMetadata=true)
 @NetworkMod(clientSideRequired=false, serverSideRequired=false)
 public class TreeCapitatorMod
 {
@@ -62,7 +62,6 @@ public class TreeCapitatorMod
         TreeCapitator.disableCreativeDrops = Config.getBoolean(config, "disableCreativeDrops", ctgyGen, TreeCapitator.disableCreativeDrops, TreeCapitator.disableCreativeDropsDesc);
         TreeCapitator.allowItemDamage = Config.getBoolean(config, "allowItemDamage", ctgyGen, TreeCapitator.allowItemDamage, TreeCapitator.allowItemDamageDesc);
         TreeCapitator.allowMoreBlocksThanDamage = Config.getBoolean(config, "allowMoreBlocksThanDamage", ctgyGen, TreeCapitator.allowMoreBlocksThanDamage, TreeCapitator.allowMoreBlocksThanDamageDesc);
-        TreeCapitator.damageMultiplier = Config.getFloat(config, "damageMultiplier", ctgyGen, TreeCapitator.damageMultiplier, 0.01F, 100F, TreeCapitator.damageMultiplierDesc);
         TreeCapitator.sneakAction = Config.getString(config, "sneakAction", ctgyGen, TreeCapitator.sneakAction, TreeCapitator.sneakActionDesc);
         TreeCapitator.maxBreakDistance = Config.getInt(config, "maxBreakDistance", ctgyGen, TreeCapitator.maxBreakDistance, -1, 100, TreeCapitator.maxBreakDistanceDesc);
 		config.save();
