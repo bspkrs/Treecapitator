@@ -23,12 +23,12 @@ import bspkrs.fml.util.Config;
 import bspkrs.treecapitator.*;
 import bspkrs.util.ModVersionChecker;
 
-@Mod(name="TreeCapitator", modid="TreeCapitator", version="FML 1.3.2.r08", useMetadata=true)
+@Mod(name="TreeCapitator", modid="TreeCapitator", version="FML 1.4.2.r01", useMetadata=true)
 @NetworkMod(clientSideRequired=false, serverSideRequired=false)
 public class TreeCapitatorMod
 {
     private static ModVersionChecker versionChecker;
-    private String versionURL = "https://dl.dropbox.com/u/20748481/Minecraft/1.3.1/treeCapitatorFML.version";
+    private String versionURL = "https://dl.dropbox.com/u/20748481/Minecraft/1.4.2/treeCapitatorFML.version";
     private String mcfTopic = "http://www.minecraftforum.net/topic/1009577-";
 
     @SideOnly(Side.CLIENT)
