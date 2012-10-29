@@ -23,7 +23,7 @@ import bspkrs.fml.util.Config;
 import bspkrs.treecapitator.*;
 import bspkrs.util.ModVersionChecker;
 
-@Mod(name="TreeCapitator", modid="TreeCapitator", version="FML 1.4.2.r01", useMetadata=true)
+@Mod(name="TreeCapitator", modid="TreeCapitator", version="FML 1.4.2.r02", useMetadata=true)
 @NetworkMod(clientSideRequired=false, serverSideRequired=false)
 public class TreeCapitatorMod
 {
