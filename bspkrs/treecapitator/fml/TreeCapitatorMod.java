@@ -23,7 +23,7 @@ import bspkrs.fml.util.Config;
 import bspkrs.treecapitator.*;
 import bspkrs.util.ModVersionChecker;
 
-@Mod(name="TreeCapitator", modid="TreeCapitator", version="FML 1.4.2.r02", useMetadata=true)
+@Mod(name="TreeCapitator", modid="TreeCapitator", version="FML 1.4.2.r03", useMetadata=true)
 @NetworkMod(clientSideRequired=false, serverSideRequired=false)
 public class TreeCapitatorMod
 {
@@ -40,6 +40,7 @@ public class TreeCapitatorMod
     public void preInit(FMLPreInitializationEvent event)
     {
         TreeCapitator.init();
+        TreeCapitator.isForge = true;
         metadata = event.getModMetadata();
         metadata.version = "FML " + TreeCapitator.versionNumber;
         versionChecker = new ModVersionChecker(metadata.name, metadata.version, versionURL, mcfTopic, FMLLog.getLogger());
