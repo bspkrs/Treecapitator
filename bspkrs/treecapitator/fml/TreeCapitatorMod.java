@@ -23,12 +23,12 @@ import bspkrs.fml.util.Config;
 import bspkrs.treecapitator.*;
 import bspkrs.util.ModVersionChecker;
 
-@Mod(name="TreeCapitator", modid="TreeCapitator", version="FML 1.4.2.r03", useMetadata=true)
+@Mod(name="TreeCapitator", modid="TreeCapitator", version="Forge 1.4.4.r01", useMetadata=true)
 @NetworkMod(clientSideRequired=false, serverSideRequired=false)
 public class TreeCapitatorMod
 {
     private static ModVersionChecker versionChecker;
-    private String versionURL = "https://dl.dropbox.com/u/20748481/Minecraft/1.4.2/treeCapitatorFML.version";
+    private String versionURL = "https://dl.dropbox.com/u/20748481/Minecraft/1.4.4/treeCapitatorForge.version";
     private String mcfTopic = "http://www.minecraftforum.net/topic/1009577-";
 
     @SideOnly(Side.CLIENT)
@@ -39,10 +39,9 @@ public class TreeCapitatorMod
     @PreInit
     public void preInit(FMLPreInitializationEvent event)
     {
-        TreeCapitator.init();
-        TreeCapitator.isForge = true;
+        TreeCapitator.init(true);
         metadata = event.getModMetadata();
-        metadata.version = "FML " + TreeCapitator.versionNumber;
+        metadata.version = "Forge " + TreeCapitator.versionNumber;
         versionChecker = new ModVersionChecker(metadata.name, metadata.version, versionURL, mcfTopic, FMLLog.getLogger());
         versionChecker.checkVersionWithLogging();
         Configuration config = new Configuration(event.getSuggestedConfigurationFile());
