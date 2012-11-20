@@ -1,41 +1,39 @@
 package bspkrs.treecapitator.fml;
 
 import java.util.EnumSet;
+
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.ModLoader;
 import net.minecraftforge.common.Configuration;
+import bspkrs.fml.util.Config;
+import bspkrs.treecapitator.TreeCapitator;
+import bspkrs.util.ModVersionChecker;
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.network.NetworkMod;
-import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.PreInit;
+import cpw.mods.fml.common.ModMetadata;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.asm.SideOnly;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.Mod.Init;
-import cpw.mods.fml.common.Mod.Metadata;
-import cpw.mods.fml.common.ModMetadata;
-import cpw.mods.fml.common.TickType;
-import bspkrs.fml.util.Config;
-import bspkrs.treecapitator.*;
-import bspkrs.util.ModVersionChecker;
+import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.registry.TickRegistry;
 
-@Mod(name="TreeCapitator", modid="TreeCapitator", version="Forge 1.4.4.r01", useMetadata=true)
-@NetworkMod(clientSideRequired=false, serverSideRequired=false)
+@Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge 1.4.4.r01", useMetadata = true)
+@NetworkMod(clientSideRequired = false, serverSideRequired = false)
 public class TreeCapitatorMod
 {
     private static ModVersionChecker versionChecker;
-    private String versionURL = "https://dl.dropbox.com/u/20748481/Minecraft/1.4.4/treeCapitatorForge.version";
-    private String mcfTopic = "http://www.minecraftforum.net/topic/1009577-";
-
+    private final String             versionURL = "https://dl.dropbox.com/u/20748481/Minecraft/1.4.4/treeCapitatorForge.version";
+    private final String             mcfTopic   = "http://www.minecraftforum.net/topic/1009577-";
+    
     @SideOnly(Side.CLIENT)
-    public static Minecraft mcClient;
-
-    public ModMetadata metadata;
-
+    public static Minecraft          mcClient;
+    
+    public ModMetadata               metadata;
+    
     @PreInit
     public void preInit(FMLPreInitializationEvent event)
     {
@@ -46,7 +44,7 @@ public class TreeCapitatorMod
         versionChecker.checkVersionWithLogging();
         Configuration config = new Configuration(event.getSuggestedConfigurationFile());
         String ctgyGen = Configuration.CATEGORY_GENERAL;
-
+        
         config.load();
         TreeCapitator.allowUpdateCheck = Config.getBoolean(config, "allowUpdateCheck", ctgyGen, TreeCapitator.allowUpdateCheck, TreeCapitator.allowUpdateCheckDesc);
         TreeCapitator.axeIDList = Config.getString(config, "axeIDList", ctgyGen, TreeCapitator.axeIDList, TreeCapitator.axeIDListDesc);
@@ -66,33 +64,34 @@ public class TreeCapitatorMod
         TreeCapitator.maxBreakDistance = Config.getInt(config, "maxBreakDistance", ctgyGen, TreeCapitator.maxBreakDistance, -1, 100, TreeCapitator.maxBreakDistanceDesc);
         config.save();
     }
-
+    
     @Init
     public void init(FMLInitializationEvent event)
     {
-        if(event.getSide().equals(Side.CLIENT))
+        if (event.getSide().equals(Side.CLIENT))
         {
             TickRegistry.registerTickHandler(new TreeCapitatorTicker(EnumSet.of(TickType.CLIENT)), Side.CLIENT);
             this.mcClient = FMLClientHandler.instance().getClient();
         }
     }
-
+    
     @SideOnly(Side.CLIENT)
     public static boolean onTick(TickType tick, boolean isStart)
     {
-        if (isStart) {
+        if (isStart)
+        {
             return true;
         }
-
+        
         if (mcClient != null && mcClient.thePlayer != null)
         {
-            if(TreeCapitator.allowUpdateCheck)
-                if(!versionChecker.isCurrentVersion())
-                    for(String msg : versionChecker.getInGameMessage())
+            if (TreeCapitator.allowUpdateCheck)
+                if (!versionChecker.isCurrentVersion())
+                    for (String msg : versionChecker.getInGameMessage())
                         mcClient.thePlayer.addChatMessage(msg);
             return false;
         }
-
+        
         return true;
     }
 }
