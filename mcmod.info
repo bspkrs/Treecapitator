@@ -2,7 +2,7 @@
 {
   "modid" : "TreeCapitator",
   "name" : "TreeCapitator",
-  "version" : "Forge 1.4.4.r01",
+  "version" : "Forge 1.4.5.r01",
   "url" : "http://www.minecraftforum.net/topic/1009577-",
   "credits": "Original by DaftPVF, currently maintained by bspkrs",
   "authors": [
@@ -12,7 +12,7 @@
   ],
   "description": "Allows you to chop down entire trees by breaking a single log.",
   "logoFile" : "",
-  "updateUrl" : "https://dl.dropbox.com/u/20748481/Minecraft/1.4.4/treeCapitatorForge.version",
+  "updateUrl" : "https://dl.dropbox.com/u/20748481/Minecraft/1.4.5/treeCapitatorForge.version",
   "parent" : "",
   "screenshots": [
   ]

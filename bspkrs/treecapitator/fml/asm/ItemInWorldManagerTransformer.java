@@ -7,9 +7,10 @@ package bspkrs.treecapitator.fml.asm;
 import static org.objectweb.asm.Opcodes.ALOAD;
 import static org.objectweb.asm.Opcodes.ASTORE;
 import static org.objectweb.asm.Opcodes.GETFIELD;
+import static org.objectweb.asm.Opcodes.GETSTATIC;
 import static org.objectweb.asm.Opcodes.IFNULL;
 import static org.objectweb.asm.Opcodes.ILOAD;
-import static org.objectweb.asm.Opcodes.INVOKESTATIC;
+import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
 import static org.objectweb.asm.Opcodes.ISTORE;
 
 import java.util.HashMap;
@@ -45,6 +46,8 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
          * create a HashMap to store the obfuscated names of classes, methods, and fields used in the transformation
          */
         obfStrings = new HashMap();
+        
+        /* 1.4.4 / 1.4.5 mappings */
         /* net.minecraft.src.ItemInWorldManager */
         obfStrings.put("className", "ir");
         /* net/minecraft/src/ItemInWorldManager */
@@ -178,6 +181,7 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
                         InsnList toInject = new InsnList();
                         
                         // construct instruction nodes for list
+                        toInject.add(new FieldInsnNode(GETSTATIC, "bspkrs/treecapitator/fml/TreeCapitatorMod", "instance", "Lbspkrs/treecapitator/fml/TreeCapitatorMod;"));
                         toInject.add(new VarInsnNode(ALOAD, 0));
                         toInject.add(new FieldInsnNode(GETFIELD, (String) hm.get("javaClassName"), (String) hm.get("worldFieldName"), "L" + (String) hm.get("worldJavaClassName") + ";"));
                         toInject.add(new VarInsnNode(ILOAD, 1));
@@ -187,7 +191,9 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
                         toInject.add(new VarInsnNode(ILOAD, mdIndex));
                         toInject.add(new VarInsnNode(ALOAD, 0));
                         toInject.add(new FieldInsnNode(GETFIELD, (String) hm.get("javaClassName"), (String) hm.get("entityPlayerFieldName"), "L" + (String) hm.get("entityPlayerMPJavaClassName") + ";"));
-                        toInject.add(new MethodInsnNode(INVOKESTATIC, "bspkrs/treecapitator/TreeCapitator", "onBlockHarvested", "(L" + (String) hm.get("worldJavaClassName") + ";IIIL" + (String) hm.get("blockJavaClassName") + ";IL" + (String) hm.get("entityPlayerJavaClassName") + ";)V"));
+                        toInject.add(new MethodInsnNode(INVOKEVIRTUAL, "bspkrs/treecapitator/fml/TreeCapitatorMod", "onBlockHarvested",
+                                "(L" + (String) hm.get("worldJavaClassName") + ";IIIL" + (String) hm.get("blockJavaClassName") + ";IL"
+                                        + (String) hm.get("entityPlayerJavaClassName") + ";)V"));
                         toInject.add(lmm1Node);
                         
                         m.instructions.insertBefore(m.instructions.get(index + offset), toInject);
