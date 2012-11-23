@@ -1,9 +1,8 @@
 package bspkrs.treecapitator.fml;
 
-import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.logging.Level;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.src.Block;
 import net.minecraft.src.BlockLeavesBase;
 import net.minecraft.src.BlockVine;
@@ -16,7 +15,6 @@ import bspkrs.treecapitator.TreeBlockBreaker;
 import bspkrs.treecapitator.TreeCapitator;
 import bspkrs.util.CommonUtils;
 import bspkrs.util.ModVersionChecker;
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -24,39 +22,38 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.ModMetadata;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.TickType;
-import cpw.mods.fml.common.asm.SideOnly;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
-import cpw.mods.fml.common.registry.TickRegistry;
 
-@Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge 1.4.5.r01", useMetadata = true)
+@Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge 1.4.5.r02", useMetadata = true)
 @NetworkMod(clientSideRequired = false, serverSideRequired = false)
 public class TreeCapitatorMod
 {
-    private static ModVersionChecker versionChecker;
-    private final String             versionURL = "https://dl.dropbox.com/u/20748481/Minecraft/1.4.5/treeCapitatorForge.version";
-    private final String             mcfTopic   = "http://www.minecraftforum.net/topic/1009577-";
+    public static ModVersionChecker versionChecker;
+    private final String            versionURL = "https://dl.dropbox.com/u/20748481/Minecraft/1.4.5/treeCapitatorForge.version";
+    private final String            mcfTopic   = "http://www.minecraftforum.net/topic/1009577-";
     
-    private HashMap                  leafClasses;
-    private String                   idList     = "17;";
-    private final static String      idListDesc = "Add the ID of log blocks (and optionally leaf blocks) that you want to be able to TreeCapitate. Format is \"<logID>[|<leafID>];\" ([] indicates optional elements). Example: 17|18; 209; 210; 211; 212; 213; 243|242;";
+    private HashMap                 leafClasses;
+    private String                  idList     = "17;";
+    private final static String     idListDesc = "Add the ID of log blocks (and optionally leaf blocks) that you want to be able to TreeCapitate. Format is \"<logID>[|<leafID>];\" ([] indicates optional elements). Example: 17|18; 209; 210; 211; 212; 213; 243|242;";
     
-    @SideOnly(Side.CLIENT)
-    public static Minecraft          mcClient;
+    public ModMetadata              metadata;
     
-    public ModMetadata               metadata;
+    @SidedProxy(clientSide = "bspkrs.treecapitator.fml.ClientProxy", serverSide = "bspkrs.treecapitator.fml.CommonProxy")
+    public static CommonProxy       proxy;
     
     @Instance(value = "TreeCapitator")
-    public static TreeCapitatorMod   instance;
+    public static TreeCapitatorMod  instance;
+    
+    public TreeCapitatorMod()
+    {}
     
     @PreInit
     public void preInit(FMLPreInitializationEvent event)
     {
-        TreeCapitator.init(true);
         metadata = event.getModMetadata();
         metadata.version = "Forge " + TreeCapitator.versionNumber;
         versionChecker = new ModVersionChecker(metadata.name, metadata.version, versionURL, mcfTopic, FMLLog.getLogger());
@@ -88,78 +85,77 @@ public class TreeCapitatorMod
     @Init
     public void init(FMLInitializationEvent event)
     {
-        if (event.getSide().equals(Side.CLIENT))
-        {
-            TickRegistry.registerTickHandler(new TreeCapitatorTicker(EnumSet.of(TickType.CLIENT)), Side.CLIENT);
-            this.mcClient = FMLClientHandler.instance().getClient();
-            MinecraftForge.EVENT_BUS.register(new PlayerHandler());
-        }
+        MinecraftForge.EVENT_BUS.register(new PlayerHandler());
+        TreeCapitator.init(true);
+        proxy.registerTickHandler();
     }
     
     @PostInit
     public void postInit(FMLPostInitializationEvent event)
     {
-        /*
-         * Handle parsing of blocks list...
-         */
+        parseBlockIDList(idList);
+    }
+    
+    private void parseBlockIDList(String list)
+    {
         leafClasses = new HashMap();
         
-        if (idList.trim().length() > 0)
+        FMLLog.log(Level.INFO, "Parsing log ID list: %s", list);
+        if (list.trim().length() > 0)
         {
-            String[] groups = idList.trim().split(";");
+            String[] groups = list.trim().split(";");
             for (String group : groups)
             {
                 if (group.trim().length() > 0)
                 {
                     String[] ids = group.trim().split("\\|");
+                    
+                    FMLLog.log(Level.INFO, "Found Log Block ID: %s", list);
                     int logID = CommonUtils.parseInt(ids[0].trim());
+                    FMLLog.log(Level.INFO, "Interpretted: %s", logID);
                     int leafID = 18;
                     
                     if (ids.length > 1)
+                    {
+                        FMLLog.log(Level.INFO, "Found Leaf Block ID: %s", list);
                         leafID = CommonUtils.parseInt(ids[1].trim());
+                        FMLLog.log(Level.INFO, "Interpretted: %s", leafID);
+                    }
+                    else
+                        FMLLog.log(Level.INFO, "Leaf Block ID not provided; using %s", leafID);
                     
                     if (logID > 0)
                     {
                         Block log = Block.blocksList[logID];
-                        if (log != null && !TreeCapitator.logClasses.contains(log.getClass()))
+                        if (log != null)
                         {
-                            TreeCapitator.logClasses.add(log.getClass());
-                            
-                            Block leaf = Block.blocksList[leafID];
-                            if (leaf != null)
+                            if (!TreeCapitator.logClasses.contains(log.getClass()))
                             {
-                                if (leaf instanceof BlockLeavesBase)
-                                    leafClasses.put(log.getClass(), BlockLeavesBase.class);
+                                TreeCapitator.logClasses.add(log.getClass());
+                                FMLLog.log(Level.INFO, "Configured Log Block class: %s", log.getClass().getName());
+                                
+                                Block leaf = Block.blocksList[leafID];
+                                if (leaf != null)
+                                {
+                                    if (leaf instanceof BlockLeavesBase)
+                                        leafClasses.put(log.getClass(), BlockLeavesBase.class);
+                                    else
+                                        leafClasses.put(log.getClass(), leaf.getClass());
+                                }
                                 else
-                                    leafClasses.put(log.getClass(), leaf.getClass());
+                                    leafClasses.put(log.getClass(), BlockLeavesBase.class);
+                                
+                                FMLLog.log(Level.INFO, "Pairing Leaf Block class: %s", leafClasses.get(log.getClass()));
                             }
                             else
-                                leafClasses.put(log.getClass(), BlockLeavesBase.class);
+                                FMLLog.log(Level.INFO, "Block for ID %s is already configured", logID);
                         }
+                        else
+                            FMLLog.log(Level.WARNING, "Block ID %s not found", logID);
                     }
                 }
             }
         }
-    }
-    
-    @SideOnly(Side.CLIENT)
-    public static boolean onTick(TickType tick, boolean isStart)
-    {
-        if (isStart)
-        {
-            return true;
-        }
-        
-        if (mcClient != null && mcClient.thePlayer != null)
-        {
-            if (TreeCapitator.allowUpdateCheck)
-                if (!versionChecker.isCurrentVersion())
-                    for (String msg : versionChecker.getInGameMessage())
-                        mcClient.thePlayer.addChatMessage(msg);
-            return false;
-        }
-        
-        return true;
     }
     
     public void onBlockHarvested(World world, int x, int y, int z, Block block, int metadata, EntityPlayer entityPlayer)

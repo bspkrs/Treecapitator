@@ -2,6 +2,9 @@ package bspkrs.treecapitator.fml;
 
 import java.util.EnumSet;
 
+import net.minecraft.client.Minecraft;
+import bspkrs.treecapitator.TreeCapitator;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.TickType;
@@ -10,11 +13,14 @@ import cpw.mods.fml.common.asm.SideOnly;
 @SideOnly(Side.CLIENT)
 public class TreeCapitatorTicker implements ITickHandler
 {
+    private Minecraft         mcClient;
+    
     private EnumSet<TickType> tickTypes = EnumSet.noneOf(TickType.class);
     
     public TreeCapitatorTicker(EnumSet<TickType> tickTypes)
     {
         this.tickTypes = tickTypes;
+        this.mcClient = FMLClientHandler.instance().getClient();
     }
     
     @Override
@@ -33,12 +39,31 @@ public class TreeCapitatorTicker implements ITickHandler
     {
         for (TickType tickType : tickTypes)
         {
-            if (!TreeCapitatorMod.onTick(tickType, isStart))
+            if (!onTick(tickType, isStart))
             {
                 this.tickTypes.remove(tickType);
                 this.tickTypes.removeAll(tickType.partnerTicks());
             }
         }
+    }
+    
+    public boolean onTick(TickType tick, boolean isStart)
+    {
+        if (isStart)
+        {
+            return true;
+        }
+        
+        if (mcClient != null && mcClient.thePlayer != null)
+        {
+            if (TreeCapitator.allowUpdateCheck)
+                if (!TreeCapitatorMod.versionChecker.isCurrentVersion())
+                    for (String msg : TreeCapitatorMod.versionChecker.getInGameMessage())
+                        mcClient.thePlayer.addChatMessage(msg);
+            return false;
+        }
+        
+        return true;
     }
     
     @Override
