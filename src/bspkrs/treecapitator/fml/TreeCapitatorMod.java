@@ -28,7 +28,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 
-@Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge 1.4.5.r02", useMetadata = true)
+@Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge 1.4.5.r03", useMetadata = true)
 @NetworkMod(clientSideRequired = false, serverSideRequired = false)
 public class TreeCapitatorMod
 {
@@ -110,7 +110,7 @@ public class TreeCapitatorMod
                 {
                     String[] ids = group.trim().split("\\|");
                     
-                    FMLLog.log(Level.INFO, "Found Log Block ID: %s", list);
+                    FMLLog.log(Level.INFO, "Found Log Block ID: %s", ids[0].trim());
                     int logID = CommonUtils.parseInt(ids[0].trim());
                     FMLLog.log(Level.INFO, "Interpretted: %s", logID);
                     int leafID = 18;
