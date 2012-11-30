@@ -3,6 +3,7 @@ package bspkrs.treecapitator.fml;
 import java.util.EnumSet;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.src.EntityPlayerMP;
 import bspkrs.treecapitator.TreeCapitator;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ITickHandler;
@@ -60,6 +61,10 @@ public class TreeCapitatorTicker implements ITickHandler
                 if (!TreeCapitatorMod.versionChecker.isCurrentVersion())
                     for (String msg : TreeCapitatorMod.versionChecker.getInGameMessage())
                         mcClient.thePlayer.addChatMessage(msg);
+            
+            if (mcClient.isSingleplayer() && TreeCapitatorMod.isItemInWorldManagerReplaced((EntityPlayerMP) mcClient.getIntegratedServer().worldServerForDimension(mcClient.thePlayer.dimension).getPlayerEntityByName(mcClient.thePlayer.username)))
+                mcClient.thePlayer.addChatMessage("Warning: The ItemInWorldManager object for your player entity has been replaced (most likely by another mod). TreeCapitator will most likely not work.");
+            
             return false;
         }
         

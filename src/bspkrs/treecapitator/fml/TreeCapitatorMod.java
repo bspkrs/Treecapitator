@@ -7,6 +7,8 @@ import net.minecraft.src.Block;
 import net.minecraft.src.BlockLeavesBase;
 import net.minecraft.src.BlockVine;
 import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.EntityPlayerMP;
+import net.minecraft.src.ItemInWorldManager;
 import net.minecraft.src.World;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
@@ -165,5 +167,10 @@ public class TreeCapitatorMod
             TreeBlockBreaker breaker = new TreeBlockBreaker(entityPlayer, block.blockID, block.getClass(), (Class<?>) leafClasses.get(block.getClass()), BlockVine.class);
             breaker.onBlockHarvested(world, x, y, z, metadata, entityPlayer);
         }
+    }
+    
+    public static boolean isItemInWorldManagerReplaced(EntityPlayerMP player)
+    {
+        return !player.theItemInWorldManager.getClass().getSimpleName().equals(ItemInWorldManager.class.getSimpleName());
     }
 }
