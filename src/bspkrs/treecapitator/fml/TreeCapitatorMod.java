@@ -15,6 +15,7 @@ import net.minecraftforge.common.MinecraftForge;
 import bspkrs.fml.util.Config;
 import bspkrs.treecapitator.TreeBlockBreaker;
 import bspkrs.treecapitator.TreeCapitator;
+import bspkrs.util.BlockID;
 import bspkrs.util.CommonUtils;
 import bspkrs.util.ModVersionChecker;
 import cpw.mods.fml.common.FMLLog;
@@ -30,7 +31,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 
-@Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge 1.4.5.r03", useMetadata = true)
+@Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge 1.4.5.r04", useMetadata = true)
 @NetworkMod(clientSideRequired = false, serverSideRequired = false)
 public class TreeCapitatorMod
 {
@@ -39,7 +40,7 @@ public class TreeCapitatorMod
     private final String            mcfTopic   = "http://www.minecraftforum.net/topic/1009577-";
     
     private HashMap                 leafClasses;
-    private String                  idList     = "17;";
+    public static String            idList     = "17;";
     private final static String     idListDesc = "Add the ID of log blocks (and optionally leaf blocks) that you want to be able to TreeCapitate. Format is \"<logID>[|<leafID>];\" ([] indicates optional elements). Example: 17|18; 209; 210; 211; 212; 213; 243|242;";
     
     public ModMetadata              metadata;
@@ -102,52 +103,66 @@ public class TreeCapitatorMod
     {
         leafClasses = new HashMap();
         
-        FMLLog.log(Level.INFO, "Parsing log ID list: %s", list);
+        FMLLog.log(Level.INFO, "Parsing TreeCapitator log ID list: %s", list);
+        
         if (list.trim().length() > 0)
         {
-            String[] groups = list.trim().split(";");
-            for (String group : groups)
+            String[] trees = list.trim().split(";");
+            for (String blocks : trees)
             {
-                if (group.trim().length() > 0)
+                if (blocks.trim().length() > 0)
                 {
-                    String[] ids = group.trim().split("\\|");
+                    String[] blockEntry = blocks.trim().split("\\|");
                     
-                    FMLLog.log(Level.INFO, "Found Log Block ID: %s", ids[0].trim());
-                    int logID = CommonUtils.parseInt(ids[0].trim());
-                    FMLLog.log(Level.INFO, "Interpretted: %s", logID);
+                    FMLLog.log(Level.INFO, "Found Log Block ID: %s", blockEntry[0].trim());
+                    String[] prs = blockEntry[0].trim().split(",");
+                    int logID = CommonUtils.parseInt(prs[0].trim());
+                    int logMetadata = -1;
+                    
+                    if (prs.length > 1)
+                        logMetadata = CommonUtils.parseInt(prs[1].trim(), -1);
+                    
+                    FMLLog.log(Level.INFO, "Interpretted: %s, %s", logID, logMetadata);
                     int leafID = 18;
+                    int leafMetadata = -1;
                     
-                    if (ids.length > 1)
+                    if (blockEntry.length > 1)
                     {
-                        FMLLog.log(Level.INFO, "Found Leaf Block ID: %s", list);
-                        leafID = CommonUtils.parseInt(ids[1].trim());
-                        FMLLog.log(Level.INFO, "Interpretted: %s", leafID);
+                        FMLLog.log(Level.INFO, "Found Leaf Block ID: %s", blockEntry[1]);
+                        prs = blockEntry[1].trim().split(",");
+                        leafID = CommonUtils.parseInt(prs[0].trim(), 18);
+                        
+                        if (prs.length > 1)
+                            leafMetadata = CommonUtils.parseInt(prs[1].trim(), -1);
+                        
+                        FMLLog.log(Level.INFO, "Interpretted: %s, %s", leafID, leafMetadata);
                     }
                     else
-                        FMLLog.log(Level.INFO, "Leaf Block ID not provided; using %s", leafID);
+                        FMLLog.log(Level.INFO, "Leaf Block ID not provided; using %s, %s", leafID, leafMetadata);
                     
                     if (logID > 0)
                     {
-                        Block log = Block.blocksList[logID];
-                        if (log != null)
+                        Block block = Block.blocksList[logID];
+                        if (block != null)
                         {
-                            if (!TreeCapitator.logClasses.contains(log.getClass()))
+                            BlockID blockID = new BlockID(logID, logMetadata);
+                            if (!TreeCapitator.logList.contains(blockID))
                             {
-                                TreeCapitator.logClasses.add(log.getClass());
-                                FMLLog.log(Level.INFO, "Configured Log Block class: %s", log.getClass().getName());
+                                TreeCapitator.logList.add(block.getClass());
+                                FMLLog.log(Level.INFO, "Configured Log Block class: %s", block.getClass().getName());
                                 
                                 Block leaf = Block.blocksList[leafID];
                                 if (leaf != null)
                                 {
                                     if (leaf instanceof BlockLeavesBase)
-                                        leafClasses.put(log.getClass(), BlockLeavesBase.class);
+                                        leafClasses.put(block.getClass(), BlockLeavesBase.class);
                                     else
-                                        leafClasses.put(log.getClass(), leaf.getClass());
+                                        leafClasses.put(block.getClass(), leaf.getClass());
                                 }
                                 else
-                                    leafClasses.put(log.getClass(), BlockLeavesBase.class);
+                                    leafClasses.put(block.getClass(), BlockLeavesBase.class);
                                 
-                                FMLLog.log(Level.INFO, "Pairing Leaf Block class: %s", leafClasses.get(log.getClass()));
+                                FMLLog.log(Level.INFO, "Pairing Leaf Block class: %s", leafClasses.get(block.getClass()));
                             }
                             else
                                 FMLLog.log(Level.INFO, "Block for ID %s is already configured", logID);
@@ -162,7 +177,7 @@ public class TreeCapitatorMod
     
     public void onBlockHarvested(World world, int x, int y, int z, Block block, int metadata, EntityPlayer entityPlayer)
     {
-        if (TreeCapitator.logClasses.contains(block.getClass()))
+        if (TreeCapitator.logList.contains(block.getClass()))
         {
             TreeBlockBreaker breaker = new TreeBlockBreaker(entityPlayer, block.blockID, block.getClass(), (Class<?>) leafClasses.get(block.getClass()), BlockVine.class);
             breaker.onBlockHarvested(world, x, y, z, metadata, entityPlayer);
