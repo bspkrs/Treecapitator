@@ -39,7 +39,7 @@ public class TreeCapitatorMod
     private final String            versionURL = "https://dl.dropbox.com/u/20748481/Minecraft/1.4.5/treeCapitatorForge.version";
     private final String            mcfTopic   = "http://www.minecraftforum.net/topic/1009577-";
     
-    private HashMap                 leafClasses;
+    public HashMap                  leafList;
     public static String            idList     = "17;";
     private final static String     idListDesc = "Add the ID of log blocks (and optionally leaf blocks) that you want to be able to TreeCapitate. Format is \"<logID>[|<leafID>];\" ([] indicates optional elements). Example: 17|18; 209; 210; 211; 212; 213; 243|242;";
     
@@ -101,7 +101,7 @@ public class TreeCapitatorMod
     
     private void parseBlockIDList(String list)
     {
-        leafClasses = new HashMap();
+        leafList = new HashMap();
         
         FMLLog.log(Level.INFO, "Parsing TreeCapitator log ID list: %s", list);
         
@@ -145,30 +145,30 @@ public class TreeCapitatorMod
                         Block block = Block.blocksList[logID];
                         if (block != null)
                         {
-                            BlockID blockID = new BlockID(logID, logMetadata);
-                            if (!TreeCapitator.logList.contains(blockID))
+                            BlockID logBlockID = new BlockID(logID, logMetadata);
+                            if (!TreeCapitator.logList.contains(logBlockID))
                             {
-                                TreeCapitator.logList.add(block.getClass());
-                                FMLLog.log(Level.INFO, "Configured Log Block class: %s", block.getClass().getName());
+                                TreeCapitator.logList.add(logBlockID);
+                                FMLLog.log(Level.INFO, "Configured Log Block ID: %s", logBlockID.toString());
                                 
                                 Block leaf = Block.blocksList[leafID];
                                 if (leaf != null)
                                 {
                                     if (leaf instanceof BlockLeavesBase)
-                                        leafClasses.put(block.getClass(), BlockLeavesBase.class);
+                                        leafList.put(logBlockID, new BlockID(18, -1));
                                     else
-                                        leafClasses.put(block.getClass(), leaf.getClass());
+                                        leafList.put(logBlockID, new BlockID(leafID, leafMetadata));
                                 }
                                 else
-                                    leafClasses.put(block.getClass(), BlockLeavesBase.class);
+                                    leafList.put(logBlockID, new BlockID(18, -1));
                                 
-                                FMLLog.log(Level.INFO, "Pairing Leaf Block class: %s", leafClasses.get(block.getClass()));
+                                FMLLog.log(Level.INFO, "Pairing Leaf Block ID: %s", leafList.get(logBlockID).toString());
                             }
                             else
-                                FMLLog.log(Level.INFO, "Block for ID %s is already configured", logID);
+                                FMLLog.log(Level.INFO, "Block for ID %s, %s is already configured", logID, logMetadata);
                         }
                         else
-                            FMLLog.log(Level.WARNING, "Block ID %s not found", logID);
+                            FMLLog.log(Level.WARNING, "Block ID %s, %s not found", logID, logMetadata);
                     }
                 }
             }
@@ -177,9 +177,9 @@ public class TreeCapitatorMod
     
     public void onBlockHarvested(World world, int x, int y, int z, Block block, int metadata, EntityPlayer entityPlayer)
     {
-        if (TreeCapitator.logList.contains(block.getClass()))
+        if (TreeCapitator.logList.contains(new BlockID(block)) || TreeCapitator.logList.contains(new BlockID(block, metadata)))
         {
-            TreeBlockBreaker breaker = new TreeBlockBreaker(entityPlayer, block.blockID, block.getClass(), (Class<?>) leafClasses.get(block.getClass()), BlockVine.class);
+            TreeBlockBreaker breaker = new TreeBlockBreaker(entityPlayer, block.blockID, block.getClass(), (Class<?>) leafList.get(block.getClass()), BlockVine.class);
             breaker.onBlockHarvested(world, x, y, z, metadata, entityPlayer);
         }
     }
