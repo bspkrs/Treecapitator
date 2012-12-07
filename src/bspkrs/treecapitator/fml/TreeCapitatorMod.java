@@ -5,7 +5,6 @@ import java.util.logging.Level;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.BlockLeavesBase;
-import net.minecraft.src.BlockVine;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.EntityPlayerMP;
 import net.minecraft.src.ItemInWorldManager;
@@ -128,7 +127,7 @@ public class TreeCapitatorMod
                     
                     if (blockEntry.length > 1)
                     {
-                        FMLLog.log(Level.INFO, "Found Leaf Block ID: %s", blockEntry[1]);
+                        FMLLog.log(Level.INFO, "Found Leaf Block ID: %s", blockEntry[1].trim());
                         prs = blockEntry[1].trim().split(",");
                         leafID = CommonUtils.parseInt(prs[0].trim(), 18);
                         
@@ -162,7 +161,7 @@ public class TreeCapitatorMod
                                 else
                                     leafList.put(logBlockID, new BlockID(18, -1));
                                 
-                                FMLLog.log(Level.INFO, "Pairing Leaf Block ID: %s", leafList.get(logBlockID).toString());
+                                FMLLog.log(Level.INFO, "Pairing Leaf Block ID: %s", ((BlockID) leafList.get(logBlockID)).toString());
                             }
                             else
                                 FMLLog.log(Level.INFO, "Block for ID %s, %s is already configured", logID, logMetadata);
@@ -177,9 +176,14 @@ public class TreeCapitatorMod
     
     public void onBlockHarvested(World world, int x, int y, int z, Block block, int metadata, EntityPlayer entityPlayer)
     {
-        if (TreeCapitator.logList.contains(new BlockID(block)) || TreeCapitator.logList.contains(new BlockID(block, metadata)))
+        if (TreeCapitator.logList.contains(new BlockID(block)))
         {
-            TreeBlockBreaker breaker = new TreeBlockBreaker(entityPlayer, block.blockID, block.getClass(), (Class<?>) leafList.get(block.getClass()), BlockVine.class);
+            TreeBlockBreaker breaker = new TreeBlockBreaker(entityPlayer, new BlockID(block), leafList);
+            breaker.onBlockHarvested(world, x, y, z, metadata, entityPlayer);
+        }
+        else if (TreeCapitator.logList.contains(new BlockID(block, metadata)))
+        {
+            TreeBlockBreaker breaker = new TreeBlockBreaker(entityPlayer, new BlockID(block, metadata), leafList);
             breaker.onBlockHarvested(world, x, y, z, metadata, entityPlayer);
         }
     }
