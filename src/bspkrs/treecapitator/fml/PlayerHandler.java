@@ -17,7 +17,7 @@ public class PlayerHandler
             if (blockID > 0)
             {
                 Block block = Block.blocksList[blockID];
-                if (block != null && TreeCapitator.logList.contains(block.getClass()))
+                if (block != null && TreeCapitator.logIDList.contains(block.getClass()))
                     block.setHardness(TreeBlockBreaker.getBlockHardness(event.entityPlayer));
             }
         }
