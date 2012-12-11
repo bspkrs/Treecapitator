@@ -1,7 +1,5 @@
 package bspkrs.treecapitator.fml;
 
-import java.util.HashMap;
-
 import net.minecraft.src.Block;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.EntityPlayerMP;
@@ -35,7 +33,6 @@ public class TreeCapitatorMod
     private final String            versionURL = "https://dl.dropbox.com/u/20748481/Minecraft/1.4.5/treeCapitatorForge.version";
     private final String            mcfTopic   = "http://www.minecraftforum.net/topic/1009577-";
     
-    public HashMap                  leafList;
     public static String            idList     = "17;";
     private final static String     idListDesc = "Add the ID of log blocks (and optionally leaf blocks) that you want to be able to TreeCapitate. Format is \"<logID>[|<leafID>];\" ([] indicates optional elements). Example: 17|18; 209; 210; 211; 212; 213; 243|242;";
     
@@ -100,12 +97,12 @@ public class TreeCapitatorMod
     {
         if (TreeCapitator.logIDList.contains(new BlockID(block)))
         {
-            TreeBlockBreaker breaker = new TreeBlockBreaker(entityPlayer, new BlockID(block), leafList);
+            TreeBlockBreaker breaker = new TreeBlockBreaker(entityPlayer, new BlockID(block));
             breaker.onBlockHarvested(world, x, y, z, metadata, entityPlayer);
         }
         else if (TreeCapitator.logIDList.contains(new BlockID(block, metadata)))
         {
-            TreeBlockBreaker breaker = new TreeBlockBreaker(entityPlayer, new BlockID(block, metadata), leafList);
+            TreeBlockBreaker breaker = new TreeBlockBreaker(entityPlayer, new BlockID(block, metadata));
             breaker.onBlockHarvested(world, x, y, z, metadata, entityPlayer);
         }
     }
