@@ -18,23 +18,26 @@ import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
+import cpw.mods.fml.common.Mod.ServerStarted;
 import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 
-@Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge 1.4.5.r04", useMetadata = true)
-@NetworkMod(clientSideRequired = false, serverSideRequired = false)
+@Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge " + TreeCapitator.versionNumber, useMetadata = true)
+@NetworkMod(clientSideRequired = false, serverSideRequired = false,
+        clientPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = ClientPacketHandler.class),
+        serverPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = ServerPacketHandler.class),
+        connectionHandler = ConnectionHandler.class)
 public class TreeCapitatorMod
 {
     public static ModVersionChecker versionChecker;
     private final String            versionURL = "https://dl.dropbox.com/u/20748481/Minecraft/1.4.5/treeCapitatorForge.version";
     private final String            mcfTopic   = "http://www.minecraftforum.net/topic/1009577-";
-    
-    public static String            idList     = "17;";
-    private final static String     idListDesc = "Add the ID of log blocks (and optionally leaf blocks) that you want to be able to TreeCapitate. Format is \"<logID>[|<leafID>];\" ([] indicates optional elements). Example: 17|18; 209; 210; 211; 212; 213; 243|242;";
     
     public ModMetadata              metadata;
     
@@ -74,7 +77,9 @@ public class TreeCapitatorMod
         TreeCapitator.allowMoreBlocksThanDamage = Config.getBoolean(config, "allowMoreBlocksThanDamage", ctgyGen, TreeCapitator.allowMoreBlocksThanDamage, TreeCapitator.allowMoreBlocksThanDamageDesc);
         TreeCapitator.sneakAction = Config.getString(config, "sneakAction", ctgyGen, TreeCapitator.sneakAction, TreeCapitator.sneakActionDesc);
         TreeCapitator.maxBreakDistance = Config.getInt(config, "maxBreakDistance", ctgyGen, TreeCapitator.maxBreakDistance, -1, 100, TreeCapitator.maxBreakDistanceDesc);
-        idList = Config.getString(config, "logIDList", ctgyGen, idList, idListDesc);
+        TreeCapitator.logBlockList = Config.getString(config, "logBlockList", ctgyGen, TreeCapitator.logBlockList, TreeCapitator.logBlockListDesc);
+        TreeCapitator.leafBlockList = Config.getString(config, "leafBlockList", ctgyGen, TreeCapitator.leafBlockList, TreeCapitator.leafBlockListDesc);
+        // TODO: add parser for old idList format to convert to new list format so that people don't bitch
         config.save();
     }
     
@@ -83,27 +88,33 @@ public class TreeCapitatorMod
     {
         MinecraftForge.EVENT_BUS.register(new PlayerHandler());
         TreeCapitator.init(true);
-        proxy.registerTickHandler();
+        proxy.onLoad();
     }
     
     @PostInit
     public void postInit(FMLPostInitializationEvent event)
     {
-        TreeCapitator.parseBlockIDList(TreeCapitator.logBlockList, TreeCapitator.logIDList, FMLLog.getLogger());
-        TreeCapitator.parseBlockIDList(TreeCapitator.leafBlockList, TreeCapitator.leafIDList, FMLLog.getLogger());
+        TreeCapitator.parseBlockIDList(TreeCapitator.logBlockList, TreeCapitator.logIDList);
+        TreeCapitator.parseBlockIDList(TreeCapitator.leafBlockList, TreeCapitator.leafIDList);
+    }
+    
+    @ServerStarted
+    public void serverStarted(FMLServerStartedEvent event)
+    {
+        new TreeCapitatorServer();
     }
     
     public void onBlockHarvested(World world, int x, int y, int z, Block block, int metadata, EntityPlayer entityPlayer)
     {
-        if (TreeCapitator.logIDList.contains(new BlockID(block)))
+        BlockID blockID = new BlockID(block, metadata);
+        
+        if (TreeCapitator.isBlockConfigured(blockID))
         {
-            TreeBlockBreaker breaker = new TreeBlockBreaker(entityPlayer, new BlockID(block));
-            breaker.onBlockHarvested(world, x, y, z, metadata, entityPlayer);
-        }
-        else if (TreeCapitator.logIDList.contains(new BlockID(block, metadata)))
-        {
-            TreeBlockBreaker breaker = new TreeBlockBreaker(entityPlayer, new BlockID(block, metadata));
-            breaker.onBlockHarvested(world, x, y, z, metadata, entityPlayer);
+            if (TreeBlockBreaker.isBreakingPossible(world, entityPlayer))
+            {
+                TreeBlockBreaker breaker = new TreeBlockBreaker(entityPlayer, blockID);
+                breaker.onBlockHarvested(world, x, y, z, metadata, entityPlayer);
+            }
         }
     }
     

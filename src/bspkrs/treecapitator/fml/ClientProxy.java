@@ -11,8 +11,15 @@ import cpw.mods.fml.common.registry.TickRegistry;
 public class ClientProxy extends CommonProxy
 {
     @Override
-    public void registerTickHandler()
+    public void onLoad()
     {
+        new TreeCapitatorClient();
         TickRegistry.registerTickHandler(new TreeCapitatorTicker(EnumSet.of(TickType.CLIENT)), Side.CLIENT);
+    }
+    
+    @Override
+    public boolean isEnabled()
+    {
+        return TreeCapitatorClient.instance.serverDetected;
     }
 }
