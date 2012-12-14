@@ -108,11 +108,12 @@ public class TreeCapitatorMod
     {
         BlockID blockID = new BlockID(block, metadata);
         
-        if (TreeCapitator.isBlockConfigured(blockID))
+        if (TreeCapitator.isLogConfigured(blockID))
         {
             if (TreeBlockBreaker.isBreakingPossible(world, entityPlayer))
             {
-                TreeBlockBreaker breaker = new TreeBlockBreaker(entityPlayer, blockID);
+                
+                TreeBlockBreaker breaker = new TreeBlockBreaker(entityPlayer, TreeCapitator.logIDList.get(TreeCapitator.logIDList.indexOf(blockID)));
                 breaker.onBlockHarvested(world, x, y, z, metadata, entityPlayer);
             }
         }
