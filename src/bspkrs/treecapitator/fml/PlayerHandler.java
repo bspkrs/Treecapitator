@@ -22,7 +22,7 @@ public class PlayerHandler
                 
                 BlockID blockID = new BlockID(block, metadata);
                 
-                if (TreeCapitator.isLogConfigured(blockID))
+                if (TreeCapitator.isLogBlock(blockID))
                 {
                     block.setHardness(TreeBlockBreaker.getBlockHardness(event.entityPlayer));
                 }

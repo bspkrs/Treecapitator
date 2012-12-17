@@ -28,10 +28,13 @@ public class TreeCapitatorClient
         FMLClientHandler.instance().getClient().thePlayer.addChatMessage("TreeCapitator server detected. Client-side features enabled.");
     }
     
-    public void onServerConfigReceived(String logBlockList, String axeIDList, float logHardnessNormal, float logHardnessModified)
+    public void onServerConfigReceived(String blockIDList, String axeIDList, float logHardnessNormal, float logHardnessModified)
     {
-        TreeCapitator.logBlockList = logBlockList;
-        TreeCapitator.parseBlockIDList(TreeCapitator.logBlockList, TreeCapitator.logIDList);
+        TreeCapitator.blockIDList = blockIDList;
+        
+        if (!FMLClientHandler.instance().getClient().isSingleplayer())
+            TreeCapitator.parsePairedBlockIDList(TreeCapitator.blockIDList);
+        
         TreeCapitator.axeIDList = axeIDList;
         TreeCapitator.logHardnessNormal = logHardnessNormal;
         TreeCapitator.logHardnessModified = logHardnessModified;
