@@ -39,7 +39,7 @@ public class TreeCapitatorMod
     private final String            versionURL    = "https://dl.dropbox.com/u/20748481/Minecraft/1.4.5/treeCapitatorForge.version";
     private final String            mcfTopic      = "http://www.minecraftforum.net/topic/1009577-";
     
-    public static final String      BLOCK_ID_CTGY = "block_ids";
+    public static final String      BLOCK_ID_CTGY = "tree_block_ids";
     
     public ModMetadata              metadata;
     
@@ -76,10 +76,10 @@ public class TreeCapitatorMod
         TreeCapitator.allowMoreBlocksThanDamage = Config.getBoolean(config, "allowMoreBlocksThanDamage", ctgyGen, TreeCapitator.allowMoreBlocksThanDamage, TreeCapitator.allowMoreBlocksThanDamageDesc);
         TreeCapitator.sneakAction = Config.getString(config, "sneakAction", ctgyGen, TreeCapitator.sneakAction, TreeCapitator.sneakActionDesc);
         TreeCapitator.maxBreakDistance = Config.getInt(config, "maxBreakDistance", ctgyGen, TreeCapitator.maxBreakDistance, -1, 100, TreeCapitator.maxBreakDistanceDesc);
-        config.addCustomCategoryComment(BLOCK_ID_CTGY, TreeCapitator.configBlockIDDesc);
         
         if (!config.hasCategory(BLOCK_ID_CTGY))
         {
+            config.addCustomCategoryComment(BLOCK_ID_CTGY, TreeCapitator.configBlockIDDesc);
             for (String key : TreeCapitator.configBlockList.keySet())
             {
                 HashMap<String, String> entry = TreeCapitator.configBlockList.get(key);
@@ -89,14 +89,24 @@ public class TreeCapitatorMod
         }
         else
         {
+            config.addCustomCategoryComment(BLOCK_ID_CTGY, TreeCapitator.configBlockIDDesc);
             TreeCapitator.configBlockList = new HashMap<String, HashMap<String, String>>();
             
             for (String ctgy : config.categories.keySet())
             {
-                if (ctgy.indexOf(BLOCK_ID_CTGY) != -1 && !ctgy.equals(BLOCK_ID_CTGY))
+                if (ctgy.indexOf(BLOCK_ID_CTGY + ".") != -1)
                 {
-                    HashMap<String, String> logs = new HashMap<String, String>();
-                    // TODO: finish the config file input parsing
+                    HashMap<String, String> blocks = new HashMap<String, String>();
+                    
+                    if (config.getCategory(ctgy).containsKey(TreeCapitator.LOGS))
+                    {
+                        blocks.put(TreeCapitator.LOGS, config.getCategory(ctgy).get(TreeCapitator.LOGS).value);
+                        
+                        if (config.getCategory(ctgy).containsKey(TreeCapitator.LEAVES))
+                            blocks.put(TreeCapitator.LEAVES, config.getCategory(ctgy).get(TreeCapitator.LEAVES).value);
+                        
+                        TreeCapitator.configBlockList.put(ctgy, blocks);
+                    }
                 }
             }
         }
@@ -122,7 +132,7 @@ public class TreeCapitatorMod
     public void serverStarted(FMLServerStartedEvent event)
     {
         new TreeCapitatorServer();
-        TreeCapitator.parsePairedBlockIDList(TreeCapitator.blockIDList);
+        TreeCapitator.parseConfigBlockList(TreeCapitator.blockIDList);
     }
     
     public void onBlockHarvested(World world, int x, int y, int z, Block block, int metadata, EntityPlayer entityPlayer)
@@ -137,9 +147,9 @@ public class TreeCapitatorMod
                 TreeBlockBreaker breaker;
                 
                 if (TreeCapitator.useStrictBlockPairing)
-                    breaker = new TreeBlockBreaker(entityPlayer, blockID, TreeCapitator.logToLeafListMap.get(blockID));
+                    breaker = new TreeBlockBreaker(entityPlayer, TreeCapitator.logToLogListMap.get(blockID), TreeCapitator.logToLeafListMap.get(blockID));
                 else
-                    breaker = new TreeBlockBreaker(entityPlayer, blockID, TreeCapitator.leafIDList);
+                    breaker = new TreeBlockBreaker(entityPlayer, TreeCapitator.logIDList, TreeCapitator.leafIDList);
                 
                 breaker.onBlockHarvested(world, x, y, z, metadata, entityPlayer);
             }

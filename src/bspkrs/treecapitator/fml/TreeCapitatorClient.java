@@ -33,7 +33,7 @@ public class TreeCapitatorClient
         TreeCapitator.blockIDList = blockIDList;
         
         if (!FMLClientHandler.instance().getClient().isSingleplayer())
-            TreeCapitator.parsePairedBlockIDList(TreeCapitator.blockIDList);
+            TreeCapitator.parseConfigBlockList(TreeCapitator.blockIDList);
         
         TreeCapitator.axeIDList = axeIDList;
         TreeCapitator.logHardnessNormal = logHardnessNormal;
