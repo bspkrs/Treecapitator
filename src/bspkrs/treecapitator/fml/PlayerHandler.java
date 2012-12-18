@@ -1,6 +1,6 @@
 package bspkrs.treecapitator.fml;
 
-import net.minecraft.src.Block;
+import net.minecraft.block.Block;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import bspkrs.treecapitator.TreeBlockBreaker;
@@ -19,6 +19,9 @@ public class PlayerHandler
             if (block != null)
             {
                 int metadata = event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z);
+                
+                if (TreeCapitator.allowDebugOutput)
+                    TreeCapitatorMod.instance.proxy.debugOutputBlockID(block.blockID, metadata);
                 
                 BlockID blockID = new BlockID(block, metadata);
                 

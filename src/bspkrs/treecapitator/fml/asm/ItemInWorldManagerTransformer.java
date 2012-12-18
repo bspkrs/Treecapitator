@@ -124,17 +124,31 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
          * create a HashMap to store the MCP names of classes, methods, and fields used in the transformation
          */
         mcpStrings = new HashMap();
-        mcpStrings.put("className", "net.minecraft.src.ItemInWorldManager");
-        mcpStrings.put("javaClassName", "net/minecraft/src/ItemInWorldManager");
+        // Forge 6.4.2.408 mappings1.4.5
+        // mcpStrings.put("className", "net.minecraft.src.ItemInWorldManager");
+        // mcpStrings.put("javaClassName", "net/minecraft/src/ItemInWorldManager");
+        // mcpStrings.put("targetMethodName", "removeBlock");
+        // mcpStrings.put("worldFieldName", "theWorld");
+        // mcpStrings.put("entityPlayerFieldName", "thisPlayerMP");
+        // mcpStrings.put("worldJavaClassName", "net/minecraft/src/World");
+        // mcpStrings.put("getBlockMetadataMethodName", "getBlockMetadata");
+        // mcpStrings.put("blockJavaClassName", "net/minecraft/src/Block");
+        // mcpStrings.put("blocksListFieldName", "blocksList");
+        // mcpStrings.put("entityPlayerJavaClassName", "net/minecraft/src/EntityPlayer");
+        // mcpStrings.put("entityPlayerMPJavaClassName", "net/minecraft/src/EntityPlayerMP");
+        
+        // Forge 6.5.0.448 1.4.5 mappings
+        mcpStrings.put("className", "net.minecraft.item.ItemInWorldManager");
+        mcpStrings.put("javaClassName", "net/minecraft/item/ItemInWorldManager");
         mcpStrings.put("targetMethodName", "removeBlock");
         mcpStrings.put("worldFieldName", "theWorld");
         mcpStrings.put("entityPlayerFieldName", "thisPlayerMP");
-        mcpStrings.put("worldJavaClassName", "net/minecraft/src/World");
+        mcpStrings.put("worldJavaClassName", "net/minecraft/world/World");
         mcpStrings.put("getBlockMetadataMethodName", "getBlockMetadata");
-        mcpStrings.put("blockJavaClassName", "net/minecraft/src/Block");
+        mcpStrings.put("blockJavaClassName", "net/minecraft/block/Block");
         mcpStrings.put("blocksListFieldName", "blocksList");
-        mcpStrings.put("entityPlayerJavaClassName", "net/minecraft/src/EntityPlayer");
-        mcpStrings.put("entityPlayerMPJavaClassName", "net/minecraft/src/EntityPlayerMP");
+        mcpStrings.put("entityPlayerJavaClassName", "net/minecraft/entity/player/EntityPlayer");
+        mcpStrings.put("entityPlayerMPJavaClassName", "net/minecraft/entity/player/EntityPlayerMP");
     }
     
     @Override

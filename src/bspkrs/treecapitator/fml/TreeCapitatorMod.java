@@ -2,11 +2,11 @@ package bspkrs.treecapitator.fml;
 
 import java.util.HashMap;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.EntityPlayerMP;
-import net.minecraft.src.ItemInWorldManager;
-import net.minecraft.src.World;
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemInWorldManager;
+import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import bspkrs.fml.util.Config;
@@ -36,10 +36,14 @@ import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 public class TreeCapitatorMod
 {
     public static ModVersionChecker versionChecker;
-    private final String            versionURL    = "https://dl.dropbox.com/u/20748481/Minecraft/1.4.5/treeCapitatorForge.version";
-    private final String            mcfTopic      = "http://www.minecraftforum.net/topic/1009577-";
+    private final String            versionURL     = "https://dl.dropbox.com/u/20748481/Minecraft/1.4.5/treeCapitatorForge.version";
+    private final String            mcfTopic       = "http://www.minecraftforum.net/topic/1009577-";
     
-    public static final String      BLOCK_ID_CTGY = "tree_block_ids";
+    public static final String      BLOCK_ID_CTGY  = "block_id";
+    public static final String      BLOCK_SETTINGS = "block_settings";
+    public static final String      ITEM_CTGY      = "item_settings";
+    public static final String      LEAF_VINE      = "leaf_and_vine_settings";
+    public static final String      MISC           = "miscellaneous_settings";
     
     public ModMetadata              metadata;
     
@@ -57,25 +61,34 @@ public class TreeCapitatorMod
     {
         metadata = event.getModMetadata();
         Configuration config = new Configuration(event.getSuggestedConfigurationFile());
-        String ctgyGen = Configuration.CATEGORY_GENERAL;
         
         config.load();
-        TreeCapitator.allowUpdateCheck = Config.getBoolean(config, "allowUpdateCheck", ctgyGen, TreeCapitator.allowUpdateCheck, TreeCapitator.allowUpdateCheckDesc);
-        TreeCapitator.axeIDList = Config.getString(config, "axeIDList", ctgyGen, TreeCapitator.axeIDList, TreeCapitator.axeIDListDesc);
-        TreeCapitator.needItem = Config.getBoolean(config, "needItem", ctgyGen, TreeCapitator.needItem, TreeCapitator.needItemDesc);
-        TreeCapitator.onlyDestroyUpwards = Config.getBoolean(config, "onlyDestroyUpwards", ctgyGen, TreeCapitator.onlyDestroyUpwards, TreeCapitator.onlyDestroyUpwardsDesc);
-        TreeCapitator.destroyLeaves = Config.getBoolean(config, "destroyLeaves", ctgyGen, TreeCapitator.destroyLeaves, TreeCapitator.destroyLeavesDesc);
-        TreeCapitator.shearLeaves = Config.getBoolean(config, "shearLeaves", ctgyGen, TreeCapitator.shearLeaves, TreeCapitator.shearLeavesDesc);
-        TreeCapitator.shearVines = Config.getBoolean(config, "shearVines", ctgyGen, TreeCapitator.shearVines, TreeCapitator.shearVinesDesc);
-        TreeCapitator.shearIDList = Config.getString(config, "shearIDList", ctgyGen, TreeCapitator.shearIDList, TreeCapitator.shearIDListDesc);;
-        TreeCapitator.logHardnessNormal = Config.getFloat(config, "logHardnessNormal", ctgyGen, TreeCapitator.logHardnessNormal, 0F, 100F, TreeCapitator.logHardnessNormalDesc);
-        TreeCapitator.logHardnessModified = Config.getFloat(config, "logHardnessModified", ctgyGen, TreeCapitator.logHardnessModified, 0F, 100F, TreeCapitator.logHardnessModifiedDesc);
-        TreeCapitator.disableInCreative = Config.getBoolean(config, "disableInCreative", ctgyGen, TreeCapitator.disableInCreative, TreeCapitator.disableInCreativeDesc);
-        TreeCapitator.disableCreativeDrops = Config.getBoolean(config, "disableCreativeDrops", ctgyGen, TreeCapitator.disableCreativeDrops, TreeCapitator.disableCreativeDropsDesc);
-        TreeCapitator.allowItemDamage = Config.getBoolean(config, "allowItemDamage", ctgyGen, TreeCapitator.allowItemDamage, TreeCapitator.allowItemDamageDesc);
-        TreeCapitator.allowMoreBlocksThanDamage = Config.getBoolean(config, "allowMoreBlocksThanDamage", ctgyGen, TreeCapitator.allowMoreBlocksThanDamage, TreeCapitator.allowMoreBlocksThanDamageDesc);
-        TreeCapitator.sneakAction = Config.getString(config, "sneakAction", ctgyGen, TreeCapitator.sneakAction, TreeCapitator.sneakActionDesc);
-        TreeCapitator.maxBreakDistance = Config.getInt(config, "maxBreakDistance", ctgyGen, TreeCapitator.maxBreakDistance, -1, 100, TreeCapitator.maxBreakDistanceDesc);
+        TreeCapitator.allowUpdateCheck = Config.getBoolean(config, "allowUpdateCheck", MISC, TreeCapitator.allowUpdateCheck, TreeCapitator.allowUpdateCheckDesc);
+        TreeCapitator.allowDebugOutput = Config.getBoolean(config, "allowDebugOutput", MISC, TreeCapitator.allowDebugOutput, TreeCapitator.allowDebugOutputDesc);
+        TreeCapitator.onlyDestroyUpwards = Config.getBoolean(config, "onlyDestroyUpwards", MISC, TreeCapitator.onlyDestroyUpwards, TreeCapitator.onlyDestroyUpwardsDesc);
+        TreeCapitator.disableInCreative = Config.getBoolean(config, "disableInCreative", MISC, TreeCapitator.disableInCreative, TreeCapitator.disableInCreativeDesc);
+        TreeCapitator.disableCreativeDrops = Config.getBoolean(config, "disableCreativeDrops", MISC, TreeCapitator.disableCreativeDrops, TreeCapitator.disableCreativeDropsDesc);
+        TreeCapitator.sneakAction = Config.getString(config, "sneakAction", MISC, TreeCapitator.sneakAction, TreeCapitator.sneakActionDesc);
+        TreeCapitator.maxBreakDistance = Config.getInt(config, "maxBreakDistance", MISC, TreeCapitator.maxBreakDistance, -1, 100, TreeCapitator.maxBreakDistanceDesc);
+        
+        TreeCapitator.axeIDList = Config.getString(config, "axeIDList", ITEM_CTGY, TreeCapitator.axeIDList, TreeCapitator.axeIDListDesc);
+        TreeCapitator.shearIDList = Config.getString(config, "shearIDList", ITEM_CTGY, TreeCapitator.shearIDList, TreeCapitator.shearIDListDesc);
+        TreeCapitator.needItem = Config.getBoolean(config, "needItem", ITEM_CTGY, TreeCapitator.needItem, TreeCapitator.needItemDesc);
+        TreeCapitator.allowItemDamage = Config.getBoolean(config, "allowItemDamage", ITEM_CTGY, TreeCapitator.allowItemDamage, TreeCapitator.allowItemDamageDesc);
+        TreeCapitator.allowMoreBlocksThanDamage = Config.getBoolean(config, "allowMoreBlocksThanDamage", ITEM_CTGY, TreeCapitator.allowMoreBlocksThanDamage, TreeCapitator.allowMoreBlocksThanDamageDesc);
+        
+        TreeCapitator.destroyLeaves = Config.getBoolean(config, "destroyLeaves", LEAF_VINE, TreeCapitator.destroyLeaves, TreeCapitator.destroyLeavesDesc);
+        TreeCapitator.shearLeaves = Config.getBoolean(config, "shearLeaves", LEAF_VINE, TreeCapitator.shearLeaves, TreeCapitator.shearLeavesDesc);
+        TreeCapitator.shearVines = Config.getBoolean(config, "shearVines", LEAF_VINE, TreeCapitator.shearVines, TreeCapitator.shearVinesDesc);
+        
+        TreeCapitator.allowGetOnlineTreeConfig = Config.getBoolean(config, "allowGetOnlineTreeConfig", BLOCK_SETTINGS, TreeCapitator.allowGetOnlineTreeConfig, TreeCapitator.allowGetOnlineTreeConfigDesc);
+        TreeCapitator.remoteTreeConfigURL = Config.getString(config, "remoteTreeConfigURL", BLOCK_SETTINGS, TreeCapitator.remoteTreeConfigURL, TreeCapitator.remoteTreeConfigURLDesc);
+        TreeCapitator.remoteTreeConfig = Config.getString(config, "remoteTreeConfig", BLOCK_SETTINGS, TreeCapitator.remoteTreeConfig, TreeCapitator.remoteTreeConfigDesc);
+        TreeCapitator.remoteTreeConfig = TreeCapitator.getRemoteConfig();
+        TreeCapitator.localTreeConfig = Config.getString(config, "localTreeConfig", BLOCK_SETTINGS, TreeCapitator.localTreeConfig, TreeCapitator.localTreeConfigDesc);
+        TreeCapitator.useOnlineTreeConfig = Config.getBoolean(config, "useOnlineTreeConfig", BLOCK_SETTINGS, TreeCapitator.useOnlineTreeConfig, TreeCapitator.useOnlineTreeConfigDesc);
+        TreeCapitator.logHardnessNormal = Config.getFloat(config, "logHardnessNormal", BLOCK_SETTINGS, TreeCapitator.logHardnessNormal, 0F, 100F, TreeCapitator.logHardnessNormalDesc);
+        TreeCapitator.logHardnessModified = Config.getFloat(config, "logHardnessModified", BLOCK_SETTINGS, TreeCapitator.logHardnessModified, 0F, 100F, TreeCapitator.logHardnessModifiedDesc);
         
         if (!config.hasCategory(BLOCK_ID_CTGY))
         {
@@ -132,26 +145,29 @@ public class TreeCapitatorMod
     public void serverStarted(FMLServerStartedEvent event)
     {
         new TreeCapitatorServer();
-        TreeCapitator.parseConfigBlockList(TreeCapitator.blockIDList);
+        TreeCapitator.parseConfigBlockList(TreeCapitator.localTreeConfig);
     }
     
     public void onBlockHarvested(World world, int x, int y, int z, Block block, int metadata, EntityPlayer entityPlayer)
     {
-        BlockID blockID = new BlockID(block, metadata);
-        
-        if (TreeCapitator.isLogBlock(blockID))
+        if (proxy.isEnabled())
         {
-            if (TreeBlockBreaker.isBreakingPossible(world, entityPlayer))
+            BlockID blockID = new BlockID(block, metadata);
+            
+            if (TreeCapitator.isLogBlock(blockID))
             {
-                blockID = TreeCapitator.logIDList.get(TreeCapitator.logIDList.indexOf(blockID));
-                TreeBlockBreaker breaker;
-                
-                if (TreeCapitator.useStrictBlockPairing)
-                    breaker = new TreeBlockBreaker(entityPlayer, TreeCapitator.logToLogListMap.get(blockID), TreeCapitator.logToLeafListMap.get(blockID));
-                else
-                    breaker = new TreeBlockBreaker(entityPlayer, TreeCapitator.logIDList, TreeCapitator.leafIDList);
-                
-                breaker.onBlockHarvested(world, x, y, z, metadata, entityPlayer);
+                if (TreeBlockBreaker.isBreakingPossible(world, entityPlayer))
+                {
+                    blockID = TreeCapitator.logIDList.get(TreeCapitator.logIDList.indexOf(blockID));
+                    TreeBlockBreaker breaker;
+                    
+                    if (TreeCapitator.useStrictBlockPairing)
+                        breaker = new TreeBlockBreaker(entityPlayer, TreeCapitator.logToLogListMap.get(blockID), TreeCapitator.logToLeafListMap.get(blockID));
+                    else
+                        breaker = new TreeBlockBreaker(entityPlayer, TreeCapitator.logIDList, TreeCapitator.leafIDList);
+                    
+                    breaker.onBlockHarvested(world, x, y, z, metadata, entityPlayer);
+                }
             }
         }
     }

@@ -2,6 +2,7 @@ package bspkrs.treecapitator.fml;
 
 import java.util.EnumSet;
 
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.asm.SideOnly;
@@ -21,5 +22,12 @@ public class ClientProxy extends CommonProxy
     public boolean isEnabled()
     {
         return TreeCapitatorClient.instance.serverDetected;
+    }
+    
+    @Override
+    public void debugOutputBlockID(int id, int metadata)
+    {
+        super.debugOutputBlockID(id, metadata);
+        FMLClientHandler.instance().getClient().thePlayer.addChatMessage("Block Clicked: " + id + ", " + metadata);
     }
 }

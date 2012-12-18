@@ -3,7 +3,7 @@ package bspkrs.treecapitator.fml;
 import java.util.EnumSet;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.EntityPlayerMP;
+import net.minecraft.entity.player.EntityPlayerMP;
 import bspkrs.treecapitator.TreeCapitator;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ITickHandler;
