@@ -10,11 +10,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import bspkrs.fml.util.Config;
+import bspkrs.treecapitator.TCLog;
 import bspkrs.treecapitator.TreeBlockBreaker;
 import bspkrs.treecapitator.TreeCapitator;
 import bspkrs.util.BlockID;
 import bspkrs.util.ModVersionChecker;
-import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -59,6 +59,7 @@ public class TreeCapitatorMod
     @PreInit
     public void preInit(FMLPreInitializationEvent event)
     {
+        TreeCapitator.init(true);
         metadata = event.getModMetadata();
         Configuration config = new Configuration(event.getSuggestedConfigurationFile());
         
@@ -81,14 +82,16 @@ public class TreeCapitatorMod
         TreeCapitator.shearLeaves = Config.getBoolean(config, "shearLeaves", LEAF_VINE, TreeCapitator.shearLeaves, TreeCapitator.shearLeavesDesc);
         TreeCapitator.shearVines = Config.getBoolean(config, "shearVines", LEAF_VINE, TreeCapitator.shearVines, TreeCapitator.shearVinesDesc);
         
-        TreeCapitator.allowGetOnlineTreeConfig = Config.getBoolean(config, "allowGetOnlineTreeConfig", BLOCK_SETTINGS, TreeCapitator.allowGetOnlineTreeConfig, TreeCapitator.allowGetOnlineTreeConfigDesc);
+        TreeCapitator.allowGetRemoteTreeConfig = Config.getBoolean(config, "allowGetRemoteTreeConfig", BLOCK_SETTINGS, TreeCapitator.allowGetRemoteTreeConfig, TreeCapitator.allowGetRemoteTreeConfigDesc);
         TreeCapitator.remoteTreeConfigURL = Config.getString(config, "remoteTreeConfigURL", BLOCK_SETTINGS, TreeCapitator.remoteTreeConfigURL, TreeCapitator.remoteTreeConfigURLDesc);
-        TreeCapitator.remoteTreeConfig = Config.getString(config, "remoteTreeConfig", BLOCK_SETTINGS, TreeCapitator.remoteTreeConfig, TreeCapitator.remoteTreeConfigDesc);
+        // TreeCapitator.remoteTreeConfig = Config.getString(config, "remoteTreeConfig", BLOCK_SETTINGS, TreeCapitator.getRemoteConfig(),
+        // TreeCapitator.remoteTreeConfigDesc);
         TreeCapitator.remoteTreeConfig = TreeCapitator.getRemoteConfig();
         TreeCapitator.localTreeConfig = Config.getString(config, "localTreeConfig", BLOCK_SETTINGS, TreeCapitator.localTreeConfig, TreeCapitator.localTreeConfigDesc);
-        TreeCapitator.useOnlineTreeConfig = Config.getBoolean(config, "useOnlineTreeConfig", BLOCK_SETTINGS, TreeCapitator.useOnlineTreeConfig, TreeCapitator.useOnlineTreeConfigDesc);
+        TreeCapitator.useRemoteTreeConfig = Config.getBoolean(config, "useRemoteTreeConfig", BLOCK_SETTINGS, TreeCapitator.useRemoteTreeConfig, TreeCapitator.useRemoteTreeConfigDesc);
         TreeCapitator.logHardnessNormal = Config.getFloat(config, "logHardnessNormal", BLOCK_SETTINGS, TreeCapitator.logHardnessNormal, 0F, 100F, TreeCapitator.logHardnessNormalDesc);
         TreeCapitator.logHardnessModified = Config.getFloat(config, "logHardnessModified", BLOCK_SETTINGS, TreeCapitator.logHardnessModified, 0F, 100F, TreeCapitator.logHardnessModifiedDesc);
+        TreeCapitator.useStrictBlockPairing = Config.getBoolean(config, "useStrictBlockPairing", BLOCK_SETTINGS, TreeCapitator.useStrictBlockPairing, TreeCapitator.useStrictBlockPairingDesc);
         
         if (!config.hasCategory(BLOCK_ID_CTGY))
         {
@@ -128,7 +131,7 @@ public class TreeCapitatorMod
         
         if (TreeCapitator.allowUpdateCheck)
         {
-            versionChecker = new ModVersionChecker(metadata.name, metadata.version, versionURL, mcfTopic, FMLLog.getLogger());
+            versionChecker = new ModVersionChecker(metadata.name, metadata.version, versionURL, mcfTopic, TCLog.INSTANCE.getLogger());
             versionChecker.checkVersionWithLogging();
         }
     }
@@ -137,7 +140,6 @@ public class TreeCapitatorMod
     public void init(FMLInitializationEvent event)
     {
         MinecraftForge.EVENT_BUS.register(new PlayerHandler());
-        TreeCapitator.init(true);
         proxy.onLoad();
     }
     

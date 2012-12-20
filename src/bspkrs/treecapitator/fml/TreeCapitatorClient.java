@@ -25,7 +25,7 @@ public class TreeCapitatorClient
     public void setServerDetected()
     {
         serverDetected = true;
-        FMLClientHandler.instance().getClient().thePlayer.addChatMessage("TreeCapitator server detected. Client-side features enabled.");
+        FMLClientHandler.instance().getClient().thePlayer.addChatMessage("TreeCapitator client-side features enabled.");
     }
     
     public void onServerConfigReceived(String blockIDList, String axeIDList, float logHardnessNormal, float logHardnessModified)

@@ -13,7 +13,7 @@ public class TreeCapitatorServer
     public TreeCapitatorServer()
     {
         instance = this;
-        if (TreeCapitator.useOnlineTreeConfig)
+        if (TreeCapitator.useRemoteTreeConfig)
             if (TreeCapitator.remoteTreeConfig.trim().length() > 0)
                 TreeCapitator.localTreeConfig = TreeCapitator.remoteTreeConfig.trim();
             else
