@@ -71,6 +71,7 @@ public class TreeCapitatorMod
         TreeCapitator.disableCreativeDrops = Config.getBoolean(config, "disableCreativeDrops", MISC, TreeCapitator.disableCreativeDrops, TreeCapitator.disableCreativeDropsDesc);
         TreeCapitator.sneakAction = Config.getString(config, "sneakAction", MISC, TreeCapitator.sneakAction, TreeCapitator.sneakActionDesc);
         TreeCapitator.maxBreakDistance = Config.getInt(config, "maxBreakDistance", MISC, TreeCapitator.maxBreakDistance, -1, 100, TreeCapitator.maxBreakDistanceDesc);
+        TreeCapitator.maxLeafSearchDist = Config.getInt(config, "maxLeafSearchDist", MISC, TreeCapitator.maxLeafSearchDist, 1, 8, TreeCapitator.maxLeafSearchDistDesc);
         
         TreeCapitator.axeIDList = Config.getString(config, "axeIDList", ITEM_CTGY, TreeCapitator.axeIDList, TreeCapitator.axeIDListDesc);
         TreeCapitator.shearIDList = Config.getString(config, "shearIDList", ITEM_CTGY, TreeCapitator.shearIDList, TreeCapitator.shearIDListDesc);
@@ -84,8 +85,6 @@ public class TreeCapitatorMod
         
         TreeCapitator.allowGetRemoteTreeConfig = Config.getBoolean(config, "allowGetRemoteTreeConfig", BLOCK_SETTINGS, TreeCapitator.allowGetRemoteTreeConfig, TreeCapitator.allowGetRemoteTreeConfigDesc);
         TreeCapitator.remoteTreeConfigURL = Config.getString(config, "remoteTreeConfigURL", BLOCK_SETTINGS, TreeCapitator.remoteTreeConfigURL, TreeCapitator.remoteTreeConfigURLDesc);
-        // TreeCapitator.remoteTreeConfig = Config.getString(config, "remoteTreeConfig", BLOCK_SETTINGS, TreeCapitator.getRemoteConfig(),
-        // TreeCapitator.remoteTreeConfigDesc);
         TreeCapitator.remoteTreeConfig = TreeCapitator.getRemoteConfig();
         TreeCapitator.localTreeConfig = Config.getString(config, "localTreeConfig", BLOCK_SETTINGS, TreeCapitator.localTreeConfig, TreeCapitator.localTreeConfigDesc);
         TreeCapitator.useRemoteTreeConfig = Config.getBoolean(config, "useRemoteTreeConfig", BLOCK_SETTINGS, TreeCapitator.useRemoteTreeConfig, TreeCapitator.useRemoteTreeConfigDesc);
@@ -125,6 +124,8 @@ public class TreeCapitatorMod
                     }
                 }
             }
+            
+            TreeCapitator.localTreeConfig = TreeCapitator.getConfigBlockListString();
         }
         
         config.save();
@@ -158,6 +159,8 @@ public class TreeCapitatorMod
             
             if (TreeCapitator.isLogBlock(blockID))
             {
+                proxy.debugString("BlockID " + blockID + " is a log.");
+                
                 if (TreeBlockBreaker.isBreakingPossible(world, entityPlayer))
                 {
                     blockID = TreeCapitator.logIDList.get(TreeCapitator.logIDList.indexOf(blockID));
@@ -170,6 +173,8 @@ public class TreeCapitatorMod
                     
                     breaker.onBlockHarvested(world, x, y, z, metadata, entityPlayer);
                 }
+                else
+                    proxy.debugString("Item is too damaged to chop.");
             }
         }
     }

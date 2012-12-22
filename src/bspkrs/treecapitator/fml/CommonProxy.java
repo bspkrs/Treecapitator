@@ -1,6 +1,7 @@
 package bspkrs.treecapitator.fml;
 
 import bspkrs.treecapitator.TCLog;
+import bspkrs.treecapitator.TreeCapitator;
 
 public class CommonProxy
 {
@@ -14,6 +15,11 @@ public class CommonProxy
     
     public void debugOutputBlockID(int id, int metadata)
     {
-        TCLog.info("DEBUG: %s, %s", id, metadata);
+        TCLog.info("[DEBUG] Clicked block: %s, %s", id, metadata);
+    }
+    
+    public void debugString(String msg)
+    {
+        TreeCapitator.debugString(msg);
     }
 }
