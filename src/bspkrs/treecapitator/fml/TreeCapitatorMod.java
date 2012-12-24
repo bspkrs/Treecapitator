@@ -40,7 +40,7 @@ import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 public class TreeCapitatorMod
 {
     public static ModVersionChecker versionChecker;
-    private final String            versionURL           = "https://dl.dropbox.com/u/20748481/Minecraft/1.4.5/treeCapitatorForge.version";
+    private final String            versionURL           = "https://dl.dropbox.com/u/20748481/Minecraft/1.4.6/treeCapitatorForge.version";
     private final String            mcfTopic             = "http://www.minecraftforum.net/topic/1009577-";
     
     public static final String      BLOCK_ID_CTGY        = "2_block_id";
