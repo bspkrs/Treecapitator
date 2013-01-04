@@ -58,12 +58,12 @@ public class TreeCapitatorTicker implements ITickHandler
         if (mcClient != null && mcClient.thePlayer != null)
         {
             if (TreeCapitator.allowUpdateCheck && TreeCapitatorMod.versionChecker != null)
-                if (!TreeCapitatorMod.versionChecker.isCurrentVersion())
+                if (!TreeCapitatorMod.versionChecker.isCurrentVersionBySubStringNewer(TreeCapitatorMod.instance.metadata.version.length() - 1, TreeCapitatorMod.instance.metadata.version.length()))
                     for (String msg : TreeCapitatorMod.versionChecker.getInGameMessage())
                         mcClient.thePlayer.addChatMessage(msg);
             
             if (mcClient.isSingleplayer() && TreeCapitatorMod.isItemInWorldManagerReplaced((EntityPlayerMP) mcClient.getIntegratedServer().worldServerForDimension(mcClient.thePlayer.dimension).getPlayerEntityByName(mcClient.thePlayer.username)))
-                mcClient.thePlayer.addChatMessage("Warning: The ItemInWorldManager object for your player entity has been replaced (most likely by another mod). TreeCapitator will most likely not work.");
+                mcClient.thePlayer.addChatMessage("Warning: The ItemInWorldManager object for your player entity has been replaced (most likely by another mod). TreeCapitator will probably not work.");
             
             return false;
         }

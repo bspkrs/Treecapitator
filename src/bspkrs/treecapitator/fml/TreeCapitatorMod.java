@@ -234,7 +234,7 @@ public class TreeCapitatorMod
         if (TreeCapitator.allowUpdateCheck)
         {
             versionChecker = new ModVersionChecker(metadata.name, metadata.version, versionURL, mcfTopic, TCLog.INSTANCE.getLogger());
-            versionChecker.checkVersionWithLogging();
+            versionChecker.checkVersionWithLoggingBySubString(metadata.version.length() - 1, metadata.version.length());
         }
     }
     
