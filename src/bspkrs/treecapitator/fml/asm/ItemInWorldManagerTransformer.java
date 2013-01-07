@@ -29,6 +29,7 @@ import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
 import bspkrs.treecapitator.TCLog;
+import bspkrs.treecapitator.fml.TreeCapitatorMod;
 import cpw.mods.fml.relauncher.IClassTransformer;
 
 public class ItemInWorldManagerTransformer implements IClassTransformer
@@ -287,6 +288,7 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
                         
                         TCLog.info("Method " + (String) hm.get("javaClassName") + "/" + m.name + m.desc + " patched at index " + (index + offset - 1));
                         TCLog.info("TreeCapitator ASM Patching Complete!");
+						TreeCapitatorMod.instance.isCoreModLoaded = true;
                         break;
                     }
                 }

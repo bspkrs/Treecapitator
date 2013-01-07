@@ -22,7 +22,7 @@ public class TreeCapitatorServer
     
     public void onPlayerLoggedIn(Player player)
     {
-        Object[] toSend = { TreeCapitator.localBlockIDList, TreeCapitator.axeIDList, TreeCapitator.logHardnessNormal, TreeCapitator.logHardnessModified };
+        Object[] toSend = { TreeCapitator.getStringFromParsedLists(), TreeCapitator.axeIDList, TreeCapitator.logHardnessNormal, TreeCapitator.logHardnessModified };
         PacketDispatcher.sendPacketToPlayer(ForgePacketHelper.createPacket("TreeCapitator", 1, toSend), player);
     }
 }

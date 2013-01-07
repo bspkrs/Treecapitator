@@ -106,7 +106,6 @@ public final class TreeCapitator
     public static ArrayList<BlockID>                          logIDList                      = new ArrayList<BlockID>();
     public static ArrayList<BlockID>                          leafIDList                     = new ArrayList<BlockID>();
     public static Map<BlockID, ArrayList<BlockID>>            logToLeafListMap               = new HashMap<BlockID, ArrayList<BlockID>>();
-    public static Map<ArrayList<BlockID>, ArrayList<BlockID>> logListToLogListMap            = new HashMap<ArrayList<BlockID>, ArrayList<BlockID>>();
     public static Map<BlockID, ArrayList<BlockID>>            logToLogListMap                = new HashMap<BlockID, ArrayList<BlockID>>();
     public static Map<String, HashMap<String, String>>        configBlockList                = new HashMap<String, HashMap<String, String>>();
     public static Map<String, HashMap<String, String>>        thirdPartyConfig               = new HashMap<String, HashMap<String, String>>();
@@ -477,7 +476,7 @@ public final class TreeCapitator
         return TreeCapitator.logIDList.contains(blockID);
     }
     
-    public static String getConfigBlockListString()
+    public static String getStringFromConfigBlockList()
     {
         String list = "";
         for (HashMap<String, String> group : configBlockList.values())
@@ -485,12 +484,36 @@ public final class TreeCapitator
         return replaceThirdPartyBlockTags(list.replaceFirst(" ! ", ""));
     }
     
+    public static String getStringFromParsedLists()
+    {
+        String list = "";
+        for (BlockID key : logIDList)
+        {            
+            String logPart = "";
+            
+            for (BlockID logID : logToLogListMap.get(key))
+            	logPart += "; "+ logID.id + (logID.metadata != -1 ? "," + logID.metadata : "");
+            logPart = logPart.replaceFirst("; ", "");
+            
+            if (logPart.trim().length() > 0)
+            {
+	            String leafPart = "";
+	            
+	            for (BlockID leafID : logToLeafListMap.get(key))
+	            	leafPart += "; "+ leafID.id + (leafID.metadata != -1 ? "," + leafID.metadata : "");
+	            leafPart = leafPart.replaceFirst("; ", "");
+	            		
+	            list += " ! " + logPart + " | " + leafPart;
+            }
+        }
+        return list.replaceFirst(" ! ", "");
+    }
+    
     public static void parseConfigBlockList(String list)
     {
         logIDList = new ArrayList<BlockID>();
         leafIDList = new ArrayList<BlockID>();
         logToLogListMap = new HashMap<BlockID, ArrayList<BlockID>>();
-        logListToLogListMap = new HashMap<ArrayList<BlockID>, ArrayList<BlockID>>();
         logToLeafListMap = new HashMap<BlockID, ArrayList<BlockID>>();
         
         TCLog.info("Parsing Tree Block Config string: %s", list);
@@ -502,7 +525,7 @@ public final class TreeCapitator
             {
                 if (entry.trim().length() > 0)
                 {
-                    TCLog.info("  Parsing entry: %s", entry);
+                	TreeCapitator.debugString("  Parsing Tree entry: %s", entry);
                     if (entry.trim().length() > 0)
                     {
                         String[] blockTypes = entry.trim().split("\\|");
@@ -511,13 +534,13 @@ public final class TreeCapitator
                         ArrayList<BlockID> logIDs = new ArrayList<BlockID>();
                         String[] logBlocks = blockTypes[0].trim().split(";");
                         
-                        TCLog.info("    Found log ID list: %s", blockTypes[0].trim());
+                        TreeCapitator.debugString("    Found log ID list: %s", blockTypes[0].trim());
                         
                         for (String logBlockStr : logBlocks)
                         {
                             String[] logBlock = logBlockStr.trim().split(",");
                             
-                            TCLog.info("    Found log ID: %s", logBlockStr);
+                            TreeCapitator.debugString("    Found log ID: %s", logBlockStr);
                             int blockID = CommonUtils.parseInt(logBlock[0].trim(), -1);
                             
                             if (blockID != -1)
@@ -536,7 +559,7 @@ public final class TreeCapitator
                                 }
                             }
                             else
-                                TCLog.warning("Block ID %s could not be parsed as an integer.  Ignoring entry.", logBlock[0].trim());
+                            	TreeCapitator.debugString("Block ID %s could not be parsed as an integer.  Ignoring entry.", logBlock[0].trim());
                         }
                         
                         for (BlockID logID : logIDs)
@@ -546,13 +569,13 @@ public final class TreeCapitator
                         ArrayList<BlockID> pairedLeaves = new ArrayList<BlockID>();
                         String[] leafBlocks = blockTypes[1].trim().split(";");
                         
-                        TCLog.info("    Found leaf ID list: %s", blockTypes[1].trim());
+                        TreeCapitator.debugString("    Found leaf ID list: %s", blockTypes[1].trim());
                         
                         for (String block : leafBlocks)
                         {
                             if (block.trim().length() > 0)
                             {
-                                TCLog.info("    Found leaf ID: %s", block.trim());
+                            	TreeCapitator.debugString("    Found leaf ID: %s", block.trim());
                                 String[] leafBlock = block.trim().split(",");
                                 int blockID = CommonUtils.parseInt(leafBlock[0].trim(), -1);
                                 
@@ -573,16 +596,13 @@ public final class TreeCapitator
                                         pairedLeaves.add(leafID);
                                 }
                                 else
-                                    TCLog.warning("Block ID %s could not be parsed as an integer.  Ignoring entry.", leafBlock[0].trim());
+                                	TreeCapitator.debugString("Block ID %s could not be parsed as an integer.  Ignoring entry.", leafBlock[0].trim());
                             }
                         }
                         
                         for (BlockID logID : logIDs)
                             if (!logToLeafListMap.containsKey(logID))
                                 logToLeafListMap.put(logID, pairedLeaves);
-                        
-                        if (!logListToLogListMap.containsKey(logIDs))
-                            logListToLogListMap.put(logIDs, pairedLeaves);
                     }
                 }
             }

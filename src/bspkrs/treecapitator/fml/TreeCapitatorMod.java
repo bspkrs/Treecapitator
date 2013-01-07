@@ -51,6 +51,8 @@ public class TreeCapitatorMod
     public static final String      LEAF_CTGY            = "leaf_and_vine_settings";
     public static final String      MISC                 = "miscellaneous_settings";
     public static final String      GENERAL              = Configuration.CATEGORY_GENERAL;
+	
+	public static boolean isCoreModLoaded = false;
     
     public ModMetadata              metadata;
     public Configuration            config;
@@ -187,8 +189,7 @@ public class TreeCapitatorMod
                 }
             }
             
-            TreeCapitator.localBlockIDList = TreeCapitator.getConfigBlockListString();
-            TCLog.info("File block config loaded: %s", TreeCapitator.localBlockIDList);
+            TCLog.info("File block config loaded.");
         }
         
         config.addCustomCategoryComment(BLOCK_ID_CTGY, TreeCapitator.configBlockIDDesc);
@@ -229,7 +230,7 @@ public class TreeCapitatorMod
             }
         }
         
-        TreeCapitator.localBlockIDList = TreeCapitator.getConfigBlockListString();
+        TreeCapitator.localBlockIDList = TreeCapitator.getStringFromConfigBlockList();
         config.get(BLOCK_CTGY, "localTreeConfig", "", TreeCapitator.localBlockIDListDesc).value = TreeCapitator.localBlockIDList;
         
         config.addCustomCategoryComment(THIRD_PARTY_CFG_CTGY, TreeCapitator.thirdPartyConfigDesc);
