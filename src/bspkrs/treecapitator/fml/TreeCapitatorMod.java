@@ -51,9 +51,9 @@ public class TreeCapitatorMod
     public static final String      LEAF_CTGY            = "leaf_and_vine_settings";
     public static final String      MISC                 = "miscellaneous_settings";
     public static final String      GENERAL              = Configuration.CATEGORY_GENERAL;
-    public static final String      HAS_BEEN_CONVERTED   = "hasBeenConverted";
     
     public ModMetadata              metadata;
+    public Configuration            config;
     
     @SidedProxy(clientSide = "bspkrs.treecapitator.fml.ClientProxy", serverSide = "bspkrs.treecapitator.fml.CommonProxy")
     public static CommonProxy       proxy;
@@ -69,7 +69,7 @@ public class TreeCapitatorMod
     {
         TreeCapitator.init(true);
         metadata = event.getModMetadata();
-        Configuration config = new Configuration(event.getSuggestedConfigurationFile());
+        config = new Configuration(event.getSuggestedConfigurationFile());
         
         config.load();
         TreeCapitator.allowUpdateCheck = Config.getBoolean(config, "allowUpdateCheck", MISC, TreeCapitator.allowUpdateCheck, TreeCapitator.allowUpdateCheckDesc);
@@ -78,6 +78,7 @@ public class TreeCapitatorMod
         TreeCapitator.disableCreativeDrops = Config.getBoolean(config, "disableCreativeDrops", MISC, TreeCapitator.disableCreativeDrops, TreeCapitator.disableCreativeDropsDesc);
         TreeCapitator.sneakAction = Config.getString(config, "sneakAction", MISC, TreeCapitator.sneakAction, TreeCapitator.sneakActionDesc);
         TreeCapitator.maxBreakDistance = Config.getInt(config, "maxBreakDistance", MISC, TreeCapitator.maxBreakDistance, -1, 100, TreeCapitator.maxBreakDistanceDesc);
+        TreeCapitator.allowSmartTreeDetection = Config.getBoolean(config, "allowSmartTreeDetection", MISC, TreeCapitator.allowSmartTreeDetection, TreeCapitator.allowSmartTreeDetectionDesc);
         
         TreeCapitator.axeIDList = Config.getString(config, "axeIDList", ITEM_CTGY, TreeCapitator.axeIDList, TreeCapitator.axeIDListDesc);
         TreeCapitator.shearIDList = Config.getString(config, "shearIDList", ITEM_CTGY, TreeCapitator.shearIDList, TreeCapitator.shearIDListDesc);
@@ -85,6 +86,9 @@ public class TreeCapitatorMod
         TreeCapitator.allowItemDamage = Config.getBoolean(config, "allowItemDamage", ITEM_CTGY, TreeCapitator.allowItemDamage, TreeCapitator.allowItemDamageDesc);
         TreeCapitator.allowMoreBlocksThanDamage = Config.getBoolean(config, "allowMoreBlocksThanDamage", ITEM_CTGY, TreeCapitator.allowMoreBlocksThanDamage, TreeCapitator.allowMoreBlocksThanDamageDesc);
         TreeCapitator.damageMultiplier = Config.getFloat(config, "damageMultiplier", ITEM_CTGY, TreeCapitator.damageMultiplier, 0.1F, 50.0F, TreeCapitator.damageMultiplierDesc);
+        TreeCapitator.useIncreasingItemDamage = Config.getBoolean(config, "useIncreasingItemDamage", ITEM_CTGY, TreeCapitator.useIncreasingItemDamage, TreeCapitator.useIncreasingItemDamageDesc);
+        TreeCapitator.increaseDamageEveryXBlocks = Config.getInt(config, "increaseDamageEveryXBlocks", ITEM_CTGY, TreeCapitator.increaseDamageEveryXBlocks, 1, 500, TreeCapitator.increaseDamageEveryXBlocksDesc);
+        TreeCapitator.damageIncreaseAmount = Config.getFloat(config, "damageIncreaseAmount", ITEM_CTGY, TreeCapitator.damageIncreaseAmount, 0.1F, 100.0F, TreeCapitator.damageIncreaseAmountDesc);
         
         TreeCapitator.destroyLeaves = Config.getBoolean(config, "destroyLeaves", LEAF_CTGY, TreeCapitator.destroyLeaves, TreeCapitator.destroyLeavesDesc);
         TreeCapitator.shearLeaves = Config.getBoolean(config, "shearLeaves", LEAF_CTGY, TreeCapitator.shearLeaves, TreeCapitator.shearLeavesDesc);
@@ -93,7 +97,7 @@ public class TreeCapitatorMod
         TreeCapitator.logHardnessNormal = Config.getFloat(config, "logHardnessNormal", BLOCK_CTGY, TreeCapitator.logHardnessNormal, 0F, 100F, TreeCapitator.logHardnessNormalDesc);
         TreeCapitator.logHardnessModified = Config.getFloat(config, "logHardnessModified", BLOCK_CTGY, TreeCapitator.logHardnessModified, 0F, 100F, TreeCapitator.logHardnessModifiedDesc);
         
-        if (config.hasCategory(GENERAL) && (!config.hasKey(GENERAL, HAS_BEEN_CONVERTED) || !Boolean.getBoolean(config.get(GENERAL, HAS_BEEN_CONVERTED, true).value)))
+        if (config.hasCategory(GENERAL))
         {
             TreeCapitator.allowUpdateCheck = Config.getBoolean(config, "allowUpdateCheck", GENERAL, TreeCapitator.allowUpdateCheck, TreeCapitator.allowUpdateCheckDesc);
             Config.setFromOldCtgy(config, "allowUpdateCheck", GENERAL, MISC);
@@ -131,7 +135,8 @@ public class TreeCapitatorMod
             TreeCapitator.logHardnessModified = Config.getFloat(config, "logHardnessModified", GENERAL, TreeCapitator.logHardnessModified, 0F, 100F, TreeCapitator.logHardnessModifiedDesc);
             Config.setFromOldCtgy(config, "logHardnessModified", GENERAL, BLOCK_CTGY);
             
-            config.get(GENERAL, HAS_BEEN_CONVERTED, true);
+            Config.renameCtgy(config, GENERAL, "z_converted_" + GENERAL);
+            config.addCustomCategoryComment("z_converted_" + GENERAL, "Your old config settings have been migrated to their new homes.  Except for logIDList.  It's not convertible. :p");
         }
         
         TreeCapitator.allowDebugOutput = Config.getBoolean(config, "allowDebugOutput", MISC, TreeCapitator.allowDebugOutput, TreeCapitator.allowDebugOutputDesc);
@@ -143,8 +148,7 @@ public class TreeCapitatorMod
         
         TreeCapitator.allowGetRemoteTreeConfig = Config.getBoolean(config, "allowGetRemoteTreeConfig", BLOCK_CTGY, TreeCapitator.allowGetRemoteTreeConfig, TreeCapitator.allowGetRemoteTreeConfigDesc);
         TreeCapitator.remoteTreeConfigURL = Config.getString(config, "remoteTreeConfigURL", BLOCK_CTGY, TreeCapitator.remoteTreeConfigURL, TreeCapitator.remoteTreeConfigURLDesc);
-        TreeCapitator.remoteTreeConfig = TreeCapitator.getRemoteConfig();
-        TreeCapitator.localTreeConfig = Config.getString(config, "localTreeConfig", BLOCK_CTGY, TreeCapitator.localTreeConfig, TreeCapitator.localTreeConfigDesc);
+        TreeCapitator.remoteBlockIDConfig = TreeCapitator.getRemoteConfig();
         TreeCapitator.useRemoteTreeConfig = Config.getBoolean(config, "useRemoteTreeConfig", BLOCK_CTGY, TreeCapitator.useRemoteTreeConfig, TreeCapitator.useRemoteTreeConfigDesc);
         TreeCapitator.useStrictBlockPairing = Config.getBoolean(config, "useStrictBlockPairing", BLOCK_CTGY, TreeCapitator.useStrictBlockPairing, TreeCapitator.useStrictBlockPairingDesc);
         
@@ -183,8 +187,8 @@ public class TreeCapitatorMod
                 }
             }
             
-            TreeCapitator.localTreeConfig = TreeCapitator.getConfigBlockListString();
-            TCLog.info("File block config loaded: %s", TreeCapitator.localTreeConfig);
+            TreeCapitator.localBlockIDList = TreeCapitator.getConfigBlockListString();
+            TCLog.info("File block config loaded: %s", TreeCapitator.localBlockIDList);
         }
         
         config.addCustomCategoryComment(BLOCK_ID_CTGY, TreeCapitator.configBlockIDDesc);
@@ -225,7 +229,8 @@ public class TreeCapitatorMod
             }
         }
         
-        TreeCapitator.localTreeConfig = TreeCapitator.getConfigBlockListString();
+        TreeCapitator.localBlockIDList = TreeCapitator.getConfigBlockListString();
+        config.get(BLOCK_CTGY, "localTreeConfig", "", TreeCapitator.localBlockIDListDesc).value = TreeCapitator.localBlockIDList;
         
         config.addCustomCategoryComment(THIRD_PARTY_CFG_CTGY, TreeCapitator.thirdPartyConfigDesc);
         
@@ -249,7 +254,7 @@ public class TreeCapitatorMod
     public void postInit(FMLPostInitializationEvent event)
     {
         getReplacementTagListFromThirdPartyConfigs();
-        TreeCapitator.localTreeConfig = TreeCapitator.replaceThirdPartyBlockTags(TreeCapitator.localTreeConfig);
+        TreeCapitator.localBlockIDList = TreeCapitator.replaceThirdPartyBlockTags(TreeCapitator.localBlockIDList);
         TreeCapitator.axeIDList = TreeCapitator.replaceThirdPartyBlockTags(TreeCapitator.axeIDList);
         TreeCapitator.shearIDList = TreeCapitator.replaceThirdPartyBlockTags(TreeCapitator.shearIDList);
     }
@@ -258,7 +263,7 @@ public class TreeCapitatorMod
     public void serverStarted(FMLServerStartedEvent event)
     {
         new TreeCapitatorServer();
-        TreeCapitator.parseConfigBlockList(TreeCapitator.localTreeConfig);
+        TreeCapitator.parseConfigBlockList(TreeCapitator.localBlockIDList);
     }
     
     public void onBlockHarvested(World world, int x, int y, int z, Block block, int metadata, EntityPlayer entityPlayer)

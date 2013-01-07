@@ -30,10 +30,10 @@ public class TreeCapitatorClient
     
     public void onServerConfigReceived(String blockIDList, String axeIDList, float logHardnessNormal, float logHardnessModified)
     {
-        TreeCapitator.localTreeConfig = blockIDList;
+        TreeCapitator.localBlockIDList = blockIDList;
         
         if (!FMLClientHandler.instance().getClient().isSingleplayer())
-            TreeCapitator.parseConfigBlockList(TreeCapitator.localTreeConfig);
+            TreeCapitator.parseConfigBlockList(TreeCapitator.localBlockIDList);
         
         TreeCapitator.axeIDList = axeIDList;
         TreeCapitator.logHardnessNormal = logHardnessNormal;

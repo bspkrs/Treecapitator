@@ -14,15 +14,15 @@ public class TreeCapitatorServer
     {
         instance = this;
         if (TreeCapitator.useRemoteTreeConfig)
-            if (TreeCapitator.remoteTreeConfig.trim().length() > 0)
-                TreeCapitator.localTreeConfig = TreeCapitator.remoteTreeConfig.trim();
+            if (TreeCapitator.remoteBlockIDConfig.trim().length() > 0)
+                TreeCapitator.localBlockIDList = TreeCapitator.remoteBlockIDConfig.trim();
             else
                 TCLog.warning("Online Block Config string is empty, try running with allowGetOnlineBlockConfig=true");
     }
     
     public void onPlayerLoggedIn(Player player)
     {
-        Object[] toSend = { TreeCapitator.localTreeConfig, TreeCapitator.axeIDList, TreeCapitator.logHardnessNormal, TreeCapitator.logHardnessModified };
+        Object[] toSend = { TreeCapitator.localBlockIDList, TreeCapitator.axeIDList, TreeCapitator.logHardnessNormal, TreeCapitator.logHardnessModified };
         PacketDispatcher.sendPacketToPlayer(ForgePacketHelper.createPacket("TreeCapitator", 1, toSend), player);
     }
 }
