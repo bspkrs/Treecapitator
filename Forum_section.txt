@@ -1,6 +1,6 @@
 TreeCapitator:
-ML Client: Latest Release (ML 1.4.6.r01) All Releases (<=1.4.5)
-Forge: Latest Release (Forge 1.4.6.r01) All Releases (<=1.4.5) Dev Builds
+ML Client (SSP): Latest Release (ML 1.4.6.r01) All Releases (<=1.4.5)
+Forge (SSP/SMP): Latest Release (Forge 1.4.6.r01) All Releases (<=1.4.5) Dev Builds
 Delete ALL previous versions of ANY TreeCapitator mods from your mods folder before using the new CoreMod version!  Put it in the coremods folder!
 There is a conflict with Magic Launcher that makes it think there is a duplicate mod.  Disable TreeCapitator in Magic Launcher and drop the mod in the coremods folder.
 MultiMine users: you MUST add the log block IDs you are using in TreeCapitator to the MultiMine block exclusion list found in AS_MultiMine.cfg.  Otherwise TreeCapitator will not work.
@@ -107,14 +107,14 @@ MLMP Server: Latest Release (MLMP 1.3.2.r08) All Releases[spoiler]Change Log:[sp
 - adds the ability to chop logs normally while sneaking
 1.2.4.c - 26-Mar-2012
 - first attempt at fixing SMP glitchiness[/spoiler]
-This makes so destroying a log block with an axe makes all the connected wood blocks above it fall as well. Based on Terraria tree-cutting style.
+This mod allows you to bring down an entire tree (leaves and all) when you chop a log from the tree. Based on Terraria tree-cutting style.
 
 Features:
-- Forge version can break any log out of the box (see logIDList config setting)
+- Forge version works with many mod logs out of the box (see .minecraft/config/TreeCapitator.cfg for details)
 - Sneak while chopping to break logs normally (configurable)
 - Configurable list of tool IDs to determine what an "axe" is
 - optional item damage based on number of logs broken (defaults to enabled)
-- Smart tree-detection
+- Smart tree-detection (configurable)
 - option to destroy leaves (enabled by default)
 - option to shear leaves (with a shear-type item in hotbar)
 - option to shear vines (with a shear-type item in hotbar)
@@ -124,11 +124,11 @@ Features:
 
 Some notes on how it works:[spoiler]Tree Detection
 - Trees are determined by looking at the number of leaf blocks that neighbor the top block of a vertical column of logs.
-- If the top block has 2 or more neighboring leaf blocks the code considers that column of logs to be a tree.
-- If the top block does not have 2 neighboring leaf blocks the code will default to normal block breaking.
+- If the top block has 3 or more neighboring leaf blocks the code considers that column of logs to be a tree.
+- If the top block does not have 3 neighboring leaf blocks the code will default to normal block breaking.
 Item Damage
 - Axes and Shears that have the Unbreaking enchantment will work the way they are supposed to.
-- Damage is applied to the item as each block is broken in the chain.
+- Damage is applied to the item as each block is broken in the chain reaction.
 - The allowMoreBlocksThanDamage setting should be self-explanitory, but basically it means that if it is set to false and your item breaks in the middle of chopping down a tree, the remaining blocks will not be broken.
 - The code will not search for other axes in your hotbar to apply damage to if your current axe breaks.
 - If you have multiple "shear-type" items in your hotbar, the code will always apply damage to the left-most item.
@@ -139,7 +139,7 @@ Destroying Leaves/Vines
 - Yes, sometimes a few leaf blocks are left behind after chopping a tree, but they will decay normally.[/spoiler]
 
 Video by TheMinecraftModder98 that shows how to use some of the config options:
-No mas video Posted Image
+No mas video :(
 
 ML/MLMP Configuration File (.minecraft/config/mod_treeCapitator.cfg):[spoiler][code]#allowUpdateCheck (boolean:true) -- Set to true to allow checking for mod updates, false to disable
 #axeIDList (java.lang.String:271; 275; 258; 286; 279) -- IDs of items that can chop down trees. Use ',' to split item id from metadata and ';' to split items.
