@@ -1,11 +1,11 @@
-TreeCapitator:
-ML Client (SSP): Latest Release (ML 1.4.6.r01) All Releases (<=1.4.5)
-Forge (SSP/SMP): Latest Release (Forge 1.4.6.r01) All Releases (<=1.4.5) Dev Builds
-Delete ALL previous versions of ANY TreeCapitator mods from your mods folder before using the new CoreMod version!  Put it in the coremods folder!
-There is a conflict with Magic Launcher that makes it think there is a duplicate mod.  Disable TreeCapitator in Magic Launcher and drop the mod in the coremods folder.
-MultiMine users: you MUST add the log block IDs you are using in TreeCapitator to the MultiMine block exclusion list found in AS_MultiMine.cfg.  Otherwise TreeCapitator will not work.
-(Starting in Forge 1.4.5.r01, put the downloaded .jar file in .minecraft/coremods)
-MLMP Server: Latest Release (MLMP 1.3.2.r08) All Releases[spoiler]Change Log:[spoiler]1.4.6.r01 - 23-Dec-2012
+[size=5][b]TreeCapitator:[/b][/size]
+ML Client (SSP): [url="http://j.gs/1599906/treecapitator-ml-latest"]Latest Release[/url] (ML 1.4.6.r01) [url="http://j.gs/1599906/treecapitator-ml-all"]All Releases[/url] (<=1.4.5)
+Forge (SSP/SMP): [url="http://adf.ly/1599906/treecapitator-forge-latest"]Latest Release[/url] (Forge 1.4.6.r01) [url="http://adf.ly/1599906/treecapitator-forge-all"]All Releases[/url] (<=1.4.5) [url="http://dl.dropbox.com/u/20748481/MC/TreeCapitator_Forge/dev/index.html"]Dev Builds[/url]
+[color=#ff0000][b]Delete ALL previous versions of ANY TreeCapitator mods from your mods folder before using the new CoreMod version!  Put it in the coremods folder![/b][/color]
+There is a conflict with [b]Magic Launcher[/b] that makes it think there is a duplicate mod.  [b]Disable TreeCapitator in Magic Launcher[/b] and drop the mod in the coremods folder.
+[b]MultiMine users[/b]: you [b][i]MUST[/i][/b] add the log block IDs you are using in TreeCapitator to the MultiMine block exclusion list found in AS_MultiMine.cfg.  Otherwise TreeCapitator will not work.
+([size=2][b]Starting in Forge 1.4.5.r01[/b], put the downloaded .jar file in [b].minecraft/coremods[/b][/size])
+[size=2]MLMP Server: [url="http://j.gs/1599906/treecapitator-mlmp-latest"]Latest Release[/url] (MLMP 1.3.2.r08) [url="http://j.gs/1599906/treecapitator-mlmp-all"]All Releases[/url][/size][spoiler][b]Change Log[/b]:[spoiler='More Info']1.4.6.r01 - 23-Dec-2012
 - 1.4.6 update
 1.4.5.r05 - 23-Dec-2012
 - fixed issue where user config was not saved properly
@@ -107,13 +107,14 @@ MLMP Server: Latest Release (MLMP 1.3.2.r08) All Releases[spoiler]Change Log:[sp
 - adds the ability to chop logs normally while sneaking
 1.2.4.c - 26-Mar-2012
 - first attempt at fixing SMP glitchiness[/spoiler]
-This mod allows you to bring down an entire tree (leaves and all) when you chop a log from the tree. Based on Terraria tree-cutting style.
+This mod allows you to chop down an entire tree (leaves and all) by harvesting one of its logs. Based on Terraria tree-cutting style.
 
-Features:
-- Forge version works with many mod logs out of the box (see .minecraft/config/TreeCapitator.cfg for details)
+[b][size=4]Features:[/size][/b]
+- [b]Forge version can break any log out of the box (see .minecraft/config/TreeCapitator.cfg for details)[/b]
 - Sneak while chopping to break logs normally (configurable)
 - Configurable list of tool IDs to determine what an "axe" is
 - optional item damage based on number of logs broken (defaults to enabled)
+- optional increasing item damage per block broken (off by default)
 - Smart tree-detection (configurable)
 - option to destroy leaves (enabled by default)
 - option to shear leaves (with a shear-type item in hotbar)
@@ -122,26 +123,26 @@ Features:
 - disable tool requirement
 - mod version checking (never miss a new feature)
 
-Some notes on how it works:[spoiler]Tree Detection
+[b]Some notes on how it works:[/b][spoiler][b]Tree Detection[/b]
 - Trees are determined by looking at the number of leaf blocks that neighbor the top block of a vertical column of logs.
 - If the top block has 3 or more neighboring leaf blocks the code considers that column of logs to be a tree.
 - If the top block does not have 3 neighboring leaf blocks the code will default to normal block breaking.
-Item Damage
+[b]Item Damage[/b]
 - Axes and Shears that have the Unbreaking enchantment will work the way they are supposed to.
-- Damage is applied to the item as each block is broken in the chain reaction.
+- Damage is applied to the item as each block is broken in the chain.
 - The allowMoreBlocksThanDamage setting should be self-explanitory, but basically it means that if it is set to false and your item breaks in the middle of chopping down a tree, the remaining blocks will not be broken.
 - The code will not search for other axes in your hotbar to apply damage to if your current axe breaks.
 - If you have multiple "shear-type" items in your hotbar, the code will always apply damage to the left-most item.
-Destroying Leaves/Vines
-- Shearing vines doesn't get every vine  It seems to favor vines hanging on the Western face of the tree.
+[b]Destroying Leaves/Vines[/b]
+- Shearing vines doesn't get [i]every[/i] vine  It seems to favor vines hanging on the Western face of the tree.
 - The destroyLeaves setting MUST be set to true in order for shearLeaves or shearVines to work.
 - The shearLeaves and shearVines settings can be enabled independently of each other.
 - Yes, sometimes a few leaf blocks are left behind after chopping a tree, but they will decay normally.[/spoiler]
 
-Video by TheMinecraftModder98 that shows how to use some of the config options:
-No mas video :(
+[s]Video by [url="http://www.minecraftforum.net/user/681031-theminecraftmodder98/"]TheMinecraftModder98[/url] that shows how to use some of the config options:[/s]
+No mas video [img]http://static.minecraftforum.net//public/style_emoticons/default/sad.png[/img]
 
-ML/MLMP Configuration File (.minecraft/config/mod_treeCapitator.cfg):[spoiler][code]#allowUpdateCheck (boolean:true) -- Set to true to allow checking for mod updates, false to disable
+[b]ML/MLMP Configuration File (.minecraft/config/mod_treeCapitator.cfg):[/b][spoiler][code]#allowUpdateCheck (boolean:true) -- Set to true to allow checking for mod updates, false to disable
 #axeIDList (java.lang.String:271; 275; 258; 286; 279) -- IDs of items that can chop down trees. Use ',' to split item id from metadata and ';' to split items.
 #needItem (boolean:true) -- Whether you need an item from the IDList to chop down a tree. Disabling will let you chop trees with any item.
 #onlyDestroyUpwards (boolean:true) -- Setting this to false will allow the chopping to move downward as well as upward (and blocks below the one you break will be chopped)
@@ -181,5 +182,5 @@ maxBreakDistance=10
 axeIDList=271; 275; 258; 286; 279
 disableInCreative=false[/code][/spoiler]
 
-Forge Configuration File (.minecraft/config/TreeCapitator.cfg):
-http://pastebin.com/kKGA4D36 (it's too long to put here, lol)[/spoiler]
+[b]Forge Configuration File (.minecraft/config/TreeCapitator.cfg):[/b]
+[url="http://pastebin.com/kKGA4D36"]http://pastebin.com/kKGA4D36[/url] (it's too long to put here, lol)[/spoiler]
