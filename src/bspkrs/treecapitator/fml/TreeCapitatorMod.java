@@ -51,8 +51,8 @@ public class TreeCapitatorMod
     public static final String      LEAF_CTGY            = "leaf_and_vine_settings";
     public static final String      MISC                 = "miscellaneous_settings";
     public static final String      GENERAL              = Configuration.CATEGORY_GENERAL;
-	
-	public static boolean isCoreModLoaded = false;
+    
+    public static boolean           isCoreModLoaded      = false;
     
     public ModMetadata              metadata;
     public Configuration            config;
@@ -289,8 +289,6 @@ public class TreeCapitatorMod
                     
                     breaker.onBlockHarvested(world, x, y, z, metadata, entityPlayer);
                 }
-                else
-                    proxy.debugString("Item is too damaged to chop.");
             }
         }
     }

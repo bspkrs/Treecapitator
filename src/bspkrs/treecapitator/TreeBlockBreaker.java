@@ -45,7 +45,10 @@ public class TreeBlockBreaker
     public static boolean isBreakingPossible(World world, EntityPlayer entityPlayer)
     {
         if (!isBreakingEnabled(entityPlayer))
+        {
+            TreeCapitator.debugString("Chopping disabled due to player state or gamemode.");
             return false;
+        }
         
         ItemStack axe = entityPlayer.getCurrentEquippedItem();
         if ((isAxeItemEquipped(entityPlayer) || !TreeCapitator.needItem) && !world.isRemote)
@@ -53,7 +56,10 @@ public class TreeBlockBreaker
             if (!entityPlayer.capabilities.isCreativeMode && TreeCapitator.allowItemDamage && axe != null
                     && (axe.getMaxDamage() - axe.getItemDamage() <= TreeCapitator.damageMultiplier)
                     && !TreeCapitator.allowMoreBlocksThanDamage)
+            {
+                TreeCapitator.debugString("Chopping disabled due to axe durability.");
                 return false;
+            }
             
             return true;
         }
