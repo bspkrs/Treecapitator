@@ -2,12 +2,14 @@ package bspkrs.treecapitator.fml;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Scanner;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemInWorldManager;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ConfigCategory;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import bspkrs.fml.util.Config;
@@ -17,6 +19,9 @@ import bspkrs.treecapitator.TreeCapitator;
 import bspkrs.util.BlockID;
 import bspkrs.util.CommonUtils;
 import bspkrs.util.ModVersionChecker;
+
+import com.google.common.eventbus.Subscribe;
+
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -24,12 +29,15 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.Mod.ServerStarted;
+import cpw.mods.fml.common.Mod.ServerStarting;
 import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 
@@ -41,21 +49,27 @@ import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 public class TreeCapitatorMod
 {
     public static ModVersionChecker versionChecker;
-    private final String            versionURL           = "https://dl.dropbox.com/u/20748481/Minecraft/1.4.6/treeCapitatorForge.version";
-    private final String            mcfTopic             = "http://www.minecraftforum.net/topic/1009577-";
+    private final String            versionURL               = "https://dl.dropbox.com/u/20748481/Minecraft/1.4.6/treeCapitatorForge.version";
+    private final String            mcfTopic                 = "http://www.minecraftforum.net/topic/1009577-";
     
-    public static final String      BLOCK_ID_CTGY        = "2_block_id";
-    public static final String      THIRD_PARTY_CFG_CTGY = "1_third_party_configs";
-    public static final String      BLOCK_CTGY           = "block_settings";
-    public static final String      ITEM_CTGY            = "item_settings";
-    public static final String      LEAF_CTGY            = "leaf_and_vine_settings";
-    public static final String      MISC                 = "miscellaneous_settings";
-    public static final String      GENERAL              = Configuration.CATEGORY_GENERAL;
+    public static final String      BLOCK_ID_CTGY            = "2_block_id";
+    public static final String      THIRD_PARTY_CFG_CTGY     = "1_third_party_configs";
+    public static final String      BLOCK_CTGY               = "block_settings";
+    public static final String      ITEM_CTGY                = "item_settings";
+    public static final String      LEAF_CTGY                = "leaf_and_vine_settings";
+    public static final String      MISC_CTGY                = "miscellaneous_settings";
+    public static final String      ID_RES_CTGY              = "id_resolver_settings";
+    public static final String      GENERAL                  = Configuration.CATEGORY_GENERAL;
     
-    public static boolean           isCoreModLoaded      = false;
+    public static boolean           isCoreModLoaded          = false;
     
     public ModMetadata              metadata;
     public Configuration            config;
+    
+    private static String           idResolverModIDDesc      = "The mod ID value for ID Resolver.";
+    private static String           idResolverModID          = "IDResolver";
+    private static String           idResolverConfigPathDesc = "The path to the ID Resolver known IDs config file reletive to .minecraft/config/.";
+    private static String           idResolverConfigPath     = "IDResolverknownIDs.properties";
     
     @SidedProxy(clientSide = "bspkrs.treecapitator.fml.ClientProxy", serverSide = "bspkrs.treecapitator.fml.CommonProxy")
     public static CommonProxy       proxy;
@@ -74,13 +88,13 @@ public class TreeCapitatorMod
         config = new Configuration(event.getSuggestedConfigurationFile());
         
         config.load();
-        TreeCapitator.allowUpdateCheck = Config.getBoolean(config, "allowUpdateCheck", MISC, TreeCapitator.allowUpdateCheck, TreeCapitator.allowUpdateCheckDesc);
-        TreeCapitator.onlyDestroyUpwards = Config.getBoolean(config, "onlyDestroyUpwards", MISC, TreeCapitator.onlyDestroyUpwards, TreeCapitator.onlyDestroyUpwardsDesc);
-        TreeCapitator.disableInCreative = Config.getBoolean(config, "disableInCreative", MISC, TreeCapitator.disableInCreative, TreeCapitator.disableInCreativeDesc);
-        TreeCapitator.disableCreativeDrops = Config.getBoolean(config, "disableCreativeDrops", MISC, TreeCapitator.disableCreativeDrops, TreeCapitator.disableCreativeDropsDesc);
-        TreeCapitator.sneakAction = Config.getString(config, "sneakAction", MISC, TreeCapitator.sneakAction, TreeCapitator.sneakActionDesc);
-        TreeCapitator.maxBreakDistance = Config.getInt(config, "maxBreakDistance", MISC, TreeCapitator.maxBreakDistance, -1, 100, TreeCapitator.maxBreakDistanceDesc);
-        TreeCapitator.allowSmartTreeDetection = Config.getBoolean(config, "allowSmartTreeDetection", MISC, TreeCapitator.allowSmartTreeDetection, TreeCapitator.allowSmartTreeDetectionDesc);
+        TreeCapitator.allowUpdateCheck = Config.getBoolean(config, "allowUpdateCheck", MISC_CTGY, TreeCapitator.allowUpdateCheck, TreeCapitator.allowUpdateCheckDesc);
+        TreeCapitator.onlyDestroyUpwards = Config.getBoolean(config, "onlyDestroyUpwards", MISC_CTGY, TreeCapitator.onlyDestroyUpwards, TreeCapitator.onlyDestroyUpwardsDesc);
+        TreeCapitator.disableInCreative = Config.getBoolean(config, "disableInCreative", MISC_CTGY, TreeCapitator.disableInCreative, TreeCapitator.disableInCreativeDesc);
+        TreeCapitator.disableCreativeDrops = Config.getBoolean(config, "disableCreativeDrops", MISC_CTGY, TreeCapitator.disableCreativeDrops, TreeCapitator.disableCreativeDropsDesc);
+        TreeCapitator.sneakAction = Config.getString(config, "sneakAction", MISC_CTGY, TreeCapitator.sneakAction, TreeCapitator.sneakActionDesc);
+        TreeCapitator.maxBreakDistance = Config.getInt(config, "maxBreakDistance", MISC_CTGY, TreeCapitator.maxBreakDistance, -1, 100, TreeCapitator.maxBreakDistanceDesc);
+        TreeCapitator.allowSmartTreeDetection = Config.getBoolean(config, "allowSmartTreeDetection", MISC_CTGY, TreeCapitator.allowSmartTreeDetection, TreeCapitator.allowSmartTreeDetectionDesc);
         
         TreeCapitator.axeIDList = Config.getString(config, "axeIDList", ITEM_CTGY, TreeCapitator.axeIDList, TreeCapitator.axeIDListDesc);
         TreeCapitator.shearIDList = Config.getString(config, "shearIDList", ITEM_CTGY, TreeCapitator.shearIDList, TreeCapitator.shearIDListDesc);
@@ -102,17 +116,17 @@ public class TreeCapitatorMod
         if (config.hasCategory(GENERAL))
         {
             TreeCapitator.allowUpdateCheck = Config.getBoolean(config, "allowUpdateCheck", GENERAL, TreeCapitator.allowUpdateCheck, TreeCapitator.allowUpdateCheckDesc);
-            Config.setFromOldCtgy(config, "allowUpdateCheck", GENERAL, MISC);
+            Config.setFromOldCtgy(config, "allowUpdateCheck", GENERAL, MISC_CTGY);
             TreeCapitator.onlyDestroyUpwards = Config.getBoolean(config, "onlyDestroyUpwards", GENERAL, TreeCapitator.onlyDestroyUpwards, TreeCapitator.onlyDestroyUpwardsDesc);
-            Config.setFromOldCtgy(config, "onlyDestroyUpwards", GENERAL, MISC);
+            Config.setFromOldCtgy(config, "onlyDestroyUpwards", GENERAL, MISC_CTGY);
             TreeCapitator.disableInCreative = Config.getBoolean(config, "disableInCreative", GENERAL, TreeCapitator.disableInCreative, TreeCapitator.disableInCreativeDesc);
-            Config.setFromOldCtgy(config, "disableInCreative", GENERAL, MISC);
+            Config.setFromOldCtgy(config, "disableInCreative", GENERAL, MISC_CTGY);
             TreeCapitator.disableCreativeDrops = Config.getBoolean(config, "disableCreativeDrops", GENERAL, TreeCapitator.disableCreativeDrops, TreeCapitator.disableCreativeDropsDesc);
-            Config.setFromOldCtgy(config, "disableCreativeDrops", GENERAL, MISC);
+            Config.setFromOldCtgy(config, "disableCreativeDrops", GENERAL, MISC_CTGY);
             TreeCapitator.sneakAction = Config.getString(config, "sneakAction", GENERAL, TreeCapitator.sneakAction, TreeCapitator.sneakActionDesc);
-            Config.setFromOldCtgy(config, "sneakAction", GENERAL, MISC);
+            Config.setFromOldCtgy(config, "sneakAction", GENERAL, MISC_CTGY);
             TreeCapitator.maxBreakDistance = Config.getInt(config, "maxBreakDistance", GENERAL, TreeCapitator.maxBreakDistance, -1, 100, TreeCapitator.maxBreakDistanceDesc);
-            Config.setFromOldCtgy(config, "maxBreakDistance", GENERAL, MISC);
+            Config.setFromOldCtgy(config, "maxBreakDistance", GENERAL, MISC_CTGY);
             
             TreeCapitator.axeIDList = Config.getString(config, "axeIDList", GENERAL, TreeCapitator.axeIDList, TreeCapitator.axeIDListDesc);
             Config.setFromOldCtgy(config, "axeIDList", GENERAL, ITEM_CTGY);
@@ -141,18 +155,24 @@ public class TreeCapitatorMod
             config.addCustomCategoryComment("z_converted_" + GENERAL, "Your old config settings have been migrated to their new homes.  Except for logIDList.  It's not convertible. :p");
         }
         
-        TreeCapitator.allowDebugOutput = Config.getBoolean(config, "allowDebugOutput", MISC, TreeCapitator.allowDebugOutput, TreeCapitator.allowDebugOutputDesc);
-        TreeCapitator.allowDebugLogging = Config.getBoolean(config, "allowDebugLogging", MISC, TreeCapitator.allowDebugLogging, TreeCapitator.allowDebugLoggingDesc);
-        TreeCapitator.maxLeafIDDist = Config.getInt(config, "maxLeafIDDist", MISC, TreeCapitator.maxLeafIDDist, 1, 8, TreeCapitator.maxLeafIDDistDesc);
-        TreeCapitator.minLeavesToID = Config.getInt(config, "minLeavesToID", MISC, TreeCapitator.minLeavesToID, 0, 8, TreeCapitator.minLeavesToIDDesc);
-        // TreeCapitator.maxLeafBreakDist = Config.getInt(config, "maxLeafBreakDist", MISC, TreeCapitator.maxLeafBreakDist, 0, 6,
-        // TreeCapitator.maxLeafBreakDistDesc);
+        TreeCapitator.allowDebugOutput = Config.getBoolean(config, "allowDebugOutput", MISC_CTGY, TreeCapitator.allowDebugOutput, TreeCapitator.allowDebugOutputDesc);
+        TreeCapitator.allowDebugLogging = Config.getBoolean(config, "allowDebugLogging", MISC_CTGY, TreeCapitator.allowDebugLogging, TreeCapitator.allowDebugLoggingDesc);
+        TreeCapitator.maxLeafIDDist = Config.getInt(config, "maxLeafIDDist", MISC_CTGY, TreeCapitator.maxLeafIDDist, 1, 8, TreeCapitator.maxLeafIDDistDesc);
+        TreeCapitator.minLeavesToID = Config.getInt(config, "minLeavesToID", MISC_CTGY, TreeCapitator.minLeavesToID, 0, 8, TreeCapitator.minLeavesToIDDesc);
         
         TreeCapitator.allowGetRemoteTreeConfig = Config.getBoolean(config, "allowGetRemoteTreeConfig", BLOCK_CTGY, TreeCapitator.allowGetRemoteTreeConfig, TreeCapitator.allowGetRemoteTreeConfigDesc);
         TreeCapitator.remoteTreeConfigURL = Config.getString(config, "remoteTreeConfigURL", BLOCK_CTGY, TreeCapitator.remoteTreeConfigURL, TreeCapitator.remoteTreeConfigURLDesc);
         TreeCapitator.remoteBlockIDConfig = TreeCapitator.getRemoteConfig();
         TreeCapitator.useRemoteTreeConfig = Config.getBoolean(config, "useRemoteTreeConfig", BLOCK_CTGY, TreeCapitator.useRemoteTreeConfig, TreeCapitator.useRemoteTreeConfigDesc);
         TreeCapitator.useStrictBlockPairing = Config.getBoolean(config, "useStrictBlockPairing", BLOCK_CTGY, TreeCapitator.useStrictBlockPairing, TreeCapitator.useStrictBlockPairingDesc);
+        
+        idResolverModID = Config.getString(config, "idResolverModID", ID_RES_CTGY, idResolverModID, idResolverModIDDesc);
+        idResolverConfigPath = Config.getString(config, "idResolverConfigPath", ID_RES_CTGY, idResolverConfigPath, idResolverConfigPathDesc);
+        config.addCustomCategoryComment(ID_RES_CTGY, "If you are not using ID Resolver, you can safely ignore this section.\n" +
+                "If you ARE using ID Resolver and your log file does not show any warnings\n" +
+                "pertaining to ID Resolver, you can still ignore this section. In fact, the\n" +
+                "only reason you should mess with this section if ShaRose decides to change\n" +
+                "the Mod ID or config file path for ID Resolver.");
         
         /*
          * Get / Set Block ID config lists
@@ -215,11 +235,27 @@ public class TreeCapitatorMod
                 if (ctgy.indexOf(THIRD_PARTY_CFG_CTGY + ".") != -1)
                 {
                     HashMap<String, String> entries = new HashMap<String, String>();
+                    ConfigCategory currentCtgy = config.getCategory(ctgy);
                     
-                    if (config.getCategory(ctgy).containsKey(TreeCapitator.MOD_NAME))
+                    if (currentCtgy.containsKey(TreeCapitator.MOD_NAME))
                     {
-                        for (String tpCfgEntry : config.getCategory(ctgy).keySet())
-                            entries.put(tpCfgEntry, config.getCategory(ctgy).get(tpCfgEntry).value);
+                        for (String tpCfgEntry : currentCtgy.keySet())
+                            entries.put(tpCfgEntry, currentCtgy.get(tpCfgEntry).value);
+                        
+                        if (!currentCtgy.containsKey(TreeCapitator.IDR_MOD_ID))
+                        { // must be an old config file. add the new entry for ID resolver and default it
+                            if (TreeCapitator.idResolverModIdMap.containsKey(currentCtgy.get(TreeCapitator.MOD_NAME).value))
+                            {
+                                String idrModID = TreeCapitator.idResolverModIdMap.get(currentCtgy.get(TreeCapitator.MOD_NAME).value);
+                                config.get(ctgy, TreeCapitator.IDR_MOD_ID, idrModID);
+                                entries.put(TreeCapitator.IDR_MOD_ID, idrModID);
+                            }
+                            else
+                            { // we don't have a default ID Resolver Mod ID value for this mod, set to blank
+                                config.get(ctgy, TreeCapitator.IDR_MOD_ID, "");
+                                entries.put(TreeCapitator.IDR_MOD_ID, "");
+                            }
+                        }
                         
                         if (entries.containsKey(TreeCapitator.ITEM_VALUES) && !entries.containsKey(TreeCapitator.SHIFT_INDEX))
                             entries.put(TreeCapitator.SHIFT_INDEX, "true");
@@ -248,12 +284,26 @@ public class TreeCapitatorMod
     public void init(FMLInitializationEvent event)
     {
         MinecraftForge.EVENT_BUS.register(new PlayerHandler());
+        
         proxy.onLoad();
     }
     
     @PostInit
     public void postInit(FMLPostInitializationEvent event)
+    {   
+        
+    }
+    
+    @Subscribe
+    public void loadComplete(FMLLoadCompleteEvent complete)
     {
+        // TODO: figure out how to register for this
+    }
+    
+    @ServerStarting
+    public void serverStarting(FMLServerStartingEvent event)
+    {
+        // TODO: move this code up to the loadComplete() method once that's figured out
         getReplacementTagListFromThirdPartyConfigs();
         TreeCapitator.localBlockIDList = TreeCapitator.replaceThirdPartyBlockTags(TreeCapitator.localBlockIDList);
         TreeCapitator.axeIDList = TreeCapitator.replaceThirdPartyBlockTags(TreeCapitator.axeIDList);
@@ -304,6 +354,67 @@ public class TreeCapitatorMod
         
         TCLog.info("Getting Block ID Lists from 3rd party mod configs...");
         
+        // HashMap<String, String> idResolverManagedMap = new HashMap<String, String>();
+        IDResolverMappingList idrMappings = new IDResolverMappingList();
+        
+        /*
+         * Get IDs from ID Resolver if it's loaded
+         */
+        if (loader.isModLoaded(idResolverModID))
+        {
+            TCLog.info("ID Resolver has been detected.  Processing ID config...");
+            
+            File idResolverConfigFile = new File(loader.getConfigDir(), idResolverConfigPath);
+            
+            if (idResolverConfigFile.exists())
+            {
+                Scanner scanner = null;
+                try
+                {
+                    scanner = new Scanner(idResolverConfigFile);
+                }
+                catch (Throwable e)
+                {
+                    TCLog.severe("Error reading ID Resolver config file: " + e.getMessage());
+                    e.printStackTrace();
+                    return;
+                }
+                while (scanner.hasNextLine())
+                {
+                    String line = scanner.nextLine();
+                    
+                    if (!line.startsWith("ItemID.") && !line.startsWith("BlockID."))
+                        continue;
+                    
+                    if (!line.trim().equals("")) // line is non-blank
+                    {
+                        try
+                        {
+                            IDResolverMapping mapping = new IDResolverMapping(line);
+                            
+                            if (mapping.oldID != 0 && mapping.newID != 0 && !mapping.isStaticMapping())
+                            {
+                                // IDs are not the same, add to the list of managed IDs
+                                idrMappings.add(mapping);
+                                TreeCapitator.debugString("Adding entry: %s", line);
+                            }
+                            else
+                                TreeCapitator.debugString("Ignoring entry: %s", line);
+                        }
+                        catch (Throwable e)
+                        {
+                            TCLog.severe("Exception caught for line: %s", line);
+                        }
+                    }
+                }
+                scanner.close();
+            }
+            else
+                TCLog.warning("The ID Resolver config file path specified does not exist: %s", idResolverConfigFile.getPath());
+        }
+        else
+            TCLog.info("ID Resolver (Mod ID \"%s\") has not been detected.", idResolverModID);
+        
         TreeCapitator.tagMap = new HashMap<String, String>();
         
         for (String key : TreeCapitator.thirdPartyConfig.keySet())
@@ -323,19 +434,31 @@ public class TreeCapitatorMod
                         useShiftedIndex = Boolean.valueOf(tpCfgKey.get(TreeCapitator.SHIFT_INDEX));
                     
                     for (String prop : tpCfgKey.keySet())
-                        if (!prop.equals(TreeCapitator.MOD_NAME) && !prop.equals(TreeCapitator.CONFIG_PATH) && !prop.equals(TreeCapitator.SHIFT_INDEX))
+                        if (!prop.equals(TreeCapitator.MOD_NAME) && !prop.equals(TreeCapitator.CONFIG_PATH) && !prop.equals(TreeCapitator.SHIFT_INDEX)
+                                && !prop.equals(TreeCapitator.IDR_MOD_ID))
                         {
-                            TCLog.info("Getting tags from %s...", prop);
+                            TreeCapitator.debugString("Getting tags from %s...", prop);
                             
                             for (String configID : tpCfgKey.get(prop).trim().split(";"))
                             {
                                 String[] subString = configID.trim().split(":");
                                 String configValue = thirdPartyConfig.get(/* ctgy */subString[0].trim(), /* prop name */subString[1].trim(), 0).value;
                                 String tagID = "<" + tpCfgKey.get(TreeCapitator.MOD_NAME) + "." + subString[1].trim() + ">";
+                                String idrClassName = tpCfgKey.get(TreeCapitator.IDR_MOD_ID);
+                                
                                 if (!TreeCapitator.tagMap.containsKey(tagID))
                                 {
+                                    TreeCapitator.debugString("configValue: %s", configValue);
+                                    IDResolverMapping mapping = idrMappings.getMappingForModAndOldID(idrClassName, CommonUtils.parseInt(configValue));
+                                    
+                                    if (mapping != null)
+                                        configValue = String.valueOf(mapping.newID);
+                                    TreeCapitator.debugString("configValue: %s", configValue);
+                                    
                                     if (prop.equals(TreeCapitator.ITEM_VALUES) && useShiftedIndex)
                                         configValue = String.valueOf(CommonUtils.parseInt(configValue, -256) + 256);
+                                    
+                                    TreeCapitator.debugString("configValue: %s", configValue);
                                     
                                     if (!configValue.equals("0"))
                                     {
@@ -354,6 +477,5 @@ public class TreeCapitatorMod
             else
                 TreeCapitator.debugString("Mod " + tpCfgKey.get(TreeCapitator.MOD_NAME) + " is not loaded.");
         }
-        
     }
 }
