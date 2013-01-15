@@ -13,10 +13,10 @@ import bspkrs.util.CommonUtils;
 
 public final class TreeCapitator
 {
-    public final static String                         versionNumber                  = "1.4.6.r04";
+    public final static String                         VERSION_NUMBER                 = "1.4.6.r04";
     public static final String                         LOGS                           = "logs";
     public static final String                         LEAVES                         = "leaves";
-    public static final String                         MOD_NAME                       = "modName";
+    public static final String                         MOD_ID                         = "modID";
     public static final String                         CONFIG_PATH                    = "configPath";
     public static final String                         BLOCK_VALUES                   = "blockValues";
     public static final String                         ITEM_VALUES                    = "itemValues";
@@ -191,10 +191,10 @@ public final class TreeCapitator
          * Third-Party config defaults
          */
         HashMap<String, String> biomesoplenty = new HashMap<String, String>();
-        biomesoplenty.put(MOD_NAME, "BiomesOPlenty");
+        biomesoplenty.put(MOD_ID, "BiomesOPlenty");
         biomesoplenty.put(CONFIG_PATH, "BiomesOPlenty.cfg");
         biomesoplenty.put(IDR_MOD_ID, "tdwp_ftw.biomesop.mod_BiomesOPlenty");
-        idResolverModIdMap.put(biomesoplenty.get(MOD_NAME), biomesoplenty.get(IDR_MOD_ID));
+        idResolverModIdMap.put(biomesoplenty.get(MOD_ID), biomesoplenty.get(IDR_MOD_ID));
         biomesoplenty.put(BLOCK_VALUES, "terrainblock:BlockAcaciaLeaves; terrainblock:BlockAcaciaLog; terrainblock:BlockAppleLeaves; " +
                 "terrainblock:BlockAppleLeavesFruitless; terrainblock:BlockAutumnLeaves; terrainblock:BlockBamboo; terrainblock:BlockBambooLeaves; " +
                 "terrainblock:BlockBlueLeaves; terrainblock:BlockCherryLog; terrainblock:BlockDarkLeaves; terrainblock:BlockDarkLog; " +
@@ -205,83 +205,83 @@ public final class TreeCapitator
         thirdPartyConfig.put("biomesoplenty", biomesoplenty);
         
         HashMap<String, String> extrabiomesxl = new HashMap<String, String>();
-        extrabiomesxl.put(MOD_NAME, "ExtrabiomesXL");
+        extrabiomesxl.put(MOD_ID, "ExtrabiomesXL");
         extrabiomesxl.put(CONFIG_PATH, "extrabiomes/extrabiomes.cfg");
         extrabiomesxl.put(IDR_MOD_ID, "extrabiomes.Extrabiomes");
-        idResolverModIdMap.put(extrabiomesxl.get(MOD_NAME), extrabiomesxl.get(IDR_MOD_ID));
+        idResolverModIdMap.put(extrabiomesxl.get(MOD_ID), extrabiomesxl.get(IDR_MOD_ID));
         extrabiomesxl.put(BLOCK_VALUES, "block:customlog.id; block:quarterlog0.id; block:quarterlog1.id; block:quarterlog2.id; block:quarterlog3.id; " +
                 "block:autumnleaves.id; block:greenleaves.id");
         thirdPartyConfig.put("extrabiomesxl", extrabiomesxl);
         
         HashMap<String, String> forestry = new HashMap<String, String>();
-        forestry.put(MOD_NAME, "Forestry");
+        forestry.put(MOD_ID, "Forestry");
         forestry.put(CONFIG_PATH, "forestry/base.conf");
         forestry.put(IDR_MOD_ID, "forestry.Forestry");
-        idResolverModIdMap.put(forestry.get(MOD_NAME), forestry.get(IDR_MOD_ID));
+        idResolverModIdMap.put(forestry.get(MOD_ID), forestry.get(IDR_MOD_ID));
         forestry.put(BLOCK_VALUES, "block:log1; block:log2; block:log3; block:log4; block:leaves");
         thirdPartyConfig.put("forestry", forestry);
         
         HashMap<String, String> ic2 = new HashMap<String, String>();
-        ic2.put(MOD_NAME, "IC2");
+        ic2.put(MOD_ID, "IC2");
         ic2.put(CONFIG_PATH, "IC2.cfg");
         ic2.put(IDR_MOD_ID, "ic2.core.IC2");
-        idResolverModIdMap.put(ic2.get(MOD_NAME), ic2.get(IDR_MOD_ID));
+        idResolverModIdMap.put(ic2.get(MOD_ID), ic2.get(IDR_MOD_ID));
         ic2.put(BLOCK_VALUES, "block:blockRubWood; block:blockRubLeaves");
         ic2.put(ITEM_VALUES, "item:itemToolBronzeAxe; item:itemToolChainsaw");
         ic2.put(SHIFT_INDEX, "true");
         thirdPartyConfig.put("ic2", ic2);
         
         HashMap<String, String> inficraft = new HashMap<String, String>();
-        inficraft.put(MOD_NAME, "Flora Trees");
+        inficraft.put(MOD_ID, "Flora Trees");
         inficraft.put(CONFIG_PATH, "InfiCraft/FloraTrees.txt");
         inficraft.put(IDR_MOD_ID, "florasoma.trees.FloraTrees");
-        idResolverModIdMap.put(inficraft.get(MOD_NAME), inficraft.get(IDR_MOD_ID));
+        idResolverModIdMap.put(inficraft.get(MOD_ID), inficraft.get(IDR_MOD_ID));
         inficraft.put(BLOCK_VALUES, "block:Bloodwood Block; block:Flora Leaves; block:Redwood Block; block:Sakura Leaves; block:Wood Block");
         thirdPartyConfig.put("inficraft", inficraft);
         
         HashMap<String, String> mfreloaded = new HashMap<String, String>();
-        mfreloaded.put(MOD_NAME, "MFReloaded");
+        mfreloaded.put(MOD_ID, "MFReloaded");
         mfreloaded.put(CONFIG_PATH, "MFReloaded.cfg");
         mfreloaded.put(IDR_MOD_ID, "powercrystals.minefactoryreloaded.MineFactoryReloadedCore");
-        idResolverModIdMap.put(mfreloaded.get(MOD_NAME), mfreloaded.get(IDR_MOD_ID));
+        idResolverModIdMap.put(mfreloaded.get(MOD_ID), mfreloaded.get(IDR_MOD_ID));
         mfreloaded.put(BLOCK_VALUES, "block:ID.RubberWood; block:ID.RubberLeaves");
         thirdPartyConfig.put("mfreloaded", mfreloaded);
         
         HashMap<String, String> redpower = new HashMap<String, String>();
-        redpower.put(MOD_NAME, "RedPowerWorld");
+        redpower.put(MOD_ID, "RedPowerWorld");
         redpower.put(CONFIG_PATH, "redpower/redpower.cfg");
         redpower.put(IDR_MOD_ID, "com.eloraam.redpower.RedPowerWorld");
-        idResolverModIdMap.put(redpower.get(MOD_NAME), redpower.get(IDR_MOD_ID));
+        idResolverModIdMap.put(redpower.get(MOD_ID), redpower.get(IDR_MOD_ID));
         redpower.put(BLOCK_VALUES, "blocks.world:log.id; blocks.world:leaves.id");
         redpower.put(ITEM_VALUES, "items.world:axeRuby.id; items.world:axeGreenSapphire.id; items.world:axeSapphire.id");
         redpower.put(SHIFT_INDEX, "true");
         thirdPartyConfig.put("redpower", redpower);
         
         HashMap<String, String> thaumcraft = new HashMap<String, String>();
-        thaumcraft.put(MOD_NAME, "Thaumcraft");
+        thaumcraft.put(MOD_ID, "Thaumcraft");
         thaumcraft.put(CONFIG_PATH, "Thaumcraft.cfg");
         thaumcraft.put(IDR_MOD_ID, "thaumcraft.common.Thaumcraft");
-        idResolverModIdMap.put(thaumcraft.get(MOD_NAME), thaumcraft.get(IDR_MOD_ID));
+        idResolverModIdMap.put(thaumcraft.get(MOD_ID), thaumcraft.get(IDR_MOD_ID));
         thaumcraft.put(BLOCK_VALUES, "block:BlockMagicalLog; block:BlockMagicalLeaves");
         thaumcraft.put(ITEM_VALUES, "item:Thaumaxe");
         thaumcraft.put(SHIFT_INDEX, "true");
         thirdPartyConfig.put("thaumcraft", thaumcraft);
         
         HashMap<String, String> twilightforest = new HashMap<String, String>();
-        twilightforest.put(MOD_NAME, "TwilightForest");
+        twilightforest.put(MOD_ID, "TwilightForest");
         twilightforest.put(CONFIG_PATH, "TwilightForest.cfg");
         twilightforest.put(IDR_MOD_ID, "twilightforest.TwilightForestMod");
-        idResolverModIdMap.put(twilightforest.get(MOD_NAME), twilightforest.get(IDR_MOD_ID));
+        idResolverModIdMap.put(twilightforest.get(MOD_ID), twilightforest.get(IDR_MOD_ID));
         twilightforest.put(BLOCK_VALUES, "block:Log; block:MagicLog; block:MagicLogSpecial; block:Leaves; block:MagicLeaves; block:Hedge");
         twilightforest.put(ITEM_VALUES, "item:IronwoodAxe; item:SteeleafAxe; item:MinotaurAxe");
         twilightforest.put(SHIFT_INDEX, "true");
         thirdPartyConfig.put("twilightforest", twilightforest);
         
         HashMap<String, String> zapapples = new HashMap<String, String>();
-        zapapples.put(MOD_NAME, "ZapApples");
+        zapapples.put(MOD_ID, "ZapApples");
         zapapples.put(CONFIG_PATH, "ZapApples.cfg");
         zapapples.put(IDR_MOD_ID, "com.jsn_man.ZapApples.ZapApples");
-        idResolverModIdMap.put(zapapples.get(MOD_NAME), zapapples.get(IDR_MOD_ID));
+        idResolverModIdMap.put(zapapples.get(MOD_ID), zapapples.get(IDR_MOD_ID));
         zapapples.put(BLOCK_VALUES, "block:zapAppleLogID; block:zapAppleLeavesID; block:zapAppleFlowersID");
         thirdPartyConfig.put("zapapples", zapapples);
         

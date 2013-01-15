@@ -41,7 +41,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 
-@Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge " + TreeCapitator.versionNumber, useMetadata = true)
+@Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge " + TreeCapitator.VERSION_NUMBER, useMetadata = true)
 @NetworkMod(clientSideRequired = false, serverSideRequired = false,
         clientPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = ClientPacketHandler.class),
         serverPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = ServerPacketHandler.class),
@@ -52,7 +52,7 @@ public class TreeCapitatorMod
     private final String            versionURL               = "https://dl.dropbox.com/u/20748481/Minecraft/1.4.6/treeCapitatorForge.version";
     private final String            mcfTopic                 = "http://www.minecraftforum.net/topic/1009577-";
     
-    public static final String      BLOCK_ID_CTGY            = "2_block_id";
+    public static final String      TREE_BLOCK_CTGY          = "2_tree_block_list";
     public static final String      THIRD_PARTY_CFG_CTGY     = "1_third_party_configs";
     public static final String      BLOCK_CTGY               = "block_settings";
     public static final String      ITEM_CTGY                = "item_settings";
@@ -77,8 +77,12 @@ public class TreeCapitatorMod
     @Instance(value = "TreeCapitator")
     public static TreeCapitatorMod  instance;
     
+    private static Loader           loader;
+    
     public TreeCapitatorMod()
-    {}
+    {
+        loader = Loader.instance();
+    }
     
     @PreInit
     public void preInit(FMLPreInitializationEvent event)
@@ -177,13 +181,16 @@ public class TreeCapitatorMod
         /*
          * Get / Set Block ID config lists
          */
-        if (!config.hasCategory(BLOCK_ID_CTGY))
+        if (config.hasCategory("2_block_id"))
+            Config.renameCtgy(config, "2_block_id", TREE_BLOCK_CTGY);
+        
+        if (!config.hasCategory(TREE_BLOCK_CTGY))
         {
             for (String key : TreeCapitator.configBlockList.keySet())
             {
                 HashMap<String, String> entry = TreeCapitator.configBlockList.get(key);
                 for (String blockType : entry.keySet())
-                    config.get(BLOCK_ID_CTGY + "." + key, blockType, entry.get(blockType));
+                    config.get(TREE_BLOCK_CTGY + "." + key, blockType, entry.get(blockType));
             }
             TCLog.info("Default block config loaded.");
         }
@@ -193,7 +200,7 @@ public class TreeCapitatorMod
             
             for (String ctgy : config.categories.keySet())
             {
-                if (ctgy.indexOf(BLOCK_ID_CTGY + ".") != -1)
+                if (ctgy.indexOf(TREE_BLOCK_CTGY + ".") != -1)
                 {
                     HashMap<String, String> blocks = new HashMap<String, String>();
                     
@@ -212,7 +219,7 @@ public class TreeCapitatorMod
             TCLog.info("File block config loaded.");
         }
         
-        config.addCustomCategoryComment(BLOCK_ID_CTGY, TreeCapitator.configBlockIDDesc);
+        config.addCustomCategoryComment(TREE_BLOCK_CTGY, TreeCapitator.configBlockIDDesc);
         
         /*
          * Get / Set Third Party block config
@@ -224,6 +231,11 @@ public class TreeCapitatorMod
                 HashMap<String, String> tpconfig = TreeCapitator.thirdPartyConfig.get(key);
                 for (String entry : tpconfig.keySet())
                     config.get(THIRD_PARTY_CFG_CTGY + "." + key, entry, tpconfig.get(entry));
+                
+                if (loader.isModLoaded(tpconfig.get(TreeCapitator.MOD_ID)))
+                    for (int i = 0; i < loader.getModList().size(); i++)
+                        if (!loader.getIndexedModList().get(tpconfig.get(TreeCapitator.MOD_ID)).getMod().getClass().getName().equals(tpconfig.get(TreeCapitator.IDR_MOD_ID)))
+                            ;
             }
         }
         else
@@ -237,16 +249,16 @@ public class TreeCapitatorMod
                     HashMap<String, String> entries = new HashMap<String, String>();
                     ConfigCategory currentCtgy = config.getCategory(ctgy);
                     
-                    if (currentCtgy.containsKey(TreeCapitator.MOD_NAME))
+                    if (currentCtgy.containsKey(TreeCapitator.MOD_ID))
                     {
                         for (String tpCfgEntry : currentCtgy.keySet())
                             entries.put(tpCfgEntry, currentCtgy.get(tpCfgEntry).value);
                         
                         if (!currentCtgy.containsKey(TreeCapitator.IDR_MOD_ID))
                         { // must be an old config file. add the new entry for ID resolver and default it
-                            if (TreeCapitator.idResolverModIdMap.containsKey(currentCtgy.get(TreeCapitator.MOD_NAME).value))
+                            if (TreeCapitator.idResolverModIdMap.containsKey(currentCtgy.get(TreeCapitator.MOD_ID).value))
                             {
-                                String idrModID = TreeCapitator.idResolverModIdMap.get(currentCtgy.get(TreeCapitator.MOD_NAME).value);
+                                String idrModID = TreeCapitator.idResolverModIdMap.get(currentCtgy.get(TreeCapitator.MOD_ID).value);
                                 config.get(ctgy, TreeCapitator.IDR_MOD_ID, idrModID);
                                 entries.put(TreeCapitator.IDR_MOD_ID, idrModID);
                             }
@@ -350,7 +362,6 @@ public class TreeCapitatorMod
     
     public static void getReplacementTagListFromThirdPartyConfigs()
     {
-        Loader loader = Loader.instance();
         
         TCLog.info("Getting Block ID Lists from 3rd party mod configs...");
         
@@ -422,7 +433,7 @@ public class TreeCapitatorMod
             TreeCapitator.debugString("Processing key " + key);
             HashMap<String, String> tpCfgKey = TreeCapitator.thirdPartyConfig.get(key);
             
-            if (loader.isModLoaded(tpCfgKey.get(TreeCapitator.MOD_NAME)))
+            if (loader.isModLoaded(tpCfgKey.get(TreeCapitator.MOD_ID)))
             {
                 File file = new File(loader.getConfigDir(), tpCfgKey.get(TreeCapitator.CONFIG_PATH).trim());
                 if (file.exists())
@@ -434,7 +445,7 @@ public class TreeCapitatorMod
                         useShiftedIndex = Boolean.valueOf(tpCfgKey.get(TreeCapitator.SHIFT_INDEX));
                     
                     for (String prop : tpCfgKey.keySet())
-                        if (!prop.equals(TreeCapitator.MOD_NAME) && !prop.equals(TreeCapitator.CONFIG_PATH) && !prop.equals(TreeCapitator.SHIFT_INDEX)
+                        if (!prop.equals(TreeCapitator.MOD_ID) && !prop.equals(TreeCapitator.CONFIG_PATH) && !prop.equals(TreeCapitator.SHIFT_INDEX)
                                 && !prop.equals(TreeCapitator.IDR_MOD_ID))
                         {
                             TreeCapitator.debugString("Getting tags from %s...", prop);
@@ -443,7 +454,7 @@ public class TreeCapitatorMod
                             {
                                 String[] subString = configID.trim().split(":");
                                 String configValue = thirdPartyConfig.get(/* ctgy */subString[0].trim(), /* prop name */subString[1].trim(), 0).value;
-                                String tagID = "<" + tpCfgKey.get(TreeCapitator.MOD_NAME) + "." + subString[1].trim() + ">";
+                                String tagID = "<" + tpCfgKey.get(TreeCapitator.MOD_ID) + "." + subString[1].trim() + ">";
                                 String idrClassName = tpCfgKey.get(TreeCapitator.IDR_MOD_ID);
                                 
                                 if (!TreeCapitator.tagMap.containsKey(tagID))
@@ -475,7 +486,7 @@ public class TreeCapitatorMod
                     TreeCapitator.debugString("Mod config file " + tpCfgKey.get(TreeCapitator.CONFIG_PATH) + " does not exist.");
             }
             else
-                TreeCapitator.debugString("Mod " + tpCfgKey.get(TreeCapitator.MOD_NAME) + " is not loaded.");
+                TreeCapitator.debugString("Mod " + tpCfgKey.get(TreeCapitator.MOD_ID) + " is not loaded.");
         }
     }
 }
