@@ -19,9 +19,7 @@ import bspkrs.treecapitator.TreeCapitator;
 import bspkrs.util.BlockID;
 import bspkrs.util.CommonUtils;
 import bspkrs.util.ModVersionChecker;
-
-import com.google.common.eventbus.Subscribe;
-
+import cpw.mods.fml.common.DummyModContainer;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -33,7 +31,6 @@ import cpw.mods.fml.common.Mod.ServerStarting;
 import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
@@ -41,12 +38,13 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 
-@Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge " + TreeCapitator.VERSION_NUMBER, useMetadata = true)
+@Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge " + TreeCapitator.VERSION_NUMBER, useMetadata = true,
+        dependencies = "*")
 @NetworkMod(clientSideRequired = false, serverSideRequired = false,
         clientPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = ClientPacketHandler.class),
         serverPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = ServerPacketHandler.class),
         connectionHandler = ConnectionHandler.class)
-public class TreeCapitatorMod
+public class TreeCapitatorMod extends DummyModContainer
 {
     public static ModVersionChecker versionChecker;
     private final String            versionURL               = "https://dl.dropbox.com/u/20748481/Minecraft/1.4.6/treeCapitatorForge.version";
@@ -233,9 +231,9 @@ public class TreeCapitatorMod
                     config.get(THIRD_PARTY_CFG_CTGY + "." + key, entry, tpconfig.get(entry));
                 
                 if (loader.isModLoaded(tpconfig.get(TreeCapitator.MOD_ID)))
-                    for (int i = 0; i < loader.getModList().size(); i++)
-                        if (!loader.getIndexedModList().get(tpconfig.get(TreeCapitator.MOD_ID)).getMod().getClass().getName().equals(tpconfig.get(TreeCapitator.IDR_MOD_ID)))
-                            ;
+                    if (!tpconfig.containsKey(TreeCapitator.IDR_MOD_ID))
+                        tpconfig.put(TreeCapitator.IDR_MOD_ID, loader.getIndexedModList().get(tpconfig.get(TreeCapitator.MOD_ID)).getMod().getClass().getName());
+                
             }
         }
         else
@@ -263,9 +261,9 @@ public class TreeCapitatorMod
                                 entries.put(TreeCapitator.IDR_MOD_ID, idrModID);
                             }
                             else
-                            { // we don't have a default ID Resolver Mod ID value for this mod, set to blank
-                                config.get(ctgy, TreeCapitator.IDR_MOD_ID, "");
-                                entries.put(TreeCapitator.IDR_MOD_ID, "");
+                            { // we don't have a default ID Resolver Mod ID value for this mod
+                                config.get(ctgy, TreeCapitator.IDR_MOD_ID, loader.getIndexedModList().get(entries.get(TreeCapitator.MOD_ID)).getMod().getClass().getName());
+                                entries.put(TreeCapitator.IDR_MOD_ID, loader.getIndexedModList().get(entries.get(TreeCapitator.MOD_ID)).getMod().getClass().getName());
                             }
                         }
                         
@@ -302,24 +300,17 @@ public class TreeCapitatorMod
     
     @PostInit
     public void postInit(FMLPostInitializationEvent event)
-    {   
-        
-    }
-    
-    @Subscribe
-    public void loadComplete(FMLLoadCompleteEvent complete)
     {
-        // TODO: figure out how to register for this
+        getReplacementTagListFromThirdPartyConfigs();
+        TreeCapitator.localBlockIDList = TreeCapitator.replaceThirdPartyBlockTags(TreeCapitator.localBlockIDList);
+        TreeCapitator.axeIDList = TreeCapitator.replaceThirdPartyBlockTags(TreeCapitator.axeIDList);
+        TreeCapitator.shearIDList = TreeCapitator.replaceThirdPartyBlockTags(TreeCapitator.shearIDList);
     }
     
     @ServerStarting
     public void serverStarting(FMLServerStartingEvent event)
     {
         // TODO: move this code up to the loadComplete() method once that's figured out
-        getReplacementTagListFromThirdPartyConfigs();
-        TreeCapitator.localBlockIDList = TreeCapitator.replaceThirdPartyBlockTags(TreeCapitator.localBlockIDList);
-        TreeCapitator.axeIDList = TreeCapitator.replaceThirdPartyBlockTags(TreeCapitator.axeIDList);
-        TreeCapitator.shearIDList = TreeCapitator.replaceThirdPartyBlockTags(TreeCapitator.shearIDList);
     }
     
     @ServerStarted
@@ -375,6 +366,7 @@ public class TreeCapitatorMod
         {
             TCLog.info("ID Resolver has been detected.  Processing ID config...");
             
+            // Properties idrKnownIDs = ObfuscationReflectionHelper.getPrivateValue(IDResolver.class, new IDResolver(), "knownIDs")
             File idResolverConfigFile = new File(loader.getConfigDir(), idResolverConfigPath);
             
             if (idResolverConfigFile.exists())
