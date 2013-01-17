@@ -2,7 +2,7 @@ package bspkrs.treecapitator.fml;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.Scanner;
+import java.util.Properties;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ConfigCategory;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
+import sharose.mods.idresolver.IDResolver;
 import bspkrs.fml.util.Config;
 import bspkrs.treecapitator.TCLog;
 import bspkrs.treecapitator.TreeBlockBreaker;
@@ -29,6 +30,7 @@ import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.Mod.ServerStarted;
 import cpw.mods.fml.common.Mod.ServerStarting;
 import cpw.mods.fml.common.ModMetadata;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -356,7 +358,6 @@ public class TreeCapitatorMod extends DummyModContainer
         
         TCLog.info("Getting Block ID Lists from 3rd party mod configs...");
         
-        // HashMap<String, String> idResolverManagedMap = new HashMap<String, String>();
         IDResolverMappingList idrMappings = new IDResolverMappingList();
         
         /*
@@ -366,54 +367,91 @@ public class TreeCapitatorMod extends DummyModContainer
         {
             TCLog.info("ID Resolver has been detected.  Processing ID config...");
             
-            // Properties idrKnownIDs = ObfuscationReflectionHelper.getPrivateValue(IDResolver.class, new IDResolver(), "knownIDs")
-            File idResolverConfigFile = new File(loader.getConfigDir(), idResolverConfigPath);
+            Properties idrKnownIDs = null;
             
-            if (idResolverConfigFile.exists())
+            try
             {
-                Scanner scanner = null;
-                try
+                idrKnownIDs = ObfuscationReflectionHelper.getPrivateValue(IDResolver.class, null, "knownIDs");
+            }
+            catch (Throwable e)
+            {
+                TreeCapitator.debugString("Error getting knownIDs from ID Resolver: %s", e.getMessage());
+            }
+            
+            if (idrKnownIDs != null)
+            {
+                for (String key : idrKnownIDs.stringPropertyNames())
                 {
-                    scanner = new Scanner(idResolverConfigFile);
-                }
-                catch (Throwable e)
-                {
-                    TCLog.severe("Error reading ID Resolver config file: " + e.getMessage());
-                    e.printStackTrace();
-                    return;
-                }
-                while (scanner.hasNextLine())
-                {
-                    String line = scanner.nextLine();
-                    
-                    if (!line.startsWith("ItemID.") && !line.startsWith("BlockID."))
-                        continue;
-                    
-                    if (!line.trim().equals("")) // line is non-blank
+                    String value = idrKnownIDs.getProperty(key);
+                    try
                     {
-                        try
+                        if (!key.startsWith("ItemID.") && !key.startsWith("BlockID."))
+                            continue;
+                        
+                        IDResolverMapping mapping = new IDResolverMapping(key + "=" + value);
+                        
+                        if (mapping.oldID != 0 && mapping.newID != 0 && !mapping.isStaticMapping())
                         {
-                            IDResolverMapping mapping = new IDResolverMapping(line);
-                            
-                            if (mapping.oldID != 0 && mapping.newID != 0 && !mapping.isStaticMapping())
-                            {
-                                // IDs are not the same, add to the list of managed IDs
-                                idrMappings.add(mapping);
-                                TreeCapitator.debugString("Adding entry: %s", line);
-                            }
-                            else
-                                TreeCapitator.debugString("Ignoring entry: %s", line);
+                            // IDs are not the same, add to the list of managed IDs
+                            idrMappings.add(mapping);
+                            TreeCapitator.debugString("Adding entry: %s", key + "=" + value);
                         }
-                        catch (Throwable e)
-                        {
-                            TCLog.severe("Exception caught for line: %s", line);
-                        }
+                        else
+                            TreeCapitator.debugString("Ignoring entry: %s", key + "=" + value);
+                    }
+                    catch (Throwable e)
+                    {
+                        TCLog.severe("Exception caught for line: %s", key + "=" + value);
                     }
                 }
-                scanner.close();
             }
-            else
-                TCLog.warning("The ID Resolver config file path specified does not exist: %s", idResolverConfigFile.getPath());
+            // File idResolverConfigFile = new File(loader.getConfigDir(), idResolverConfigPath);
+            //
+            // if (idResolverConfigFile.exists())
+            // {
+            // Scanner scanner = null;
+            // try
+            // {
+            // scanner = new Scanner(idResolverConfigFile);
+            // }
+            // catch (Throwable e)
+            // {
+            // TCLog.severe("Error reading ID Resolver config file: " + e.getMessage());
+            // e.printStackTrace();
+            // return;
+            // }
+            // while (scanner.hasNextLine())
+            // {
+            // String line = scanner.nextLine();
+            //
+            // if (!line.startsWith("ItemID.") && !line.startsWith("BlockID."))
+            // continue;
+            //
+            // if (!line.trim().equals("")) // line is non-blank
+            // {
+            // try
+            // {
+            // IDResolverMapping mapping = new IDResolverMapping(line);
+            //
+            // if (mapping.oldID != 0 && mapping.newID != 0 && !mapping.isStaticMapping())
+            // {
+            // // IDs are not the same, add to the list of managed IDs
+            // idrMappings.add(mapping);
+            // TreeCapitator.debugString("Adding entry: %s", line);
+            // }
+            // else
+            // TreeCapitator.debugString("Ignoring entry: %s", line);
+            // }
+            // catch (Throwable e)
+            // {
+            // TCLog.severe("Exception caught for line: %s", line);
+            // }
+            // }
+            // }
+            // scanner.close();
+            // }
+            // else
+            // TCLog.warning("The ID Resolver config file path specified does not exist: %s", idResolverConfigFile.getPath());
         }
         else
             TCLog.info("ID Resolver (Mod ID \"%s\") has not been detected.", idResolverModID);

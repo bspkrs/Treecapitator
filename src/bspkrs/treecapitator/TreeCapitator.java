@@ -37,7 +37,7 @@ public final class TreeCapitator
     public static boolean                              allowGetRemoteTreeConfig       = false;
     
     public final static String                         axeIDListDesc                  = "IDs of items that can chop down trees. Use ',' to split item id from metadata and ';' to split items.";
-    public static String                               axeIDList                      = Item.axeWood.shiftedIndex + "; " + Item.axeStone.shiftedIndex + "; " + Item.axeSteel.shiftedIndex + "; " + Item.axeGold.shiftedIndex + "; " + Item.axeDiamond.shiftedIndex;
+    public static String                               axeIDList                      = Item.axeWood.itemID + "; " + Item.axeStone.itemID + "; " + Item.axeSteel.itemID + "; " + Item.axeGold.itemID + "; " + Item.axeDiamond.itemID;
     public final static String                         needItemDesc                   = "Whether you need an item from the axeIDList to chop down a tree. Disabling will let you chop trees with any item.";
     public static boolean                              needItem                       = true;
     public final static String                         onlyDestroyUpwardsDesc         = "Setting this to false will allow the chopping to move downward as well as upward (and blocks below the one you break will be chopped)";
@@ -50,7 +50,7 @@ public final class TreeCapitator
     public static boolean                              shearVines                     = false;
     public final static String                         shearIDListDesc                = "IDs of items that when placed in the hotbar will allow leaves to be sheared when shearLeaves is true.\n"
                                                                                               + "Use ',' to split item id from metadata and ';' to split items.";
-    public static String                               shearIDList                    = Item.shears.shiftedIndex + "";
+    public static String                               shearIDList                    = Item.shears.itemID + "";
     public final static String                         logHardnessNormalDesc          = "The hardness of logs for when you are using items that won't chop down the trees.";
     public static float                                logHardnessNormal              = 2.0F;
     public final static String                         logHardnessModifiedDesc        = "The hardness of logs for when you are using items that can chop down trees.";

@@ -125,7 +125,7 @@ public class TreeBlockBreaker
                                 currentShearsDamage = Math.round(currentShearsDamage);
                                 
                                 for (int i = 0; i < Math.floor(currentShearsDamage); i++)
-                                    if (TreeCapitator.isForge && shears.itemID == Item.shears.shiftedIndex)
+                                    if (TreeCapitator.isForge && shears.itemID == Item.shears.itemID)
                                         shears.damageItem(1, player);
                                     else
                                         shears.getItem().onBlockDestroyed(shears, world, 18, x, y, z, player);
@@ -380,7 +380,7 @@ public class TreeBlockBreaker
             
             for (int i = 0; i < Math.floor(currentShearsDamage); i++)
                 // Shakes fist at Forge!
-                if (TreeCapitator.isForge && shears.itemID == Item.shears.shiftedIndex)
+                if (TreeCapitator.isForge && shears.itemID == Item.shears.itemID)
                     shears.damageItem(1, player);
                 else
                     shears.getItem().onBlockDestroyed(shears, world, id, x, y, z, player);
