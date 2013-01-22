@@ -41,7 +41,7 @@ public class mod_treecapitator extends BaseMod
     public static int         maxBreakDistance          = TreeCapitator.maxBreakDistance;
     
     private ModVersionChecker versionChecker;
-    private final String      versionURL                = "https://dl.dropbox.com/u/20748481/Minecraft/1.4.5/treeCapitator.version";
+    private final String      versionURL                = "https://dl.dropbox.com/u/20748481/Minecraft/1.4.6/treeCapitator.version";
     private final String      mcfTopic                  = "http://www.minecraftforum.net/topic/1009577-";
     
     public mod_treecapitator()
@@ -77,7 +77,7 @@ public class mod_treecapitator extends BaseMod
     @Override
     public String getVersion()
     {
-        return "ML " + TreeCapitator.versionNumber;
+        return "ML " + TreeCapitator.VERSION_NUMBER;
     }
     
     @Override

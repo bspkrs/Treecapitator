@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ConfigCategory;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
-import sharose.mods.idresolver.IDResolver;
+import sharose.mods.idresolver.IDResolverBasic;
 import bspkrs.fml.util.Config;
 import bspkrs.treecapitator.TCLog;
 import bspkrs.treecapitator.TreeBlockBreaker;
@@ -23,25 +23,24 @@ import bspkrs.util.ModVersionChecker;
 import cpw.mods.fml.common.DummyModContainer;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.IMCCallback;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.Mod.ServerStarted;
-import cpw.mods.fml.common.Mod.ServerStarting;
 import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLInterModComms.IMCEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 
-@Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge " + TreeCapitator.VERSION_NUMBER, useMetadata = true,
-        dependencies = "*")
+@Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge " + TreeCapitator.VERSION_NUMBER, useMetadata = true)
 @NetworkMod(clientSideRequired = false, serverSideRequired = false,
         clientPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = ClientPacketHandler.class),
         serverPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = ServerPacketHandler.class),
@@ -171,12 +170,13 @@ public class TreeCapitatorMod extends DummyModContainer
         TreeCapitator.useStrictBlockPairing = Config.getBoolean(config, "useStrictBlockPairing", BLOCK_CTGY, TreeCapitator.useStrictBlockPairing, TreeCapitator.useStrictBlockPairingDesc);
         
         idResolverModID = Config.getString(config, "idResolverModID", ID_RES_CTGY, idResolverModID, idResolverModIDDesc);
-        idResolverConfigPath = Config.getString(config, "idResolverConfigPath", ID_RES_CTGY, idResolverConfigPath, idResolverConfigPathDesc);
+        // idResolverConfigPath = Config.getString(config, "idResolverConfigPath", ID_RES_CTGY, idResolverConfigPath,
+        // idResolverConfigPathDesc);
         config.addCustomCategoryComment(ID_RES_CTGY, "If you are not using ID Resolver, you can safely ignore this section.\n" +
                 "If you ARE using ID Resolver and your log file does not show any warnings\n" +
                 "pertaining to ID Resolver, you can still ignore this section. In fact, the\n" +
                 "only reason you should mess with this section if ShaRose decides to change\n" +
-                "the Mod ID or config file path for ID Resolver.");
+                "the Mod ID for ID Resolver.");
         
         /*
          * Get / Set Block ID config lists
@@ -232,10 +232,6 @@ public class TreeCapitatorMod extends DummyModContainer
                 for (String entry : tpconfig.keySet())
                     config.get(THIRD_PARTY_CFG_CTGY + "." + key, entry, tpconfig.get(entry));
                 
-                if (loader.isModLoaded(tpconfig.get(TreeCapitator.MOD_ID)))
-                    if (!tpconfig.containsKey(TreeCapitator.IDR_MOD_ID))
-                        tpconfig.put(TreeCapitator.IDR_MOD_ID, loader.getIndexedModList().get(tpconfig.get(TreeCapitator.MOD_ID)).getMod().getClass().getName());
-                
             }
         }
         else
@@ -253,21 +249,6 @@ public class TreeCapitatorMod extends DummyModContainer
                     {
                         for (String tpCfgEntry : currentCtgy.keySet())
                             entries.put(tpCfgEntry, currentCtgy.get(tpCfgEntry).value);
-                        
-                        if (!currentCtgy.containsKey(TreeCapitator.IDR_MOD_ID))
-                        { // must be an old config file. add the new entry for ID resolver and default it
-                            if (TreeCapitator.idResolverModIdMap.containsKey(currentCtgy.get(TreeCapitator.MOD_ID).value))
-                            {
-                                String idrModID = TreeCapitator.idResolverModIdMap.get(currentCtgy.get(TreeCapitator.MOD_ID).value);
-                                config.get(ctgy, TreeCapitator.IDR_MOD_ID, idrModID);
-                                entries.put(TreeCapitator.IDR_MOD_ID, idrModID);
-                            }
-                            else
-                            { // we don't have a default ID Resolver Mod ID value for this mod
-                                config.get(ctgy, TreeCapitator.IDR_MOD_ID, loader.getIndexedModList().get(entries.get(TreeCapitator.MOD_ID)).getMod().getClass().getName());
-                                entries.put(TreeCapitator.IDR_MOD_ID, loader.getIndexedModList().get(entries.get(TreeCapitator.MOD_ID)).getMod().getClass().getName());
-                            }
-                        }
                         
                         if (entries.containsKey(TreeCapitator.ITEM_VALUES) && !entries.containsKey(TreeCapitator.SHIFT_INDEX))
                             entries.put(TreeCapitator.SHIFT_INDEX, "true");
@@ -300,6 +281,12 @@ public class TreeCapitatorMod extends DummyModContainer
         proxy.onLoad();
     }
     
+    @IMCCallback
+    public void processIMCMessages(IMCEvent event)
+    {   
+        
+    }
+    
     @PostInit
     public void postInit(FMLPostInitializationEvent event)
     {
@@ -307,12 +294,6 @@ public class TreeCapitatorMod extends DummyModContainer
         TreeCapitator.localBlockIDList = TreeCapitator.replaceThirdPartyBlockTags(TreeCapitator.localBlockIDList);
         TreeCapitator.axeIDList = TreeCapitator.replaceThirdPartyBlockTags(TreeCapitator.axeIDList);
         TreeCapitator.shearIDList = TreeCapitator.replaceThirdPartyBlockTags(TreeCapitator.shearIDList);
-    }
-    
-    @ServerStarting
-    public void serverStarting(FMLServerStartingEvent event)
-    {
-        // TODO: move this code up to the loadComplete() method once that's figured out
     }
     
     @ServerStarted
@@ -371,11 +352,12 @@ public class TreeCapitatorMod extends DummyModContainer
             
             try
             {
-                idrKnownIDs = ObfuscationReflectionHelper.getPrivateValue(IDResolver.class, null, "knownIDs");
+                idrKnownIDs = ObfuscationReflectionHelper.getPrivateValue(IDResolverBasic.class, null, "knownIDs");
             }
             catch (Throwable e)
             {
                 TreeCapitator.debugString("Error getting knownIDs from ID Resolver: %s", e.getMessage());
+                e.printStackTrace();
             }
             
             if (idrKnownIDs != null)
@@ -469,14 +451,14 @@ public class TreeCapitatorMod extends DummyModContainer
                 if (file.exists())
                 {
                     Configuration thirdPartyConfig = new Configuration(file);
+                    String idrClassName = loader.getIndexedModList().get(tpCfgKey.get(TreeCapitator.MOD_ID)).getMod().getClass().getName();
                     thirdPartyConfig.load();
                     boolean useShiftedIndex = true;
                     if (tpCfgKey.containsKey(TreeCapitator.SHIFT_INDEX))
                         useShiftedIndex = Boolean.valueOf(tpCfgKey.get(TreeCapitator.SHIFT_INDEX));
                     
                     for (String prop : tpCfgKey.keySet())
-                        if (!prop.equals(TreeCapitator.MOD_ID) && !prop.equals(TreeCapitator.CONFIG_PATH) && !prop.equals(TreeCapitator.SHIFT_INDEX)
-                                && !prop.equals(TreeCapitator.IDR_MOD_ID))
+                        if (!prop.equals(TreeCapitator.MOD_ID) && !prop.equals(TreeCapitator.CONFIG_PATH) && !prop.equals(TreeCapitator.SHIFT_INDEX))
                         {
                             TreeCapitator.debugString("Getting tags from %s...", prop);
                             
@@ -485,7 +467,6 @@ public class TreeCapitatorMod extends DummyModContainer
                                 String[] subString = configID.trim().split(":");
                                 String configValue = thirdPartyConfig.get(/* ctgy */subString[0].trim(), /* prop name */subString[1].trim(), 0).value;
                                 String tagID = "<" + tpCfgKey.get(TreeCapitator.MOD_ID) + "." + subString[1].trim() + ">";
-                                String idrClassName = tpCfgKey.get(TreeCapitator.IDR_MOD_ID);
                                 
                                 if (!TreeCapitator.tagMap.containsKey(tagID))
                                 {
