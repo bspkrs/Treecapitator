@@ -51,7 +51,7 @@ public class TreeCapitatorMod extends DummyModContainer
     private final String            versionURL               = "https://dl.dropbox.com/u/20748481/Minecraft/1.4.6/treeCapitatorForge.version";
     private final String            mcfTopic                 = "http://www.minecraftforum.net/topic/1009577-";
     
-    public static final String      TREE_BLOCK_CTGY          = "2_tree_block_list";
+    public static final String      TREE_BLOCK_CTGY          = "2_tree_definitions";
     public static final String      THIRD_PARTY_CFG_CTGY     = "1_third_party_configs";
     public static final String      BLOCK_CTGY               = "block_settings";
     public static final String      ITEM_CTGY                = "item_settings";
@@ -170,8 +170,6 @@ public class TreeCapitatorMod extends DummyModContainer
         TreeCapitator.useStrictBlockPairing = Config.getBoolean(config, "useStrictBlockPairing", BLOCK_CTGY, TreeCapitator.useStrictBlockPairing, TreeCapitator.useStrictBlockPairingDesc);
         
         idResolverModID = Config.getString(config, "idResolverModID", ID_RES_CTGY, idResolverModID, idResolverModIDDesc);
-        // idResolverConfigPath = Config.getString(config, "idResolverConfigPath", ID_RES_CTGY, idResolverConfigPath,
-        // idResolverConfigPathDesc);
         config.addCustomCategoryComment(ID_RES_CTGY, "If you are not using ID Resolver, you can safely ignore this section.\n" +
                 "If you ARE using ID Resolver and your log file does not show any warnings\n" +
                 "pertaining to ID Resolver, you can still ignore this section. In fact, the\n" +
@@ -387,56 +385,9 @@ public class TreeCapitatorMod extends DummyModContainer
                     }
                 }
             }
-            // File idResolverConfigFile = new File(loader.getConfigDir(), idResolverConfigPath);
-            //
-            // if (idResolverConfigFile.exists())
-            // {
-            // Scanner scanner = null;
-            // try
-            // {
-            // scanner = new Scanner(idResolverConfigFile);
-            // }
-            // catch (Throwable e)
-            // {
-            // TCLog.severe("Error reading ID Resolver config file: " + e.getMessage());
-            // e.printStackTrace();
-            // return;
-            // }
-            // while (scanner.hasNextLine())
-            // {
-            // String line = scanner.nextLine();
-            //
-            // if (!line.startsWith("ItemID.") && !line.startsWith("BlockID."))
-            // continue;
-            //
-            // if (!line.trim().equals("")) // line is non-blank
-            // {
-            // try
-            // {
-            // IDResolverMapping mapping = new IDResolverMapping(line);
-            //
-            // if (mapping.oldID != 0 && mapping.newID != 0 && !mapping.isStaticMapping())
-            // {
-            // // IDs are not the same, add to the list of managed IDs
-            // idrMappings.add(mapping);
-            // TreeCapitator.debugString("Adding entry: %s", line);
-            // }
-            // else
-            // TreeCapitator.debugString("Ignoring entry: %s", line);
-            // }
-            // catch (Throwable e)
-            // {
-            // TCLog.severe("Exception caught for line: %s", line);
-            // }
-            // }
-            // }
-            // scanner.close();
-            // }
-            // else
-            // TCLog.warning("The ID Resolver config file path specified does not exist: %s", idResolverConfigFile.getPath());
         }
         else
-            TCLog.info("ID Resolver (Mod ID \"%s\") has not been detected.", idResolverModID);
+            TCLog.info("ID Resolver (Mod ID \"%s\") is not loaded.", idResolverModID);
         
         TreeCapitator.tagMap = new HashMap<String, String>();
         
@@ -470,17 +421,17 @@ public class TreeCapitatorMod extends DummyModContainer
                                 
                                 if (!TreeCapitator.tagMap.containsKey(tagID))
                                 {
-                                    TreeCapitator.debugString("configValue: %s", configValue);
+                                    // TreeCapitator.debugString("configValue: %s", configValue);
                                     IDResolverMapping mapping = idrMappings.getMappingForModAndOldID(idrClassName, CommonUtils.parseInt(configValue));
                                     
                                     if (mapping != null)
                                         configValue = String.valueOf(mapping.newID);
-                                    TreeCapitator.debugString("configValue: %s", configValue);
+                                    // TreeCapitator.debugString("configValue: %s", configValue);
                                     
                                     if (prop.equals(TreeCapitator.ITEM_VALUES) && useShiftedIndex)
                                         configValue = String.valueOf(CommonUtils.parseInt(configValue, -256) + 256);
                                     
-                                    TreeCapitator.debugString("configValue: %s", configValue);
+                                    // TreeCapitator.debugString("configValue: %s", configValue);
                                     
                                     if (!configValue.equals("0"))
                                     {
@@ -494,7 +445,7 @@ public class TreeCapitatorMod extends DummyModContainer
                         }
                 }
                 else
-                    TreeCapitator.debugString("Mod config file " + tpCfgKey.get(TreeCapitator.CONFIG_PATH) + " does not exist.");
+                    TCLog.warning("Mod config file %s does not exist when processing config key %s.", tpCfgKey.get(TreeCapitator.CONFIG_PATH), key);
             }
             else
                 TreeCapitator.debugString("Mod " + tpCfgKey.get(TreeCapitator.MOD_ID) + " is not loaded.");

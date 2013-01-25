@@ -86,55 +86,56 @@ public class TreeBlockBreaker
             {
                 TreeCapitator.debugString("Tree Chopping is not disabled.");
                 Coord topLog = getTopLog(world, new Coord(x, y, z));
-                if (!TreeCapitator.allowSmartTreeDetection || hasXLeavesInDist(world, topLog, TreeCapitator.maxLeafIDDist, TreeCapitator.minLeavesToID))
+                if (!TreeCapitator.allowSmartTreeDetection || this.leafIDList.size() == 0 || hasXLeavesInDist(world, topLog, TreeCapitator.maxLeafIDDist, TreeCapitator.minLeavesToID))
+                {
                     if (isAxeItemEquipped() || !TreeCapitator.needItem)
-                        if (!world.isRemote)
+                    {
+                        TreeCapitator.debugString("Proceeding to chop tree...");
+                        List<Coord> listFinal = new ArrayList<Coord>();
+                        TreeCapitator.debugString("Finding log blocks...");
+                        List<Coord> logs = addLogs(world, new Coord(x, y, z));
+                        addLogsAbove(world, new Coord(x, y, z), listFinal);
+                        
+                        TreeCapitator.debugString("Destroying log blocks...");
+                        destroyBlocks(world, logs);
+                        if (TreeCapitator.destroyLeaves && this.leafIDList.size() != 0)
                         {
-                            TreeCapitator.debugString("Proceeding to chop tree...");
-                            List<Coord> listFinal = new ArrayList<Coord>();
-                            TreeCapitator.debugString("Finding log blocks...");
-                            List<Coord> logs = addLogs(world, new Coord(x, y, z));
-                            addLogsAbove(world, new Coord(x, y, z), listFinal);
-                            
-                            TreeCapitator.debugString("Destroying log blocks...");
-                            destroyBlocks(world, logs);
-                            if (TreeCapitator.destroyLeaves)
+                            TreeCapitator.debugString("Finding leaf blocks...");
+                            for (Coord pos : listFinal)
                             {
-                                TreeCapitator.debugString("Finding leaf blocks...");
-                                for (Coord pos : listFinal)
-                                {
-                                    List<Coord> leaves = addLeaves(world, pos);
-                                    removeLeavesWithLogsAround(world, leaves);
-                                    destroyBlocksWithChance(world, leaves, 0.5F, hasShearsInHotbar(player));
-                                }
-                            }
-                            
-                            /*
-                             * Apply remaining damage if it rounds to a non-zero value
-                             */
-                            if (currentAxeDamage > 0.0F && axe != null)
-                            {
-                                currentAxeDamage = Math.round(currentAxeDamage);
-                                
-                                for (int i = 0; i < (int) Math.floor(currentAxeDamage); i++)
-                                    axe.getItem().onBlockDestroyed(axe, world, 17, x, y, z, player);
-                            }
-                            
-                            if (currentShearsDamage > 0.0F && shears != null)
-                            {
-                                currentShearsDamage = Math.round(currentShearsDamage);
-                                
-                                for (int i = 0; i < Math.floor(currentShearsDamage); i++)
-                                    if (TreeCapitator.isForge && shears.itemID == Item.shears.itemID)
-                                        shears.damageItem(1, player);
-                                    else
-                                        shears.getItem().onBlockDestroyed(shears, world, 18, x, y, z, player);
+                                List<Coord> leaves = addLeaves(world, pos);
+                                removeLeavesWithLogsAround(world, leaves);
+                                destroyBlocksWithChance(world, leaves, 0.5F, hasShearsInHotbar(player));
                             }
                         }
-                        else
-                            TreeCapitator.debugString("Axe item is not equipped.");
+                        
+                        /*
+                         * Apply remaining damage if it rounds to a non-zero value
+                         */
+                        if (currentAxeDamage > 0.0F && axe != null)
+                        {
+                            currentAxeDamage = Math.round(currentAxeDamage);
+                            
+                            for (int i = 0; i < (int) Math.floor(currentAxeDamage); i++)
+                                axe.getItem().onBlockDestroyed(axe, world, 17, x, y, z, player);
+                        }
+                        
+                        if (currentShearsDamage > 0.0F && shears != null)
+                        {
+                            currentShearsDamage = Math.round(currentShearsDamage);
+                            
+                            for (int i = 0; i < Math.floor(currentShearsDamage); i++)
+                                if (TreeCapitator.isForge && shears.itemID == Item.shears.itemID)
+                                    shears.damageItem(1, player);
+                                else
+                                    shears.getItem().onBlockDestroyed(shears, world, 18, x, y, z, player);
+                        }
+                    }
                     else
-                        TreeCapitator.debugString("Could not identify tree.");
+                        TreeCapitator.debugString("Axe item is not equipped.");
+                }
+                else
+                    TreeCapitator.debugString("Could not identify tree.");
             }
             else
                 TreeCapitator.debugString("Tree Chopping is disabled due to player state or gamemode.");
