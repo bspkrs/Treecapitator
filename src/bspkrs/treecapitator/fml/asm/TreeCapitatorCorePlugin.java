@@ -6,8 +6,7 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
 /*
- * Don't let any access transformer stuff accidentally modify our classes A list
- * of package prefixes for FML to ignore
+ * Don't let any access transformer stuff accidentally modify our classes. A list of package prefixes for FML to ignore
  */
 @TransformerExclusions({ "bspkrs.treecapitator.fml.asm", "bspkrs.util", "bspkrs.treecapitator", "bspkrs.treecapitator.fml", "bspkrs.fml.util" })
 public class TreeCapitatorCorePlugin implements IFMLLoadingPlugin

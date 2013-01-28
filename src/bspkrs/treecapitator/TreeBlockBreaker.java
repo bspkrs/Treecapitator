@@ -51,18 +51,21 @@ public class TreeBlockBreaker
         }
         
         ItemStack axe = entityPlayer.getCurrentEquippedItem();
-        if ((isAxeItemEquipped(entityPlayer) || !TreeCapitator.needItem) && !world.isRemote)
-        {
-            if (!entityPlayer.capabilities.isCreativeMode && TreeCapitator.allowItemDamage && axe != null
-                    && (axe.getMaxDamage() - axe.getItemDamage() <= TreeCapitator.damageMultiplier)
-                    && !TreeCapitator.allowMoreBlocksThanDamage)
+        if (!world.isRemote)
+            if ((isAxeItemEquipped(entityPlayer) || !TreeCapitator.needItem))
             {
-                TreeCapitator.debugString("Chopping disabled due to axe durability.");
-                return false;
+                if (!entityPlayer.capabilities.isCreativeMode && TreeCapitator.allowItemDamage && axe != null
+                        && (axe.getMaxDamage() - axe.getItemDamage() <= TreeCapitator.damageMultiplier)
+                        && !TreeCapitator.allowMoreBlocksThanDamage)
+                {
+                    TreeCapitator.debugString("Chopping disabled due to axe durability.");
+                    return false;
+                }
+                
+                return true;
             }
-            
-            return true;
-        }
+            else
+                TreeCapitator.debugString("Player does not have an axe equipped.");
         return false;
     }
     
@@ -497,7 +500,7 @@ public class TreeBlockBreaker
                     if (isLeafBlock(new BlockID(blockID, md)) || vineID.equals(new BlockID(blockID)))
                     {
                         int metadata = world.getBlockMetadata(x + pos.x, y + pos.y, z + pos.z);
-                        if ((metadata & 8) != 0 && (metadata & 4) == 0)
+                        if (!TreeCapitator.requireLeafDecayCheck || ((metadata & 8) != 0 && (metadata & 4) == 0))
                         {
                             Coord newPos = new Coord(x + pos.x, y + pos.y, z + pos.z);
                             if (!list.contains(newPos))

@@ -110,6 +110,7 @@ public class TreeCapitatorMod extends DummyModContainer
         TreeCapitator.damageIncreaseAmount = Config.getFloat(config, "damageIncreaseAmount", ITEM_CTGY, TreeCapitator.damageIncreaseAmount, 0.1F, 100.0F, TreeCapitator.damageIncreaseAmountDesc);
         
         TreeCapitator.destroyLeaves = Config.getBoolean(config, "destroyLeaves", LEAF_CTGY, TreeCapitator.destroyLeaves, TreeCapitator.destroyLeavesDesc);
+        TreeCapitator.requireLeafDecayCheck = Config.getBoolean(config, "requireLeafDecayCheck", LEAF_CTGY, TreeCapitator.requireLeafDecayCheck, TreeCapitator.requireLeafDecayCheckDesc);
         TreeCapitator.shearLeaves = Config.getBoolean(config, "shearLeaves", LEAF_CTGY, TreeCapitator.shearLeaves, TreeCapitator.shearLeavesDesc);
         TreeCapitator.shearVines = Config.getBoolean(config, "shearVines", LEAF_CTGY, TreeCapitator.shearVines, TreeCapitator.shearVinesDesc);
         

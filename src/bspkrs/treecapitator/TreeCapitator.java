@@ -44,12 +44,15 @@ public final class TreeCapitator
     public static boolean                              onlyDestroyUpwards             = true;
     public final static String                         destroyLeavesDesc              = "Enabling this will make leaves be destroyed when trees are chopped.";
     public static boolean                              destroyLeaves                  = true;
+    public final static String                         requireLeafDecayCheckDesc      = "When true TreeCapitator will only instantly decay leaves that have actually been marked for decay.\n" +
+                                                                                              "Set to false if you want leaves to be destroyed regardless of their decay status (hint: or for \"leaf\" blocks that are not really leaves).";
+    public static boolean                              requireLeafDecayCheck          = true;
     public final static String                         shearLeavesDesc                = "Enabling this will cause destroyed leaves to be sheared when a shearing item is in the hotbar (ignored if destroyLeaves is false).";
     public static boolean                              shearLeaves                    = false;
     public final static String                         shearVinesDesc                 = "Enabling this will shear /some/ of the vines on a tree when a shearing item is in the hotbar (ignored if destroyLeaves is false).";
     public static boolean                              shearVines                     = false;
-    public final static String                         shearIDListDesc                = "IDs of items that when placed in the hotbar will allow leaves to be sheared when shearLeaves is true.\n"
-                                                                                              + "Use ',' to split item id from metadata and ';' to split items.";
+    public final static String                         shearIDListDesc                = "IDs of items that when placed in the hotbar will allow leaves to be sheared when shearLeaves is true.\n" +
+                                                                                              "Use ',' to split item id from metadata and ';' to split items.";
     public static String                               shearIDList                    = Item.shears.itemID + "";
     public final static String                         logHardnessNormalDesc          = "The hardness of logs for when you are using items that won't chop down the trees.";
     public static float                                logHardnessNormal              = 2.0F;
@@ -203,6 +206,15 @@ public final class TreeCapitator
         biomesoplenty.put(SHIFT_INDEX, "true");
         thirdPartyConfig.put("biomesoplenty", biomesoplenty);
         
+        HashMap<String, String> divinerpg = new HashMap<String, String>();
+        divinerpg.put(MOD_ID, "DivineRPG");
+        divinerpg.put(CONFIG_PATH, "DivineRPG.cfg");
+        divinerpg.put(BLOCK_VALUES, "block:eucalyptus");
+        divinerpg.put(ITEM_VALUES, "item:Bedrock Axe; item:Crystal Axe; item:Realmite Axe; item:azuriteaxe; item:corruptedaxe; " +
+                "item:denseaxe; item:divineaxe; item:donatoraxe; item:energyaxe; item:mythrilaxe; item:plasmaaxe; item:serenityaxe; item:twilightaxe");
+        divinerpg.put(SHIFT_INDEX, "true");
+        thirdPartyConfig.put("divinerpg", divinerpg);
+        
         HashMap<String, String> extrabiomesxl = new HashMap<String, String>();
         extrabiomesxl.put(MOD_ID, "ExtrabiomesXL");
         extrabiomesxl.put(CONFIG_PATH, "extrabiomes/extrabiomes.cfg");
@@ -271,11 +283,24 @@ public final class TreeCapitator
                 "<IC2.itemToolBronzeAxe>; <IC2.itemToolChainsaw>; " +
                 "<RedPowerWorld.axeRuby.id>; <RedPowerWorld.axeGreenSapphire.id>; <RedPowerWorld.axeSapphire.id>; " +
                 "<Thaumcraft.Thaumaxe>; " +
-                "<TwilightForest.IronwoodAxe>; <TwilightForest.SteeleafAxe>; <TwilightForest.MinotaurAxe>; ";
+                "<TwilightForest.IronwoodAxe>; <TwilightForest.SteeleafAxe>; <TwilightForest.MinotaurAxe>; " +
+                "<DivineRPG.Bedrock Axe>; <DivineRPG.Crystal Axe>; <DivineRPG.Realmite Axe>; <DivineRPG.azuriteaxe>; <DivineRPG.corruptedaxe>; " +
+                "<DivineRPG.denseaxe>; <DivineRPG.divineaxe>; <DivineRPG.donatoraxe>; <DivineRPG.energyaxe>; <DivineRPG.mythrilaxe>; " +
+                "<DivineRPG.plasmaaxe>; <DivineRPG.serenityaxe>; <DivineRPG.twilightaxe>";
         
         /*
          * Default local config
          */
+        HashMap<String, String> huge_brown_mushrooms = new HashMap<String, String>();
+        huge_brown_mushrooms.put(LOGS, "99,10; 99,15");
+        huge_brown_mushrooms.put(LEAVES, "99,1; 99,2; 99,3; 99,4; 99,5; 99,6; 99,7; 99,8; 99,9; 99,14");
+        configBlockList.put("huge_brown_mushrooms", huge_brown_mushrooms);
+        
+        HashMap<String, String> huge_red_mushrooms = new HashMap<String, String>();
+        huge_red_mushrooms.put(LOGS, "100,10; 100,15");
+        huge_red_mushrooms.put(LEAVES, "100,1; 100,2; 100,3; 100,4; 100,5; 100,6; 100,7; 100,8; 100,9; 100,14");
+        configBlockList.put("huge_red_mushrooms", huge_red_mushrooms);
+        
         HashMap<String, String> vanilla_ebxl_oaks = new HashMap<String, String>();
         vanilla_ebxl_oaks.put(LOGS, "17,0; 17,4; 17,8; <ExtrabiomesXL.quarterlog0.id>,2; <ExtrabiomesXL.quarterlog1.id>,2; " +
                 "<ExtrabiomesXL.quarterlog2.id>,2; <ExtrabiomesXL.quarterlog3.id>,2;");
@@ -352,6 +377,11 @@ public final class TreeCapitator
         biomesoplenty_willow.put(LOGS, "<BiomesOPlenty.Willow Log ID>");
         biomesoplenty_willow.put(LEAVES, "<BiomesOPlenty.Willow Leaves ID>");
         configBlockList.put("biomesoplenty_willow", biomesoplenty_willow);
+        
+        HashMap<String, String> divinerpg_eucalyptus = new HashMap<String, String>();
+        divinerpg_eucalyptus.put(LOGS, "<DivineRPG.eucalyptus>");
+        divinerpg_eucalyptus.put(LEAVES, "18"); // not sure on this? haven't found any of them yet and no sapling
+        configBlockList.put("divinerpg_eucalyptus", divinerpg_eucalyptus);
         
         HashMap<String, String> ebxl_redwoods = new HashMap<String, String>();
         ebxl_redwoods.put(LOGS, "<ExtrabiomesXL.quarterlog0.id>,0; <ExtrabiomesXL.quarterlog1.id>,0; <ExtrabiomesXL.quarterlog2.id>,0; " +
@@ -455,15 +485,6 @@ public final class TreeCapitator
         ic2_rubber.put(LEAVES, "<IC2.blockRubLeaves>");
         configBlockList.put("ic2_rubber", ic2_rubber);
         
-        /*
-         * block:Bloodwood Block; block:Flora Leaves; block:; block:Wood Block
-         */
-        
-        HashMap<String, String> inficraft_tree = new HashMap<String, String>();
-        inficraft_tree.put(LOGS, "<Flora Trees.Wood Block>");
-        inficraft_tree.put(LEAVES, "<Flora Trees.Flora Leaves>");
-        configBlockList.put("inficraft_tree", inficraft_tree);
-        
         HashMap<String, String> inficraft_bloodwood = new HashMap<String, String>();
         inficraft_bloodwood.put(LOGS, "<Flora Trees.Bloodwood Block>");
         inficraft_bloodwood.put(LEAVES, "<Flora Trees.Sakura Leaves>,2");
@@ -476,12 +497,12 @@ public final class TreeCapitator
         
         HashMap<String, String> inficraft_ghostwood = new HashMap<String, String>();
         inficraft_ghostwood.put(LOGS, "<Flora Trees.Wood Block>,2; <Flora Trees.Wood Block>, 6; <Flora Trees.Wood Block>, 10");
-        inficraft_ghostwood.put(LEAVES, "<Flora Trees.Sakura Leaves>");
+        inficraft_ghostwood.put(LEAVES, "<Flora Trees.Sakura Leaves>,1");
         configBlockList.put("inficraft_ghostwood", inficraft_ghostwood);
         
         HashMap<String, String> inficraft_hopseed = new HashMap<String, String>();
         inficraft_hopseed.put(LOGS, "<Flora Trees.Wood Block>,3; <Flora Trees.Wood Block>, 7; <Flora Trees.Wood Block>, 11");
-        inficraft_hopseed.put(LEAVES, "<Flora Trees.Flora Leaves>");
+        inficraft_hopseed.put(LEAVES, "<Flora Trees.Flora Leaves>,2");
         configBlockList.put("inficraft_hopseed", inficraft_hopseed);
         
         HashMap<String, String> inficraft_redwood = new HashMap<String, String>();
@@ -543,8 +564,6 @@ public final class TreeCapitator
         zapapple.put(LOGS, "<ZapApples.zapAppleLogID>");
         zapapple.put(LEAVES, "<ZapApples.zapAppleLeavesID>; <ZapApples.zapAppleFlowersID>");
         configBlockList.put("zapapple", zapapple);
-        
-        // localTreeConfig = getConfigBlockListString();
     }
     
     public static void debugString(String msg, Object... args)

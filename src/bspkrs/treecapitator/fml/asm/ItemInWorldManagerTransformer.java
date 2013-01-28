@@ -162,7 +162,7 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
         // mcpStrings.put("entityPlayerJavaClassName", "net/minecraft/src/EntityPlayer");
         // mcpStrings.put("entityPlayerMPJavaClassName", "net/minecraft/src/EntityPlayerMP");
         
-        // Forge 6.5.0.448 1.4.5 mappings
+        // Forge 6.6.0.497 1.4.5-1.4.6 mappings
         mcpStrings.put("className", "net.minecraft.item.ItemInWorldManager");
         mcpStrings.put("javaClassName", "net/minecraft/item/ItemInWorldManager");
         mcpStrings.put("targetMethodName", "removeBlock");
@@ -179,7 +179,7 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
     @Override
     public byte[] transform(String name, byte[] bytes)
     {
-        // TCLog.info("transforming: "+name);
+        //System.out.println("transforming: " + name);
         if (name.equals(obfStrings.get("className")))
         {
             return transformItemInWorldManager(bytes, obfStrings);
@@ -288,7 +288,7 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
                         
                         TCLog.info("Method " + (String) hm.get("javaClassName") + "/" + m.name + m.desc + " patched at index " + (index + offset - 1));
                         TCLog.info("TreeCapitator ASM Patching Complete!");
-						TreeCapitatorMod.instance.isCoreModLoaded = true;
+                        TreeCapitatorMod.instance.isCoreModLoaded = true;
                         break;
                     }
                 }
