@@ -13,7 +13,7 @@ import bspkrs.util.CommonUtils;
 
 public final class TreeCapitator
 {
-    public final static String                         VERSION_NUMBER                 = "1.4.6.r04";
+    public final static String                         VERSION_NUMBER                 = "1.4.6.r05";
     public static final String                         LOGS                           = "logs";
     public static final String                         LEAVES                         = "leaves";
     public static final String                         MOD_ID                         = "modID";

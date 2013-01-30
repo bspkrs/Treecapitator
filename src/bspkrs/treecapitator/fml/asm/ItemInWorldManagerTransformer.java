@@ -179,7 +179,7 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
     @Override
     public byte[] transform(String name, byte[] bytes)
     {
-        //System.out.println("transforming: " + name);
+        // System.out.println("transforming: " + name);
         if (name.equals(obfStrings.get("className")))
         {
             return transformItemInWorldManager(bytes, obfStrings);

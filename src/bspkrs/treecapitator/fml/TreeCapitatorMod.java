@@ -268,7 +268,7 @@ public class TreeCapitatorMod extends DummyModContainer
         if (TreeCapitator.allowUpdateCheck)
         {
             versionChecker = new ModVersionChecker(metadata.name, metadata.version, versionURL, mcfTopic, TCLog.INSTANCE.getLogger());
-            versionChecker.checkVersionWithLoggingBySubString(metadata.version.length() - 1, metadata.version.length());
+            versionChecker.checkVersionWithLoggingBySubStringAsFloat(metadata.version.length() - 1, metadata.version.length());
         }
     }
     
