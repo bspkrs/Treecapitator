@@ -13,7 +13,7 @@ import bspkrs.util.CommonUtils;
 
 public final class TreeCapitator
 {
-    public final static String                         VERSION_NUMBER                 = "1.4.6.r05";
+    public final static String                         VERSION_NUMBER                 = "1.4.6.r06";
     public static final String                         LOGS                           = "logs";
     public static final String                         LEAVES                         = "leaves";
     public static final String                         MOD_ID                         = "modID";
@@ -23,17 +23,21 @@ public final class TreeCapitator
     public static final String                         SHIFT_INDEX                    = "useShiftedItemID";
     public static final String                         IDR_MOD_ID                     = "idResolverModID";
     
-    public final static String                         remoteTreeConfigURLDesc        = "Leave this URL as is to get the latest tree definitions from my master list.\nFeel free to start your own remote list to share with your friends or send your suggestions to me for the master list!";
+    public final static String                         remoteTreeConfigURLDesc        = "Incomplete - do not use";
+    // "Leave this URL as is to get the latest tree definitions from my master list.\nFeel free to start your own remote list to share with your friends or send your suggestions to me for the master list!";
     public static String                               remoteTreeConfigURL            = "http://dl.dropbox.com/u/20748481/Minecraft/1.4.6/treeCapitatorTreeConfig.txt";
     public final static String                         allowUpdateCheckDesc           = "Set to true to allow checking for mod updates, false to disable";
     public static boolean                              allowUpdateCheck               = true;
-    public final static String                         remoteBlockIDConfigDesc        = "Values downloaded from: " + remoteTreeConfigURL;
+    public final static String                         remoteBlockIDConfigDesc        = "Incomplete - do not use";
+    // "Values downloaded from: " + remoteTreeConfigURL;
     public static String                               remoteBlockIDConfig            = "";
     public final static String                         localBlockIDListDesc           = "Automatically generated:";
     public static String                               localBlockIDList               = "";
-    public final static String                         useRemoteTreeConfigDesc        = "Set to true to use the remote block ID list (must also set allowGetOnlineTreeConfig to true), false to use local config.";
+    public final static String                         useRemoteTreeConfigDesc        = "Incomplete - do not use";
+    // "Set to true to use the remote block ID list (must also set allowGetOnlineTreeConfig to true), false to use local config.";
     public static boolean                              useRemoteTreeConfig            = false;
-    public final static String                         allowGetRemoteTreeConfigDesc   = "Set to true to allow TreeCapitator to retrieve the remote block ID list, false to disable.";
+    public final static String                         allowGetRemoteTreeConfigDesc   = "Incomplete - do not use";
+    // "Set to true to allow TreeCapitator to retrieve the remote block ID list, false to disable.";
     public static boolean                              allowGetRemoteTreeConfig       = false;
     
     public final static String                         axeIDListDesc                  = "IDs of items that can chop down trees. Use ',' to split item id from metadata and ';' to split items.";
@@ -184,7 +188,7 @@ public final class TreeCapitator
                                                                                               "        B:useShiftedItemID=true\n" +
                                                                                               "    }\n\n" +
                                                                                               "Once your third-party config entries are setup, you can use replacement\n" +
-                                                                                              "tags in your block, axe, and shears ID configs.  Replacement tags are structured like this:\n" +
+                                                                                              "tags in your tree, axe, and shears ID configs.  Replacement tags are structured like this:\n" +
                                                                                               "<ModName.ConfigPropName>";
     
     static
@@ -302,7 +306,7 @@ public final class TreeCapitator
         configBlockList.put("huge_red_mushrooms", huge_red_mushrooms);
         
         HashMap<String, String> vanilla_ebxl_oaks = new HashMap<String, String>();
-        vanilla_ebxl_oaks.put(LOGS, "17,0; 17,4; 17,8; <ExtrabiomesXL.quarterlog0.id>,2; <ExtrabiomesXL.quarterlog1.id>,2; " +
+        vanilla_ebxl_oaks.put(LOGS, "17,0; 17,4; 17,8; 17,12; <ExtrabiomesXL.quarterlog0.id>,2; <ExtrabiomesXL.quarterlog1.id>,2; " +
                 "<ExtrabiomesXL.quarterlog2.id>,2; <ExtrabiomesXL.quarterlog3.id>,2;");
         vanilla_ebxl_oaks.put(LEAVES, "18,0; <ExtrabiomesXL.autumnleaves.id>; <BiomesOPlenty.Dying Leaves ID>; <BiomesOPlenty.Origin Leaves ID>; " +
                 "<BiomesOPlenty.Apple Leaves ID>; <BiomesOPlenty.Fruitless Apple Leaves ID>; <BiomesOPlenty.Orange Autumn Leaves ID>; " +
@@ -310,17 +314,17 @@ public final class TreeCapitator
         configBlockList.put("vanilla_ebxl_bop_oaks", vanilla_ebxl_oaks);
         
         HashMap<String, String> vanilla_ebxl_spruces = new HashMap<String, String>();
-        vanilla_ebxl_spruces.put(LOGS, "17,1; 17,5; 17,9");
+        vanilla_ebxl_spruces.put(LOGS, "17,1; 17,5; 17,9; 17,13");
         vanilla_ebxl_spruces.put(LEAVES, "18,1; <ExtrabiomesXL.autumnleaves.id>");
         configBlockList.put("vanilla_ebxl_spruces", vanilla_ebxl_spruces);
         
         HashMap<String, String> birches = new HashMap<String, String>();
-        birches.put(LOGS, "17,2; 17,6; 17,10");
+        birches.put(LOGS, "17,2; 17,6; 17,10; 17,14");
         birches.put(LEAVES, "18,2; <BiomesOPlenty.Yellow Autumn Leaves ID>");
         configBlockList.put("vanilla_bop_birches", birches);
         
         HashMap<String, String> jungle_trees = new HashMap<String, String>();
-        jungle_trees.put(LOGS, "17,3; 17,7; 17,11");
+        jungle_trees.put(LOGS, "17,3; 17,7; 17,11; 17,15");
         jungle_trees.put(LEAVES, "18,3");
         configBlockList.put("jungle_trees", jungle_trees);
         
