@@ -29,6 +29,7 @@ import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
 import bspkrs.treecapitator.TCLog;
+import bspkrs.treecapitator.TreeCapitator;
 import bspkrs.treecapitator.fml.TreeCapitatorMod;
 import cpw.mods.fml.relauncher.IClassTransformer;
 
@@ -194,8 +195,8 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
     
     private byte[] transformItemInWorldManager(byte[] bytes, HashMap hm)
     {
-        TCLog.info("TreeCapitator ASM Magic Time!");
-        TCLog.info("Class Transformation running on " + hm.get("javaClassName") + "...");
+        TreeCapitator.debugString("TreeCapitator ASM Magic Time!");
+        TreeCapitator.debugString("Class Transformation running on " + hm.get("javaClassName") + "...");
         
         ClassNode classNode = new ClassNode();
         ClassReader classReader = new ClassReader(bytes);
@@ -208,7 +209,7 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
             MethodNode m = methods.next();
             if (m.name.equals(hm.get("targetMethodName")) && m.desc.equals(targetMethodDesc))
             {
-                TCLog.info("Found target method " + m.name + m.desc + "! Searching for landmarks...");
+                TreeCapitator.debugString("Found target method " + m.name + m.desc + "! Searching for landmarks...");
                 int blockIndex = 4;
                 int mdIndex = 5;
                 
@@ -227,10 +228,10 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
                             int offset = 1;
                             while (m.instructions.get(index + offset).getOpcode() != ASTORE)
                                 offset++;
-                            TCLog.info("Found Block object ASTORE Node at " + (index + offset));
+                            TreeCapitator.debugString("Found Block object ASTORE Node at " + (index + offset));
                             VarInsnNode blockNode = (VarInsnNode) m.instructions.get(index + offset);
                             blockIndex = blockNode.var;
-                            TCLog.info("Block object is in local object " + blockIndex);
+                            TreeCapitator.debugString("Block object is in local object " + blockIndex);
                         }
                     }
                     
@@ -244,23 +245,23 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
                             int offset = 1;
                             while (m.instructions.get(index + offset).getOpcode() != ISTORE)
                                 offset++;
-                            TCLog.info("Found metadata local variable ISTORE Node at " + (index + offset));
+                            TreeCapitator.debugString("Found metadata local variable ISTORE Node at " + (index + offset));
                             VarInsnNode mdFieldNode = (VarInsnNode) m.instructions.get(index + offset);
                             mdIndex = mdFieldNode.var;
-                            TCLog.info("Metadata is in local variable " + mdIndex);
+                            TreeCapitator.debugString("Metadata is in local variable " + mdIndex);
                         }
                     }
                     
                     if (m.instructions.get(index).getOpcode() == IFNULL)
                     {
-                        TCLog.info("Found IFNULL Node at " + index);
+                        TreeCapitator.debugString("Found IFNULL Node at " + index);
                         
                         int offset = 1;
                         while (m.instructions.get(index + offset).getOpcode() != ALOAD)
                             offset++;
                         
-                        TCLog.info("Found ALOAD Node at offset " + offset + " from IFNULL Node");
-                        TCLog.info("Patching method " + (String) hm.get("javaClassName") + "/" + m.name + m.desc + "...");
+                        TreeCapitator.debugString("Found ALOAD Node at offset " + offset + " from IFNULL Node");
+                        TreeCapitator.debugString("Patching method " + (String) hm.get("javaClassName") + "/" + m.name + m.desc + "...");
                         
                         // make a new label node for the end of our code
                         LabelNode lmm1Node = new LabelNode(new Label());
@@ -286,7 +287,7 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
                         
                         m.instructions.insertBefore(m.instructions.get(index + offset), toInject);
                         
-                        TCLog.info("Method " + (String) hm.get("javaClassName") + "/" + m.name + m.desc + " patched at index " + (index + offset - 1));
+                        TreeCapitator.debugString("Method " + (String) hm.get("javaClassName") + "/" + m.name + m.desc + " patched at index " + (index + offset - 1));
                         TCLog.info("TreeCapitator ASM Patching Complete!");
                         TreeCapitatorMod.instance.isCoreModLoaded = true;
                         break;

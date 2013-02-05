@@ -108,7 +108,7 @@ public final class TreeCapitator
     public final static String                         allowDebugOutputDesc           = "Set to true if you want TreeCapitator to tell you what kind of block you have clicked when sneaking, false to disable.";
     public static boolean                              allowDebugOutput               = false;
     public final static String                         allowDebugLoggingDesc          = "Set to true if you want TreeCapitator to log info about what it's doing, false to disable";
-    public static boolean                              allowDebugLogging              = true;
+    public static boolean                              allowDebugLogging              = false;
     
     public static boolean                              isForge                        = false;
     
@@ -701,7 +701,7 @@ public final class TreeCapitator
                                 
                                 if (logBlock.length > 1)
                                     metadata = CommonUtils.parseInt(logBlock[1].trim(), -1);
-                                TCLog.info("    ++Configured log: %s, %s", blockID, metadata);
+                                TreeCapitator.debugString("    ++Configured log: %s, %s", blockID, metadata);
                                 
                                 BlockID logID = new BlockID(blockID, metadata);
                                 if (!logIDList.contains(logID))
@@ -741,7 +741,7 @@ public final class TreeCapitator
                                         if (leafBlock.length > 1)
                                             metadata = CommonUtils.parseInt(leafBlock[1].trim(), -1);
                                         
-                                        TCLog.info("    ++Configured leaf: %s, %s", blockID, metadata);
+                                        TreeCapitator.debugString("    ++Configured leaf: %s, %s", blockID, metadata);
                                         
                                         BlockID leafID = new BlockID(blockID, metadata);
                                         if (!leafIDList.contains(leafID))

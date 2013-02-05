@@ -26,6 +26,7 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.IMCCallback;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.Mod.Metadata;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.Mod.ServerStarted;
@@ -62,7 +63,8 @@ public class TreeCapitatorMod extends DummyModContainer
     
     public static boolean           isCoreModLoaded          = false;
     
-    public ModMetadata              metadata;
+    @Metadata(value = "TreeCapitator")
+    public static ModMetadata       metadata;
     public Configuration            config;
     
     private static String           idResolverModIDDesc      = "The mod ID value for ID Resolver.";
@@ -88,7 +90,21 @@ public class TreeCapitatorMod extends DummyModContainer
     {
         TreeCapitator.init(true);
         metadata = event.getModMetadata();
-        config = new Configuration(event.getSuggestedConfigurationFile());
+        
+        File file = event.getSuggestedConfigurationFile();
+        
+        if (Block.class.getSimpleName().equalsIgnoreCase("Block"))
+        { // debug settings for deobfuscated execution
+            TreeCapitator.allowDebugLogging = false;
+            TreeCapitator.onlyDestroyUpwards = true;
+            TreeCapitator.sneakAction = "disable";
+            TreeCapitator.maxBreakDistance = 16;
+            TreeCapitator.allowSmartTreeDetection = true;
+            if (file.exists())
+                file.delete();
+        }
+        
+        Configuration config = new Configuration(file);
         
         config.load();
         TreeCapitator.allowUpdateCheck = Config.getBoolean(config, "allowUpdateCheck", MISC_CTGY, TreeCapitator.allowUpdateCheck, TreeCapitator.allowUpdateCheckDesc);
