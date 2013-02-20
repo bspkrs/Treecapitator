@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemInWorldManager;
+import net.minecraft.src.mod_bspkrsCore;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ConfigCategory;
 import net.minecraftforge.common.Configuration;
@@ -41,7 +42,7 @@ import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 
-@Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge " + TreeCapitator.VERSION_NUMBER, useMetadata = true)
+@Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge " + TreeCapitator.VERSION_NUMBER, dependencies = "after:mod_bspkrsCore", useMetadata = true)
 @NetworkMod(clientSideRequired = false, serverSideRequired = false,
         clientPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = ClientPacketHandler.class),
         serverPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = ServerPacketHandler.class),
@@ -107,7 +108,6 @@ public class TreeCapitatorMod extends DummyModContainer
         Configuration config = new Configuration(file);
         
         config.load();
-        TreeCapitator.allowUpdateCheck = Config.getBoolean(config, "allowUpdateCheck", MISC_CTGY, TreeCapitator.allowUpdateCheck, TreeCapitator.allowUpdateCheckDesc);
         TreeCapitator.onlyDestroyUpwards = Config.getBoolean(config, "onlyDestroyUpwards", MISC_CTGY, TreeCapitator.onlyDestroyUpwards, TreeCapitator.onlyDestroyUpwardsDesc);
         TreeCapitator.disableInCreative = Config.getBoolean(config, "disableInCreative", MISC_CTGY, TreeCapitator.disableInCreative, TreeCapitator.disableInCreativeDesc);
         TreeCapitator.disableCreativeDrops = Config.getBoolean(config, "disableCreativeDrops", MISC_CTGY, TreeCapitator.disableCreativeDrops, TreeCapitator.disableCreativeDropsDesc);
@@ -135,8 +135,6 @@ public class TreeCapitatorMod extends DummyModContainer
         
         if (config.hasCategory(GENERAL))
         {
-            TreeCapitator.allowUpdateCheck = Config.getBoolean(config, "allowUpdateCheck", GENERAL, TreeCapitator.allowUpdateCheck, TreeCapitator.allowUpdateCheckDesc);
-            Config.setFromOldCtgy(config, "allowUpdateCheck", GENERAL, MISC_CTGY);
             TreeCapitator.onlyDestroyUpwards = Config.getBoolean(config, "onlyDestroyUpwards", GENERAL, TreeCapitator.onlyDestroyUpwards, TreeCapitator.onlyDestroyUpwardsDesc);
             Config.setFromOldCtgy(config, "onlyDestroyUpwards", GENERAL, MISC_CTGY);
             TreeCapitator.disableInCreative = Config.getBoolean(config, "disableInCreative", GENERAL, TreeCapitator.disableInCreative, TreeCapitator.disableInCreativeDesc);
@@ -260,6 +258,10 @@ public class TreeCapitatorMod extends DummyModContainer
                     HashMap<String, String> entries = new HashMap<String, String>();
                     ConfigCategory currentCtgy = config.getCategory(ctgy);
                     
+                    // fixed issue with old configs not having the right prop name
+                    if (currentCtgy.containsKey("modName"))
+                        Config.renameProperty(config, ctgy, "modName", TreeCapitator.MOD_ID);
+                    
                     if (currentCtgy.containsKey(TreeCapitator.MOD_ID))
                     {
                         for (String tpCfgEntry : currentCtgy.keySet())
@@ -281,7 +283,7 @@ public class TreeCapitatorMod extends DummyModContainer
         
         config.save();
         
-        if (TreeCapitator.allowUpdateCheck)
+        if (mod_bspkrsCore.allowUpdateCheck)
         {
             versionChecker = new ModVersionChecker(metadata.name, metadata.version, versionURL, mcfTopic, TCLog.INSTANCE.getLogger());
             versionChecker.checkVersionWithLoggingBySubStringAsFloat(metadata.version.length() - 1, metadata.version.length());

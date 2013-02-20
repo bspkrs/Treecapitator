@@ -13,7 +13,7 @@ import bspkrs.util.CommonUtils;
 
 public final class TreeCapitator
 {
-    public final static String                         VERSION_NUMBER                 = "1.4.6.r06";
+    public final static String                         VERSION_NUMBER                 = "1.4.6.r07";
     public static final String                         LOGS                           = "logs";
     public static final String                         LEAVES                         = "leaves";
     public static final String                         MOD_ID                         = "modID";
@@ -26,8 +26,6 @@ public final class TreeCapitator
     public final static String                         remoteTreeConfigURLDesc        = "Incomplete - do not use";
     // "Leave this URL as is to get the latest tree definitions from my master list.\nFeel free to start your own remote list to share with your friends or send your suggestions to me for the master list!";
     public static String                               remoteTreeConfigURL            = "http://dl.dropbox.com/u/20748481/Minecraft/1.4.6/treeCapitatorTreeConfig.txt";
-    public final static String                         allowUpdateCheckDesc           = "Set to true to allow checking for mod updates, false to disable";
-    public static boolean                              allowUpdateCheck               = true;
     public final static String                         remoteBlockIDConfigDesc        = "Incomplete - do not use";
     // "Values downloaded from: " + remoteTreeConfigURL;
     public static String                               remoteBlockIDConfig            = "";
@@ -173,7 +171,7 @@ public final class TreeCapitator
                                                                                               "other mods' config files.  These values are case-sensitive!\n\n" +
                                                                                               "Format:\n" +
                                                                                               "    <section_name> {\n" +
-                                                                                              "        S:modName=<modID from mcmod.info>\n" +
+                                                                                              "        S:modID=<modID from mcmod.info>\n" +
                                                                                               "        S:configPath=<path to config file relative to .minecraft/config/>\n" +
                                                                                               "        S:blockValues=<block config section>:<config property name>; <mod config section>:<config property name>\n" +
                                                                                               "        S:itemValues=<item config section>:<property name>; <item config section>:<property name>\n" +
@@ -181,7 +179,7 @@ public final class TreeCapitator
                                                                                               "    }\n\n" +
                                                                                               "Example:\n" +
                                                                                               "    extrabiomesxl {\n" +
-                                                                                              "        S:modName=ExtrabiomesXL\n" +
+                                                                                              "        S:modID=ExtrabiomesXL\n" +
                                                                                               "        S:configPath=extrabiomes/extrabiomes.cfg\n" +
                                                                                               "        S:blockValues=block:customlog.id; block:quarterlog0.id; block:quarterlog1.id; block:quarterlog2.id; block:quarterlog3.id; block:autumnleaves.id; block:greenleaves.id\n" +
                                                                                               "        S:itemValues=items.world:axeRuby.id; items.world:axeGreenSapphire.id; items.world:axeSapphire.id\n" +
@@ -320,7 +318,7 @@ public final class TreeCapitator
         
         HashMap<String, String> birches = new HashMap<String, String>();
         birches.put(LOGS, "17,2; 17,6; 17,10; 17,14");
-        birches.put(LEAVES, "18,2; <BiomesOPlenty.Yellow Autumn Leaves ID>");
+        birches.put(LEAVES, "18,2; <BiomesOPlenty.Yellow Autumn Leaves ID>; 18,0");
         configBlockList.put("vanilla_bop_birches", birches);
         
         HashMap<String, String> jungle_trees = new HashMap<String, String>();

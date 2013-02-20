@@ -7,8 +7,6 @@ import bspkrs.util.ModVersionChecker;
 
 public class mod_treecapitator extends BaseMod
 {
-    @MLProp(info = TreeCapitator.allowUpdateCheckDesc)
-    public static boolean     allowUpdateCheck           = true;
     @MLProp(info = TreeCapitator.axeIDListDesc)
     public static String      axeIDList                  = TreeCapitator.axeIDList;
     @MLProp(info = TreeCapitator.needItemDesc)
@@ -59,11 +57,10 @@ public class mod_treecapitator extends BaseMod
     
     public mod_treecapitator()
     {
-        if (TreeCapitator.allowUpdateCheck)
+        if (mod_bspkrsCore.allowUpdateCheck)
             versionChecker = new ModVersionChecker(getName(), getVersion(), versionURL, mcfTopic, TCLog.INSTANCE.getLogger());
         
         TreeCapitator.init(false);
-        TreeCapitator.allowUpdateCheck = allowUpdateCheck;
         TreeCapitator.axeIDList = axeIDList;
         TreeCapitator.needItem = needItem;
         TreeCapitator.onlyDestroyUpwards = onlyDestroyUpwards;
@@ -101,9 +98,15 @@ public class mod_treecapitator extends BaseMod
     }
     
     @Override
+    public String getPriorities()
+    {
+        return "after:mod_bspkrsCore";
+    }
+    
+    @Override
     public void load()
     {
-        if (TreeCapitator.allowUpdateCheck && versionChecker != null)
+        if (mod_bspkrsCore.allowUpdateCheck && versionChecker != null)
             versionChecker.checkVersionWithLogging();
         ModLoader.setInGameHook(this, true, true);
     }
@@ -111,7 +114,7 @@ public class mod_treecapitator extends BaseMod
     @Override
     public boolean onTickInGame(float f, Minecraft mc)
     {
-        if (TreeCapitator.allowUpdateCheck && versionChecker != null)
+        if (mod_bspkrsCore.allowUpdateCheck && versionChecker != null)
         {
             if (!versionChecker.isCurrentVersion())
                 for (String msg : versionChecker.getInGameMessage())

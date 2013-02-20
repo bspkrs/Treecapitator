@@ -4,8 +4,7 @@ import java.util.EnumSet;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
-import bspkrs.treecapitator.TreeCapitator;
-import bspkrs.treecapitator.fml.TreeCapitatorMod;
+import net.minecraft.src.mod_bspkrsCore;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
@@ -58,11 +57,11 @@ public class TreeCapitatorTicker implements ITickHandler
         
         if (mcClient != null && mcClient.thePlayer != null)
         {
-            if (TreeCapitator.allowUpdateCheck && TreeCapitatorMod.versionChecker != null)
+            if (mod_bspkrsCore.allowUpdateCheck && TreeCapitatorMod.versionChecker != null)
                 if (!TreeCapitatorMod.versionChecker.isCurrentVersionBySubStringAsFloatNewer(TreeCapitatorMod.instance.metadata.version.length() - 1, TreeCapitatorMod.instance.metadata.version.length()))
                     for (String msg : TreeCapitatorMod.versionChecker.getInGameMessage())
                         mcClient.thePlayer.addChatMessage(msg);
-			            
+            
             if (mcClient.isSingleplayer() && TreeCapitatorMod.isItemInWorldManagerReplaced((EntityPlayerMP) mcClient.getIntegratedServer().worldServerForDimension(mcClient.thePlayer.dimension).getPlayerEntityByName(mcClient.thePlayer.username)))
                 mcClient.thePlayer.addChatMessage("Warning: The ItemInWorldManager object for your player entity has been replaced (most likely by another mod). TreeCapitator will probably not work.");
             

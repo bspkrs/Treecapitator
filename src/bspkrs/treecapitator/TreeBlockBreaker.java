@@ -410,7 +410,7 @@ public class TreeBlockBreaker
             Coord currentLog = list.get(index);
             
             for (x = -1; x <= 1; x++)
-                for (y = -1; y <= 1; y++)
+                for (y = (TreeCapitator.onlyDestroyUpwards ? 0 : -1); y <= 1; y++)
                     for (z = -1; z <= 1; z++)
                         if (logIDList.contains(new BlockID(world, currentLog.x + x, currentLog.y + y, currentLog.z + z)))
                         {
