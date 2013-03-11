@@ -3,11 +3,12 @@ package bspkrs.treecapitator;
 import java.util.ArrayList;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLog;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import bspkrs.util.BlockID;
 
-public class BlockTree extends net.minecraft.block.BlockLog
+public class BlockTree extends BlockLog
 {
     private TreeBlockBreaker breaker;
     
@@ -16,8 +17,8 @@ public class BlockTree extends net.minecraft.block.BlockLog
         super(i);
         setHardness(TreeCapitator.logHardnessNormal);
         setStepSound(Block.soundWoodFootstep);
-        setBlockName("log");
-        setRequiresSelfNotify();
+        setUnlocalizedName("log");
+        // setRequiresSelfNotify();
     }
     
     /**

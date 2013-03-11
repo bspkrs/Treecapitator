@@ -8,186 +8,192 @@ import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import bspkrs.util.BlockID;
 import bspkrs.util.CommonUtils;
 
 public final class TreeCapitator
 {
-    public final static String                         VERSION_NUMBER                 = "1.4.6.r07";
-    public static final String                         LOGS                           = "logs";
-    public static final String                         LEAVES                         = "leaves";
-    public static final String                         MOD_ID                         = "modID";
-    public static final String                         CONFIG_PATH                    = "configPath";
-    public static final String                         BLOCK_VALUES                   = "blockValues";
-    public static final String                         ITEM_VALUES                    = "itemValues";
-    public static final String                         SHIFT_INDEX                    = "useShiftedItemID";
-    public static final String                         IDR_MOD_ID                     = "idResolverModID";
+    public final static String                         VERSION_NUMBER                     = "1.4.6.r08";
+    public static final String                         LOGS                               = "logs";
+    public static final String                         LEAVES                             = "leaves";
+    public static final String                         MOD_ID                             = "modID";
+    public static final String                         CONFIG_PATH                        = "configPath";
+    public static final String                         BLOCK_VALUES                       = "blockValues";
+    public static final String                         ITEM_VALUES                        = "itemValues";
+    public static final String                         SHIFT_INDEX                        = "useShiftedItemID";
+    public static final String                         IDR_MOD_ID                         = "idResolverModID";
     
-    public final static String                         remoteTreeConfigURLDesc        = "Incomplete - do not use";
+    public final static String                         remoteTreeConfigURLDesc            = "Incomplete - do not use";
     // "Leave this URL as is to get the latest tree definitions from my master list.\nFeel free to start your own remote list to share with your friends or send your suggestions to me for the master list!";
-    public static String                               remoteTreeConfigURL            = "http://dl.dropbox.com/u/20748481/Minecraft/1.4.6/treeCapitatorTreeConfig.txt";
-    public final static String                         remoteBlockIDConfigDesc        = "Incomplete - do not use";
+    public static String                               remoteTreeConfigURL                = "http://dl.dropbox.com/u/20748481/Minecraft/1.4.6/treeCapitatorTreeConfig.txt";
+    public final static String                         remoteBlockIDConfigDesc            = "Incomplete - do not use";
     // "Values downloaded from: " + remoteTreeConfigURL;
-    public static String                               remoteBlockIDConfig            = "";
-    public final static String                         localBlockIDListDesc           = "Automatically generated:";
-    public static String                               localBlockIDList               = "";
-    public final static String                         useRemoteTreeConfigDesc        = "Incomplete - do not use";
+    public static String                               remoteBlockIDConfig                = "";
+    public final static String                         localBlockIDListDesc               = "Automatically generated:";
+    public static String                               localBlockIDList                   = "";
+    public final static String                         useRemoteTreeConfigDesc            = "Incomplete - do not use";
     // "Set to true to use the remote block ID list (must also set allowGetOnlineTreeConfig to true), false to use local config.";
-    public static boolean                              useRemoteTreeConfig            = false;
-    public final static String                         allowGetRemoteTreeConfigDesc   = "Incomplete - do not use";
+    public static boolean                              useRemoteTreeConfig                = false;
+    public final static String                         allowGetRemoteTreeConfigDesc       = "Incomplete - do not use";
     // "Set to true to allow TreeCapitator to retrieve the remote block ID list, false to disable.";
-    public static boolean                              allowGetRemoteTreeConfig       = false;
+    public static boolean                              allowGetRemoteTreeConfig           = false;
     
-    public final static String                         axeIDListDesc                  = "IDs of items that can chop down trees. Use ',' to split item id from metadata and ';' to split items.";
-    public static String                               axeIDList                      = Item.axeWood.itemID + "; " + Item.axeStone.itemID + "; " + Item.axeSteel.itemID + "; " + Item.axeGold.itemID + "; " + Item.axeDiamond.itemID;
-    public final static String                         needItemDesc                   = "Whether you need an item from the axeIDList to chop down a tree. Disabling will let you chop trees with any item.";
-    public static boolean                              needItem                       = true;
-    public final static String                         onlyDestroyUpwardsDesc         = "Setting this to false will allow the chopping to move downward as well as upward (and blocks below the one you break will be chopped)";
-    public static boolean                              onlyDestroyUpwards             = true;
-    public final static String                         destroyLeavesDesc              = "Enabling this will make leaves be destroyed when trees are chopped.";
-    public static boolean                              destroyLeaves                  = true;
-    public final static String                         requireLeafDecayCheckDesc      = "When true TreeCapitator will only instantly decay leaves that have actually been marked for decay.\n" +
-                                                                                              "Set to false if you want leaves to be destroyed regardless of their decay status (hint: or for \"leaf\" blocks that are not really leaves).";
-    public static boolean                              requireLeafDecayCheck          = true;
-    public final static String                         shearLeavesDesc                = "Enabling this will cause destroyed leaves to be sheared when a shearing item is in the hotbar (ignored if destroyLeaves is false).";
-    public static boolean                              shearLeaves                    = false;
-    public final static String                         shearVinesDesc                 = "Enabling this will shear /some/ of the vines on a tree when a shearing item is in the hotbar (ignored if destroyLeaves is false).";
-    public static boolean                              shearVines                     = false;
-    public final static String                         shearIDListDesc                = "IDs of items that when placed in the hotbar will allow leaves to be sheared when shearLeaves is true.\n" +
-                                                                                              "Use ',' to split item id from metadata and ';' to split items.";
-    public static String                               shearIDList                    = Item.shears.itemID + "";
-    public final static String                         logHardnessNormalDesc          = "The hardness of logs for when you are using items that won't chop down the trees.";
-    public static float                                logHardnessNormal              = 2.0F;
-    public final static String                         logHardnessModifiedDesc        = "The hardness of logs for when you are using items that can chop down trees.";
-    public static float                                logHardnessModified            = 4.0F;
-    public final static String                         disableInCreativeDesc          = "Flag to disable tree chopping in Creative mode";
-    public static boolean                              disableInCreative              = false;
-    public final static String                         disableCreativeDropsDesc       = "Flag to disable drops in Creative mode";
-    public static boolean                              disableCreativeDrops           = false;
-    public final static String                         allowItemDamageDesc            = "Enable to cause item damage based on number of blocks destroyed";
-    public static boolean                              allowItemDamage                = true;
-    public final static String                         allowMoreBlocksThanDamageDesc  = "Enable to allow chopping down the entire tree even if your item does not have enough damage remaining to cover the number of blocks.";
-    public static boolean                              allowMoreBlocksThanDamage      = false;
-    public final static String                         damageMultiplierDesc           = "Axes and shears will take damage this many times for each log broken.\n" +
-                                                                                              "Remaining damage is rounded and applied to tools when a tree is finished.";
-    public static float                                damageMultiplier               = 1.0F;
-    public final static String                         useIncreasingItemDamageDesc    = "Set to true to have the per-block item damage amount increase after every increaseDamageEveryXBlocks blocks are broken.";
-    public static boolean                              useIncreasingItemDamage        = false;
-    public final static String                         increaseDamageEveryXBlocksDesc = "When useIncreasingItemDamage=true the damage applied per block broken will increase each time this many blocks are broken in a tree.";
-    public static int                                  increaseDamageEveryXBlocks     = 15;
-    public final static String                         damageIncreaseAmountDesc       = "When useIncreasingItemDamage=true the damage applied per block broken will increase by this amount every increaseDamageEveryXBlocks blocks broken in a tree.";
-    public static float                                damageIncreaseAmount           = 1.0F;
-    public final static String                         sneakActionDesc                = "Set sneakAction = \"disable\" to disable tree chopping while sneaking,\n" +
-                                                                                              "set sneakAction = \"enable\" to only enable tree chopping while sneaking,\n" +
-                                                                                              "set sneakAction = \"none\" to have tree chopping enabled regardless of sneaking.";
-    public static String                               sneakAction                    = "disable";
-    public final static String                         maxBreakDistanceDesc           = "The maximum horizontal distance that the log breaking effect will travel (use -1 for no limit).";
-    public static int                                  maxBreakDistance               = 16;
-    public final static String                         allowSmartTreeDetectionDesc    = "Set to false to disable TreeCapitator Smart Tree Detection.\n" +
-                                                                                              "Smart Tree Detection counts the number of leaf blocks that are adjacent to the\n" +
-                                                                                              "top-most connected log block at the x, z location of a log you've broken. If\n" +
-                                                                                              "there are at least minLeavesToID leaf blocks within maxLeafIDDist blocks then\n" +
-                                                                                              "TreeCapitator considers it a tree and allows chopping.\n" +
-                                                                                              "WARNING: Disabling Smart Tree Detection will remove the only safeguard against\n" +
-                                                                                              "accidentally destroying a log structure.  Make sure you know what you're doing!";
-    public static boolean                              allowSmartTreeDetection        = true;
-    public final static String                         maxLeafIDDistDesc              = "If a tree's top log is not close enough to leaf blocks, the tree will not be chopped.\n" +
-                                                                                              "Increasing this value will search further.  I would try to keep it below 3.";
-    public static int                                  maxLeafIDDist                  = 1;
-    public final static String                         maxLeafBreakDistDesc           = "The maximum distance to instantly decay leaves from any log block that is removed by TreeCapitator.";
-    public static int                                  maxLeafBreakDist               = 4;
-    public final static String                         minLeavesToIDDesc              = "The minimum number of leaves within maxLeafIDDist of the top log block required to identify a tree.";
-    public static int                                  minLeavesToID                  = 3;
-    public final static String                         useStrictBlockPairingDesc      = "Set to true if you want only the leaf blocks listed with each log in blockIDList\n"
-                                                                                              + "to break when that log type is chopped.  When set to false it will break\n"
-                                                                                              + "any leaf type within range of the tree, not just the type for that tree.";
-    public static boolean                              useStrictBlockPairing          = false;
+    public final static String                         enableEnchantmentModeDesc          = "Toggle for whether or not to use the Treecapitating enchantment instead of only requiring an item to be in the axeIDList to chop a tree.";
+    public static boolean                              enableEnchantmentMode              = false;
+    public final static String                         requireItemInAxeListForEnchantDesc = "Whether or not to check axeIDList for an item when determining if a given item can be imbued with the Treecapitating enchantment.\n" +
+                                                                                                  "NOTE: when set to false, any ItemTool type item (pickaxes, shovels, etc) with a high enough enchantability level can get the enchantment, not just axes.";
+    public static boolean                              requireItemInAxeListForEnchant     = false;
+    public final static String                         axeIDListDesc                      = "IDs of items that can chop down trees. Use ',' to split item id from metadata and ';' to split items.";
+    public static String                               axeIDList                          = Item.axeWood.itemID + "; " + Item.axeStone.itemID + "; " + Item.axeSteel.itemID + "; " + Item.axeGold.itemID + "; " + Item.axeDiamond.itemID;
+    public final static String                         needItemDesc                       = "Whether you need an item from the axeIDList to chop down a tree. Disabling will let you chop trees with any item.";
+    public static boolean                              needItem                           = true;
+    public final static String                         onlyDestroyUpwardsDesc             = "Setting this to false will allow the chopping to move downward as well as upward (and blocks below the one you break will be chopped)";
+    public static boolean                              onlyDestroyUpwards                 = true;
+    public final static String                         destroyLeavesDesc                  = "Enabling this will make leaves be destroyed when trees are chopped.";
+    public static boolean                              destroyLeaves                      = true;
+    public final static String                         requireLeafDecayCheckDesc          = "When true TreeCapitator will only instantly decay leaves that have actually been marked for decay.\n" +
+                                                                                                  "Set to false if you want leaves to be destroyed regardless of their decay status (hint: or for \"leaf\" blocks that are not really leaves).";
+    public static boolean                              requireLeafDecayCheck              = true;
+    public final static String                         shearLeavesDesc                    = "Enabling this will cause destroyed leaves to be sheared when a shearing item is in the hotbar (ignored if destroyLeaves is false).";
+    public static boolean                              shearLeaves                        = false;
+    public final static String                         shearVinesDesc                     = "Enabling this will shear /some/ of the vines on a tree when a shearing item is in the hotbar (ignored if destroyLeaves is false).";
+    public static boolean                              shearVines                         = false;
+    public final static String                         shearIDListDesc                    = "IDs of items that when placed in the hotbar will allow leaves to be sheared when shearLeaves is true.\n" +
+                                                                                                  "Use ',' to split item id from metadata and ';' to split items.";
+    public static String                               shearIDList                        = Item.shears.itemID + "";
+    public final static String                         logHardnessNormalDesc              = "The hardness of logs for when you are using items that won't chop down the trees.";
+    public static float                                logHardnessNormal                  = 2.0F;
+    public final static String                         logHardnessModifiedDesc            = "The hardness of logs for when you are using items that can chop down trees.";
+    public static float                                logHardnessModified                = 4.0F;
+    public final static String                         disableInCreativeDesc              = "Flag to disable tree chopping in Creative mode";
+    public static boolean                              disableInCreative                  = false;
+    public final static String                         disableCreativeDropsDesc           = "Flag to disable drops in Creative mode";
+    public static boolean                              disableCreativeDrops               = false;
+    public final static String                         allowItemDamageDesc                = "Enable to cause item damage based on number of blocks destroyed";
+    public static boolean                              allowItemDamage                    = true;
+    public final static String                         allowMoreBlocksThanDamageDesc      = "Enable to allow chopping down the entire tree even if your item does not have enough damage remaining to cover the number of blocks.";
+    public static boolean                              allowMoreBlocksThanDamage          = false;
+    public final static String                         damageMultiplierDesc               = "Axes and shears will take damage this many times for each log broken.\n" +
+                                                                                                  "Remaining damage is rounded and applied to tools when a tree is finished.";
+    public static float                                damageMultiplier                   = 1.0F;
+    public final static String                         useIncreasingItemDamageDesc        = "Set to true to have the per-block item damage amount increase after every increaseDamageEveryXBlocks blocks are broken.";
+    public static boolean                              useIncreasingItemDamage            = false;
+    public final static String                         increaseDamageEveryXBlocksDesc     = "When useIncreasingItemDamage=true the damage applied per block broken will increase each time this many blocks are broken in a tree.";
+    public static int                                  increaseDamageEveryXBlocks         = 15;
+    public final static String                         damageIncreaseAmountDesc           = "When useIncreasingItemDamage=true the damage applied per block broken will increase by this amount every increaseDamageEveryXBlocks blocks broken in a tree.";
+    public static float                                damageIncreaseAmount               = 1.0F;
+    public final static String                         sneakActionDesc                    = "Set sneakAction = \"disable\" to disable tree chopping while sneaking,\n" +
+                                                                                                  "set sneakAction = \"enable\" to only enable tree chopping while sneaking,\n" +
+                                                                                                  "set sneakAction = \"none\" to have tree chopping enabled regardless of sneaking.";
+    public static String                               sneakAction                        = "disable";
+    public final static String                         maxBreakDistanceDesc               = "The maximum horizontal distance that the log breaking effect will travel (use -1 for no limit).";
+    public static int                                  maxBreakDistance                   = 16;
+    public final static String                         allowSmartTreeDetectionDesc        = "Set to false to disable TreeCapitator Smart Tree Detection.\n" +
+                                                                                                  "Smart Tree Detection counts the number of leaf blocks that are adjacent to the\n" +
+                                                                                                  "top-most connected log block at the x, z location of a log you've broken. If\n" +
+                                                                                                  "there are at least minLeavesToID leaf blocks within maxLeafIDDist blocks then\n" +
+                                                                                                  "TreeCapitator considers it a tree and allows chopping.\n" +
+                                                                                                  "WARNING: Disabling Smart Tree Detection will remove the only safeguard against\n" +
+                                                                                                  "accidentally destroying a log structure.  Make sure you know what you're doing!";
+    public static boolean                              allowSmartTreeDetection            = true;
+    public final static String                         maxLeafIDDistDesc                  = "If a tree's top log is not close enough to leaf blocks, the tree will not be chopped.\n" +
+                                                                                                  "Increasing this value will search further.  I would try to keep it below 3.";
+    public static int                                  maxLeafIDDist                      = 1;
+    public final static String                         maxLeafBreakDistDesc               = "The maximum distance to instantly decay leaves from any log block that is removed by TreeCapitator.";
+    public static int                                  maxLeafBreakDist                   = 4;
+    public final static String                         minLeavesToIDDesc                  = "The minimum number of leaves within maxLeafIDDist of the top log block required to identify a tree.";
+    public static int                                  minLeavesToID                      = 3;
+    public final static String                         useStrictBlockPairingDesc          = "Set to true if you want only the leaf blocks listed with each log in blockIDList\n"
+                                                                                                  + "to break when that log type is chopped.  When set to false it will break\n"
+                                                                                                  + "any leaf type within range of the tree, not just the type for that tree.";
+    public static boolean                              useStrictBlockPairing              = false;
     
-    public final static String                         allowDebugOutputDesc           = "Set to true if you want TreeCapitator to tell you what kind of block you have clicked when sneaking, false to disable.";
-    public static boolean                              allowDebugOutput               = false;
-    public final static String                         allowDebugLoggingDesc          = "Set to true if you want TreeCapitator to log info about what it's doing, false to disable";
-    public static boolean                              allowDebugLogging              = false;
+    public final static String                         allowDebugOutputDesc               = "Set to true if you want TreeCapitator to tell you what kind of block you have clicked when sneaking, false to disable.";
+    public static boolean                              allowDebugOutput                   = false;
+    public final static String                         allowDebugLoggingDesc              = "Set to true if you want TreeCapitator to log info about what it's doing, false to disable";
+    public static boolean                              allowDebugLogging                  = false;
     
-    public static boolean                              isForge                        = false;
+    public static boolean                              isForge                            = false;
     
-    public static ArrayList<BlockID>                   logIDList                      = new ArrayList<BlockID>();
-    public static ArrayList<BlockID>                   leafIDList                     = new ArrayList<BlockID>();
-    public static Map<BlockID, ArrayList<BlockID>>     logToLeafListMap               = new HashMap<BlockID, ArrayList<BlockID>>();
-    public static Map<BlockID, ArrayList<BlockID>>     logToLogListMap                = new HashMap<BlockID, ArrayList<BlockID>>();
-    public static Map<String, HashMap<String, String>> configBlockList                = new HashMap<String, HashMap<String, String>>();
-    public static Map<String, HashMap<String, String>> thirdPartyConfig               = new HashMap<String, HashMap<String, String>>();
-    public static Map<String, String>                  tagMap                         = new HashMap<String, String>();
+    public static ArrayList<BlockID>                   logIDList                          = new ArrayList<BlockID>();
+    public static ArrayList<BlockID>                   leafIDList                         = new ArrayList<BlockID>();
+    public static Map<BlockID, ArrayList<BlockID>>     logToLeafListMap                   = new HashMap<BlockID, ArrayList<BlockID>>();
+    public static Map<BlockID, ArrayList<BlockID>>     logToLogListMap                    = new HashMap<BlockID, ArrayList<BlockID>>();
+    public static Map<String, HashMap<String, String>> configBlockList                    = new HashMap<String, HashMap<String, String>>();
+    public static Map<String, HashMap<String, String>> thirdPartyConfig                   = new HashMap<String, HashMap<String, String>>();
+    public static Map<String, String>                  tagMap                             = new HashMap<String, String>();
     
-    public static final String                         configBlockIDDesc              = "Add the log and leaf block IDs for all trees you want to be able to chop down.\n" +
-                                                                                              "Each section below represents a type of tree.  Each list may contain block IDs\n" +
-                                                                                              "and/or third-party config replacement tags. You can change it to be more or\n" +
-                                                                                              "less granular as long as all sections follow the basic structure.  Do not use\n" +
-                                                                                              "spaces or periods in your section names.  Otherwise you can call them anything\n" +
-                                                                                              "you like.\n\n" +
-                                                                                              "EACH LOG ID MAY ONLY APPEAR IN EXACTLY ONE SECTION.\n\n" +
-                                                                                              "NOTE: Some mod trees use vanilla log blocks as well as custom blocks.  If a tree\n" +
-                                                                                              "contains more than 1 type of log, all logs must be included in the same section.\n" +
-                                                                                              "Examples of this are the default entries for vanilla_ebxl_oaks and vanilla_ebxl_spruces.\n\n" +
-                                                                                              "Simple Example (all logs and leaves are grouped in one section, no metadata is specified):\n" +
-                                                                                              "    trees {\n" +
-                                                                                              "        S:leaves=18; <Forestry.leaves>; <ExtrabiomesXL.autumnleaves.id>; <ExtrabiomesXL.greenleaves.id>\n" +
-                                                                                              "        S:logs=17; <Forestry.log1>; <Forestry.log2>; <Forestry.log3>; <Forestry.log4>; <ExtrabiomesXL.customlog.id>; <ExtrabiomesXL.quarterlog0.id>; <ExtrabiomesXL.quarterlog1.id>; <ExtrabiomesXL.quarterlog2.id>;<ExtrabiomesXL.quarterlog3.id>\n" +
-                                                                                              "    }\n\n" +
-                                                                                              "Advanced Example (each mod tree has its own section, metadata is included):\n" +
-                                                                                              "    vanilla_ebxl_oaks {\n" +
-                                                                                              "        S:leaves=18,0\n" +
-                                                                                              "        S:logs=17,0; 17,4; 17,8; <ExtrabiomesXL.quarterlog0.id>,2; <ExtrabiomesXL.quarterlog1.id>,2; <ExtrabiomesXL.quarterlog2.id>,2;<ExtrabiomesXL.quarterlog3.id>,2;\n" +
-                                                                                              "    }\n\n" +
-                                                                                              "    birches {\n" +
-                                                                                              "        S:leaves=18,2\n" +
-                                                                                              "        S:logs=17,2; 17,6; 17,10\n" +
-                                                                                              "    }\n\n" +
-                                                                                              "    vanilla_ebxl_spruces {\n" +
-                                                                                              "        S:leaves=18,1; <ExtrabiomesXL.autumnleaves.id>\n" +
-                                                                                              "        S:logs=17,1; 17,5; 17,9\n" +
-                                                                                              "    }\n\n" +
-                                                                                              "    jungle_trees {\n" +
-                                                                                              "        S:leaves=18,3\n" +
-                                                                                              "        S:logs=17,3; 17,7; 17,11\n" +
-                                                                                              "    }\n\n" +
-                                                                                              "    ic2_rubber {\n" +
-                                                                                              "        S:leaves=<IC2.blockRubLeaves>\n" +
-                                                                                              "        S:logs=<IC2.blockRubWood>\n" +
-                                                                                              "    }\n\n" +
-                                                                                              "    ebxl_acacia {\n" +
-                                                                                              "        S:leaves=<ExtrabiomesXL.greenleaves.id>,2\n" +
-                                                                                              "        S:logs=<ExtrabiomesXL.customlog.id>,1\n" +
-                                                                                              "    }\n\n" +
-                                                                                              "    ebxl_firs {\n" +
-                                                                                              "        S:leaves=<ExtrabiomesXL.greenleaves.id>,0\n" +
-                                                                                              "        S:logs=<ExtrabiomesXL.customlog.id>,0; <ExtrabiomesXL.quarterlog0.id>,1; <ExtrabiomesXL.quarterlog1.id>,1; <ExtrabiomesXL.quarterlog2.id>,1; <ExtrabiomesXL.quarterlog3.id>,1\n" +
-                                                                                              "    }\n\n" +
-                                                                                              "    ebxl_redwoods {\n" +
-                                                                                              "        S:leaves=<ExtrabiomesXL.greenleaves.id>,1\n" +
-                                                                                              "        S:logs=<ExtrabiomesXL.quarterlog0.id>,0; <ExtrabiomesXL.quarterlog1.id>,0; <ExtrabiomesXL.quarterlog2.id>,0; <ExtrabiomesXL.quarterlog3.id>,0\n" +
-                                                                                              "    }";
+    public static final String                         configBlockIDDesc                  = "Add the log and leaf block IDs for all trees you want to be able to chop down.\n" +
+                                                                                                  "Each section below represents a type of tree.  Each list may contain block IDs\n" +
+                                                                                                  "and/or third-party config replacement tags. You can change it to be more or\n" +
+                                                                                                  "less granular as long as all sections follow the basic structure.  Do not use\n" +
+                                                                                                  "spaces or periods in your section names.  Otherwise you can call them anything\n" +
+                                                                                                  "you like.\n\n" +
+                                                                                                  "EACH LOG ID MAY ONLY APPEAR IN EXACTLY ONE SECTION.\n\n" +
+                                                                                                  "NOTE: Some mod trees use vanilla log blocks as well as custom blocks.  If a tree\n" +
+                                                                                                  "contains more than 1 type of log, all logs must be included in the same section.\n" +
+                                                                                                  "Examples of this are the default entries for vanilla_ebxl_oaks and vanilla_ebxl_spruces.\n\n" +
+                                                                                                  "Simple Example (all logs and leaves are grouped in one section, no metadata is specified):\n" +
+                                                                                                  "    trees {\n" +
+                                                                                                  "        S:leaves=18; <Forestry.leaves>; <ExtrabiomesXL.autumnleaves.id>; <ExtrabiomesXL.greenleaves.id>\n" +
+                                                                                                  "        S:logs=17; <Forestry.log1>; <Forestry.log2>; <Forestry.log3>; <Forestry.log4>; <ExtrabiomesXL.customlog.id>; <ExtrabiomesXL.quarterlog0.id>; <ExtrabiomesXL.quarterlog1.id>; <ExtrabiomesXL.quarterlog2.id>;<ExtrabiomesXL.quarterlog3.id>\n" +
+                                                                                                  "    }\n\n" +
+                                                                                                  "Advanced Example (each mod tree has its own section, metadata is included):\n" +
+                                                                                                  "    vanilla_ebxl_oaks {\n" +
+                                                                                                  "        S:leaves=18,0\n" +
+                                                                                                  "        S:logs=17,0; 17,4; 17,8; <ExtrabiomesXL.quarterlog0.id>,2; <ExtrabiomesXL.quarterlog1.id>,2; <ExtrabiomesXL.quarterlog2.id>,2;<ExtrabiomesXL.quarterlog3.id>,2;\n" +
+                                                                                                  "    }\n\n" +
+                                                                                                  "    birches {\n" +
+                                                                                                  "        S:leaves=18,2\n" +
+                                                                                                  "        S:logs=17,2; 17,6; 17,10\n" +
+                                                                                                  "    }\n\n" +
+                                                                                                  "    vanilla_ebxl_spruces {\n" +
+                                                                                                  "        S:leaves=18,1; <ExtrabiomesXL.autumnleaves.id>\n" +
+                                                                                                  "        S:logs=17,1; 17,5; 17,9\n" +
+                                                                                                  "    }\n\n" +
+                                                                                                  "    jungle_trees {\n" +
+                                                                                                  "        S:leaves=18,3\n" +
+                                                                                                  "        S:logs=17,3; 17,7; 17,11\n" +
+                                                                                                  "    }\n\n" +
+                                                                                                  "    ic2_rubber {\n" +
+                                                                                                  "        S:leaves=<IC2.blockRubLeaves>\n" +
+                                                                                                  "        S:logs=<IC2.blockRubWood>\n" +
+                                                                                                  "    }\n\n" +
+                                                                                                  "    ebxl_acacia {\n" +
+                                                                                                  "        S:leaves=<ExtrabiomesXL.greenleaves.id>,2\n" +
+                                                                                                  "        S:logs=<ExtrabiomesXL.customlog.id>,1\n" +
+                                                                                                  "    }\n\n" +
+                                                                                                  "    ebxl_firs {\n" +
+                                                                                                  "        S:leaves=<ExtrabiomesXL.greenleaves.id>,0\n" +
+                                                                                                  "        S:logs=<ExtrabiomesXL.customlog.id>,0; <ExtrabiomesXL.quarterlog0.id>,1; <ExtrabiomesXL.quarterlog1.id>,1; <ExtrabiomesXL.quarterlog2.id>,1; <ExtrabiomesXL.quarterlog3.id>,1\n" +
+                                                                                                  "    }\n\n" +
+                                                                                                  "    ebxl_redwoods {\n" +
+                                                                                                  "        S:leaves=<ExtrabiomesXL.greenleaves.id>,1\n" +
+                                                                                                  "        S:logs=<ExtrabiomesXL.quarterlog0.id>,0; <ExtrabiomesXL.quarterlog1.id>,0; <ExtrabiomesXL.quarterlog2.id>,0; <ExtrabiomesXL.quarterlog3.id>,0\n" +
+                                                                                                  "    }";
     
-    public static final String                         thirdPartyConfigDesc           = "Third-Party config entries tell TreeCapitator how to find the block IDs from\n" +
-                                                                                              "other mods' config files.  These values are case-sensitive!\n\n" +
-                                                                                              "Format:\n" +
-                                                                                              "    <section_name> {\n" +
-                                                                                              "        S:modID=<modID from mcmod.info>\n" +
-                                                                                              "        S:configPath=<path to config file relative to .minecraft/config/>\n" +
-                                                                                              "        S:blockValues=<block config section>:<config property name>; <mod config section>:<config property name>\n" +
-                                                                                              "        S:itemValues=<item config section>:<property name>; <item config section>:<property name>\n" +
-                                                                                              "        B:useShiftedItemID=<whether or not to use the +256 shifted item ID> (true/false)\n" +
-                                                                                              "    }\n\n" +
-                                                                                              "Example:\n" +
-                                                                                              "    extrabiomesxl {\n" +
-                                                                                              "        S:modID=ExtrabiomesXL\n" +
-                                                                                              "        S:configPath=extrabiomes/extrabiomes.cfg\n" +
-                                                                                              "        S:blockValues=block:customlog.id; block:quarterlog0.id; block:quarterlog1.id; block:quarterlog2.id; block:quarterlog3.id; block:autumnleaves.id; block:greenleaves.id\n" +
-                                                                                              "        S:itemValues=items.world:axeRuby.id; items.world:axeGreenSapphire.id; items.world:axeSapphire.id\n" +
-                                                                                              "        B:useShiftedItemID=true\n" +
-                                                                                              "    }\n\n" +
-                                                                                              "Once your third-party config entries are setup, you can use replacement\n" +
-                                                                                              "tags in your tree, axe, and shears ID configs.  Replacement tags are structured like this:\n" +
-                                                                                              "<ModName.ConfigPropName>";
+    public static final String                         thirdPartyConfigDesc               = "Third-Party config entries tell TreeCapitator how to find the block IDs from\n" +
+                                                                                                  "other mods' config files.  These values are case-sensitive!\n\n" +
+                                                                                                  "Format:\n" +
+                                                                                                  "    <section_name> {\n" +
+                                                                                                  "        S:modID=<modID from mcmod.info>\n" +
+                                                                                                  "        S:configPath=<path to config file relative to .minecraft/config/>\n" +
+                                                                                                  "        S:blockValues=<block config section>:<config property name>; <mod config section>:<config property name>\n" +
+                                                                                                  "        S:itemValues=<item config section>:<property name>; <item config section>:<property name>\n" +
+                                                                                                  "        B:useShiftedItemID=<whether or not to use the +256 shifted item ID> (true/false)\n" +
+                                                                                                  "    }\n\n" +
+                                                                                                  "Example:\n" +
+                                                                                                  "    extrabiomesxl {\n" +
+                                                                                                  "        S:modID=ExtrabiomesXL\n" +
+                                                                                                  "        S:configPath=extrabiomes/extrabiomes.cfg\n" +
+                                                                                                  "        S:blockValues=block:customlog.id; block:quarterlog0.id; block:quarterlog1.id; block:quarterlog2.id; block:quarterlog3.id; block:autumnleaves.id; block:greenleaves.id\n" +
+                                                                                                  "        S:itemValues=items.world:axeRuby.id; items.world:axeGreenSapphire.id; items.world:axeSapphire.id\n" +
+                                                                                                  "        B:useShiftedItemID=true\n" +
+                                                                                                  "    }\n\n" +
+                                                                                                  "Once your third-party config entries are setup, you can use replacement\n" +
+                                                                                                  "tags in your tree, axe, and shears ID configs.  Replacement tags are structured like this:\n" +
+                                                                                                  "<ModName.ConfigPropName>";
     
     static
     {
@@ -617,6 +623,11 @@ public final class TreeCapitator
     public static boolean isLogBlock(BlockID blockID)
     {
         return TreeCapitator.logIDList.contains(blockID);
+    }
+    
+    public static boolean isAxeItem(ItemStack itemStack)
+    {
+        return itemStack != null && itemStack.stackSize > 0 && CommonUtils.isItemInList(itemStack.itemID, itemStack.getItemDamage(), TreeCapitator.axeIDList);
     }
     
     public static String getStringFromConfigBlockList()

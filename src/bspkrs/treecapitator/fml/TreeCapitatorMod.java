@@ -211,7 +211,7 @@ public class TreeCapitatorMod extends DummyModContainer
         {
             TreeCapitator.configBlockList = new HashMap<String, HashMap<String, String>>();
             
-            for (String ctgy : config.categories.keySet())
+            for (String ctgy : config.getCategoryNames())
             {
                 if (ctgy.indexOf(TREE_BLOCK_CTGY + ".") != -1)
                 {
@@ -219,10 +219,10 @@ public class TreeCapitatorMod extends DummyModContainer
                     
                     if (config.getCategory(ctgy).containsKey(TreeCapitator.LOGS))
                     {
-                        blocks.put(TreeCapitator.LOGS, config.getCategory(ctgy).get(TreeCapitator.LOGS).value);
+                        blocks.put(TreeCapitator.LOGS, config.getCategory(ctgy).get(TreeCapitator.LOGS).getString());
                         
                         if (config.getCategory(ctgy).containsKey(TreeCapitator.LEAVES))
-                            blocks.put(TreeCapitator.LEAVES, config.getCategory(ctgy).get(TreeCapitator.LEAVES).value);
+                            blocks.put(TreeCapitator.LEAVES, config.getCategory(ctgy).get(TreeCapitator.LEAVES).getString());
                         
                         TreeCapitator.configBlockList.put(ctgy, blocks);
                     }
@@ -251,7 +251,7 @@ public class TreeCapitatorMod extends DummyModContainer
         {
             TreeCapitator.thirdPartyConfig = new HashMap<String, HashMap<String, String>>();
             
-            for (String ctgy : config.categories.keySet())
+            for (String ctgy : config.getCategoryNames())
             {
                 if (ctgy.indexOf(THIRD_PARTY_CFG_CTGY + ".") != -1)
                 {
@@ -265,7 +265,7 @@ public class TreeCapitatorMod extends DummyModContainer
                     if (currentCtgy.containsKey(TreeCapitator.MOD_ID))
                     {
                         for (String tpCfgEntry : currentCtgy.keySet())
-                            entries.put(tpCfgEntry, currentCtgy.get(tpCfgEntry).value);
+                            entries.put(tpCfgEntry, currentCtgy.get(tpCfgEntry).getString());
                         
                         if (entries.containsKey(TreeCapitator.ITEM_VALUES) && !entries.containsKey(TreeCapitator.SHIFT_INDEX))
                             entries.put(TreeCapitator.SHIFT_INDEX, "true");
@@ -277,7 +277,7 @@ public class TreeCapitatorMod extends DummyModContainer
         }
         
         TreeCapitator.localBlockIDList = TreeCapitator.getStringFromConfigBlockList();
-        config.get(BLOCK_CTGY, "localTreeConfig", "", TreeCapitator.localBlockIDListDesc).value = TreeCapitator.localBlockIDList;
+        config.get(BLOCK_CTGY, "localTreeConfig", "", TreeCapitator.localBlockIDListDesc).set(TreeCapitator.localBlockIDList);
         
         config.addCustomCategoryComment(THIRD_PARTY_CFG_CTGY, TreeCapitator.thirdPartyConfigDesc);
         
@@ -435,7 +435,7 @@ public class TreeCapitatorMod extends DummyModContainer
                             for (String configID : tpCfgKey.get(prop).trim().split(";"))
                             {
                                 String[] subString = configID.trim().split(":");
-                                String configValue = thirdPartyConfig.get(/* ctgy */subString[0].trim(), /* prop name */subString[1].trim(), 0).value;
+                                String configValue = thirdPartyConfig.get(/* ctgy */subString[0].trim(), /* prop name */subString[1].trim(), 0).getString();
                                 String tagID = "<" + tpCfgKey.get(TreeCapitator.MOD_ID) + "." + subString[1].trim() + ">";
                                 
                                 if (!TreeCapitator.tagMap.containsKey(tagID))

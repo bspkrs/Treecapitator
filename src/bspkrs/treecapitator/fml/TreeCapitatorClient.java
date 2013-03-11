@@ -26,14 +26,14 @@ public class TreeCapitatorClient
     public void setServerDetected()
     {
         serverDetected = true;
-        if (serverDetected)
-            FMLClientHandler.instance().getClient().thePlayer.addChatMessage("TreeCapitator client-side features enabled.");
-        else if (!TreeCapitatorMod.instance.isCoreModLoaded && FMLClientHandler.instance().getClient().isSingleplayer())
+        if (!TreeCapitatorMod.instance.isCoreModLoaded && FMLClientHandler.instance().getClient().isSingleplayer())
         {
             String s = "TreeCapitator CoreMod code has not been injected. Ensure the downloaded .jar file is in the coremods folder and not mods.";
             FMLClientHandler.instance().getClient().thePlayer.addChatMessage(s);
             TCLog.severe(s);
         }
+        else
+            FMLClientHandler.instance().getClient().thePlayer.addChatMessage("TreeCapitator client-side features enabled.");
     }
     
     public void onServerConfigReceived(String blockIDList, String axeIDList, float logHardnessNormal, float logHardnessModified)

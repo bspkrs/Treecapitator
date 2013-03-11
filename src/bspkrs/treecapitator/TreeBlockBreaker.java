@@ -231,7 +231,7 @@ public class TreeBlockBreaker
     private boolean isAxeItemEquipped()
     {
         ItemStack item = player.getCurrentEquippedItem();
-        if (item != null && item.stackSize > 0 && CommonUtils.isItemInList(item.itemID, item.getItemDamage(), TreeCapitator.axeIDList))
+        if (TreeCapitator.isAxeItem(item))
         {
             axe = item;
             return true;
@@ -249,7 +249,7 @@ public class TreeBlockBreaker
     public static boolean isAxeItemEquipped(EntityPlayer entityPlayer)
     {
         ItemStack item = entityPlayer.getCurrentEquippedItem();
-        if (item != null && item.stackSize > 0 && CommonUtils.isItemInList(item.itemID, item.getItemDamage(), TreeCapitator.axeIDList))
+        if (TreeCapitator.isAxeItem(item))
         {
             return true;
         }
@@ -347,7 +347,7 @@ public class TreeBlockBreaker
                 if (world.blockHasTileEntity(pos.x, pos.y, pos.z))
                     world.removeBlockTileEntity(pos.x, pos.y, pos.z);
                 
-                world.setBlockWithNotify(pos.x, pos.y, pos.z, 0);
+                world.setBlockAndMetadataWithNotify(pos.x, pos.y, pos.z, 0, 0, 3);
             }
         }
     }
