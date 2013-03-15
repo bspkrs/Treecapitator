@@ -8,13 +8,13 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemInWorldManager;
-import net.minecraft.src.mod_bspkrsCore;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ConfigCategory;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import sharose.mods.idresolver.IDResolverBasic;
 import bspkrs.fml.util.Config;
+import bspkrs.fml.util.bspkrsCoreProxy;
 import bspkrs.treecapitator.TCLog;
 import bspkrs.treecapitator.TreeBlockBreaker;
 import bspkrs.treecapitator.TreeCapitator;
@@ -85,6 +85,7 @@ public class TreeCapitatorMod extends DummyModContainer
     public TreeCapitatorMod()
     {
         loader = Loader.instance();
+        new bspkrsCoreProxy();
     }
     
     @PreInit
@@ -284,7 +285,7 @@ public class TreeCapitatorMod extends DummyModContainer
         
         config.save();
         
-        if (mod_bspkrsCore.allowUpdateCheck)
+        if (bspkrsCoreProxy.instance.allowUpdateCheck)
         {
             versionChecker = new ModVersionChecker(metadata.name, metadata.version, versionURL, mcfTopic, TCLog.INSTANCE.getLogger());
             versionChecker.checkVersionWithLoggingBySubStringAsFloat(metadata.version.length() - 1, metadata.version.length());
