@@ -20,6 +20,7 @@ import bspkrs.treecapitator.TreeBlockBreaker;
 import bspkrs.treecapitator.TreeCapitator;
 import bspkrs.util.BlockID;
 import bspkrs.util.CommonUtils;
+import bspkrs.util.Coord;
 import bspkrs.util.ModVersionChecker;
 import cpw.mods.fml.common.DummyModContainer;
 import cpw.mods.fml.common.Loader;
@@ -42,7 +43,7 @@ import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 
-@Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge " + TreeCapitator.VERSION_NUMBER, dependencies = "after:mod_bspkrsCore", useMetadata = true)
+@Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge " + TreeCapitator.VERSION_NUMBER, dependencies = "required-after:mod_bspkrsCore", useMetadata = true)
 @NetworkMod(clientSideRequired = false, serverSideRequired = false,
         clientPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = ClientPacketHandler.class),
         serverPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = ServerPacketHandler.class),
@@ -50,7 +51,7 @@ import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 public class TreeCapitatorMod extends DummyModContainer
 {
     public static ModVersionChecker versionChecker;
-    private final String            versionURL               = "https://dl.dropbox.com/u/20748481/Minecraft/1.4.6/treeCapitatorForge.version";
+    private final String            versionURL               = "https://dl.dropbox.com/u/20748481/Minecraft/1.5.0/treeCapitatorForge.version";
     private final String            mcfTopic                 = "http://www.minecraftforum.net/topic/1009577-";
     
     public static final String      TREE_BLOCK_CTGY          = "2_tree_definitions";
@@ -94,16 +95,16 @@ public class TreeCapitatorMod extends DummyModContainer
         
         File file = event.getSuggestedConfigurationFile();
         
-        if (Block.class.getSimpleName().equalsIgnoreCase("Block"))
-        { // debug settings for deobfuscated execution
-            TreeCapitator.allowDebugLogging = false;
-            TreeCapitator.onlyDestroyUpwards = true;
-            TreeCapitator.sneakAction = "disable";
-            TreeCapitator.maxBreakDistance = 16;
-            TreeCapitator.allowSmartTreeDetection = true;
-            if (file.exists())
-                file.delete();
-        }
+        //        if (Block.class.getSimpleName().equalsIgnoreCase("Block"))
+        //        { // debug settings for deobfuscated execution
+        //            TreeCapitator.allowDebugLogging = false;
+        //            TreeCapitator.onlyDestroyUpwards = true;
+        //            TreeCapitator.sneakAction = "disable";
+        //            TreeCapitator.maxBreakDistance = 16;
+        //            TreeCapitator.allowSmartTreeDetection = true;
+        //            if (file.exists())
+        //                file.delete();
+        //        }
         
         Configuration config = new Configuration(file);
         
@@ -328,19 +329,27 @@ public class TreeCapitatorMod extends DummyModContainer
             
             if (TreeCapitator.isLogBlock(blockID))
             {
-                proxy.debugString("BlockID " + blockID + " is a log.");
-                
-                if (TreeBlockBreaker.isBreakingPossible(world, entityPlayer))
+                Coord blockPos = new Coord(x, y, z);
+                if (!TreeCapitator.blocksBeingChopped.contains(blockPos))
                 {
-                    blockID = TreeCapitator.logIDList.get(TreeCapitator.logIDList.indexOf(blockID));
-                    TreeBlockBreaker breaker;
+                    proxy.debugString("BlockID " + blockID + " is a log.");
                     
-                    if (TreeCapitator.useStrictBlockPairing)
-                        breaker = new TreeBlockBreaker(entityPlayer, TreeCapitator.logToLogListMap.get(blockID), TreeCapitator.logToLeafListMap.get(blockID));
-                    else
-                        breaker = new TreeBlockBreaker(entityPlayer, TreeCapitator.logIDList, TreeCapitator.leafIDList);
-                    
-                    breaker.onBlockHarvested(world, x, y, z, metadata, entityPlayer);
+                    if (TreeBlockBreaker.isBreakingPossible(world, entityPlayer))
+                    {
+                        TreeCapitator.blocksBeingChopped.add(blockPos);
+                        
+                        blockID = TreeCapitator.logIDList.get(TreeCapitator.logIDList.indexOf(blockID));
+                        TreeBlockBreaker breaker;
+                        
+                        if (TreeCapitator.useStrictBlockPairing)
+                            breaker = new TreeBlockBreaker(entityPlayer, TreeCapitator.logToLogListMap.get(blockID), TreeCapitator.logToLeafListMap.get(blockID));
+                        else
+                            breaker = new TreeBlockBreaker(entityPlayer, TreeCapitator.logIDList, TreeCapitator.leafIDList);
+                        
+                        breaker.onBlockHarvested(world, x, y, z, metadata, entityPlayer);
+                        
+                        TreeCapitator.blocksBeingChopped.remove(blockPos);
+                    }
                 }
             }
         }

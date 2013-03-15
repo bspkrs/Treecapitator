@@ -7,14 +7,17 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLog;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemMultiTextureTile;
 import net.minecraft.item.ItemStack;
 import bspkrs.util.BlockID;
 import bspkrs.util.CommonUtils;
+import bspkrs.util.Coord;
 
 public final class TreeCapitator
 {
-    public final static String                         VERSION_NUMBER                     = "1.4.6.r08";
+    public final static String                         VERSION_NUMBER                     = "1.5.0.r01";
     public static final String                         LOGS                               = "logs";
     public static final String                         LEAVES                             = "leaves";
     public static final String                         MOD_ID                             = "modID";
@@ -115,6 +118,7 @@ public final class TreeCapitator
     public static boolean                              allowDebugLogging                  = false;
     
     public static boolean                              isForge                            = false;
+    public static Block                                wood;                                                                                                                                                                                                  ;
     
     public static ArrayList<BlockID>                   logIDList                          = new ArrayList<BlockID>();
     public static ArrayList<BlockID>                   leafIDList                         = new ArrayList<BlockID>();
@@ -123,6 +127,7 @@ public final class TreeCapitator
     public static Map<String, HashMap<String, String>> configBlockList                    = new HashMap<String, HashMap<String, String>>();
     public static Map<String, HashMap<String, String>> thirdPartyConfig                   = new HashMap<String, HashMap<String, String>>();
     public static Map<String, String>                  tagMap                             = new HashMap<String, String>();
+    public static ArrayList<Coord>                     blocksBeingChopped                 = new ArrayList<Coord>();
     
     public static final String                         configBlockIDDesc                  = "Add the log and leaf block IDs for all trees you want to be able to chop down.\n" +
                                                                                                   "Each section below represents a type of tree.  Each list may contain block IDs\n" +
@@ -616,13 +621,18 @@ public final class TreeCapitator
         if (!isForge)
         {
             Block.blocksList[Block.wood.blockID] = null;
-            Block.blocksList[Block.wood.blockID] = new BlockTree(Block.wood.blockID);
+            wood = new BlockTree(Block.wood.blockID);
+            Block.blocksList[wood.blockID] = wood;
+            Item.itemsList[wood.blockID] = null;
+            Item.itemsList[wood.blockID] = (new ItemMultiTextureTile(wood.blockID - 256, wood, BlockLog.woodType)).setUnlocalizedName("log");
+            
+            logIDList.add(new BlockID(wood.blockID));
         }
     }
     
     public static boolean isLogBlock(BlockID blockID)
     {
-        return TreeCapitator.logIDList.contains(blockID);
+        return logIDList.contains(blockID);
     }
     
     public static boolean isAxeItem(ItemStack itemStack)
@@ -677,7 +687,7 @@ public final class TreeCapitator
         logToLogListMap = new HashMap<BlockID, ArrayList<BlockID>>();
         logToLeafListMap = new HashMap<BlockID, ArrayList<BlockID>>();
         
-        TCLog.info("Parsing Tree Block Config string: %s", list);
+        debugString("Parsing Tree Block Config string: %s", list);
         
         if (list.trim().length() > 0)
         {
@@ -774,19 +784,4 @@ public final class TreeCapitator
         }
         TCLog.info("Block ID list parsing complete.");
     }
-    /*
-     * public static void parseBlockIDList(String list, ArrayList<BlockID> blockList) { TCLog.info("Parsing TreeCapitator Block ID list: " +
-     * list); if (list.trim().length() > 0) { String[] blocks = list.trim().split(";"); for (String block : blocks) { if
-     * (block.trim().length() > 0) { String[] blockEntry = block.trim().split(","); TCLog.info("Found Block entry: " + block); int blockID =
-     * CommonUtils.parseInt(blockEntry[0].trim()); int metadata = -1; if (blockEntry.length > 1) metadata =
-     * CommonUtils.parseInt(blockEntry[1].trim(), -1); TCLog.info("Interpretted: " + blockID + ", " + metadata); if (blockID > 0) { Block
-     * testBlock = Block.blocksList[blockID]; if (testBlock != null) { List<ItemStack> subBlocks = new ArrayList<ItemStack>();
-     * testBlock.getSubBlocks(blockID, CreativeTabs.tabBlock, subBlocks); if (metadata != -1 && subBlocks.size() == 1) {
-     * TCLog.warning("Block " + blockID + " has no sub-blocks. You should probably remove the metadata..."); } else if (metadata == -1 &&
-     * subBlocks.size() > 1) { TCLog.info("Block " + blockID +
-     * " has sub-blocks, but no metadata was specified. This will match all sub-blocks."); } BlockID newID = new BlockID(blockID, metadata);
-     * if (!blockList.contains(newID)) blockList.add(newID); TCLog.info("Configured Block: " + blockID + ", " + metadata); } else
-     * TCLog.warning("Block could not be found: " + blockID + ", " + metadata); } } } }
-     * TCLog.info("Completed parsing TreeCapitator Block ID list."); }
-     */
 }

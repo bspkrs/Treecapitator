@@ -52,13 +52,39 @@ public class mod_treecapitator extends BaseMod
     public static boolean     allowSmartTreeDetection    = TreeCapitator.allowSmartTreeDetection;
     
     private ModVersionChecker versionChecker;
-    private final String      versionURL                 = "https://dl.dropbox.com/u/20748481/Minecraft/1.4.6/treeCapitator.version";
+    private final String      versionURL                 = "https://dl.dropbox.com/u/20748481/Minecraft/1.5.0/treeCapitator.version";
     private final String      mcfTopic                   = "http://www.minecraftforum.net/topic/1009577-";
     
     public mod_treecapitator()
     {
         if (mod_bspkrsCore.allowUpdateCheck)
             versionChecker = new ModVersionChecker(getName(), getVersion(), versionURL, mcfTopic, TCLog.INSTANCE.getLogger());
+    }
+    
+    @Override
+    public String getName()
+    {
+        return "TreeCapitator";
+    }
+    
+    @Override
+    public String getVersion()
+    {
+        return "ML " + TreeCapitator.VERSION_NUMBER;
+    }
+    
+    @Override
+    public String getPriorities()
+    {
+        return "required-after:mod_bspkrsCore";
+    }
+    
+    @Override
+    public void load()
+    {
+        if (mod_bspkrsCore.allowUpdateCheck && versionChecker != null)
+            versionChecker.checkVersionWithLogging();
+        ModLoader.setInGameHook(this, true, true);
         
         TreeCapitator.init(false);
         TreeCapitator.axeIDList = axeIDList;
@@ -83,32 +109,6 @@ public class mod_treecapitator extends BaseMod
         TreeCapitator.increaseDamageEveryXBlocks = increaseDamageEveryXBlocks;
         TreeCapitator.damageIncreaseAmount = damageIncreaseAmount;
         TreeCapitator.allowSmartTreeDetection = allowSmartTreeDetection;
-    }
-    
-    @Override
-    public String getName()
-    {
-        return "TreeCapitator";
-    }
-    
-    @Override
-    public String getVersion()
-    {
-        return "ML " + TreeCapitator.VERSION_NUMBER;
-    }
-    
-    @Override
-    public String getPriorities()
-    {
-        return "after:mod_bspkrsCore";
-    }
-    
-    @Override
-    public void load()
-    {
-        if (mod_bspkrsCore.allowUpdateCheck && versionChecker != null)
-            versionChecker.checkVersionWithLogging();
-        ModLoader.setInGameHook(this, true, true);
     }
     
     @Override

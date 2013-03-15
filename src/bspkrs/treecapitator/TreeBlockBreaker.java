@@ -8,6 +8,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import bspkrs.util.BlockID;
 import bspkrs.util.CommonUtils;
@@ -55,7 +56,7 @@ public class TreeBlockBreaker
             if ((isAxeItemEquipped(entityPlayer) || !TreeCapitator.needItem))
             {
                 if (!entityPlayer.capabilities.isCreativeMode && TreeCapitator.allowItemDamage && axe != null
-                        && (axe.getMaxDamage() - axe.getItemDamage() <= TreeCapitator.damageMultiplier)
+                        && (axe.isItemStackDamageable() && (axe.getMaxDamage() - axe.getItemDamage() <= TreeCapitator.damageMultiplier))
                         && !TreeCapitator.allowMoreBlocksThanDamage)
                 {
                     TreeCapitator.debugString("Chopping disabled due to axe durability.");
@@ -87,7 +88,6 @@ public class TreeBlockBreaker
         {
             if (isBreakingEnabled(entityPlayer))
             {
-                TreeCapitator.debugString("Tree Chopping is not disabled.");
                 Coord topLog = getTopLog(world, new Coord(x, y, z));
                 if (!TreeCapitator.allowSmartTreeDetection || this.leafIDList.size() == 0 || hasXLeavesInDist(world, topLog, TreeCapitator.maxLeafIDDist, TreeCapitator.minLeavesToID))
                 {
@@ -119,7 +119,7 @@ public class TreeBlockBreaker
                         {
                             currentAxeDamage = Math.round(currentAxeDamage);
                             
-                            for (int i = 0; i < (int) Math.floor(currentAxeDamage); i++)
+                            for (int i = 0; i < MathHelper.floor_double(currentAxeDamage); i++)
                                 axe.getItem().onBlockDestroyed(axe, world, 17, x, y, z, player);
                         }
                         
@@ -536,7 +536,8 @@ public class TreeBlockBreaker
                     /*
                      * Use TreeCapitator.logIDList here so that we find ANY type of log block, not just the type for this tree
                      */
-                    if ((x != 0 || y != 0 || z != 0) && neighborID != 0 && TreeCapitator.logIDList.contains(new BlockID(world, neighbor.x, neighbor.y, neighbor.z))
+                    if ((x != 0 || y != 0 || z != 0) && neighborID != 0 &&
+                            TreeCapitator.logIDList.contains(new BlockID(world, neighbor.x, neighbor.y, neighbor.z))
                             && !neighbor.equals(startPos))
                         return true;
                 }

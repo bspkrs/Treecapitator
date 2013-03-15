@@ -50,11 +50,11 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
          */
         obfStrings = new HashMap();
         
-        /* 1.4.6 mappings */
+        /* 1.5.0 mappings */
         /* net.minecraft.src.ItemInWorldManager */
-        obfStrings.put("className", "ir");
+        obfStrings.put("className", "jd");
         /* net/minecraft/src/ItemInWorldManager */
-        obfStrings.put("javaClassName", "ir");
+        obfStrings.put("javaClassName", "jd");
         /* removeBlock */
         obfStrings.put("targetMethodName", "d");
         /* theWorld */
@@ -62,17 +62,41 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
         /* thisPlayerMP */
         obfStrings.put("entityPlayerFieldName", "b");
         /* net/minecraft/src/World */
-        obfStrings.put("worldJavaClassName", "yc");
+        obfStrings.put("worldJavaClassName", "zv");
         /* net/minecraft/src/World.getBlockMetadata() */
         obfStrings.put("getBlockMetadataMethodName", "h");
         /* net/minecraft/src/Block */
-        obfStrings.put("blockJavaClassName", "amq");
+        obfStrings.put("blockJavaClassName", "aou");
         /* net/minecraft/src/Block.blocksList[] */
-        obfStrings.put("blocksListFieldName", "p");
+        obfStrings.put("blocksListFieldName", "r");
         /* net/minecraft/src/EntityPlayer */
-        obfStrings.put("entityPlayerJavaClassName", "qx");
+        obfStrings.put("entityPlayerJavaClassName", "sk");
         /* net/minecraft/src/EntityPlayerMP */
-        obfStrings.put("entityPlayerMPJavaClassName", "iq");
+        obfStrings.put("entityPlayerMPJavaClassName", "jc");
+        
+        /* 1.4.6/1.4.7 mappings */
+        //        /* net.minecraft.src.ItemInWorldManager */
+        //        obfStrings.put("className", "ir");
+        //        /* net/minecraft/src/ItemInWorldManager */
+        //        obfStrings.put("javaClassName", "ir");
+        //        /* removeBlock */
+        //        obfStrings.put("targetMethodName", "d");
+        //        /* theWorld */
+        //        obfStrings.put("worldFieldName", "a");
+        //        /* thisPlayerMP */
+        //        obfStrings.put("entityPlayerFieldName", "b");
+        //        /* net/minecraft/src/World */
+        //        obfStrings.put("worldJavaClassName", "yc");
+        //        /* net/minecraft/src/World.getBlockMetadata() */
+        //        obfStrings.put("getBlockMetadataMethodName", "h");
+        //        /* net/minecraft/src/Block */
+        //        obfStrings.put("blockJavaClassName", "amq");
+        //        /* net/minecraft/src/Block.blocksList[] */
+        //        obfStrings.put("blocksListFieldName", "p");
+        //        /* net/minecraft/src/EntityPlayer */
+        //        obfStrings.put("entityPlayerJavaClassName", "qx");
+        //        /* net/minecraft/src/EntityPlayerMP */
+        //        obfStrings.put("entityPlayerMPJavaClassName", "iq");
         
         /* 1.4.4 / 1.4.5 mappings */
         // /* net.minecraft.src.ItemInWorldManager */
@@ -150,6 +174,20 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
          * create a HashMap to store the MCP names of classes, methods, and fields used in the transformation
          */
         mcpStrings = new HashMap();
+        // Forge 7.7.0.582 1.5.0 mappings
+        // Forge 6.6.0.497 1.4.5/1.4.6/1.4.7 mappings
+        mcpStrings.put("className", "net.minecraft.item.ItemInWorldManager");
+        mcpStrings.put("javaClassName", "net/minecraft/item/ItemInWorldManager");
+        mcpStrings.put("targetMethodName", "removeBlock");
+        mcpStrings.put("worldFieldName", "theWorld");
+        mcpStrings.put("entityPlayerFieldName", "thisPlayerMP");
+        mcpStrings.put("worldJavaClassName", "net/minecraft/world/World");
+        mcpStrings.put("getBlockMetadataMethodName", "getBlockMetadata");
+        mcpStrings.put("blockJavaClassName", "net/minecraft/block/Block");
+        mcpStrings.put("blocksListFieldName", "blocksList");
+        mcpStrings.put("entityPlayerJavaClassName", "net/minecraft/entity/player/EntityPlayer");
+        mcpStrings.put("entityPlayerMPJavaClassName", "net/minecraft/entity/player/EntityPlayerMP");
+        
         // Forge 6.4.2.408 mappings1.4.5
         // mcpStrings.put("className", "net.minecraft.src.ItemInWorldManager");
         // mcpStrings.put("javaClassName", "net/minecraft/src/ItemInWorldManager");
@@ -162,19 +200,6 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
         // mcpStrings.put("blocksListFieldName", "blocksList");
         // mcpStrings.put("entityPlayerJavaClassName", "net/minecraft/src/EntityPlayer");
         // mcpStrings.put("entityPlayerMPJavaClassName", "net/minecraft/src/EntityPlayerMP");
-        
-        // Forge 6.6.0.497 1.4.5-1.4.6 mappings
-        mcpStrings.put("className", "net.minecraft.item.ItemInWorldManager");
-        mcpStrings.put("javaClassName", "net/minecraft/item/ItemInWorldManager");
-        mcpStrings.put("targetMethodName", "removeBlock");
-        mcpStrings.put("worldFieldName", "theWorld");
-        mcpStrings.put("entityPlayerFieldName", "thisPlayerMP");
-        mcpStrings.put("worldJavaClassName", "net/minecraft/world/World");
-        mcpStrings.put("getBlockMetadataMethodName", "getBlockMetadata");
-        mcpStrings.put("blockJavaClassName", "net/minecraft/block/Block");
-        mcpStrings.put("blocksListFieldName", "blocksList");
-        mcpStrings.put("entityPlayerJavaClassName", "net/minecraft/entity/player/EntityPlayer");
-        mcpStrings.put("entityPlayerMPJavaClassName", "net/minecraft/entity/player/EntityPlayerMP");
     }
     
     @Override
