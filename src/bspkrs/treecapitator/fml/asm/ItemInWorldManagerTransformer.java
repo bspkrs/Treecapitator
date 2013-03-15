@@ -206,11 +206,11 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
     public byte[] transform(String name, String transformedName, byte[] bytes)
     {
         // System.out.println("transforming: " + name);
-        if (name.equals(obfStrings.get("className")))
+        if (name.equals(obfStrings.get("className")) && !TreeCapitatorMod.instance.isCoreModLoaded)
         {
             return transformItemInWorldManager(bytes, obfStrings);
         }
-        else if (name.equals(mcpStrings.get("className")))
+        else if (name.equals(mcpStrings.get("className")) && !TreeCapitatorMod.instance.isCoreModLoaded)
         {
             return transformItemInWorldManager(bytes, mcpStrings);
         }
