@@ -1,11 +1,12 @@
 package net.minecraft.src;
 
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.common.ForgeVersion;
 import bspkrs.treecapitator.TCLog;
 import bspkrs.treecapitator.TreeCapitator;
 import bspkrs.util.ModVersionChecker;
 
-public class mod_treecapitator extends BaseMod
+public class mod_TreeCapitator extends BaseMod
 {
     @MLProp(info = TreeCapitator.axeIDListDesc)
     public static String      axeIDList                  = TreeCapitator.axeIDList;
@@ -52,10 +53,11 @@ public class mod_treecapitator extends BaseMod
     public static boolean     allowSmartTreeDetection    = TreeCapitator.allowSmartTreeDetection;
     
     private ModVersionChecker versionChecker;
-    private final String      versionURL                 = "https://dl.dropbox.com/u/20748481/Minecraft/1.5.0/treeCapitator.version";
+    private final String      versionURL                 = "https://bspk.rs/Minecraft/1.5.0/treeCapitator.version";
     private final String      mcfTopic                   = "http://www.minecraftforum.net/topic/1009577-";
+    private boolean           isForgeDetected;
     
-    public mod_treecapitator()
+    public mod_TreeCapitator()
     {
         if (mod_bspkrsCore.allowUpdateCheck)
             versionChecker = new ModVersionChecker(getName(), getVersion(), versionURL, mcfTopic, TCLog.INSTANCE.getLogger());
@@ -82,6 +84,17 @@ public class mod_treecapitator extends BaseMod
     @Override
     public void load()
     {
+        try
+        {
+            ForgeVersion.getVersion();
+            isForgeDetected = true;
+            TCLog.severe("Minecraft Forge has been detected! You should not be using the ModLoader version of %s!", getName());
+        }
+        catch (Throwable e)
+        {
+            isForgeDetected = false;
+        }
+        
         if (mod_bspkrsCore.allowUpdateCheck && versionChecker != null)
             versionChecker.checkVersionWithLogging();
         ModLoader.setInGameHook(this, true, true);
@@ -120,6 +133,10 @@ public class mod_treecapitator extends BaseMod
                 for (String msg : versionChecker.getInGameMessage())
                     mc.thePlayer.addChatMessage(msg);
         }
+        
+        if (isForgeDetected)
+            mc.thePlayer.addChatMessage("\247cMinecraft Forge has been detected! You should not be using the ModLoader version of " + getName() + "! Use the Forge version instead!");
+        
         return false;
     }
 }
