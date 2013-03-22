@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<project name="GenericForgeMod" default="build">
+    <description>Generic ForgeMod Builder</description>
+
+    <target name="init">
+        <!-- load properties from files -->
+        <property file="build.properties"/>
+        <property file="mod.properties"/>
+        <property name="version" value="${version.major}.${version.minor}.${version.micro}.r${version.build}"/>
+
+        <!-- base dirs -->
+        <property name="dev.home" location="${dir.project}"/>
+        <property name="mcp.home" location="${dir.mcp}"/>
+        <property name="mc.home" location="${dir.mc}"/>
+        <property name="core.dev.home" location="${mc.home}/github/bspkrsCore"/>
+        <property name="release.home" location="${dir.release}"/>
+        <property name="release.jar" value="[${version.minecraft}]${mod.id}.Forge.${version}.Uni.CoreMod.jar"/>
+        <property name="release.zip" value="[${version.minecraft}]${mod.id}.ML.${version}.zip"/>
+
+        <!-- setup python -->
+        <property name="python.win" location="${mcp.home}/runtime/bin/python/python_mcp"/>
+        <condition property="python" value="${python.win}" else="python">
+            <os family="Windows"/>
+        </condition>
+
+        <!-- setup source dirs -->
+        <property name="dev.src" location="${dev.home}/src"/>
+        <property name="dev.resources" location="${dev.home}/resources"/>
+        <property name="dev.core.src" location="${core.dev.home}/src"/>
+
+        <!-- check if the directories are present -->
+        <condition property="has.dev.src" value="true" else="false">
+            <available file="${dev.src}" type="dir"/>
+        </condition>
+        <condition property="has.dev.resources" value="true" else="false">
+            <available file="${dev.resources}" type="dir"/>
+        </condition>
+        <condition property="has.dev.core.src" value="true" else="false">
+            <available file="${dev.core.src}" type="dir"/>
+        </condition>
+
+        <!-- setup MCP dirs -->
+        <property name="mcp.src" location="${mcp.home}/src"/>
+        <property name="mcp.src.minecraft" location="${mcp.src}/minecraft"/>
+        <property name="mcp.bin" location="${mcp.home}/reobf/minecraft"/>
+    </target>
+
+    <target name="clean">
+        <!-- clean minecraft sources -->
+        <delete verbose="true" failonerror="false">
+            <fileset dir="${mcp.src.minecraft}">
+                <present present="both" targetdir="${dev.src}"/>
+            </fileset>
+        </delete>
+        <delete verbose="true" failonerror="false">
+            <fileset dir="${mcp.src.minecraft}">
+                <present present="both" targetdir="${dev.core.src}"/>
+            </fileset>
+        </delete>
+
+        <!-- clean classes -->
+        <delete verbose="true" failonerror="false">
+            <fileset dir="${mcp.bin}"/>
+        </delete>
+    </target>
+
+    <target name="merge-source">
+        <!-- merge sources -->
+        <antcall target="merge-mod"/>
+        <antcall target="merge-core"/>
+    </target>
+
+    <target name="merge-mod" if="${has.dev.src}">
+        <!-- merge minecraft sources -->
+        <copy todir="${mcp.src.minecraft}" overwrite="true" verbose="true">
+            <fileset dir="${dev.src}" includes="**/*.java"/>
+        </copy>
+    </target>
+
+    <target name="merge-core" if="${has.dev.core.src}">
+        <!-- merge minecraft sources -->
+        <copy todir="${mcp.src.minecraft}" overwrite="true" verbose="true">
+            <fileset dir="${dev.core.src}" includes="**/*.java"/>
+        </copy>
+    </target>
+
+    <target name="recompile">
+        <!-- recompile -->
+        <exec executable="${python}" dir="${mcp.home}" failonerror="true">
+            <arg value="${mcp.home}/runtime/recompile.py"/>
+        </exec>
+    </target>
+
+    <target name="reobfuscate">
+        <!-- reobfuscate -->
+        <exec executable="${python}" dir="${mcp.home}" failonerror="true">
+            <arg value="${mcp.home}/runtime/reobfuscate.py"/>
+        </exec>
+    </target>
+
+    <target name="build-Forge-jar">
+        <!-- build the jar -->
+        <jar manifest="${dev.resources}/META-INF/MANIFEST.MF" destfile="${release.home}/${release.jar}">
+            <fileset dir="${mcp.bin}" includes="bspkrs/treecapitator/**/*.class"/>
+            <fileset dir="${dev.resources}" excludes="mcmod.template"/>
+            <mappedresources>
+                <concat>
+                    <fileset dir="${dev.resources}" includes="mcmod.template"/>
+                    <filterchain>
+                        <replacetokens>
+                            <token key="AUTHORS" value="${mod.authors}"/>
+                            <token key="CREDITS" value="${mod.credits}"/>
+                            <token key="DEPENDANTS" value="${mod.dependants}"/>
+                            <token key="DEPENDENCIES" value="${mod.Forge.dependencies}"/>
+                            <token key="DESCRIPTION" value="${mod.description}"/>
+                            <token key="LOGOFILE" value="${mod.logoFile}"/>
+                            <token key="MCVERSION" value="${version.minecraft}"/>
+                            <token key="MODID" value="${mod.id}"/>
+                            <token key="MODNAME" value="${mod.name}"/>
+                            <token key="PARENT" value="${mod.parent}"/>
+                            <token key="REQUIREDMODS" value="${mod.Forge.requiredMods}"/>
+                            <token key="SCREENSHOTS" value="${mod.screenshots}"/>
+                            <token key="UPDATEURL" value="${mod.Forge.updateUrl}"/>
+                            <token key="URL" value="${mod.url}"/>
+                            <token key="USEDEPENDANCYINFORMATION" value="${mod.useDependencyInformation}"/>
+                            <token key="VERSION" value="Forge ${version}"/>
+                        </replacetokens>
+                    </filterchain>
+                </concat>
+                <mergemapper to="mcmod.info"/>
+            </mappedresources>
+        </jar>
+    </target>
+
+    <target name="build-ML-zip">
+        <!-- build the zip -->
+        <zip destfile="${release.home}/${release.zip}">
+            <fileset dir="${mcp.bin}" includes="bspkrs/treecapitator/*.class"/>
+            <fileset dir="${mcp.bin}" includes="mod_${mod.id}.class"/>
+            <fileset dir="${dev.resources}" includes="LICENSE"/>
+            <mappedresources>
+                <concat>
+                    <fileset dir="${dev.resources}" includes="mcmod.template"/>
+                    <filterchain>
+                        <replacetokens>
+                            <token key="AUTHORS" value="${mod.authors}"/>
+                            <token key="CREDITS" value="${mod.credits}"/>
+                            <token key="DEPENDANTS" value="${mod.dependants}"/>
+                            <token key="DEPENDENCIES" value="${mod.ML.dependencies}"/>
+                            <token key="DESCRIPTION" value="${mod.description}"/>
+                            <token key="LOGOFILE" value="${mod.logoFile}"/>
+                            <token key="MCVERSION" value="${version.minecraft}"/>
+                            <token key="MODID" value="${mod.id}"/>
+                            <token key="MODNAME" value="${mod.name}"/>
+                            <token key="PARENT" value="${mod.parent}"/>
+                            <token key="REQUIREDMODS" value="${mod.ML.requiredMods}"/>
+                            <token key="SCREENSHOTS" value="${mod.screenshots}"/>
+                            <token key="UPDATEURL" value="${mod.ML.updateUrl}"/>
+                            <token key="URL" value="${mod.url}"/>
+                            <token key="USEDEPENDANCYINFORMATION" value="${mod.useDependencyInformation}"/>
+                            <token key="VERSION" value="ML ${version}"/>
+                        </replacetokens>
+                    </filterchain>
+                </concat>
+                <mergemapper to="mcmod.info"/>
+            </mappedresources>
+        </zip>
+    </target>
+
+    <target name="build" depends="init">
+        <!-- build the project and clean up MCP after -->
+        <antcall target="clean"/>
+        <antcall target="merge-source"/>
+        <antcall target="recompile"/>
+        <antcall target="reobfuscate"/>
+        <antcall target="build-Forge-jar"/>
+        <antcall target="build-ML-zip"/>
+
+        <antcall target="clean"/>
+    </target>
+</project>

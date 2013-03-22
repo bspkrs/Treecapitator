@@ -347,7 +347,7 @@ public class TreeBlockBreaker
                 if (world.blockHasTileEntity(pos.x, pos.y, pos.z))
                     world.removeBlockTileEntity(pos.x, pos.y, pos.z);
                 
-                world.setBlockAndMetadataWithNotify(pos.x, pos.y, pos.z, 0, 0, 3);
+                world.setBlock(pos.x, pos.y, pos.z, 0, 0, 3);
             }
         }
     }

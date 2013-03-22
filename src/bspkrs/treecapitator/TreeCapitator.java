@@ -17,7 +17,7 @@ import bspkrs.util.Coord;
 
 public final class TreeCapitator
 {
-    public final static String                         VERSION_NUMBER                     = "1.5.0.r01";
+    public final static String                         VERSION_NUMBER                     = "1.5.1.r01";
     public static final String                         LOGS                               = "logs";
     public static final String                         LEAVES                             = "leaves";
     public static final String                         MOD_ID                             = "modID";

@@ -53,7 +53,7 @@ public class mod_TreeCapitator extends BaseMod
     public static boolean     allowSmartTreeDetection    = TreeCapitator.allowSmartTreeDetection;
     
     private ModVersionChecker versionChecker;
-    private final String      versionURL                 = "http://bspk.rs/Minecraft/1.5.0/treeCapitator.version";
+    private final String      versionURL                 = "http://bspk.rs/Minecraft/1.5.1/treeCapitator.version";
     private final String      mcfTopic                   = "http://www.minecraftforum.net/topic/1009577-";
     private boolean           isForgeDetected;
     

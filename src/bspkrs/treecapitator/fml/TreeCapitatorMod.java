@@ -51,7 +51,7 @@ import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 public class TreeCapitatorMod extends DummyModContainer
 {
     public static ModVersionChecker versionChecker;
-    private final String            versionURL               = "http://bspk.rs/Minecraft/1.5.0/treeCapitatorForge.version";
+    private final String            versionURL               = "http://bspk.rs/Minecraft/1.5.1/treeCapitatorForge.version";
     private final String            mcfTopic                 = "http://www.minecraftforum.net/topic/1009577-";
     
     public static final String      TREE_BLOCK_CTGY          = "2_tree_definitions";
