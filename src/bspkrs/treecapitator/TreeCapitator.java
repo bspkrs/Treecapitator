@@ -29,7 +29,7 @@ public final class TreeCapitator
     
     public final static String                         remoteTreeConfigURLDesc            = "Incomplete - do not use";
     // "Leave this URL as is to get the latest tree definitions from my master list.\nFeel free to start your own remote list to share with your friends or send your suggestions to me for the master list!";
-    public static String                               remoteTreeConfigURL                = "http://bspk.rs/Minecraft/1.5.0/treeCapitatorTreeConfig.txt";
+    public static String                               remoteTreeConfigURL                = "http://bspk.rs/Minecraft/1.5.1/treeCapitatorTreeConfig.txt";
     public final static String                         remoteBlockIDConfigDesc            = "Incomplete - do not use";
     // "Values downloaded from: " + remoteTreeConfigURL;
     public static String                               remoteBlockIDConfig                = "";
