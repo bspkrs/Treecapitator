@@ -12,8 +12,7 @@
         <!-- base dirs -->
         <property name="dev.home" location="${dir.project}"/>
         <property name="mcp.home" location="${dir.mcp}"/>
-        <property name="mc.home" location="${dir.mc}"/>
-        <property name="core.dev.home" location="${mc.home}/github/bspkrsCore"/>
+        <property name="dev.core.home" location="${dir.core.project}"/>
         <property name="release.home" location="${dir.release}"/>
         <property name="release.jar" value="[${version.minecraft}]${mod.id}.Forge.${version}.Uni.CoreMod.jar"/>
         <property name="release.zip" value="[${version.minecraft}]${mod.id}.ML.${version}.zip"/>
@@ -27,7 +26,7 @@
         <!-- setup source dirs -->
         <property name="dev.src" location="${dev.home}/src"/>
         <property name="dev.resources" location="${dev.home}/resources"/>
-        <property name="dev.core.src" location="${core.dev.home}/src"/>
+        <property name="dev.core.src" location="${dev.core.home}/src"/>
 
         <!-- check if the directories are present -->
         <condition property="has.dev.src" value="true" else="false">
