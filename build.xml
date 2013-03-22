@@ -150,7 +150,7 @@
                             <token key="DESCRIPTION" value="${mod.description}"/>
                             <token key="LOGOFILE" value="${mod.logoFile}"/>
                             <token key="MCVERSION" value="${version.minecraft}"/>
-                            <token key="MODID" value="${mod.id}"/>
+                            <token key="MODID" value="mod_${mod.id}"/>
                             <token key="MODNAME" value="${mod.name}"/>
                             <token key="PARENT" value="${mod.parent}"/>
                             <token key="REQUIREDMODS" value="${mod.ML.requiredMods}"/>
