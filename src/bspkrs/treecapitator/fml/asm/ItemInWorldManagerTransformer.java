@@ -50,7 +50,7 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
          */
         obfStrings = new HashMap();
         
-        /* 1.5.0/1.5.1 mappings */
+        /* 1.5.1 mappings */
         /* net.minecraft.src.ItemInWorldManager */
         obfStrings.put("className", "jd");
         /* net/minecraft/src/ItemInWorldManager */
@@ -62,17 +62,41 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
         /* thisPlayerMP */
         obfStrings.put("entityPlayerFieldName", "b");
         /* net/minecraft/src/World */
-        obfStrings.put("worldJavaClassName", "zv");
+        obfStrings.put("worldJavaClassName", "aab");
         /* net/minecraft/src/World.getBlockMetadata() */
         obfStrings.put("getBlockMetadataMethodName", "h");
         /* net/minecraft/src/Block */
-        obfStrings.put("blockJavaClassName", "aou");
+        obfStrings.put("blockJavaClassName", "apa");
         /* net/minecraft/src/Block.blocksList[] */
         obfStrings.put("blocksListFieldName", "r");
         /* net/minecraft/src/EntityPlayer */
-        obfStrings.put("entityPlayerJavaClassName", "sk");
+        obfStrings.put("entityPlayerJavaClassName", "sq");
         /* net/minecraft/src/EntityPlayerMP */
         obfStrings.put("entityPlayerMPJavaClassName", "jc");
+        
+        /* 1.5.0 mappings */
+        //        /* net.minecraft.src.ItemInWorldManager */
+        //        obfStrings.put("className", "jd");
+        //        /* net/minecraft/src/ItemInWorldManager */
+        //        obfStrings.put("javaClassName", "jd");
+        //        /* removeBlock */
+        //        obfStrings.put("targetMethodName", "d");
+        //        /* theWorld */
+        //        obfStrings.put("worldFieldName", "a");
+        //        /* thisPlayerMP */
+        //        obfStrings.put("entityPlayerFieldName", "b");
+        //        /* net/minecraft/src/World */
+        //        obfStrings.put("worldJavaClassName", "zv");
+        //        /* net/minecraft/src/World.getBlockMetadata() */
+        //        obfStrings.put("getBlockMetadataMethodName", "h");
+        //        /* net/minecraft/src/Block */
+        //        obfStrings.put("blockJavaClassName", "aou");
+        //        /* net/minecraft/src/Block.blocksList[] */
+        //        obfStrings.put("blocksListFieldName", "r");
+        //        /* net/minecraft/src/EntityPlayer */
+        //        obfStrings.put("entityPlayerJavaClassName", "sk");
+        //        /* net/minecraft/src/EntityPlayerMP */
+        //        obfStrings.put("entityPlayerMPJavaClassName", "jc");
         
         /* 1.4.6/1.4.7 mappings */
         //        /* net.minecraft.src.ItemInWorldManager */
