@@ -4,52 +4,54 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.ForgeVersion;
 import bspkrs.treecapitator.TCLog;
 import bspkrs.treecapitator.TreeCapitator;
+import bspkrs.util.BSProp;
+import bspkrs.util.BSPropRegistry;
 import bspkrs.util.ModVersionChecker;
 
 public class mod_TreeCapitator extends BaseMod
 {
-    @MLProp(info = TreeCapitator.axeIDListDesc)
+    @BSProp(info = TreeCapitator.axeIDListDesc + "\n")
     public static String      axeIDList                  = TreeCapitator.axeIDList;
-    @MLProp(info = TreeCapitator.needItemDesc)
+    @BSProp(info = TreeCapitator.needItemDesc + "\n")
     public static boolean     needItem                   = TreeCapitator.needItem;
-    @MLProp(info = TreeCapitator.onlyDestroyUpwardsDesc)
+    @BSProp(info = TreeCapitator.onlyDestroyUpwardsDesc + "\n")
     public static boolean     onlyDestroyUpwards         = TreeCapitator.onlyDestroyUpwards;
-    @MLProp(info = TreeCapitator.destroyLeavesDesc)
+    @BSProp(info = TreeCapitator.destroyLeavesDesc + "\n")
     public static boolean     destroyLeaves              = TreeCapitator.destroyLeaves;
-    @MLProp(info = TreeCapitator.shearLeavesDesc)
+    @BSProp(info = TreeCapitator.shearLeavesDesc + "\n")
     public static boolean     shearLeaves                = TreeCapitator.shearLeaves;
-    @MLProp(info = TreeCapitator.shearVinesDesc)
+    @BSProp(info = TreeCapitator.shearVinesDesc + "\n")
     public static boolean     shearVines                 = TreeCapitator.shearVines;
-    @MLProp(info = TreeCapitator.shearIDListDesc)
+    @BSProp(info = TreeCapitator.shearIDListDesc + "\n")
     public static String      shearIDList                = TreeCapitator.shearIDList;
-    @MLProp(info = TreeCapitator.logHardnessNormalDesc)
+    @BSProp(info = TreeCapitator.logHardnessNormalDesc + "\n")
     public static float       logHardnessNormal          = TreeCapitator.logHardnessNormal;
-    @MLProp(info = TreeCapitator.logHardnessModifiedDesc)
+    @BSProp(info = TreeCapitator.logHardnessModifiedDesc + "\n")
     public static float       logHardnessModified        = TreeCapitator.logHardnessModified;
-    @MLProp(info = TreeCapitator.disableInCreativeDesc)
+    @BSProp(info = TreeCapitator.disableInCreativeDesc + "\n")
     public static boolean     disableInCreative          = TreeCapitator.disableInCreative;
-    @MLProp(info = TreeCapitator.disableCreativeDropsDesc)
+    @BSProp(info = TreeCapitator.disableCreativeDropsDesc + "\n")
     public static boolean     disableCreativeDrops       = TreeCapitator.disableCreativeDrops;
-    @MLProp(info = TreeCapitator.allowItemDamageDesc)
+    @BSProp(info = TreeCapitator.allowItemDamageDesc + "\n")
     public static boolean     allowItemDamage            = TreeCapitator.allowItemDamage;
-    @MLProp(info = TreeCapitator.allowMoreBlocksThanDamageDesc)
+    @BSProp(info = TreeCapitator.allowMoreBlocksThanDamageDesc + "\n")
     public static boolean     allowMoreBlocksThanDamage  = TreeCapitator.allowMoreBlocksThanDamage;
-    @MLProp(info = TreeCapitator.sneakActionDesc)
+    @BSProp(info = TreeCapitator.sneakActionDesc + "\n")
     public static String      sneakAction                = TreeCapitator.sneakAction;
-    @MLProp(info = TreeCapitator.maxBreakDistanceDesc)
+    @BSProp(info = TreeCapitator.maxBreakDistanceDesc + "\n")
     public static int         maxBreakDistance           = TreeCapitator.maxBreakDistance;
     
-    @MLProp(info = TreeCapitator.requireLeafDecayCheckDesc)
+    @BSProp(info = TreeCapitator.requireLeafDecayCheckDesc + "\n")
     public static boolean     requireLeafDecayCheck      = TreeCapitator.requireLeafDecayCheck;
-    @MLProp(info = TreeCapitator.damageMultiplierDesc)
+    @BSProp(info = TreeCapitator.damageMultiplierDesc + "\n")
     public static float       damageMultiplier           = TreeCapitator.damageMultiplier;
-    @MLProp(info = TreeCapitator.useIncreasingItemDamageDesc)
+    @BSProp(info = TreeCapitator.useIncreasingItemDamageDesc + "\n")
     public static boolean     useIncreasingItemDamage    = TreeCapitator.useIncreasingItemDamage;
-    @MLProp(info = TreeCapitator.increaseDamageEveryXBlocksDesc)
+    @BSProp(info = TreeCapitator.increaseDamageEveryXBlocksDesc + "\n")
     public static int         increaseDamageEveryXBlocks = TreeCapitator.increaseDamageEveryXBlocks;
-    @MLProp(info = TreeCapitator.damageIncreaseAmountDesc)
+    @BSProp(info = TreeCapitator.damageIncreaseAmountDesc + "\n")
     public static float       damageIncreaseAmount       = TreeCapitator.damageIncreaseAmount;
-    @MLProp(info = TreeCapitator.allowSmartTreeDetectionDesc + "\n\n**ONLY EDIT WHAT IS BELOW THIS**")
+    @BSProp(info = TreeCapitator.allowSmartTreeDetectionDesc + "\n\n**ONLY EDIT WHAT IS BELOW THIS**")
     public static boolean     allowSmartTreeDetection    = TreeCapitator.allowSmartTreeDetection;
     
     private ModVersionChecker versionChecker;
@@ -59,8 +61,7 @@ public class mod_TreeCapitator extends BaseMod
     
     public mod_TreeCapitator()
     {
-        if (mod_bspkrsCore.allowUpdateCheck)
-            versionChecker = new ModVersionChecker(getName(), getVersion(), versionURL, mcfTopic, TCLog.INSTANCE.getLogger());
+        BSPropRegistry.registerPropHandler(this.getClass());
     }
     
     @Override
@@ -95,8 +96,12 @@ public class mod_TreeCapitator extends BaseMod
             isForgeDetected = false;
         }
         
-        if (mod_bspkrsCore.allowUpdateCheck && versionChecker != null)
+        if (mod_bspkrsCore.allowUpdateCheck)
+        {
+            versionChecker = new ModVersionChecker(getName(), getVersion(), versionURL, mcfTopic, TCLog.INSTANCE.getLogger());
             versionChecker.checkVersionWithLogging();
+        }
+        
         ModLoader.setInGameHook(this, true, true);
         
         TreeCapitator.init(false);

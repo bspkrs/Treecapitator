@@ -17,7 +17,7 @@ import bspkrs.util.Coord;
 
 public final class TreeCapitator
 {
-    public final static String                         VERSION_NUMBER                     = "1.5.1.r01";
+    public final static String                         VERSION_NUMBER                     = "1.5.1.r02";
     public static final String                         LOGS                               = "logs";
     public static final String                         LEAVES                             = "leaves";
     public static final String                         MOD_ID                             = "modID";
@@ -42,7 +42,7 @@ public final class TreeCapitator
     // "Set to true to allow TreeCapitator to retrieve the remote block ID list, false to disable.";
     public static boolean                              allowGetRemoteTreeConfig           = false;
     
-    public final static String                         enableEnchantmentModeDesc          = "Toggle for whether or not to use the Treecapitating enchantment instead of only requiring an item to be in the axeIDList to chop a tree.";
+    public final static String                         enableEnchantmentModeDesc          = "Toggle for whether or not to use the Treecapitating enchantment as opposed to requiring an item to be in the axeIDList to chop a tree.";
     public static boolean                              enableEnchantmentMode              = false;
     public final static String                         requireItemInAxeListForEnchantDesc = "Whether or not to check axeIDList for an item when determining if a given item can be imbued with the Treecapitating enchantment.\n" +
                                                                                                   "NOTE: when set to false, any ItemTool type item (pickaxes, shovels, etc) with a high enough enchantability level can get the enchantment, not just axes.";
@@ -290,16 +290,6 @@ public final class TreeCapitator
         zapapples.put(CONFIG_PATH, "ZapApples.cfg");
         zapapples.put(BLOCK_VALUES, "block:zapAppleLogID; block:zapAppleLeavesID; block:zapAppleFlowersID");
         thirdPartyConfig.put("zapapples", zapapples);
-        
-        axeIDList = axeIDList + "; " +
-                "<BiomesOPlenty.Muddy Axe ID>; " +
-                "<IC2.itemToolBronzeAxe>; <IC2.itemToolChainsaw>; " +
-                "<RedPowerWorld.axeRuby.id>; <RedPowerWorld.axeGreenSapphire.id>; <RedPowerWorld.axeSapphire.id>; " +
-                "<Thaumcraft.Thaumaxe>; " +
-                "<TwilightForest.IronwoodAxe>; <TwilightForest.SteeleafAxe>; <TwilightForest.MinotaurAxe>; " +
-                "<DivineRPG.Bedrock Axe>; <DivineRPG.Crystal Axe>; <DivineRPG.Realmite Axe>; <DivineRPG.azuriteaxe>; <DivineRPG.corruptedaxe>; " +
-                "<DivineRPG.denseaxe>; <DivineRPG.divineaxe>; <DivineRPG.donatoraxe>; <DivineRPG.energyaxe>; <DivineRPG.mythrilaxe>; " +
-                "<DivineRPG.plasmaaxe>; <DivineRPG.serenityaxe>; <DivineRPG.twilightaxe>";
         
         /*
          * Default local config
@@ -627,6 +617,18 @@ public final class TreeCapitator
             Item.itemsList[wood.blockID] = (new ItemMultiTextureTile(wood.blockID - 256, wood, BlockLog.woodType)).setUnlocalizedName("log");
             
             logIDList.add(new BlockID(wood.blockID));
+        }
+        else
+        {
+            axeIDList = axeIDList + "; " +
+                    "<BiomesOPlenty.Muddy Axe ID>; " +
+                    "<IC2.itemToolBronzeAxe>; <IC2.itemToolChainsaw>; " +
+                    "<RedPowerWorld.axeRuby.id>; <RedPowerWorld.axeGreenSapphire.id>; <RedPowerWorld.axeSapphire.id>; " +
+                    "<Thaumcraft.Thaumaxe>; " +
+                    "<TwilightForest.IronwoodAxe>; <TwilightForest.SteeleafAxe>; <TwilightForest.MinotaurAxe>; " +
+                    "<DivineRPG.Bedrock Axe>; <DivineRPG.Crystal Axe>; <DivineRPG.Realmite Axe>; <DivineRPG.azuriteaxe>; <DivineRPG.corruptedaxe>; " +
+                    "<DivineRPG.denseaxe>; <DivineRPG.divineaxe>; <DivineRPG.donatoraxe>; <DivineRPG.energyaxe>; <DivineRPG.mythrilaxe>; " +
+                    "<DivineRPG.plasmaaxe>; <DivineRPG.serenityaxe>; <DivineRPG.twilightaxe>";
         }
     }
     
