@@ -98,7 +98,7 @@ public class mod_TreeCapitator extends BaseMod
         
         if (mod_bspkrsCore.allowUpdateCheck)
         {
-            versionChecker = new ModVersionChecker(getName(), getVersion(), versionURL, mcfTopic, TCLog.INSTANCE.getLogger());
+            versionChecker = new ModVersionChecker(getName(), getVersion(), versionURL, mcfTopic);
             versionChecker.checkVersionWithLogging();
         }
         

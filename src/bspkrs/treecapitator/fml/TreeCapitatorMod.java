@@ -287,7 +287,7 @@ public class TreeCapitatorMod extends DummyModContainer
         
         if (bspkrsCoreProxy.instance.allowUpdateCheck)
         {
-            versionChecker = new ModVersionChecker(metadata.name, metadata.version, versionURL, mcfTopic, TCLog.INSTANCE.getLogger());
+            versionChecker = new ModVersionChecker(metadata.name, metadata.version, versionURL, mcfTopic);
             versionChecker.checkVersionWithLoggingBySubStringAsFloat(metadata.version.length() - 1, metadata.version.length());
         }
     }
@@ -296,7 +296,6 @@ public class TreeCapitatorMod extends DummyModContainer
     public void init(FMLInitializationEvent event)
     {
         MinecraftForge.EVENT_BUS.register(new PlayerHandler());
-        
         proxy.onLoad();
     }
     
