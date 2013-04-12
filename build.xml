@@ -102,7 +102,10 @@
         <!-- build the jar -->
         <jar manifest="${dev.resources}/META-INF/MANIFEST.MF" destfile="${release.home}/${release.jar}">
             <fileset dir="${mcp.bin}" includes="bspkrs/treecapitator/**/*.class"/>
-            <fileset dir="${dev.resources}" excludes="mcmod.template"/>
+            <fileset dir="${dev.resources}"/>
+				<exclude name="mcmod.template"/>
+				<exclude name="coremods"/>
+			</fileset>
             <mappedresources>
                 <concat>
                     <fileset dir="${dev.resources}" includes="mcmod.template"/>

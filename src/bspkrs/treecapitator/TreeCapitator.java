@@ -48,7 +48,7 @@ public final class TreeCapitator
                                                                                                   "NOTE: when set to false, any ItemTool type item (pickaxes, shovels, etc) with a high enough enchantability level can get the enchantment, not just axes.";
     public static boolean                              requireItemInAxeListForEnchant     = false;
     public final static String                         axeIDListDesc                      = "IDs of items that can chop down trees. Use ',' to split item id from metadata and ';' to split items.";
-    public static String                               axeIDList                          = Item.axeWood.itemID + "; " + Item.axeStone.itemID + "; " + Item.axeSteel.itemID + "; " + Item.axeGold.itemID + "; " + Item.axeDiamond.itemID;
+    public static String                               axeIDList                          = Item.axeWood.itemID + "; " + Item.axeStone.itemID + "; " + Item.axeIron.itemID + "; " + Item.axeGold.itemID + "; " + Item.axeDiamond.itemID;
     public final static String                         needItemDesc                       = "Whether you need an item from the axeIDList to chop down a tree. Disabling will let you chop trees with any item.";
     public static boolean                              needItem                           = true;
     public final static String                         onlyDestroyUpwardsDesc             = "Setting this to false will allow the chopping to move downward as well as upward (and blocks below the one you break will be chopped)";
