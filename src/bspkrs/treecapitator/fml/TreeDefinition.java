@@ -45,6 +45,42 @@ public class TreeDefinition
         return this;
     }
     
+    public TreeDefinition setOnlyDestroyUpwards(boolean onlyDestroyUpwards)
+    {
+        this.onlyDestroyUpwards = onlyDestroyUpwards;
+        return this;
+    }
+    
+    public TreeDefinition setRequireLeafDecayCheck(boolean requireLeafDecayCheck)
+    {
+        this.requireLeafDecayCheck = requireLeafDecayCheck;
+        return this;
+    }
+    
+    public TreeDefinition setMaxLogBreakDist(int maxLogBreakDist)
+    {
+        this.maxLogBreakDist = maxLogBreakDist;
+        return this;
+    }
+    
+    public TreeDefinition setMaxLeafIDDist(int maxLeafIDDist)
+    {
+        this.maxLeafIDDist = maxLeafIDDist;
+        return this;
+    }
+    
+    public TreeDefinition setMaxLeafBreakDist(int maxLeafBreakDist)
+    {
+        this.maxLeafBreakDist = maxLeafBreakDist;
+        return this;
+    }
+    
+    public TreeDefinition setMinLeavesToID(int minLeavesToID)
+    {
+        this.minLeavesToID = minLeavesToID;
+        return this;
+    }
+    
     public List<BlockID> getLogIDList()
     {
         List<BlockID> copy = new ArrayList<BlockID>(logBlocks.size());
@@ -64,21 +100,9 @@ public class TreeDefinition
         return onlyDestroyUpwards;
     }
     
-    public TreeDefinition setOnlyDestroyUpwards(boolean onlyDestroyUpwards)
-    {
-        this.onlyDestroyUpwards = onlyDestroyUpwards;
-        return this;
-    }
-    
     public boolean requireLeafDecayCheck()
     {
         return requireLeafDecayCheck;
-    }
-    
-    public TreeDefinition setRequireLeafDecayCheck(boolean requireLeafDecayCheck)
-    {
-        this.requireLeafDecayCheck = requireLeafDecayCheck;
-        return this;
     }
     
     public int maxLogBreakDist()
@@ -86,21 +110,9 @@ public class TreeDefinition
         return maxLogBreakDist;
     }
     
-    public TreeDefinition setMaxLogBreakDist(int maxLogBreakDist)
-    {
-        this.maxLogBreakDist = maxLogBreakDist;
-        return this;
-    }
-    
     public int maxLeafIDDist()
     {
         return maxLeafIDDist;
-    }
-    
-    public TreeDefinition setMaxLeafIDDist(int maxLeafIDDist)
-    {
-        this.maxLeafIDDist = maxLeafIDDist;
-        return this;
     }
     
     public int maxLeafBreakDist()
@@ -108,20 +120,8 @@ public class TreeDefinition
         return maxLeafBreakDist;
     }
     
-    public TreeDefinition setMaxLeafBreakDist(int maxLeafBreakDist)
-    {
-        this.maxLeafBreakDist = maxLeafBreakDist;
-        return this;
-    }
-    
     public int minLeavesToID()
     {
         return minLeavesToID;
-    }
-    
-    public TreeDefinition setMinLeavesToID(int minLeavesToID)
-    {
-        this.minLeavesToID = minLeavesToID;
-        return this;
     }
 }
