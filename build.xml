@@ -105,6 +105,7 @@
             <fileset dir="${dev.resources}">
 				<exclude name="mcmod.template"/>
 				<exclude name="coremods"/>
+				<exclude name="coremods/*"/>
 			</fileset>
             <mappedresources>
                 <concat>
