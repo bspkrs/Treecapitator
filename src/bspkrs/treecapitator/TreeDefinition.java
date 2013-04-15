@@ -1,10 +1,11 @@
-package bspkrs.treecapitator.fml;
+package bspkrs.treecapitator;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import bspkrs.util.BlockID;
+import bspkrs.util.HashCodeUtil;
 
 public class TreeDefinition
 {
@@ -12,6 +13,7 @@ public class TreeDefinition
     private List<BlockID> leafBlocks;
     private boolean       onlyDestroyUpwards;
     private boolean       requireLeafDecayCheck;
+    // max horizontal distance that logs will be broken
     private int           maxLogBreakDist;
     private int           maxLeafIDDist;
     private int           maxLeafBreakDist;
@@ -23,7 +25,30 @@ public class TreeDefinition
         leafBlocks = new ArrayList<BlockID>();
     }
     
-    public boolean isTreeBlock(BlockID blockID)
+    @Override
+    public boolean equals(Object o)
+    {
+        if (!(o instanceof TreeDefinition))
+            return false;
+        
+        if (o == this)
+            return true;
+        
+        TreeDefinition td = (TreeDefinition) o;
+        return td.logBlocks.equals(logBlocks) && td.leafBlocks.equals(leafBlocks);
+        
+    }
+    
+    @Override
+    public int hashCode()
+    {
+        int result = 23;
+        result = HashCodeUtil.hash(result, logBlocks);
+        result = HashCodeUtil.hash(result, leafBlocks);
+        return result;
+    }
+    
+    public boolean isLogBlock(BlockID blockID)
     {
         return logBlocks.contains(blockID);
     }
@@ -35,13 +60,17 @@ public class TreeDefinition
     
     public TreeDefinition addLogID(BlockID blockID)
     {
-        logBlocks.add(blockID);
+        if (!isLogBlock(blockID))
+            logBlocks.add(blockID);
+        
         return this;
     }
     
     public TreeDefinition addLeafID(BlockID blockID)
     {
-        leafBlocks.add(blockID);
+        if (!isLeafBlock(blockID))
+            leafBlocks.add(blockID);
+        
         return this;
     }
     
@@ -81,6 +110,11 @@ public class TreeDefinition
         return this;
     }
     
+    /**
+     * Retrieves a copy of the list of logs in this TreeDefinition.
+     * 
+     * @return
+     */
     public List<BlockID> getLogIDList()
     {
         List<BlockID> copy = new ArrayList<BlockID>(logBlocks.size());
@@ -88,6 +122,11 @@ public class TreeDefinition
         return copy;
     }
     
+    /**
+     * Retrieves a copy of the list of leaves in this TreeDefinition.
+     * 
+     * @return
+     */
     public List<BlockID> getLeafIDList()
     {
         List<BlockID> copy = new ArrayList<BlockID>(leafBlocks.size());
