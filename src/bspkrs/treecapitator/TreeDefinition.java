@@ -1,7 +1,6 @@
 package bspkrs.treecapitator;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import bspkrs.util.BlockID;
@@ -23,6 +22,20 @@ public class TreeDefinition
     {
         logBlocks = new ArrayList<BlockID>();
         leafBlocks = new ArrayList<BlockID>();
+        
+        onlyDestroyUpwards = TreeCapitator.onlyDestroyUpwards;
+        requireLeafDecayCheck = TreeCapitator.requireLeafDecayCheck;
+        maxLogBreakDist = TreeCapitator.maxBreakDistance;
+        maxLeafIDDist = TreeCapitator.maxLeafIDDist;
+        maxLeafBreakDist = TreeCapitator.maxLeafBreakDist;
+        minLeavesToID = TreeCapitator.minLeavesToID;
+    }
+    
+    public TreeDefinition(List<BlockID> logs, List<BlockID> leaves)
+    {
+        this();
+        logBlocks.addAll(logs);
+        leafBlocks.addAll(leaves);
     }
     
     @Override
@@ -74,6 +87,19 @@ public class TreeDefinition
         return this;
     }
     
+    public TreeDefinition append(TreeDefinition toAdd)
+    {
+        for (BlockID blockID : toAdd.logBlocks)
+            if (!logBlocks.contains(blockID))
+                logBlocks.add(blockID);
+        
+        for (BlockID blockID : toAdd.leafBlocks)
+            if (!leafBlocks.contains(blockID))
+                leafBlocks.add(blockID);
+        
+        return this;
+    }
+    
     public TreeDefinition setOnlyDestroyUpwards(boolean onlyDestroyUpwards)
     {
         this.onlyDestroyUpwards = onlyDestroyUpwards;
@@ -115,11 +141,9 @@ public class TreeDefinition
      * 
      * @return
      */
-    public List<BlockID> getLogIDList()
+    public List<BlockID> getLogList()
     {
-        List<BlockID> copy = new ArrayList<BlockID>(logBlocks.size());
-        Collections.copy(copy, logBlocks);
-        return copy;
+        return new ArrayList<BlockID>(logBlocks);
     }
     
     /**
@@ -127,11 +151,9 @@ public class TreeDefinition
      * 
      * @return
      */
-    public List<BlockID> getLeafIDList()
+    public List<BlockID> getLeafList()
     {
-        List<BlockID> copy = new ArrayList<BlockID>(leafBlocks.size());
-        Collections.copy(copy, leafBlocks);
-        return copy;
+        return new ArrayList<BlockID>(leafBlocks);
     }
     
     public boolean onlyDestroyUpwards()

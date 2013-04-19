@@ -16,31 +16,42 @@ import bspkrs.util.Coord;
 
 public class TreeBlockBreaker
 {
-    public EntityPlayer              player;
-    public boolean                   shouldFell;
-    private Coord                    startPos;
-    private ItemStack                axe;
-    private ItemStack                shears;
-    private final ArrayList<BlockID> logIDList;
-    private final ArrayList<BlockID> leafIDList;
-    private final BlockID            vineID;
-    private float                    currentAxeDamage, currentShearsDamage = 0.0F;
-    private int                      numLogsBroken;
-    private int                      numLeavesSheared;
-    private float                    logDamageMultiplier;
-    private float                    leafDamageMultiplier;
+    public EntityPlayer          player;
+    public boolean               shouldFell;
+    private Coord                startPos;
+    private ItemStack            axe;
+    private ItemStack            shears;
+    private final TreeDefinition treeDef;
+    private final List<BlockID>  masterLogList;
+    private final List<BlockID>  logList;
+    private final List<BlockID>  leafList;
+    private final BlockID        vineID;
+    private float                currentAxeDamage, currentShearsDamage = 0.0F;
+    private int                  numLogsBroken;
+    private int                  numLeavesSheared;
+    private float                logDamageMultiplier;
+    private float                leafDamageMultiplier;
     
-    public TreeBlockBreaker(EntityPlayer entityPlayer, ArrayList<BlockID> logIDList, ArrayList<BlockID> leafIDList)
+    public TreeBlockBreaker(EntityPlayer entityPlayer, TreeDefinition treeDef)
     {
         player = entityPlayer;
         shouldFell = false;
-        this.logIDList = logIDList;
-        this.leafIDList = leafIDList;
+        this.treeDef = treeDef;
+        masterLogList = TreeRegistry.instance().getMasterLogList();
+        logList = treeDef.getLogList();
+        leafList = treeDef.getLeafList();
         vineID = new BlockID(Block.vine.blockID);
         logDamageMultiplier = TreeCapitator.damageMultiplier;
         leafDamageMultiplier = TreeCapitator.damageMultiplier;
         numLogsBroken = 0;
         numLeavesSheared = 0;
+        
+    }
+    
+    @Deprecated
+    public TreeBlockBreaker(EntityPlayer entityPlayer, ArrayList<BlockID> logIDList, ArrayList<BlockID> leafIDList)
+    {
+        this(entityPlayer, new TreeDefinition(logIDList, leafIDList));
     }
     
     public static boolean isBreakingPossible(World world, EntityPlayer entityPlayer)
@@ -89,7 +100,7 @@ public class TreeBlockBreaker
             if (isBreakingEnabled(entityPlayer))
             {
                 Coord topLog = getTopLog(world, new Coord(x, y, z));
-                if (!TreeCapitator.allowSmartTreeDetection || this.leafIDList.size() == 0 || hasXLeavesInDist(world, topLog, TreeCapitator.maxLeafIDDist, TreeCapitator.minLeavesToID))
+                if (!TreeCapitator.allowSmartTreeDetection || leafList.size() == 0 || hasXLeavesInDist(world, topLog, treeDef.maxLeafIDDist(), treeDef.minLeavesToID()))
                 {
                     if (isAxeItemEquipped() || !TreeCapitator.needItem)
                     {
@@ -101,7 +112,7 @@ public class TreeBlockBreaker
                         
                         TreeCapitator.debugString("Destroying log blocks...");
                         destroyBlocks(world, logs);
-                        if (TreeCapitator.destroyLeaves && this.leafIDList.size() != 0)
+                        if (TreeCapitator.destroyLeaves && leafList.size() != 0)
                         {
                             TreeCapitator.debugString("Finding leaf blocks...");
                             for (Coord pos : listFinal)
@@ -165,7 +176,7 @@ public class TreeBlockBreaker
     
     private Coord getTopLog(World world, Coord pos)
     {
-        while (logIDList.contains(new BlockID(world, pos.x, pos.y + 1, pos.z)))
+        while (logList.contains(new BlockID(world, pos.x, pos.y + 1, pos.z)))
             pos.y++;
         
         TreeCapitator.debugString("Top Log: " + pos.x + ", " + pos.y + ", " + pos.z);
@@ -288,7 +299,7 @@ public class TreeBlockBreaker
     
     public boolean isLeafBlock(BlockID blockID)
     {
-        return leafIDList.contains(blockID) || leafIDList.contains(new BlockID(blockID.id, blockID.metadata & 7));
+        return leafList.contains(blockID) || leafList.contains(new BlockID(blockID.id, blockID.metadata & 7));
     }
     
     private void destroyBlocks(World world, List<Coord> list)
@@ -325,7 +336,7 @@ public class TreeBlockBreaker
                         numLeavesSheared++;
                         
                         if (canShear && TreeCapitator.useIncreasingItemDamage && numLeavesSheared % TreeCapitator.increaseDamageEveryXBlocks == 0)
-                            this.leafDamageMultiplier += TreeCapitator.damageIncreaseAmount;
+                            leafDamageMultiplier += TreeCapitator.damageIncreaseAmount;
                     }
                 }
                 else if (!(player.capabilities.isCreativeMode && TreeCapitator.disableCreativeDrops))
@@ -341,7 +352,7 @@ public class TreeBlockBreaker
                         numLogsBroken++;
                         
                         if (TreeCapitator.useIncreasingItemDamage && numLogsBroken % TreeCapitator.increaseDamageEveryXBlocks == 0)
-                            this.logDamageMultiplier += TreeCapitator.damageIncreaseAmount;
+                            logDamageMultiplier += TreeCapitator.damageIncreaseAmount;
                     }
                 }
                 if (world.blockHasTileEntity(pos.x, pos.y, pos.z))
@@ -410,15 +421,15 @@ public class TreeBlockBreaker
             Coord currentLog = list.get(index);
             
             for (x = -1; x <= 1; x++)
-                for (y = (TreeCapitator.onlyDestroyUpwards ? 0 : -1); y <= 1; y++)
+                for (y = (treeDef.onlyDestroyUpwards() ? 0 : -1); y <= 1; y++)
                     for (z = -1; z <= 1; z++)
-                        if (logIDList.contains(new BlockID(world, currentLog.x + x, currentLog.y + y, currentLog.z + z)))
+                        if (logList.contains(new BlockID(world, currentLog.x + x, currentLog.y + y, currentLog.z + z)))
                         {
                             newPos = new Coord(currentLog.x + x, currentLog.y + y, currentLog.z + z);
                             
-                            if (TreeCapitator.maxBreakDistance == -1 || (Math.abs(newPos.x - startPos.x) <= TreeCapitator.maxBreakDistance
-                                    && Math.abs(newPos.z - startPos.z) <= TreeCapitator.maxBreakDistance))
-                                if (!list.contains(newPos) && (newPos.y >= lowY || !TreeCapitator.onlyDestroyUpwards))
+                            if (treeDef.maxLogBreakDist() == -1 || (Math.abs(newPos.x - startPos.x) <= treeDef.maxLogBreakDist()
+                                    && Math.abs(newPos.z - startPos.z) <= treeDef.maxLogBreakDist()))
+                                if (!list.contains(newPos) && (newPos.y >= lowY || !treeDef.onlyDestroyUpwards()))
                                     list.add(newPos);
                         }
         }
@@ -446,7 +457,7 @@ public class TreeBlockBreaker
                 counter = 0;
                 for (x = -1; x <= 1; x++)
                     for (z = -1; z <= 1; z++)
-                        if (logIDList.contains(new BlockID(world, pos.x + x, pos.y + 1, pos.z + z)))
+                        if (logList.contains(new BlockID(world, pos.x + x, pos.y + 1, pos.z + z)))
                         {
                             if (!listAbove.contains(newPosition = new Coord(pos.x + x, pos.y + 1, pos.z + z)))
                                 listAbove.add(newPosition);
@@ -464,7 +475,7 @@ public class TreeBlockBreaker
                 Coord pos = listAbove.get(index);
                 for (x = -1; x <= 1; x++)
                     for (z = -1; z <= 1; z++)
-                        if (logIDList.contains(new BlockID(world, pos.x + x, pos.y, pos.z + z)))
+                        if (logList.contains(new BlockID(world, pos.x + x, pos.y, pos.z + z)))
                             if (!listAbove.contains(newPosition = new Coord(pos.x + x, pos.y, pos.z + z)))
                                 listAbove.add(newPosition);
             }
@@ -477,7 +488,8 @@ public class TreeBlockBreaker
         int index = -1;
         List<Coord> list = new ArrayList<Coord>();
         
-        addLeavesInDistance(world, pos, TreeCapitator.maxLeafBreakDist, list);
+        //addConnectedLeavesInRange(world, pos, treeDef.maxLeafBreakDist(), 0, list);
+        addLeavesInDistance(world, pos, treeDef.maxLeafBreakDist(), list);
         
         while (++index < list.size())
         {
@@ -500,7 +512,7 @@ public class TreeBlockBreaker
                     if (isLeafBlock(new BlockID(blockID, md)) || vineID.equals(new BlockID(blockID)))
                     {
                         int metadata = world.getBlockMetadata(x + pos.x, y + pos.y, z + pos.z);
-                        if (!TreeCapitator.requireLeafDecayCheck || ((metadata & 8) != 0 && (metadata & 4) == 0))
+                        if (!treeDef.requireLeafDecayCheck() || ((metadata & 8) != 0 && (metadata & 4) == 0))
                         {
                             Coord newPos = new Coord(x + pos.x, y + pos.y, z + pos.z);
                             if (!list.contains(newPos))
@@ -508,6 +520,33 @@ public class TreeBlockBreaker
                         }
                     }
                 }
+    }
+    
+    public void addConnectedLeavesInRange(World world, Coord pos, int range, int distance, List list)
+    {
+        // So far this method is utter shit and doesn't work right
+        if (!list.contains(pos))
+        {
+            int blockID = world.getBlockId(pos.x, pos.y, pos.z);
+            int md = world.getBlockMetadata(pos.x, pos.y, pos.z);
+            if (Math.abs(distance) <= range)
+            {
+                if (isLeafBlock(new BlockID(blockID, md)) || vineID.equals(new BlockID(blockID)) || distance == 0)
+                {
+                    if ((!treeDef.requireLeafDecayCheck() || ((md & 8) != 0 && (md & 4) == 0)) && distance != 0)
+                    {
+                        list.add(pos);
+                    }
+                    
+                    for (int x = -1; x <= 1; x++)
+                        for (int y = -1; y <= 1; y++)
+                            for (int z = -1; z <= 1; z++)
+                            {
+                                addConnectedLeavesInRange(world, new Coord(pos.x + x, pos.y + y, pos.z + z), range, distance + 1, list);
+                            }
+                }
+            }
+        }
     }
     
     /**
@@ -537,7 +576,7 @@ public class TreeBlockBreaker
                      * Use TreeCapitator.logIDList here so that we find ANY type of log block, not just the type for this tree
                      */
                     if ((x != 0 || y != 0 || z != 0) && neighborID != 0 &&
-                            TreeCapitator.logIDList.contains(new BlockID(world, neighbor.x, neighbor.y, neighbor.z))
+                            masterLogList.contains(new BlockID(world, neighbor.x, neighbor.y, neighbor.z))
                             && !neighbor.equals(startPos))
                         return true;
                 }
