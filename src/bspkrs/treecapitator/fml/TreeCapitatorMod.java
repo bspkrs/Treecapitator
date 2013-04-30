@@ -9,8 +9,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemInWorldManager;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ConfigCategory;
-import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import sharose.mods.idresolver.IDResolverBasic;
 import bspkrs.fml.util.Config;
@@ -19,8 +17,11 @@ import bspkrs.treecapitator.Strings;
 import bspkrs.treecapitator.TCLog;
 import bspkrs.treecapitator.TreeBlockBreaker;
 import bspkrs.treecapitator.TreeCapitator;
+import bspkrs.treecapitator.TreeRegistry;
 import bspkrs.util.BlockID;
 import bspkrs.util.CommonUtils;
+import bspkrs.util.ConfigCategory;
+import bspkrs.util.Configuration;
 import bspkrs.util.Coord;
 import bspkrs.util.ModVersionChecker;
 import cpw.mods.fml.common.DummyModContainer;
@@ -317,7 +318,7 @@ public class TreeCapitatorMod extends DummyModContainer
         {
             BlockID blockID = new BlockID(block, metadata);
             
-            if (TreeCapitator.isLogBlock(blockID))
+            if (TreeRegistry.instance().isRegistered(blockID))
             {
                 Coord blockPos = new Coord(x, y, z);
                 if (!TreeCapitator.blocksBeingChopped.contains(blockPos))
@@ -328,13 +329,12 @@ public class TreeCapitatorMod extends DummyModContainer
                     {
                         TreeCapitator.blocksBeingChopped.add(blockPos);
                         
-                        blockID = TreeCapitator.logIDList.get(TreeCapitator.logIDList.indexOf(blockID));
                         TreeBlockBreaker breaker;
                         
                         if (TreeCapitator.useStrictBlockPairing)
-                            breaker = new TreeBlockBreaker(entityPlayer, TreeCapitator.logToLogListMap.get(blockID), TreeCapitator.logToLeafListMap.get(blockID));
+                            breaker = new TreeBlockBreaker(entityPlayer, TreeRegistry.instance().get(blockID));
                         else
-                            breaker = new TreeBlockBreaker(entityPlayer, TreeCapitator.logIDList, TreeCapitator.leafIDList);
+                            breaker = new TreeBlockBreaker(entityPlayer, TreeRegistry.instance().genericDefinition());
                         
                         breaker.onBlockHarvested(world, x, y, z, metadata, entityPlayer);
                         

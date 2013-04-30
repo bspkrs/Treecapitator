@@ -37,7 +37,7 @@ public class TreeBlockBreaker
         player = entityPlayer;
         shouldFell = false;
         this.treeDef = treeDef;
-        masterLogList = TreeRegistry.instance().getMasterLogList();
+        masterLogList = TreeRegistry.instance().masterLogList();
         logList = treeDef.getLogList();
         leafList = treeDef.getLeafList();
         vineID = new BlockID(Block.vine.blockID);

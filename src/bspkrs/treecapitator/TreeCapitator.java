@@ -612,6 +612,7 @@ public final class TreeCapitator
         }
         else
         {
+            new TreeRegistry();
             axeIDList = axeIDList + "; " +
                     "<BiomesOPlenty.Muddy Axe ID>; " +
                     "<IC2.itemToolBronzeAxe>; <IC2.itemToolChainsaw>; " +

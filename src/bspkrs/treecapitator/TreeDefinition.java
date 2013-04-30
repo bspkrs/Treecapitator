@@ -97,6 +97,19 @@ public class TreeDefinition
             if (!leafBlocks.contains(blockID))
                 leafBlocks.add(blockID);
         
+        if (toAdd.onlyDestroyUpwards != TreeCapitator.onlyDestroyUpwards)
+            onlyDestroyUpwards = toAdd.onlyDestroyUpwards;
+        if (toAdd.requireLeafDecayCheck != TreeCapitator.requireLeafDecayCheck)
+            requireLeafDecayCheck = toAdd.requireLeafDecayCheck;
+        if (toAdd.maxLogBreakDist != TreeCapitator.maxBreakDistance)
+            maxLogBreakDist = toAdd.maxLogBreakDist;
+        if (toAdd.maxLeafIDDist != TreeCapitator.maxLeafIDDist)
+            maxLeafIDDist = toAdd.maxLeafIDDist;
+        if (toAdd.maxLeafBreakDist != TreeCapitator.maxLeafBreakDist)
+            maxLeafBreakDist = toAdd.maxLeafBreakDist;
+        if (toAdd.minLeavesToID != TreeCapitator.minLeavesToID)
+            minLeavesToID = toAdd.minLeavesToID;
+        
         return this;
     }
     
