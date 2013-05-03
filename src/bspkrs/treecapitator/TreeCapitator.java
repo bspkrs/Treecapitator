@@ -82,7 +82,6 @@ public final class TreeCapitator
                                                                                                   "set sneakAction = \"enable\" to only enable tree chopping while sneaking,\n" +
                                                                                                   "set sneakAction = \"none\" to have tree chopping enabled regardless of sneaking.";
     public static String                               sneakAction                        = "disable";
-    public final static String                         maxBreakDistanceDesc               = "The maximum horizontal distance that the log breaking effect will travel (use -1 for no limit).";
     public static int                                  maxBreakDistance                   = 16;
     public final static String                         allowSmartTreeDetectionDesc        = "Set to false to disable TreeCapitator Smart Tree Detection.\n" +
                                                                                                   "Smart Tree Detection counts the number of leaf blocks that are adjacent to the\n" +
@@ -102,7 +101,7 @@ public final class TreeCapitator
     public final static String                         useStrictBlockPairingDesc          = "Set to true if you want only the leaf blocks listed with each log in blockIDList\n"
                                                                                                   + "to break when that log type is chopped.  When set to false it will break\n"
                                                                                                   + "any leaf type within range of the tree, not just the type for that tree.";
-    public static boolean                              useStrictBlockPairing              = false;
+    public static boolean                              useStrictBlockPairing              = true;
     
     public final static String                         allowDebugOutputDesc               = "Set to true if you want TreeCapitator to tell you what kind of block you have clicked when sneaking, false to disable.";
     public static boolean                              allowDebugOutput                   = false;
@@ -110,7 +109,7 @@ public final class TreeCapitator
     public static boolean                              allowDebugLogging                  = false;
     
     public static boolean                              isForge                            = false;
-    public static Block                                wood;                                                                                                                                                                                                  ;
+    public static Block                                wood;
     
     public static ArrayList<BlockID>                   logIDList                          = new ArrayList<BlockID>();
     public static ArrayList<BlockID>                   leafIDList                         = new ArrayList<BlockID>();
@@ -591,12 +590,12 @@ public final class TreeCapitator
         return TreeCapitator.remoteBlockIDConfig;
     }
     
-    public static void init()
+    public static void preInit()
     {
-        init(false);
+        preInit(false);
     }
     
-    public static void init(boolean isForgeVersion)
+    public static void preInit(boolean isForgeVersion)
     {
         isForge = isForgeVersion;
         
@@ -612,7 +611,6 @@ public final class TreeCapitator
         }
         else
         {
-            new TreeRegistry();
             axeIDList = axeIDList + "; " +
                     "<BiomesOPlenty.Muddy Axe ID>; " +
                     "<IC2.itemToolBronzeAxe>; <IC2.itemToolChainsaw>; " +

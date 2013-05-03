@@ -3,6 +3,8 @@ package bspkrs.treecapitator;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import bspkrs.util.BlockID;
 import bspkrs.util.HashCodeUtil;
 
@@ -103,14 +105,91 @@ public class TreeDefinition
             requireLeafDecayCheck = toAdd.requireLeafDecayCheck;
         if (toAdd.maxLogBreakDist != TreeCapitator.maxBreakDistance)
             maxLogBreakDist = toAdd.maxLogBreakDist;
-        if (toAdd.maxLeafIDDist != TreeCapitator.maxLeafIDDist)
-            maxLeafIDDist = toAdd.maxLeafIDDist;
         if (toAdd.maxLeafBreakDist != TreeCapitator.maxLeafBreakDist)
             maxLeafBreakDist = toAdd.maxLeafBreakDist;
+        if (toAdd.maxLeafIDDist != TreeCapitator.maxLeafIDDist)
+            maxLeafIDDist = toAdd.maxLeafIDDist;
         if (toAdd.minLeavesToID != TreeCapitator.minLeavesToID)
             minLeavesToID = toAdd.minLeavesToID;
         
         return this;
+    }
+    
+    public TreeDefinition readFromNBT(NBTTagCompound treeDefNBT)
+    {
+        if (treeDefNBT.hasKey(Strings.onlyDestroyUpwards))
+            onlyDestroyUpwards = treeDefNBT.getBoolean(Strings.onlyDestroyUpwards);
+        if (treeDefNBT.hasKey(Strings.requireLeafDecayCheck))
+            requireLeafDecayCheck = treeDefNBT.getBoolean(Strings.requireLeafDecayCheck);
+        if (treeDefNBT.hasKey(Strings.maxLogBreakDist))
+            maxLogBreakDist = treeDefNBT.getInteger(Strings.maxLogBreakDist);
+        if (treeDefNBT.hasKey(Strings.maxLeafBreakDist))
+            maxLeafBreakDist = treeDefNBT.getInteger(Strings.maxLeafBreakDist);
+        if (treeDefNBT.hasKey(Strings.maxLeafIDDist))
+            maxLeafIDDist = treeDefNBT.getInteger(Strings.maxLeafIDDist);
+        if (treeDefNBT.hasKey(Strings.minLeavesToID))
+            minLeavesToID = treeDefNBT.getInteger(Strings.minLeavesToID);
+        
+        logBlocks = new ArrayList<BlockID>();
+        leafBlocks = new ArrayList<BlockID>();
+        
+        NBTTagList logList = treeDefNBT.getTagList(Strings.LOGS);
+        
+        for (int i = 0; i < logList.tagCount(); i++)
+        {
+            NBTTagCompound log = (NBTTagCompound) logList.tagAt(i);
+            logBlocks.add(new BlockID(log.getInteger(Strings.id), log.getInteger(Strings.metadata)));
+        }
+        
+        if (treeDefNBT.hasKey(Strings.LEAVES))
+        {
+            NBTTagList leafList = treeDefNBT.getTagList(Strings.LEAVES);
+            
+            for (int i = 0; i < leafList.tagCount(); i++)
+            {
+                NBTTagCompound leaf = (NBTTagCompound) leafList.tagAt(i);
+                leafBlocks.add(new BlockID(leaf.getInteger(Strings.id), leaf.getInteger(Strings.metadata)));
+            }
+        }
+        
+        return this;
+    }
+    
+    public void writeToNBT(NBTTagCompound treeDefNBT)
+    {
+        treeDefNBT.setBoolean(Strings.onlyDestroyUpwards, onlyDestroyUpwards);
+        treeDefNBT.setBoolean(Strings.requireLeafDecayCheck, requireLeafDecayCheck);
+        treeDefNBT.setInteger(Strings.maxLogBreakDist, maxLogBreakDist);
+        treeDefNBT.setInteger(Strings.maxLeafBreakDist, maxLeafBreakDist);
+        treeDefNBT.setInteger(Strings.maxLeafIDDist, maxLeafIDDist);
+        treeDefNBT.setInteger(Strings.minLeavesToID, minLeavesToID);
+        
+        NBTTagList logList = new NBTTagList();
+        
+        for (BlockID logBlock : logBlocks)
+        {
+            NBTTagCompound log = new NBTTagCompound();
+            log.setInteger(Strings.id, logBlock.id);
+            log.setInteger(Strings.metadata, logBlock.metadata);
+            logList.appendTag(log);
+        }
+        
+        treeDefNBT.setTag(Strings.LOGS, logList);
+        
+        if (leafBlocks.size() > 0)
+        {
+            NBTTagList leafList = new NBTTagList();
+            
+            for (BlockID leafBlock : leafBlocks)
+            {
+                NBTTagCompound leaf = new NBTTagCompound();
+                leaf.setInteger(Strings.id, leafBlock.id);
+                leaf.setInteger(Strings.metadata, leafBlock.metadata);
+                leafList.appendTag(leaf);
+            }
+            
+            treeDefNBT.setTag(Strings.LEAVES, leafList);
+        }
     }
     
     public TreeDefinition setOnlyDestroyUpwards(boolean onlyDestroyUpwards)

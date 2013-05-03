@@ -2,8 +2,11 @@ package net.minecraft.src;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.ForgeVersion;
+import bspkrs.treecapitator.Strings;
 import bspkrs.treecapitator.TCLog;
 import bspkrs.treecapitator.TreeCapitator;
+import bspkrs.treecapitator.TreeRegistry;
+import bspkrs.treecapitator.fml.TreeCapitatorMod;
 import bspkrs.util.BSProp;
 import bspkrs.util.BSPropRegistry;
 import bspkrs.util.ModVersionChecker;
@@ -38,7 +41,7 @@ public class mod_TreeCapitator extends BaseMod
     public static boolean     allowMoreBlocksThanDamage  = TreeCapitator.allowMoreBlocksThanDamage;
     @BSProp(info = TreeCapitator.sneakActionDesc + "\n")
     public static String      sneakAction                = TreeCapitator.sneakAction;
-    @BSProp(info = TreeCapitator.maxBreakDistanceDesc + "\n")
+    @BSProp(info = Strings.maxBreakDistanceDesc + "\n")
     public static int         maxBreakDistance           = TreeCapitator.maxBreakDistance;
     
     @BSProp(info = TreeCapitator.requireLeafDecayCheckDesc + "\n")
@@ -96,37 +99,48 @@ public class mod_TreeCapitator extends BaseMod
             isForgeDetected = false;
         }
         
-        if (mod_bspkrsCore.allowUpdateCheck)
+        try
         {
-            versionChecker = new ModVersionChecker(getName(), getVersion(), versionURL, mcfTopic);
-            versionChecker.checkVersionWithLogging();
+            if (TreeCapitatorMod.isCoreModLoaded)
+                ;
+            TCLog.warning("%s Forge has been detected! ModLoader version of %s will be ignored!", getName(), getName());
         }
-        
-        ModLoader.setInGameHook(this, true, true);
-        
-        TreeCapitator.init(false);
-        TreeCapitator.axeIDList = axeIDList;
-        TreeCapitator.needItem = needItem;
-        TreeCapitator.onlyDestroyUpwards = onlyDestroyUpwards;
-        TreeCapitator.destroyLeaves = destroyLeaves;
-        TreeCapitator.shearLeaves = shearLeaves;
-        TreeCapitator.shearVines = shearVines;
-        TreeCapitator.shearIDList = shearIDList;
-        TreeCapitator.logHardnessNormal = logHardnessNormal;
-        TreeCapitator.logHardnessModified = logHardnessModified;
-        TreeCapitator.disableInCreative = disableInCreative;
-        TreeCapitator.disableCreativeDrops = disableCreativeDrops;
-        TreeCapitator.allowItemDamage = allowItemDamage;
-        TreeCapitator.allowMoreBlocksThanDamage = allowMoreBlocksThanDamage;
-        TreeCapitator.sneakAction = sneakAction;
-        TreeCapitator.maxBreakDistance = maxBreakDistance;
-        
-        TreeCapitator.requireLeafDecayCheck = requireLeafDecayCheck;
-        TreeCapitator.damageMultiplier = damageMultiplier;
-        TreeCapitator.useIncreasingItemDamage = useIncreasingItemDamage;
-        TreeCapitator.increaseDamageEveryXBlocks = increaseDamageEveryXBlocks;
-        TreeCapitator.damageIncreaseAmount = damageIncreaseAmount;
-        TreeCapitator.allowSmartTreeDetection = allowSmartTreeDetection;
+        catch (Throwable e)
+        {
+            if (mod_bspkrsCore.allowUpdateCheck)
+            {
+                versionChecker = new ModVersionChecker(getName(), getVersion(), versionURL, mcfTopic);
+                versionChecker.checkVersionWithLogging();
+            }
+            
+            ModLoader.setInGameHook(this, true, true);
+            
+            TreeCapitator.preInit(false);
+            TreeCapitator.axeIDList = axeIDList;
+            TreeCapitator.needItem = needItem;
+            TreeCapitator.onlyDestroyUpwards = onlyDestroyUpwards;
+            TreeCapitator.destroyLeaves = destroyLeaves;
+            TreeCapitator.shearLeaves = shearLeaves;
+            TreeCapitator.shearVines = shearVines;
+            TreeCapitator.shearIDList = shearIDList;
+            TreeCapitator.logHardnessNormal = logHardnessNormal;
+            TreeCapitator.logHardnessModified = logHardnessModified;
+            TreeCapitator.disableInCreative = disableInCreative;
+            TreeCapitator.disableCreativeDrops = disableCreativeDrops;
+            TreeCapitator.allowItemDamage = allowItemDamage;
+            TreeCapitator.allowMoreBlocksThanDamage = allowMoreBlocksThanDamage;
+            TreeCapitator.sneakAction = sneakAction;
+            TreeCapitator.maxBreakDistance = maxBreakDistance;
+            
+            TreeCapitator.requireLeafDecayCheck = requireLeafDecayCheck;
+            TreeCapitator.damageMultiplier = damageMultiplier;
+            TreeCapitator.useIncreasingItemDamage = useIncreasingItemDamage;
+            TreeCapitator.increaseDamageEveryXBlocks = increaseDamageEveryXBlocks;
+            TreeCapitator.damageIncreaseAmount = damageIncreaseAmount;
+            TreeCapitator.allowSmartTreeDetection = allowSmartTreeDetection;
+            
+            TreeRegistry.instance();
+        }
     }
     
     @Override

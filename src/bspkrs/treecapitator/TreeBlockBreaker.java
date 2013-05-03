@@ -118,7 +118,7 @@ public class TreeBlockBreaker
                             for (Coord pos : listFinal)
                             {
                                 List<Coord> leaves = addLeaves(world, pos);
-                                removeLeavesWithLogsAround(world, leaves);
+                                //removeLeavesWithLogsAround(world, leaves);
                                 destroyBlocksWithChance(world, leaves, 0.5F, hasShearsInHotbar(player));
                             }
                         }
@@ -494,7 +494,8 @@ public class TreeBlockBreaker
         while (++index < list.size())
         {
             Coord pos2 = list.get(index);
-            addLeavesInDistance(world, pos2, 1, list);
+            if (CommonUtils.getSphericalDistance(pos, pos2) < treeDef.maxLeafBreakDist())
+                addLeavesInDistance(world, pos2, 1, list);
         }
         
         return list;
@@ -515,7 +516,7 @@ public class TreeBlockBreaker
                         if (!treeDef.requireLeafDecayCheck() || ((metadata & 8) != 0 && (metadata & 4) == 0))
                         {
                             Coord newPos = new Coord(x + pos.x, y + pos.y, z + pos.z);
-                            if (!list.contains(newPos))
+                            if (!list.contains(newPos) && !hasLogClose(world, newPos, 1))
                                 list.add(newPos);
                         }
                     }
@@ -551,7 +552,10 @@ public class TreeBlockBreaker
     
     /**
      * Removes leaf/vine blocks from the list if they still have a log block neighbor (ie- if they are part of another tree)
+     * 
+     * Deprecated in favor of just not adding those leaves to the list in the first place.
      */
+    @Deprecated
     public void removeLeavesWithLogsAround(World world, List<Coord> list)
     {
         for (int i = 0; i < list.size();)

@@ -82,7 +82,7 @@ public class TreeCapitatorMod extends DummyModContainer
     @PreInit
     public void preInit(FMLPreInitializationEvent event)
     {
-        TreeCapitator.init(true);
+        TreeCapitator.preInit(true);
         metadata = event.getModMetadata();
         
         File file = event.getSuggestedConfigurationFile();
@@ -105,7 +105,7 @@ public class TreeCapitatorMod extends DummyModContainer
         TreeCapitator.disableInCreative = Config.getBoolean(config, "disableInCreative", Strings.MISC_CTGY, TreeCapitator.disableInCreative, TreeCapitator.disableInCreativeDesc);
         TreeCapitator.disableCreativeDrops = Config.getBoolean(config, "disableCreativeDrops", Strings.MISC_CTGY, TreeCapitator.disableCreativeDrops, TreeCapitator.disableCreativeDropsDesc);
         TreeCapitator.sneakAction = Config.getString(config, "sneakAction", Strings.MISC_CTGY, TreeCapitator.sneakAction, TreeCapitator.sneakActionDesc);
-        TreeCapitator.maxBreakDistance = Config.getInt(config, "maxBreakDistance", Strings.MISC_CTGY, TreeCapitator.maxBreakDistance, -1, 100, TreeCapitator.maxBreakDistanceDesc);
+        TreeCapitator.maxBreakDistance = Config.getInt(config, "maxBreakDistance", Strings.MISC_CTGY, TreeCapitator.maxBreakDistance, -1, 100, Strings.maxBreakDistanceDesc);
         TreeCapitator.allowSmartTreeDetection = Config.getBoolean(config, "allowSmartTreeDetection", Strings.MISC_CTGY, TreeCapitator.allowSmartTreeDetection, TreeCapitator.allowSmartTreeDetectionDesc);
         
         TreeCapitator.axeIDList = Config.getString(config, "axeIDList", Strings.ITEM_CTGY, TreeCapitator.axeIDList, TreeCapitator.axeIDListDesc);
@@ -136,7 +136,7 @@ public class TreeCapitatorMod extends DummyModContainer
             Config.setFromOldCtgy(config, "disableCreativeDrops", Strings.GENERAL, Strings.MISC_CTGY);
             TreeCapitator.sneakAction = Config.getString(config, "sneakAction", Strings.GENERAL, TreeCapitator.sneakAction, TreeCapitator.sneakActionDesc);
             Config.setFromOldCtgy(config, "sneakAction", Strings.GENERAL, Strings.MISC_CTGY);
-            TreeCapitator.maxBreakDistance = Config.getInt(config, "maxBreakDistance", Strings.GENERAL, TreeCapitator.maxBreakDistance, -1, 100, TreeCapitator.maxBreakDistanceDesc);
+            TreeCapitator.maxBreakDistance = Config.getInt(config, "maxBreakDistance", Strings.GENERAL, TreeCapitator.maxBreakDistance, -1, 100, Strings.maxBreakDistanceDesc);
             Config.setFromOldCtgy(config, "maxBreakDistance", Strings.GENERAL, Strings.MISC_CTGY);
             
             TreeCapitator.axeIDList = Config.getString(config, "axeIDList", Strings.GENERAL, TreeCapitator.axeIDList, TreeCapitator.axeIDListDesc);
@@ -178,11 +178,11 @@ public class TreeCapitatorMod extends DummyModContainer
         TreeCapitator.useStrictBlockPairing = Config.getBoolean(config, "useStrictBlockPairing", Strings.BLOCK_CTGY, TreeCapitator.useStrictBlockPairing, TreeCapitator.useStrictBlockPairingDesc);
         
         idResolverModID = Config.getString(config, "idResolverModID", Strings.ID_RES_CTGY, idResolverModID, idResolverModIDDesc);
-        config.addCustomCategoryComment(Strings.ID_RES_CTGY, "If you are not using ID Resolver, you can safely ignore this section.\n" +
-                "If you ARE using ID Resolver and your log file does not show any warnings\n" +
-                "pertaining to ID Resolver, you can still ignore this section. In fact, the\n" +
-                "only reason you should mess with this section if ShaRose decides to change\n" +
-                "the Mod ID for ID Resolver.");
+        config.addCustomCategoryComment(Strings.ID_RES_CTGY, "If you are not using ID Resolver, you can safely ignore this section.");
+        //                "If you ARE using ID Resolver and your log file does not show any warnings\n" +
+        //                "pertaining to ID Resolver, you can still ignore this section. In fact, the\n" +
+        //                "only reason you should mess with this section if ShaRose decides to change\n" +
+        //                "the Mod ID for ID Resolver."
         
         /*
          * Get / Set Block ID config lists
@@ -281,6 +281,8 @@ public class TreeCapitatorMod extends DummyModContainer
             versionChecker = new ModVersionChecker(metadata.name, metadata.version, versionURL, mcfTopic);
             versionChecker.checkVersionWithLoggingBySubStringAsFloat(metadata.version.length() - 1, metadata.version.length());
         }
+        
+        TreeRegistry.instance();
     }
     
     @Init
