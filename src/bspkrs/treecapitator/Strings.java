@@ -1,6 +1,7 @@
 package bspkrs.treecapitator;
 
-import net.minecraftforge.common.Configuration;
+import bspkrs.util.Configuration;
+import bspkrs.util.Const;
 
 public class Strings
 {
@@ -8,6 +9,8 @@ public class Strings
     public static final String SPRUCE                = "vanilla_spruce";
     public static final String BIRCH                 = "vanilla_birch";
     public static final String JUNGLE                = "vanilla_jungle";
+    public static final String MUSH_BROWN            = "vanilla_huge_brown_mushroom";
+    public static final String MUSH_RED              = "vanilla_huge_red_mushroom";
     
     public static final String LOGS                  = "logs";
     public static final String LEAVES                = "leaves";
@@ -15,6 +18,8 @@ public class Strings
     public static final String CONFIG_PATH           = "configPath";
     public static final String BLOCK_VALUES          = "blockValues";
     public static final String ITEM_VALUES           = "itemValues";
+    public static final String axeIDList             = "axeIDList";
+    public static final String shearIDList           = "shearIDList";
     public static final String SHIFT_INDEX           = "useShiftedItemID";
     public static final String IDR_MOD_ID            = "idResolverModID";
     public static final String TREE_BLOCK_CTGY       = "2_tree_definitions";
@@ -35,4 +40,5 @@ public class Strings
     public static final String metadata              = "metadata";
     
     public final static String maxBreakDistanceDesc  = "The maximum horizontal distance that the log breaking effect will travel (use -1 for no limit).";
+    public final static String VERSION_NUMBER        = Const.MCVERSION + ".r01";
 }

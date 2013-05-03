@@ -10,15 +10,15 @@ import bspkrs.util.HashCodeUtil;
 
 public class TreeDefinition
 {
-    private List<BlockID> logBlocks;
-    private List<BlockID> leafBlocks;
-    private boolean       onlyDestroyUpwards;
-    private boolean       requireLeafDecayCheck;
+    protected List<BlockID> logBlocks;
+    protected List<BlockID> leafBlocks;
+    protected boolean       onlyDestroyUpwards;
+    protected boolean       requireLeafDecayCheck;
     // max horizontal distance that logs will be broken
-    private int           maxLogBreakDist;
-    private int           maxLeafIDDist;
-    private int           maxLeafBreakDist;
-    private int           minLeavesToID;
+    protected int           maxLogBreakDist;
+    protected int           maxLeafIDDist;
+    protected int           maxLeafBreakDist;
+    protected int           minLeavesToID;
     
     public TreeDefinition()
     {

@@ -7,7 +7,7 @@
         <!-- load properties from files -->
         <property file="build.properties"/>
         <property file="mod.properties"/>
-        <property name="version" value="${version.major}.${version.minor}.${version.micro}.r${version.build}"/>
+        <property name="version" value="${version.minecraft}.r${version.build}"/>
 
         <!-- base dirs -->
         <property name="dev.home" location="${dir.project}"/>

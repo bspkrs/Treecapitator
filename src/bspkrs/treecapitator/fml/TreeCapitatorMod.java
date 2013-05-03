@@ -22,6 +22,7 @@ import bspkrs.util.BlockID;
 import bspkrs.util.CommonUtils;
 import bspkrs.util.ConfigCategory;
 import bspkrs.util.Configuration;
+import bspkrs.util.Const;
 import bspkrs.util.Coord;
 import bspkrs.util.ModVersionChecker;
 import cpw.mods.fml.common.DummyModContainer;
@@ -45,7 +46,7 @@ import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 
-@Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge " + TreeCapitator.VERSION_NUMBER, dependencies = "required-after:mod_bspkrsCore", useMetadata = true)
+@Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge " + Strings.VERSION_NUMBER, dependencies = "required-after:mod_bspkrsCore", useMetadata = true)
 @NetworkMod(clientSideRequired = false, serverSideRequired = false,
         clientPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = ClientPacketHandler.class),
         serverPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = ServerPacketHandler.class),
@@ -53,7 +54,7 @@ import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 public class TreeCapitatorMod extends DummyModContainer
 {
     public static ModVersionChecker versionChecker;
-    private final String            versionURL          = "http://bspk.rs/Minecraft/1.5.1/treeCapitatorForge.version";
+    private final String            versionURL          = "http://bspk.rs/Minecraft/" + Const.MCVERSION + "/treeCapitatorForge.version";
     private final String            mcfTopic            = "http://www.minecraftforum.net/topic/1009577-";
     
     public static boolean           isCoreModLoaded     = false;

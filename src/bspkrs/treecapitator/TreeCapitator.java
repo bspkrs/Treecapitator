@@ -17,8 +17,6 @@ import bspkrs.util.Coord;
 
 public final class TreeCapitator
 {
-    public final static String                         VERSION_NUMBER                     = "1.5.1.r02";
-    
     public final static String                         remoteTreeConfigURLDesc            = "Incomplete - do not use";
     // "Leave this URL as is to get the latest tree definitions from my master list.\nFeel free to start your own remote list to share with your friends or send your suggestions to me for the master list!";
     public static String                               remoteTreeConfigURL                = "http://bspk.rs/Minecraft/1.5.1/treeCapitatorTreeConfig.txt";
@@ -193,9 +191,15 @@ public final class TreeCapitator
     
     static
     {
+        HashMap<String, String> vanilla_oak;
+        HashMap<String, String> vanilla_birch;
+        HashMap<String, String> vanilla_spruce;
+        HashMap<String, String> vanilla_jungle;
+        
         /*
          * Third-Party config defaults
          */
+        
         HashMap<String, String> biomesoplenty = new HashMap<String, String>();
         biomesoplenty.put(Strings.MOD_ID, "BiomesOPlenty");
         biomesoplenty.put(Strings.CONFIG_PATH, "BiomesOPlenty.cfg");
@@ -208,6 +212,66 @@ public final class TreeCapitator
                 "block:White Cherry Leaves ID; block:Willow Leaves ID; block:Willow Log ID; block:Yellow Autumn Leaves ID");
         biomesoplenty.put(Strings.ITEM_VALUES, "item:Muddy Axe ID");
         biomesoplenty.put(Strings.SHIFT_INDEX, "true");
+        vanilla_oak = new HashMap<String, String>();
+        vanilla_oak.put(Strings.LEAVES, "<block:Dying Leaves ID>; <block:Origin Leaves ID>; " +
+                "<block:Apple Leaves ID>; <block:Fruitless Apple Leaves ID>; <block:Orange Autumn Leaves ID>; " +
+                "<block:Maple Leaves ID>");
+        vanilla_birch = new HashMap<String, String>();
+        vanilla_birch.put(Strings.LEAVES, "<block:Yellow Autumn Leaves ID>");
+        
+        HashMap<String, String> biomesoplenty_dead = new HashMap<String, String>();
+        biomesoplenty_dead.put(Strings.LOGS, "<block:Dead Log ID>");
+        configBlockList.put("biomesoplenty_dead", biomesoplenty_dead);
+        
+        HashMap<String, String> biomesoplenty_acacia = new HashMap<String, String>();
+        biomesoplenty_acacia.put(Strings.LOGS, "<block:Acacia Log ID>");
+        biomesoplenty_acacia.put(Strings.LEAVES, "<block:Acacia Leaves ID>");
+        configBlockList.put("biomesoplenty_acacia", biomesoplenty_acacia);
+        
+        HashMap<String, String> biomesoplenty_bamboo = new HashMap<String, String>();
+        biomesoplenty_bamboo.put(Strings.LOGS, "<block:Bamboo ID>");
+        biomesoplenty_bamboo.put(Strings.LEAVES, "<block:Bamboo Leaves ID>");
+        configBlockList.put("biomesoplenty_bamboo", biomesoplenty_bamboo);
+        
+        HashMap<String, String> biomesoplenty_cherry = new HashMap<String, String>();
+        biomesoplenty_cherry.put(Strings.LOGS, "<block:Cherry Log ID>");
+        biomesoplenty_cherry.put(Strings.LEAVES, "<block:Pink Cherry Leaves ID>; <block:White Cherry Leaves ID>");
+        configBlockList.put("biomesoplenty_cherry", biomesoplenty_cherry);
+        
+        HashMap<String, String> biomesoplenty_dark = new HashMap<String, String>();
+        biomesoplenty_dark.put(Strings.LOGS, "<block:Dark Log ID>");
+        biomesoplenty_dark.put(Strings.LEAVES, "<block:Dark Leaves ID>; <block:White Cherry Leaves ID>");
+        configBlockList.put("biomesoplenty_darkwood", biomesoplenty_dark);
+        
+        HashMap<String, String> biomesoplenty_fir = new HashMap<String, String>();
+        biomesoplenty_fir.put(Strings.LOGS, "<block:Fir Log ID>");
+        biomesoplenty_fir.put(Strings.LEAVES, "<block:Fir Leaves ID>");
+        configBlockList.put("biomesoplenty_fir", biomesoplenty_fir);
+        
+        HashMap<String, String> biomesoplenty_magic = new HashMap<String, String>();
+        biomesoplenty_magic.put(Strings.LOGS, "<block:Magic Log ID>");
+        biomesoplenty_magic.put(Strings.LEAVES, "<block:Magic Leaves ID>");
+        configBlockList.put("biomesoplenty_magic", biomesoplenty_magic);
+        
+        HashMap<String, String> biomesoplenty_mangrove = new HashMap<String, String>();
+        biomesoplenty_mangrove.put(Strings.LOGS, "<block:Mangrove Log ID>");
+        biomesoplenty_mangrove.put(Strings.LEAVES, "<block:Mangrove Leaves ID>");
+        configBlockList.put("biomesoplenty_mangrove", biomesoplenty_mangrove);
+        
+        HashMap<String, String> biomesoplenty_palm = new HashMap<String, String>();
+        biomesoplenty_palm.put(Strings.LOGS, "<block:Palm Log ID>");
+        biomesoplenty_palm.put(Strings.LEAVES, "<block:Palm Leaves ID>");
+        configBlockList.put("biomesoplenty_palm", biomesoplenty_palm);
+        
+        HashMap<String, String> biomesoplenty_redwood = new HashMap<String, String>();
+        biomesoplenty_redwood.put(Strings.LOGS, "<block:Redwood Log ID>");
+        biomesoplenty_redwood.put(Strings.LEAVES, "<block:Redwood Leaves ID>");
+        configBlockList.put("biomesoplenty_redwood", biomesoplenty_redwood);
+        
+        HashMap<String, String> biomesoplenty_willow = new HashMap<String, String>();
+        biomesoplenty_willow.put(Strings.LOGS, "<block:Willow Log ID>");
+        biomesoplenty_willow.put(Strings.LEAVES, "<block:Willow Leaves ID>");
+        configBlockList.put("biomesoplenty_willow", biomesoplenty_willow);
         thirdPartyConfig.put("biomesoplenty", biomesoplenty);
         
         HashMap<String, String> divinerpg = new HashMap<String, String>();
@@ -216,7 +280,15 @@ public final class TreeCapitator
         divinerpg.put(Strings.BLOCK_VALUES, "block:eucalyptus");
         divinerpg.put(Strings.ITEM_VALUES, "item:Bedrock Axe; item:Crystal Axe; item:Realmite Axe; item:azuriteaxe; item:corruptedaxe; " +
                 "item:denseaxe; item:divineaxe; item:donatoraxe; item:energyaxe; item:mythrilaxe; item:plasmaaxe; item:serenityaxe; item:twilightaxe");
+        
+        divinerpg.put(Strings.axeIDList, "<item:Bedrock Axe>; <item:Crystal Axe>; <item:Realmite Axe>; <item:azuriteaxe>; <item:corruptedaxe>; " +
+                "<item:denseaxe>; <item:divineaxe>; <item:donatoraxe>; <item:energyaxe>; <item:mythrilaxe>; " +
+                "<item:plasmaaxe>; <item:serenityaxe>; <item:twilightaxe>");
         divinerpg.put(Strings.SHIFT_INDEX, "true");
+        
+        HashMap<String, String> divinerpg_eucalyptus = new HashMap<String, String>();
+        divinerpg_eucalyptus.put(Strings.LOGS, "<block:eucalyptus>");
+        divinerpg_eucalyptus.put(Strings.LEAVES, "18"); // not sure on this? haven't found any of them yet and no sapling
         thirdPartyConfig.put("divinerpg", divinerpg);
         
         HashMap<String, String> extrabiomesxl = new HashMap<String, String>();
@@ -224,12 +296,92 @@ public final class TreeCapitator
         extrabiomesxl.put(Strings.CONFIG_PATH, "extrabiomes/extrabiomes.cfg");
         extrabiomesxl.put(Strings.BLOCK_VALUES, "block:customlog.id; block:quarterlog0.id; block:quarterlog1.id; block:quarterlog2.id; block:quarterlog3.id; " +
                 "block:autumnleaves.id; block:greenleaves.id");
+        vanilla_oak = new HashMap<String, String>();
+        vanilla_oak.put(Strings.LOGS, "<block:quarterlog0.id>,2; <block:quarterlog1.id>,2; <block:quarterlog2.id>,2; <block:quarterlog3.id>,2;");
+        vanilla_oak.put(Strings.LEAVES, "<block:autumnleaves.id>");
+        vanilla_spruce = new HashMap<String, String>();
+        vanilla_spruce.put(Strings.LEAVES, "<block:autumnleaves.id>");
+        HashMap<String, String> ebxl_redwoods = new HashMap<String, String>();
+        ebxl_redwoods.put(Strings.LOGS, "<block:quarterlog0.id>,0; <block:quarterlog1.id>,0; <ExtrabiomesXL.quarterlog2.id>,0; " +
+                "<ExtrabiomesXL.quarterlog3.id>,0");
+        ebxl_redwoods.put(Strings.LEAVES, "<ExtrabiomesXL.greenleaves.id>,1");
+        HashMap<String, String> ebxl_firs = new HashMap<String, String>();
+        ebxl_firs.put(Strings.LOGS, "<ExtrabiomesXL.customlog.id>,0; <ExtrabiomesXL.quarterlog0.id>,1; <ExtrabiomesXL.quarterlog1.id>,1; " +
+                "<ExtrabiomesXL.quarterlog2.id>,1; <ExtrabiomesXL.quarterlog3.id>,1");
+        ebxl_firs.put(Strings.LEAVES, "<ExtrabiomesXL.greenleaves.id>,0");
+        HashMap<String, String> ebxl_acacia = new HashMap<String, String>();
+        ebxl_acacia.put(Strings.LOGS, "<ExtrabiomesXL.customlog.id>,1");
+        ebxl_acacia.put(Strings.LEAVES, "<ExtrabiomesXL.greenleaves.id>,2");
         thirdPartyConfig.put("extrabiomesxl", extrabiomesxl);
         
         HashMap<String, String> forestry = new HashMap<String, String>();
         forestry.put(Strings.MOD_ID, "Forestry");
         forestry.put(Strings.CONFIG_PATH, "forestry/base.conf");
         forestry.put(Strings.BLOCK_VALUES, "block:log1; block:log2; block:log3; block:log4; block:leaves");
+        
+        HashMap<String, String> forestry_larch = new HashMap<String, String>();
+        forestry_larch.put(Strings.LOGS, "<block:log1>,0; <block:log1>,4; <block:log1>,8");
+        forestry_larch.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
+        
+        HashMap<String, String> forestry_teak = new HashMap<String, String>();
+        forestry_teak.put(Strings.LOGS, "<block:log1>,1; <block:log1>,5; <block:log1>,9");
+        forestry_teak.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
+        
+        HashMap<String, String> forestry_acacia = new HashMap<String, String>();
+        forestry_acacia.put(Strings.LOGS, "<block:log1>,2; <block:log1>,6; <block:log1>,10");
+        forestry_acacia.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
+        
+        HashMap<String, String> forestry_lime = new HashMap<String, String>();
+        forestry_lime.put(Strings.LOGS, "<block:log1>,3; <block:log1>,7; <block:log1>,11");
+        forestry_lime.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
+        
+        HashMap<String, String> forestry_chestnut = new HashMap<String, String>();
+        forestry_chestnut.put(Strings.LOGS, "<block:log2>,0; <block:log2>,4; <block:log2>,8");
+        forestry_chestnut.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
+        
+        HashMap<String, String> forestry_wenge = new HashMap<String, String>();
+        forestry_wenge.put(Strings.LOGS, "<block:log2>,1; <block:log2>,5; <block:log2>,9");
+        forestry_wenge.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
+        
+        HashMap<String, String> forestry_baobab = new HashMap<String, String>();
+        forestry_baobab.put(Strings.LOGS, "<block:log2>,2; <block:log2>,6; <block:log2>,10");
+        forestry_baobab.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
+        
+        HashMap<String, String> forestry_sequoia = new HashMap<String, String>();
+        forestry_sequoia.put(Strings.LOGS, "<block:log2>,3; <block:log2>,7; <block:log2>,11");
+        forestry_sequoia.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
+        
+        HashMap<String, String> forestry_kapok = new HashMap<String, String>();
+        forestry_kapok.put(Strings.LOGS, "<block:log3>,0; <block:log3>,4; <block:log3>,8");
+        forestry_kapok.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
+        
+        HashMap<String, String> forestry_ebony = new HashMap<String, String>();
+        forestry_ebony.put(Strings.LOGS, "<block:log3>,1; <block:log3>,5; <block:log3>,9");
+        forestry_ebony.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
+        
+        HashMap<String, String> forestry_mahogany = new HashMap<String, String>();
+        forestry_mahogany.put(Strings.LOGS, "<block:log3>,2; <block:log3>,6; <block:log3>,10");
+        forestry_mahogany.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
+        
+        HashMap<String, String> forestry_balsa = new HashMap<String, String>();
+        forestry_balsa.put(Strings.LOGS, "<block:log3>,3; <block:log3>,7; <block:log3>,11");
+        forestry_balsa.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
+        
+        HashMap<String, String> forestry_willow = new HashMap<String, String>();
+        forestry_willow.put(Strings.LOGS, "<block:log4>,0; <block:log4>,4; <block:log4>,8");
+        forestry_willow.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
+        
+        HashMap<String, String> forestry_walnut = new HashMap<String, String>();
+        forestry_walnut.put(Strings.LOGS, "<block:log4>,1; <block:log4>,5; <block:log4>,9");
+        forestry_walnut.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
+        
+        HashMap<String, String> forestry_boojum = new HashMap<String, String>();
+        forestry_boojum.put(Strings.LOGS, "<block:log4>,2; <block:log4>,6; <block:log4>,10");
+        forestry_boojum.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
+        
+        HashMap<String, String> forestry_cherry = new HashMap<String, String>();
+        forestry_cherry.put(Strings.LOGS, "<block:log4>,3; <block:log4>,7; <block:log4>,11");
+        forestry_cherry.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
         thirdPartyConfig.put("forestry", forestry);
         
         HashMap<String, String> ic2 = new HashMap<String, String>();
@@ -237,19 +389,53 @@ public final class TreeCapitator
         ic2.put(Strings.CONFIG_PATH, "IC2.cfg");
         ic2.put(Strings.BLOCK_VALUES, "block:blockRubWood; block:blockRubLeaves");
         ic2.put(Strings.ITEM_VALUES, "item:itemToolBronzeAxe; item:itemToolChainsaw");
+        ic2.put(Strings.axeIDList, "<item:itemToolBronzeAxe>; <item:itemToolChainsaw>");
+        ic2.put(Strings.shearIDList, "<item:itemToolChainsaw>");
         ic2.put(Strings.SHIFT_INDEX, "true");
+        
+        HashMap<String, String> ic2_rubber = new HashMap<String, String>();
+        ic2_rubber.put(Strings.LOGS, "<block:blockRubWood>");
+        ic2_rubber.put(Strings.LEAVES, "<block:blockRubLeaves>");
         thirdPartyConfig.put("ic2", ic2);
         
         HashMap<String, String> inficraft = new HashMap<String, String>();
         inficraft.put(Strings.MOD_ID, "Flora Trees");
         inficraft.put(Strings.CONFIG_PATH, "InfiCraft/FloraSoma.txt");
         inficraft.put(Strings.BLOCK_VALUES, "block:Bloodwood Block; block:Flora Leaves; block:Redwood Block; block:Sakura Leaves; block:Wood Block");
+        
+        HashMap<String, String> inficraft_bloodwood = new HashMap<String, String>();
+        inficraft_bloodwood.put(Strings.LOGS, "<block:Bloodwood Block>");
+        inficraft_bloodwood.put(Strings.LEAVES, "<block:Sakura Leaves>,2");
+        
+        HashMap<String, String> inficraft_eucalyptus = new HashMap<String, String>();
+        inficraft_eucalyptus.put(Strings.LOGS, "<block:Wood Block>,0; <block:Wood Block>,4; <block:Wood Block>,8");
+        inficraft_eucalyptus.put(Strings.LEAVES, "<block:Flora Leaves>,1");
+        
+        HashMap<String, String> inficraft_ghostwood = new HashMap<String, String>();
+        inficraft_ghostwood.put(Strings.LOGS, "<block:Wood Block>,2; <block:Wood Block>, 6; <block:Wood Block>, 10");
+        inficraft_ghostwood.put(Strings.LEAVES, "<block:Sakura Leaves>,1");
+        
+        HashMap<String, String> inficraft_hopseed = new HashMap<String, String>();
+        inficraft_hopseed.put(Strings.LOGS, "<block:Wood Block>,3; <block:Wood Block>, 7; <block:Wood Block>, 11");
+        inficraft_hopseed.put(Strings.LEAVES, "<block:Flora Leaves>,2");
+        
+        HashMap<String, String> inficraft_redwood = new HashMap<String, String>();
+        inficraft_redwood.put(Strings.LOGS, "<block:Redwood Block>");
+        inficraft_redwood.put(Strings.LEAVES, "<block:Flora Leaves>,0");
+        
+        HashMap<String, String> inficraft_sakura = new HashMap<String, String>();
+        inficraft_sakura.put(Strings.LOGS, "<block:Wood Block>, 1; <block:Wood Block>, 5; <block:Wood Block>, 9");
+        inficraft_sakura.put(Strings.LEAVES, "<block:Sakura Leaves>,0");
         thirdPartyConfig.put("inficraft", inficraft);
         
         HashMap<String, String> mfreloaded = new HashMap<String, String>();
         mfreloaded.put(Strings.MOD_ID, "MFReloaded");
         mfreloaded.put(Strings.CONFIG_PATH, "MFReloaded.cfg");
         mfreloaded.put(Strings.BLOCK_VALUES, "block:ID.RubberWood; block:ID.RubberLeaves; block:ID.RubberSapling");
+        
+        HashMap<String, String> mfr_rubber = new HashMap<String, String>();
+        mfr_rubber.put(Strings.LOGS, "<block:ID.RubberWood>");
+        mfr_rubber.put(Strings.LEAVES, "<block:ID.RubberLeaves>");
         thirdPartyConfig.put("mfreloaded", mfreloaded);
         
         HashMap<String, String> redpower = new HashMap<String, String>();
@@ -258,6 +444,10 @@ public final class TreeCapitator
         redpower.put(Strings.BLOCK_VALUES, "blocks.world:log.id; blocks.world:leaves.id");
         redpower.put(Strings.ITEM_VALUES, "items.world:axeRuby.id; items.world:axeGreenSapphire.id; items.world:axeSapphire.id");
         redpower.put(Strings.SHIFT_INDEX, "true");
+        ic2.put(Strings.axeIDList, "<items.world:axeRuby.id>; <items.world:axeGreenSapphire.id>; <items.world:axeSapphire.id>");
+        HashMap<String, String> rp2_rubber = new HashMap<String, String>();
+        rp2_rubber.put(Strings.LOGS, "<blocks.world:log.id>");
+        rp2_rubber.put(Strings.LEAVES, "<blocks.world:leaves.id>");
         thirdPartyConfig.put("redpower", redpower);
         
         HashMap<String, String> thaumcraft = new HashMap<String, String>();
@@ -265,7 +455,16 @@ public final class TreeCapitator
         thaumcraft.put(Strings.CONFIG_PATH, "Thaumcraft.cfg");
         thaumcraft.put(Strings.BLOCK_VALUES, "block:BlockMagicalLog; block:BlockMagicalLeaves");
         thaumcraft.put(Strings.ITEM_VALUES, "item:Thaumaxe");
+        ic2.put(Strings.axeIDList, "<item:Thaumaxe>");
         thaumcraft.put(Strings.SHIFT_INDEX, "true");
+        
+        HashMap<String, String> thaum_greatwood = new HashMap<String, String>();
+        thaum_greatwood.put(Strings.LOGS, "<block:BlockMagicalLog>,0; <block:BlockMagicalLog>,4; <block:BlockMagicalLog>,8");
+        thaum_greatwood.put(Strings.LEAVES, "<block:BlockMagicalLeaves>,0; <block:BlockMagicalLeaves>,8");
+        
+        HashMap<String, String> thaum_silverwood = new HashMap<String, String>();
+        thaum_silverwood.put(Strings.LOGS, "<Thaumcraft.BlockMagicalLog>,1; <Thaumcraft.BlockMagicalLog>,5; <Thaumcraft.BlockMagicalLog>,9");
+        thaum_silverwood.put(Strings.LEAVES, "<Thaumcraft.BlockMagicalLeaves>,1");
         thirdPartyConfig.put("thaumcraft", thaumcraft);
         
         HashMap<String, String> twilightforest = new HashMap<String, String>();
@@ -273,291 +472,43 @@ public final class TreeCapitator
         twilightforest.put(Strings.CONFIG_PATH, "TwilightForest.cfg");
         twilightforest.put(Strings.BLOCK_VALUES, "block:Log; block:MagicLog; block:MagicStrings.LOGSpecial; block:Leaves; block:MagicLeaves; block:Hedge");
         twilightforest.put(Strings.ITEM_VALUES, "item:IronwoodAxe; item:SteeleafAxe; item:MinotaurAxe");
+        twilightforest.put(Strings.axeIDList, "<item:IronwoodAxe>; <item:SteeleafAxe>; <item:MinotaurAxe>; ");
         twilightforest.put(Strings.SHIFT_INDEX, "true");
+        
+        HashMap<String, String> twilight_oaks = new HashMap<String, String>();
+        twilight_oaks.put(Strings.LOGS, "<block:Log>,0; <block:Log>,4; <block:Log>,8; <block:Log>,12");
+        twilight_oaks.put(Strings.LEAVES, "<block:Leaves>,0; <block:Leaves>,3; <block:Leaves>,8; <block:Leaves>,11");
+        
+        HashMap<String, String> twilight_canopy = new HashMap<String, String>();
+        twilight_canopy.put(Strings.LOGS, "<block:Log>,1; <block:Log>,5; <block:Log>,9; <block:Log>,13");
+        twilight_canopy.put(Strings.LEAVES, "<block:Leaves>, 1; <block:Leaves>,9");
+        
+        HashMap<String, String> twilight_mangrove = new HashMap<String, String>();
+        twilight_mangrove.put(Strings.LOGS, "<block:Log>,2; <block:Log>,6; <block:Log>,10; <block:Log>,14");
+        twilight_mangrove.put(Strings.LEAVES, "<block:Leaves>, 1; <block:Leaves>,9");
+        
+        HashMap<String, String> twilight_darkwood = new HashMap<String, String>();
+        twilight_darkwood.put(Strings.LOGS, "<block:Log>,3; <block:Log>,7; <block:Log>,11;  <block:Log>,15");
+        twilight_darkwood.put(Strings.LEAVES, "<block:Hedge>,1");
+        
+        HashMap<String, String> twilight_time = new HashMap<String, String>();
+        twilight_time.put(Strings.LOGS, "<block:MagicLog>,0; <block:Log>,4; <block:Log>,8; <block:MagicLog>,12");
+        twilight_time.put(Strings.LEAVES, "<block:MagicLeaves>,0; <block:MagicLeaves>,8");
         thirdPartyConfig.put("twilightforest", twilightforest);
         
         HashMap<String, String> zapapples = new HashMap<String, String>();
         zapapples.put(Strings.MOD_ID, "ZapApples");
         zapapples.put(Strings.CONFIG_PATH, "ZapApples.cfg");
         zapapples.put(Strings.BLOCK_VALUES, "block:zapAppleLogID; block:zapAppleLeavesID; block:zapAppleFlowersID");
+        
+        HashMap<String, String> zapapple = new HashMap<String, String>();
+        zapapple.put(Strings.LOGS, "<block:zapAppleLogID>");
+        zapapple.put(Strings.LEAVES, "<block:zapAppleLeavesID>; <block:zapAppleFlowersID>");
         thirdPartyConfig.put("zapapples", zapapples);
         
         /*
          * Default local config
          */
-        HashMap<String, String> huge_brown_mushrooms = new HashMap<String, String>();
-        huge_brown_mushrooms.put(Strings.LOGS, "99,10; 99,15");
-        huge_brown_mushrooms.put(Strings.LEAVES, "99,1; 99,2; 99,3; 99,4; 99,5; 99,6; 99,7; 99,8; 99,9; 99,14");
-        configBlockList.put("huge_brown_mushrooms", huge_brown_mushrooms);
-        
-        HashMap<String, String> huge_red_mushrooms = new HashMap<String, String>();
-        huge_red_mushrooms.put(Strings.LOGS, "100,10; 100,15");
-        huge_red_mushrooms.put(Strings.LEAVES, "100,1; 100,2; 100,3; 100,4; 100,5; 100,6; 100,7; 100,8; 100,9; 100,14");
-        configBlockList.put("huge_red_mushrooms", huge_red_mushrooms);
-        
-        HashMap<String, String> vanilla_ebxl_oaks = new HashMap<String, String>();
-        vanilla_ebxl_oaks.put(Strings.LOGS, "17,0; 17,4; 17,8; 17,12; <ExtrabiomesXL.quarterlog0.id>,2; <ExtrabiomesXL.quarterlog1.id>,2; " +
-                "<ExtrabiomesXL.quarterlog2.id>,2; <ExtrabiomesXL.quarterlog3.id>,2;");
-        vanilla_ebxl_oaks.put(Strings.LEAVES, "18,0; <ExtrabiomesXL.autumnleaves.id>; <BiomesOPlenty.Dying Leaves ID>; <BiomesOPlenty.Origin Leaves ID>; " +
-                "<BiomesOPlenty.Apple Leaves ID>; <BiomesOPlenty.Fruitless Apple Leaves ID>; <BiomesOPlenty.Orange Autumn Leaves ID>; " +
-                "<BiomesOPlenty.Maple Leaves ID>");
-        configBlockList.put("vanilla_ebxl_bop_oaks", vanilla_ebxl_oaks);
-        
-        HashMap<String, String> vanilla_ebxl_spruces = new HashMap<String, String>();
-        vanilla_ebxl_spruces.put(Strings.LOGS, "17,1; 17,5; 17,9; 17,13");
-        vanilla_ebxl_spruces.put(Strings.LEAVES, "18,1; <ExtrabiomesXL.autumnleaves.id>");
-        configBlockList.put("vanilla_ebxl_spruces", vanilla_ebxl_spruces);
-        
-        HashMap<String, String> birches = new HashMap<String, String>();
-        birches.put(Strings.LOGS, "17,2; 17,6; 17,10; 17,14");
-        birches.put(Strings.LEAVES, "18,2; <BiomesOPlenty.Yellow Autumn Leaves ID>; 18,0");
-        configBlockList.put("vanilla_bop_birches", birches);
-        
-        HashMap<String, String> jungle_trees = new HashMap<String, String>();
-        jungle_trees.put(Strings.LOGS, "17,3; 17,7; 17,11; 17,15");
-        jungle_trees.put(Strings.LEAVES, "18,3");
-        configBlockList.put("jungle_trees", jungle_trees);
-        
-        HashMap<String, String> biomesoplenty_dead = new HashMap<String, String>();
-        biomesoplenty_dead.put(Strings.LOGS, "<BiomesOPlenty.Dead Log ID>");
-        configBlockList.put("biomesoplenty_dead", biomesoplenty_dead);
-        
-        HashMap<String, String> biomesoplenty_acacia = new HashMap<String, String>();
-        biomesoplenty_acacia.put(Strings.LOGS, "<BiomesOPlenty.Acacia Log ID>");
-        biomesoplenty_acacia.put(Strings.LEAVES, "<BiomesOPlenty.Acacia Leaves ID>");
-        configBlockList.put("biomesoplenty_acacia", biomesoplenty_acacia);
-        
-        HashMap<String, String> biomesoplenty_bamboo = new HashMap<String, String>();
-        biomesoplenty_bamboo.put(Strings.LOGS, "<BiomesOPlenty.Bamboo ID>");
-        biomesoplenty_bamboo.put(Strings.LEAVES, "<BiomesOPlenty.Bamboo Leaves ID>");
-        configBlockList.put("biomesoplenty_bamboo", biomesoplenty_bamboo);
-        
-        HashMap<String, String> biomesoplenty_cherry = new HashMap<String, String>();
-        biomesoplenty_cherry.put(Strings.LOGS, "<BiomesOPlenty.Cherry Log ID>");
-        biomesoplenty_cherry.put(Strings.LEAVES, "<BiomesOPlenty.Pink Cherry Leaves ID>; <BiomesOPlenty.White Cherry Leaves ID>");
-        configBlockList.put("biomesoplenty_cherry", biomesoplenty_cherry);
-        
-        HashMap<String, String> biomesoplenty_dark = new HashMap<String, String>();
-        biomesoplenty_dark.put(Strings.LOGS, "<BiomesOPlenty.Dark Log ID>");
-        biomesoplenty_dark.put(Strings.LEAVES, "<BiomesOPlenty.Dark Leaves ID>; <BiomesOPlenty.White Cherry Leaves ID>");
-        configBlockList.put("biomesoplenty_darkwood", biomesoplenty_dark);
-        
-        HashMap<String, String> biomesoplenty_fir = new HashMap<String, String>();
-        biomesoplenty_fir.put(Strings.LOGS, "<BiomesOPlenty.Fir Log ID>");
-        biomesoplenty_fir.put(Strings.LEAVES, "<BiomesOPlenty.Fir Leaves ID>");
-        configBlockList.put("biomesoplenty_fir", biomesoplenty_fir);
-        
-        HashMap<String, String> biomesoplenty_magic = new HashMap<String, String>();
-        biomesoplenty_magic.put(Strings.LOGS, "<BiomesOPlenty.Magic Log ID>");
-        biomesoplenty_magic.put(Strings.LEAVES, "<BiomesOPlenty.Magic Leaves ID>");
-        configBlockList.put("biomesoplenty_magic", biomesoplenty_magic);
-        
-        HashMap<String, String> biomesoplenty_mangrove = new HashMap<String, String>();
-        biomesoplenty_mangrove.put(Strings.LOGS, "<BiomesOPlenty.Mangrove Log ID>");
-        biomesoplenty_mangrove.put(Strings.LEAVES, "<BiomesOPlenty.Mangrove Leaves ID>");
-        configBlockList.put("biomesoplenty_mangrove", biomesoplenty_mangrove);
-        
-        HashMap<String, String> biomesoplenty_palm = new HashMap<String, String>();
-        biomesoplenty_palm.put(Strings.LOGS, "<BiomesOPlenty.Palm Log ID>");
-        biomesoplenty_palm.put(Strings.LEAVES, "<BiomesOPlenty.Palm Leaves ID>");
-        configBlockList.put("biomesoplenty_palm", biomesoplenty_palm);
-        
-        HashMap<String, String> biomesoplenty_redwood = new HashMap<String, String>();
-        biomesoplenty_redwood.put(Strings.LOGS, "<BiomesOPlenty.Redwood Log ID>");
-        biomesoplenty_redwood.put(Strings.LEAVES, "<BiomesOPlenty.Redwood Leaves ID>");
-        configBlockList.put("biomesoplenty_redwood", biomesoplenty_redwood);
-        
-        HashMap<String, String> biomesoplenty_willow = new HashMap<String, String>();
-        biomesoplenty_willow.put(Strings.LOGS, "<BiomesOPlenty.Willow Log ID>");
-        biomesoplenty_willow.put(Strings.LEAVES, "<BiomesOPlenty.Willow Leaves ID>");
-        configBlockList.put("biomesoplenty_willow", biomesoplenty_willow);
-        
-        HashMap<String, String> divinerpg_eucalyptus = new HashMap<String, String>();
-        divinerpg_eucalyptus.put(Strings.LOGS, "<DivineRPG.eucalyptus>");
-        divinerpg_eucalyptus.put(Strings.LEAVES, "18"); // not sure on this? haven't found any of them yet and no sapling
-        configBlockList.put("divinerpg_eucalyptus", divinerpg_eucalyptus);
-        
-        HashMap<String, String> ebxl_redwoods = new HashMap<String, String>();
-        ebxl_redwoods.put(Strings.LOGS, "<ExtrabiomesXL.quarterlog0.id>,0; <ExtrabiomesXL.quarterlog1.id>,0; <ExtrabiomesXL.quarterlog2.id>,0; " +
-                "<ExtrabiomesXL.quarterlog3.id>,0");
-        ebxl_redwoods.put(Strings.LEAVES, "<ExtrabiomesXL.greenleaves.id>,1");
-        configBlockList.put("ebxl_redwoods", ebxl_redwoods);
-        
-        HashMap<String, String> ebxl_firs = new HashMap<String, String>();
-        ebxl_firs.put(Strings.LOGS, "<ExtrabiomesXL.customlog.id>,0; <ExtrabiomesXL.quarterlog0.id>,1; <ExtrabiomesXL.quarterlog1.id>,1; " +
-                "<ExtrabiomesXL.quarterlog2.id>,1; <ExtrabiomesXL.quarterlog3.id>,1");
-        ebxl_firs.put(Strings.LEAVES, "<ExtrabiomesXL.greenleaves.id>,0");
-        configBlockList.put("ebxl_firs", ebxl_firs);
-        
-        HashMap<String, String> ebxl_acacia = new HashMap<String, String>();
-        ebxl_acacia.put(Strings.LOGS, "<ExtrabiomesXL.customlog.id>,1");
-        ebxl_acacia.put(Strings.LEAVES, "<ExtrabiomesXL.greenleaves.id>,2");
-        configBlockList.put("ebxl_acacia", ebxl_acacia);
-        
-        HashMap<String, String> forestry_larch = new HashMap<String, String>();
-        forestry_larch.put(Strings.LOGS, "<Forestry.log1>,0; <Forestry.log1>,4; <Forestry.log1>,8");
-        forestry_larch.put(Strings.LEAVES, "<Forestry.leaves>,0; <Forestry.leaves>,8");
-        configBlockList.put("forestry_larch", forestry_larch);
-        
-        HashMap<String, String> forestry_teak = new HashMap<String, String>();
-        forestry_teak.put(Strings.LOGS, "<Forestry.log1>,1; <Forestry.log1>,5; <Forestry.log1>,9");
-        forestry_teak.put(Strings.LEAVES, "<Forestry.leaves>,0; <Forestry.leaves>,8");
-        configBlockList.put("forestry_teak", forestry_teak);
-        
-        HashMap<String, String> forestry_acacia = new HashMap<String, String>();
-        forestry_acacia.put(Strings.LOGS, "<Forestry.log1>,2; <Forestry.log1>,6; <Forestry.log1>,10");
-        forestry_acacia.put(Strings.LEAVES, "<Forestry.leaves>,0; <Forestry.leaves>,8");
-        configBlockList.put("forestry_acacia", forestry_acacia);
-        
-        HashMap<String, String> forestry_lime = new HashMap<String, String>();
-        forestry_lime.put(Strings.LOGS, "<Forestry.log1>,3; <Forestry.log1>,7; <Forestry.log1>,11");
-        forestry_lime.put(Strings.LEAVES, "<Forestry.leaves>,0; <Forestry.leaves>,8");
-        configBlockList.put("forestry_lime", forestry_lime);
-        
-        HashMap<String, String> forestry_chestnut = new HashMap<String, String>();
-        forestry_chestnut.put(Strings.LOGS, "<Forestry.log2>,0; <Forestry.log2>,4; <Forestry.log2>,8");
-        forestry_chestnut.put(Strings.LEAVES, "<Forestry.leaves>,0; <Forestry.leaves>,8");
-        configBlockList.put("forestry_chestnut", forestry_chestnut);
-        
-        HashMap<String, String> forestry_wenge = new HashMap<String, String>();
-        forestry_wenge.put(Strings.LOGS, "<Forestry.log2>,1; <Forestry.log2>,5; <Forestry.log2>,9");
-        forestry_wenge.put(Strings.LEAVES, "<Forestry.leaves>,0; <Forestry.leaves>,8");
-        configBlockList.put("forestry_wenge", forestry_wenge);
-        
-        HashMap<String, String> forestry_baobab = new HashMap<String, String>();
-        forestry_baobab.put(Strings.LOGS, "<Forestry.log2>,2; <Forestry.log2>,6; <Forestry.log2>,10");
-        forestry_baobab.put(Strings.LEAVES, "<Forestry.leaves>,0; <Forestry.leaves>,8");
-        configBlockList.put("forestry_baobab", forestry_baobab);
-        
-        HashMap<String, String> forestry_sequoia = new HashMap<String, String>();
-        forestry_sequoia.put(Strings.LOGS, "<Forestry.log2>,3; <Forestry.log2>,7; <Forestry.log2>,11");
-        forestry_sequoia.put(Strings.LEAVES, "<Forestry.leaves>,0; <Forestry.leaves>,8");
-        configBlockList.put("forestry_sequoia", forestry_sequoia);
-        
-        HashMap<String, String> forestry_kapok = new HashMap<String, String>();
-        forestry_kapok.put(Strings.LOGS, "<Forestry.log3>,0; <Forestry.log3>,4; <Forestry.log3>,8");
-        forestry_kapok.put(Strings.LEAVES, "<Forestry.leaves>,0; <Forestry.leaves>,8");
-        configBlockList.put("forestry_kapok", forestry_kapok);
-        
-        HashMap<String, String> forestry_ebony = new HashMap<String, String>();
-        forestry_ebony.put(Strings.LOGS, "<Forestry.log3>,1; <Forestry.log3>,5; <Forestry.log3>,9");
-        forestry_ebony.put(Strings.LEAVES, "<Forestry.leaves>,0; <Forestry.leaves>,8");
-        configBlockList.put("forestry_ebony", forestry_ebony);
-        
-        HashMap<String, String> forestry_mahogany = new HashMap<String, String>();
-        forestry_mahogany.put(Strings.LOGS, "<Forestry.log3>,2; <Forestry.log3>,6; <Forestry.log3>,10");
-        forestry_mahogany.put(Strings.LEAVES, "<Forestry.leaves>,0; <Forestry.leaves>,8");
-        configBlockList.put("forestry_mahogany", forestry_mahogany);
-        
-        HashMap<String, String> forestry_balsa = new HashMap<String, String>();
-        forestry_balsa.put(Strings.LOGS, "<Forestry.log3>,3; <Forestry.log3>,7; <Forestry.log3>,11");
-        forestry_balsa.put(Strings.LEAVES, "<Forestry.leaves>,0; <Forestry.leaves>,8");
-        configBlockList.put("forestry_balsa", forestry_balsa);
-        
-        HashMap<String, String> forestry_willow = new HashMap<String, String>();
-        forestry_willow.put(Strings.LOGS, "<Forestry.log4>,0; <Forestry.log4>,4; <Forestry.log4>,8");
-        forestry_willow.put(Strings.LEAVES, "<Forestry.leaves>,0; <Forestry.leaves>,8");
-        configBlockList.put("forestry_willow", forestry_willow);
-        
-        HashMap<String, String> forestry_walnut = new HashMap<String, String>();
-        forestry_walnut.put(Strings.LOGS, "<Forestry.log4>,1; <Forestry.log4>,5; <Forestry.log4>,9");
-        forestry_walnut.put(Strings.LEAVES, "<Forestry.leaves>,0; <Forestry.leaves>,8");
-        configBlockList.put("forestry_walnut", forestry_walnut);
-        
-        HashMap<String, String> forestry_boojum = new HashMap<String, String>();
-        forestry_boojum.put(Strings.LOGS, "<Forestry.log4>,2; <Forestry.log4>,6; <Forestry.log4>,10");
-        forestry_boojum.put(Strings.LEAVES, "<Forestry.leaves>,0; <Forestry.leaves>,8");
-        configBlockList.put("forestry_boojum", forestry_boojum);
-        
-        HashMap<String, String> forestry_cherry = new HashMap<String, String>();
-        forestry_cherry.put(Strings.LOGS, "<Forestry.log4>,3; <Forestry.log4>,7; <Forestry.log4>,11");
-        forestry_cherry.put(Strings.LEAVES, "<Forestry.leaves>,0; <Forestry.leaves>,8");
-        configBlockList.put("forestry_cherry", forestry_cherry);
-        
-        HashMap<String, String> ic2_rubber = new HashMap<String, String>();
-        ic2_rubber.put(Strings.LOGS, "<IC2.blockRubWood>");
-        ic2_rubber.put(Strings.LEAVES, "<IC2.blockRubLeaves>");
-        configBlockList.put("ic2_rubber", ic2_rubber);
-        
-        HashMap<String, String> inficraft_bloodwood = new HashMap<String, String>();
-        inficraft_bloodwood.put(Strings.LOGS, "<Flora Trees.Bloodwood Block>");
-        inficraft_bloodwood.put(Strings.LEAVES, "<Flora Trees.Sakura Leaves>,2");
-        configBlockList.put("inficraft_bloodwood", inficraft_bloodwood);
-        
-        HashMap<String, String> inficraft_eucalyptus = new HashMap<String, String>();
-        inficraft_eucalyptus.put(Strings.LOGS, "<Flora Trees.Wood Block>,0; <Flora Trees.Wood Block>,4; <Flora Trees.Wood Block>,8");
-        inficraft_eucalyptus.put(Strings.LEAVES, "<Flora Trees.Flora Leaves>,1");
-        configBlockList.put("inficraft_eucalyptus", inficraft_eucalyptus);
-        
-        HashMap<String, String> inficraft_ghostwood = new HashMap<String, String>();
-        inficraft_ghostwood.put(Strings.LOGS, "<Flora Trees.Wood Block>,2; <Flora Trees.Wood Block>, 6; <Flora Trees.Wood Block>, 10");
-        inficraft_ghostwood.put(Strings.LEAVES, "<Flora Trees.Sakura Leaves>,1");
-        configBlockList.put("inficraft_ghostwood", inficraft_ghostwood);
-        
-        HashMap<String, String> inficraft_hopseed = new HashMap<String, String>();
-        inficraft_hopseed.put(Strings.LOGS, "<Flora Trees.Wood Block>,3; <Flora Trees.Wood Block>, 7; <Flora Trees.Wood Block>, 11");
-        inficraft_hopseed.put(Strings.LEAVES, "<Flora Trees.Flora Leaves>,2");
-        configBlockList.put("inficraft_hopseed", inficraft_hopseed);
-        
-        HashMap<String, String> inficraft_redwood = new HashMap<String, String>();
-        inficraft_redwood.put(Strings.LOGS, "<Flora Trees.Redwood Block>");
-        inficraft_redwood.put(Strings.LEAVES, "<Flora Trees.Flora Leaves>,0");
-        configBlockList.put("inficraft_redwood", inficraft_redwood);
-        
-        HashMap<String, String> inficraft_sakura = new HashMap<String, String>();
-        inficraft_sakura.put(Strings.LOGS, "<Flora Trees.Wood Block>, 1; <Flora Trees.Wood Block>, 5; <Flora Trees.Wood Block>, 9");
-        inficraft_sakura.put(Strings.LEAVES, "<Flora Trees.Sakura Leaves>,0");
-        configBlockList.put("inficraft_sakura", inficraft_sakura);
-        
-        HashMap<String, String> mfr_rubber = new HashMap<String, String>();
-        mfr_rubber.put(Strings.LOGS, "<MFReloaded.ID.RubberWood>");
-        mfr_rubber.put(Strings.LEAVES, "<MFReloaded.ID.RubberLeaves>");
-        configBlockList.put("mfr_rubber", mfr_rubber);
-        
-        HashMap<String, String> rp2_rubber = new HashMap<String, String>();
-        rp2_rubber.put(Strings.LOGS, "<RedPowerWorld.log.id>");
-        rp2_rubber.put(Strings.LEAVES, "<RedPowerWorld.leaves.id>");
-        configBlockList.put("rp2_rubber", rp2_rubber);
-        
-        HashMap<String, String> thaum_greatwood = new HashMap<String, String>();
-        thaum_greatwood.put(Strings.LOGS, "<Thaumcraft.BlockMagicalLog>,0; <Thaumcraft.BlockMagicalLog>,4; <Thaumcraft.BlockMagicalLog>,8");
-        thaum_greatwood.put(Strings.LEAVES, "<Thaumcraft.BlockMagicalLeaves>,0; <Thaumcraft.BlockMagicalLeaves>,8");
-        configBlockList.put("thaum_greatwood", thaum_greatwood);
-        
-        HashMap<String, String> thaum_silverwood = new HashMap<String, String>();
-        thaum_silverwood.put(Strings.LOGS, "<Thaumcraft.BlockMagicalLog>,1; <Thaumcraft.BlockMagicalLog>,5; <Thaumcraft.BlockMagicalLog>,9");
-        thaum_silverwood.put(Strings.LEAVES, "<Thaumcraft.BlockMagicalLeaves>,1");
-        configBlockList.put("thaum_silverwood", thaum_silverwood);
-        
-        HashMap<String, String> twilight_oaks = new HashMap<String, String>();
-        twilight_oaks.put(Strings.LOGS, "<TwilightForest.Log>,0; <TwilightForest.Log>,4; <TwilightForest.Log>,8; <TwilightForest.Log>,12");
-        twilight_oaks.put(Strings.LEAVES, "<TwilightForest.Leaves>,0; <TwilightForest.Leaves>,3; <TwilightForest.Leaves>,8; <TwilightForest.Leaves>,11");
-        configBlockList.put("twilight_oaks", twilight_oaks);
-        
-        HashMap<String, String> twilight_canopy = new HashMap<String, String>();
-        twilight_canopy.put(Strings.LOGS, "<TwilightForest.Log>,1; <TwilightForest.Log>,5; <TwilightForest.Log>,9; <TwilightForest.Log>,13");
-        twilight_canopy.put(Strings.LEAVES, "<TwilightForest.Leaves>, 1; <TwilightForest.Leaves>,9");
-        configBlockList.put("twilight_canopy", twilight_canopy);
-        
-        HashMap<String, String> twilight_mangrove = new HashMap<String, String>();
-        twilight_mangrove.put(Strings.LOGS, "<TwilightForest.Log>,2; <TwilightForest.Log>,6; <TwilightForest.Log>,10; <TwilightForest.Log>,14");
-        twilight_mangrove.put(Strings.LEAVES, "<TwilightForest.Leaves>, 1; <TwilightForest.Leaves>,9");
-        configBlockList.put("twilight_mangrove", twilight_mangrove);
-        
-        HashMap<String, String> twilight_darkwood = new HashMap<String, String>();
-        twilight_darkwood.put(Strings.LOGS, "<TwilightForest.Log>,3; <TwilightForest.Log>,7; <TwilightForest.Log>,11;  <TwilightForest.Log>,15");
-        twilight_darkwood.put(Strings.LEAVES, "<TwilightForest.Hedge>,1");
-        configBlockList.put("twilight_darkwood", twilight_darkwood);
-        
-        HashMap<String, String> twilight_time = new HashMap<String, String>();
-        twilight_time.put(Strings.LOGS, "<TwilightForest.MagicLog>,0; <TwilightForest.Log>,4; <TwilightForest.Log>,8; <TwilightForest.MagicLog>,12");
-        twilight_time.put(Strings.LEAVES, "<TwilightForest.MagicLeaves>,0; <TwilightForest.MagicLeaves>,8");
-        configBlockList.put("twilight_time", twilight_time);
-        
-        HashMap<String, String> zapapple = new HashMap<String, String>();
-        zapapple.put(Strings.LOGS, "<ZapApples.zapAppleLogID>");
-        zapapple.put(Strings.LEAVES, "<ZapApples.zapAppleLeavesID>; <ZapApples.zapAppleFlowersID>");
-        configBlockList.put("zapapple", zapapple);
     }
     
     public static void debugString(String msg, Object... args)
@@ -610,17 +561,7 @@ public final class TreeCapitator
             logIDList.add(new BlockID(wood.blockID));
         }
         else
-        {
-            axeIDList = axeIDList + "; " +
-                    "<BiomesOPlenty.Muddy Axe ID>; " +
-                    "<IC2.itemToolBronzeAxe>; <IC2.itemToolChainsaw>; " +
-                    "<RedPowerWorld.axeRuby.id>; <RedPowerWorld.axeGreenSapphire.id>; <RedPowerWorld.axeSapphire.id>; " +
-                    "<Thaumcraft.Thaumaxe>; " +
-                    "<TwilightForest.IronwoodAxe>; <TwilightForest.SteeleafAxe>; <TwilightForest.MinotaurAxe>; " +
-                    "<DivineRPG.Bedrock Axe>; <DivineRPG.Crystal Axe>; <DivineRPG.Realmite Axe>; <DivineRPG.azuriteaxe>; <DivineRPG.corruptedaxe>; " +
-                    "<DivineRPG.denseaxe>; <DivineRPG.divineaxe>; <DivineRPG.donatoraxe>; <DivineRPG.energyaxe>; <DivineRPG.mythrilaxe>; " +
-                    "<DivineRPG.plasmaaxe>; <DivineRPG.serenityaxe>; <DivineRPG.twilightaxe>";
-        }
+        {}
     }
     
     public static boolean isLogBlock(BlockID blockID)

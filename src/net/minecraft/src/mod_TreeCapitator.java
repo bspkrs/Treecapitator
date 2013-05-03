@@ -9,6 +9,7 @@ import bspkrs.treecapitator.TreeRegistry;
 import bspkrs.treecapitator.fml.TreeCapitatorMod;
 import bspkrs.util.BSProp;
 import bspkrs.util.BSPropRegistry;
+import bspkrs.util.Const;
 import bspkrs.util.ModVersionChecker;
 
 public class mod_TreeCapitator extends BaseMod
@@ -58,7 +59,7 @@ public class mod_TreeCapitator extends BaseMod
     public static boolean     allowSmartTreeDetection    = TreeCapitator.allowSmartTreeDetection;
     
     private ModVersionChecker versionChecker;
-    private final String      versionURL                 = "http://bspk.rs/Minecraft/1.5.1/treeCapitator.version";
+    private final String      versionURL                 = "http://bspk.rs/Minecraft/" + Const.MCVERSION + "/treeCapitator.version";
     private final String      mcfTopic                   = "http://www.minecraftforum.net/topic/1009577-";
     private boolean           isForgeDetected;
     
@@ -76,7 +77,7 @@ public class mod_TreeCapitator extends BaseMod
     @Override
     public String getVersion()
     {
-        return "ML " + TreeCapitator.VERSION_NUMBER;
+        return "ML " + Strings.VERSION_NUMBER;
     }
     
     @Override

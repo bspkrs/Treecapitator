@@ -2,6 +2,7 @@ package bspkrs.treecapitator.fml.asm;
 
 import java.util.Map;
 
+import bspkrs.util.Const;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.MCVersion;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
@@ -10,7 +11,7 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
  * Don't let any access transformer stuff accidentally modify our classes. A list of package prefixes for FML to ignore
  */
 @TransformerExclusions({ "bspkrs.treecapitator.fml.asm" })
-@MCVersion(value = "1.5.1")
+@MCVersion(value = Const.MCVERSION)
 public class TreeCapitatorCorePlugin implements IFMLLoadingPlugin
 {
     @Override
