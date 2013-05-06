@@ -11,11 +11,8 @@ public class EnchantmentTreecapitating extends Enchantment
         super(par1, par2, EnumEnchantmentType.digger);
     }
     
-    /*
-     * canEnchantItem(ItemStack itemStack)
-     */
     @Override
-    public boolean func_92089_a(ItemStack itemStack)
+    public boolean canApply(ItemStack itemStack)
     {
         return itemStack.isItemEnchantable() && TreeCapitator.isAxeItem(itemStack);
     }
@@ -23,7 +20,7 @@ public class EnchantmentTreecapitating extends Enchantment
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack itemStack)
     {
-        return this.type.canEnchantItem(itemStack.getItem());
+        return type.canEnchantItem(itemStack.getItem());
     }
     
     @Override

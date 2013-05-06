@@ -2,6 +2,7 @@ package bspkrs.treecapitator;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class ThirdPartyModConfig
 {
@@ -12,7 +13,7 @@ public class ThirdPartyModConfig
     private boolean                           shiftIndex;
     private Map<String, ConfigTreeDefinition> configTreesMap;
     private Map<String, TreeDefinition>       treesMap;
-    private Map<String, Integer>              tagMap;
+    private Map<String, String>               tagMap;
     
     public ThirdPartyModConfig(String modID, String configPath, String blockKeys, String itemKeys, boolean shiftIndex)
     {
@@ -24,15 +25,34 @@ public class ThirdPartyModConfig
         
         configTreesMap = new HashMap<String, ConfigTreeDefinition>();
         treesMap = new HashMap<String, TreeDefinition>();
-        tagMap = new HashMap<String, Integer>();
+        tagMap = new HashMap<String, String>();
     }
     
-    public ThirdPartyModConfig setTagMap(Map<String, Integer> newTagMap)
+    public ThirdPartyModConfig setTagMap(Map<String, String> newTagMap)
     {
-        this.tagMap.clear();
-        this.tagMap.putAll(newTagMap);
+        tagMap.clear();
+        tagMap.putAll(newTagMap);
         
         return this;
+    }
+    
+    public void populateTreeDefsFromConfig()
+    {
+        for (Entry<String, ConfigTreeDefinition> e : configTreesMap.entrySet())
+        {
+            String key = e.getKey();
+            ConfigTreeDefinition ctd = e.getValue();
+            
+            for (String logs : ctd.getConfigLogList());
+        }
+    }
+    
+    public String replaceThirdPartyBlockTags(String input)
+    {
+        for (String tag : tagMap.keySet())
+            input = input.replace(tag, tagMap.get(tag));
+        
+        return input;
     }
     
     public ThirdPartyModConfig addConfigTreeDef(String key, ConfigTreeDefinition tree)
@@ -50,7 +70,7 @@ public class ThirdPartyModConfig
         if (!treesMap.containsKey(key))
             treesMap.put(key, tree);
         else
-            TCLog.warning("Mod %s attempted to add two tree definitions with the same name: %s", modID, key);
+            TCLog.warning("Mod %s attempted to add two tree definitions with the same id: %s", modID, key);
         
         return this;
     }

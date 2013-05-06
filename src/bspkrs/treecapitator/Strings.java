@@ -13,7 +13,9 @@ public class Strings
     public static final String MUSH_RED              = "vanilla_huge_red_mushroom";
     
     public static final String LOGS                  = "logs";
+    public static final String LOG_VALS              = "logValues";
     public static final String LEAVES                = "leaves";
+    public static final String LEAF_VALS             = "leafValues";
     public static final String MOD_ID                = "modID";
     public static final String CONFIG_PATH           = "configPath";
     public static final String BLOCK_VALUES          = "blockValues";
