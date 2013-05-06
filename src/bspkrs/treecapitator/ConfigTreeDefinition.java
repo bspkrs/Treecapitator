@@ -3,6 +3,8 @@ package bspkrs.treecapitator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import net.minecraft.nbt.NBTTagCompound;
 import bspkrs.util.BlockID;
@@ -31,7 +33,23 @@ public class ConfigTreeDefinition extends TreeDefinition
         leafKeys = Arrays.asList(configLeaves.split(";"));
     }
     
+    public TreeDefinition getTagsReplacedTreeDef(Map<String, String> tagMap)
+    {
+        logBlocks = new ArrayList<BlockID>();
+        leafBlocks = new ArrayList<BlockID>();
+        for (Entry<String, String> e : tagMap.entrySet())
+        {
+            for (String logID : logKeys)
+                super.addLogID(new BlockID(logID.replace(e.getKey(), e.getValue())));
+            for (String leafID : leafKeys)
+                super.addLeafID(new BlockID(leafID.replace(e.getKey(), e.getValue())));
+        }
+        
+        return this;
+    }
+    
     @Override
+    // TODO: fix this up
     public boolean equals(Object o)
     {
         if (!(o instanceof ConfigTreeDefinition))
@@ -46,6 +64,7 @@ public class ConfigTreeDefinition extends TreeDefinition
     }
     
     @Override
+    // TODO: fix this up
     public int hashCode()
     {
         int result = 23;
@@ -62,10 +81,13 @@ public class ConfigTreeDefinition extends TreeDefinition
         logKeys = new ArrayList<String>();
         leafKeys = new ArrayList<String>();
         
-        String logValues = treeDefNBT.getString(Strings.LOG_VALS);
-        
-        for (String s : logValues.split(";"))
-            logKeys.add(s.trim());
+        if (treeDefNBT.hasKey(Strings.LOG_VALS))
+        {
+            String logValues = treeDefNBT.getString(Strings.LOG_VALS);
+            
+            for (String s : logValues.split(";"))
+                logKeys.add(s.trim());
+        }
         
         if (treeDefNBT.hasKey(Strings.LEAF_VALS))
         {

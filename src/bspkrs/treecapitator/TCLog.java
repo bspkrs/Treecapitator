@@ -52,4 +52,10 @@ public enum TCLog
     {
         getLogger().log(level, String.format(format, data));
     }
+    
+    public static void debug(String format, Object... args)
+    {
+        if (TreeCapitator.allowDebugLogging)
+            TCLog.info("[DEBUG] " + format, args);
+    }
 }

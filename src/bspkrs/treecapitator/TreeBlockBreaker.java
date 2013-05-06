@@ -58,7 +58,7 @@ public class TreeBlockBreaker
     {
         if (!isBreakingEnabled(entityPlayer))
         {
-            TreeCapitator.debugString("Chopping disabled due to player state or gamemode.");
+            TCLog.debug("Chopping disabled due to player state or gamemode.");
             return false;
         }
         
@@ -70,14 +70,14 @@ public class TreeBlockBreaker
                         && (axe.isItemStackDamageable() && (axe.getMaxDamage() - axe.getItemDamage() <= TreeCapitator.damageMultiplier))
                         && !TreeCapitator.allowMoreBlocksThanDamage)
                 {
-                    TreeCapitator.debugString("Chopping disabled due to axe durability.");
+                    TCLog.debug("Chopping disabled due to axe durability.");
                     return false;
                 }
                 
                 return true;
             }
             else
-                TreeCapitator.debugString("Player does not have an axe equipped.");
+                TCLog.debug("Player does not have an axe equipped.");
         return false;
     }
     
@@ -91,7 +91,7 @@ public class TreeBlockBreaker
     
     public void onBlockHarvested(World world, int x, int y, int z, int md, EntityPlayer entityPlayer)
     {
-        TreeCapitator.debugString("In TreeBlockBreaker.onBlockHarvested() " + x + ", " + y + ", " + z);
+        TCLog.debug("In TreeBlockBreaker.onBlockHarvested() " + x + ", " + y + ", " + z);
         player = entityPlayer;
         startPos = new Coord(x, y, z);
         
@@ -104,17 +104,17 @@ public class TreeBlockBreaker
                 {
                     if (isAxeItemEquipped() || !TreeCapitator.needItem)
                     {
-                        TreeCapitator.debugString("Proceeding to chop tree...");
+                        TCLog.debug("Proceeding to chop tree...");
                         List<Coord> listFinal = new ArrayList<Coord>();
-                        TreeCapitator.debugString("Finding log blocks...");
+                        TCLog.debug("Finding log blocks...");
                         List<Coord> logs = addLogs(world, new Coord(x, y, z));
                         addLogsAbove(world, new Coord(x, y, z), listFinal);
                         
-                        TreeCapitator.debugString("Destroying log blocks...");
+                        TCLog.debug("Destroying log blocks...");
                         destroyBlocks(world, logs);
                         if (TreeCapitator.destroyLeaves && leafList.size() != 0)
                         {
-                            TreeCapitator.debugString("Finding leaf blocks...");
+                            TCLog.debug("Finding leaf blocks...");
                             for (Coord pos : listFinal)
                             {
                                 List<Coord> leaves = addLeaves(world, pos);
@@ -146,16 +146,16 @@ public class TreeBlockBreaker
                         }
                     }
                     else
-                        TreeCapitator.debugString("Axe item is not equipped.");
+                        TCLog.debug("Axe item is not equipped.");
                 }
                 else
-                    TreeCapitator.debugString("Could not identify tree.");
+                    TCLog.debug("Could not identify tree.");
             }
             else
-                TreeCapitator.debugString("Tree Chopping is disabled due to player state or gamemode.");
+                TCLog.debug("Tree Chopping is disabled due to player state or gamemode.");
         }
         else
-            TreeCapitator.debugString("World is remote, exiting TreeBlockBreaker.");
+            TCLog.debug("World is remote, exiting TreeBlockBreaker.");
     }
     
     /**
@@ -179,13 +179,13 @@ public class TreeBlockBreaker
         while (logList.contains(new BlockID(world, pos.x, pos.y + 1, pos.z)))
             pos.y++;
         
-        TreeCapitator.debugString("Top Log: " + pos.x + ", " + pos.y + ", " + pos.z);
+        TCLog.debug("Top Log: " + pos.x + ", " + pos.y + ", " + pos.z);
         return pos;
     }
     
     private boolean hasXLeavesInDist(World world, Coord pos, int range, int limit)
     {
-        TreeCapitator.debugString("Attempting to identify tree...");
+        TCLog.debug("Attempting to identify tree...");
         int i = 0;
         for (int x = -range; x <= range; x++)
             /* lower bound kept at -1 */
@@ -196,16 +196,16 @@ public class TreeBlockBreaker
                         BlockID blockID = new BlockID(world, pos.x + x, pos.y + y, pos.z + z);
                         if (isLeafBlock(blockID))
                         {
-                            TreeCapitator.debugString("Found leaf block: %s", blockID);
+                            TCLog.debug("Found leaf block: %s", blockID);
                             i++;
                             if (i >= limit)
                                 return true;
                         }
                         else
-                            TreeCapitator.debugString("Not a leaf block: %s", blockID);
+                            TCLog.debug("Not a leaf block: %s", blockID);
                     }
         
-        TreeCapitator.debugString("Number of leaf blocks is less than the limit. Found: %s", i);
+        TCLog.debug("Number of leaf blocks is less than the limit. Found: %s", i);
         return false;
     }
     
@@ -220,14 +220,14 @@ public class TreeBlockBreaker
                         BlockID blockID = new BlockID(world, pos.x + x, pos.y + y, pos.z + z);
                         if (isLeafBlock(blockID))
                         {
-                            TreeCapitator.debugString("Found leaf block: %s", blockID);
+                            TCLog.debug("Found leaf block: %s", blockID);
                             i++;
                         }
                         else
-                            TreeCapitator.debugString("Not a leaf block: %s", blockID);
+                            TCLog.debug("Not a leaf block: %s", blockID);
                     }
         
-        TreeCapitator.debugString("Leaves within " + range + " blocks of " + pos.x + ", " + pos.y + ", " + pos.z + " : " + i);
+        TCLog.debug("Leaves within " + range + " blocks of " + pos.x + ", " + pos.y + ", " + pos.z + " : " + i);
         return i;
     }
     
@@ -314,7 +314,7 @@ public class TreeBlockBreaker
     
     private void destroyBlocksWithChance(World world, List<Coord> list, float f, boolean canShear)
     {
-        TreeCapitator.debugString("Breaking identified blocks...");
+        TCLog.debug("Breaking identified blocks...");
         while (list.size() > 0)
         {
             Coord pos = list.remove(0);

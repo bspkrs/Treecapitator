@@ -13,13 +13,18 @@ import net.minecraft.item.ItemMultiTextureTile;
 import net.minecraft.item.ItemStack;
 import bspkrs.util.BlockID;
 import bspkrs.util.CommonUtils;
+import bspkrs.util.Const;
 import bspkrs.util.Coord;
 
 public final class TreeCapitator
 {
+    
+    public final static String                         idResolverModIDDesc                = "The mod ID value for ID Resolver.";
+    public static String                               idResolverModID                    = "IDResolver";
     public final static String                         remoteTreeConfigURLDesc            = "Incomplete - do not use";
     // "Leave this URL as is to get the latest tree definitions from my master list.\nFeel free to start your own remote list to share with your friends or send your suggestions to me for the master list!";
-    public static String                               remoteTreeConfigURL                = "http://bspk.rs/Minecraft/1.5.1/treeCapitatorTreeConfig.txt";
+    @Deprecated
+    public static String                               remoteTreeConfigURL                = "http://bspk.rs/Minecraft/" + Const.MCVERSION + "/treeCapitatorTreeConfig.txt";
     public final static String                         remoteBlockIDConfigDesc            = "Incomplete - do not use";
     // "Values downloaded from: " + remoteTreeConfigURL;
     public static String                               remoteBlockIDConfig                = "";
@@ -27,9 +32,11 @@ public final class TreeCapitator
     public static String                               localBlockIDList                   = "";
     public final static String                         useRemoteTreeConfigDesc            = "Incomplete - do not use";
     // "Set to true to use the remote block ID list (must also set allowGetOnlineTreeConfig to true), false to use local config.";
+    @Deprecated
     public static boolean                              useRemoteTreeConfig                = false;
     public final static String                         allowGetRemoteTreeConfigDesc       = "Incomplete - do not use";
     // "Set to true to allow TreeCapitator to retrieve the remote block ID list, false to disable.";
+    @Deprecated
     public static boolean                              allowGetRemoteTreeConfig           = false;
     
     public final static String                         enableEnchantmentModeDesc          = "Toggle for whether or not to use the Treecapitating enchantment as opposed to requiring an item to be in the axeIDList to chop a tree.";
@@ -109,15 +116,23 @@ public final class TreeCapitator
     public static boolean                              isForge                            = false;
     public static Block                                wood;
     
+    @Deprecated
     public static ArrayList<BlockID>                   logIDList                          = new ArrayList<BlockID>();
+    @Deprecated
     public static ArrayList<BlockID>                   leafIDList                         = new ArrayList<BlockID>();
+    @Deprecated
     public static Map<BlockID, ArrayList<BlockID>>     logToLeafListMap                   = new HashMap<BlockID, ArrayList<BlockID>>();
+    @Deprecated
     public static Map<BlockID, ArrayList<BlockID>>     logToLogListMap                    = new HashMap<BlockID, ArrayList<BlockID>>();
+    @Deprecated
     public static Map<String, HashMap<String, String>> configBlockList                    = new HashMap<String, HashMap<String, String>>();
+    @Deprecated
     public static Map<String, HashMap<String, String>> thirdPartyConfig                   = new HashMap<String, HashMap<String, String>>();
+    @Deprecated
     public static Map<String, String>                  tagMap                             = new HashMap<String, String>();
     public static ArrayList<Coord>                     blocksBeingChopped                 = new ArrayList<Coord>();
     
+    // TODO: write a new config category description
     public static final String                         configBlockIDDesc                  = "Add the log and leaf block IDs for all trees you want to be able to chop down.\n" +
                                                                                                   "Each section below represents a type of tree.  Each list may contain block IDs\n" +
                                                                                                   "and/or third-party config replacement tags. You can change it to be more or\n" +
@@ -167,6 +182,7 @@ public final class TreeCapitator
                                                                                                   "        S:Strings.LOGS=<ExtrabiomesXL.quarterlog0.id>,0; <ExtrabiomesXL.quarterlog1.id>,0; <ExtrabiomesXL.quarterlog2.id>,0; <ExtrabiomesXL.quarterlog3.id>,0\n" +
                                                                                                   "    }";
     
+    // TODO: write a new config category description
     public static final String                         thirdPartyConfigDesc               = "Third-Party config entries tell TreeCapitator how to find the block IDs from\n" +
                                                                                                   "other mods' config files.  These values are case-sensitive!\n\n" +
                                                                                                   "Format:\n" +
@@ -511,12 +527,6 @@ public final class TreeCapitator
          */
     }
     
-    public static void debugString(String msg, Object... args)
-    {
-        if (allowDebugLogging)
-            TCLog.info("[DEBUG] " + msg, args);
-    }
-    
     public static String replaceThirdPartyBlockTags(String input)
     {
         for (String tag : tagMap.keySet())
@@ -564,6 +574,7 @@ public final class TreeCapitator
         {}
     }
     
+    @Deprecated
     public static boolean isLogBlock(BlockID blockID)
     {
         return logIDList.contains(blockID);
@@ -574,6 +585,7 @@ public final class TreeCapitator
         return itemStack != null && itemStack.stackSize > 0 && CommonUtils.isItemInList(itemStack.itemID, itemStack.getItemDamage(), TreeCapitator.axeIDList);
     }
     
+    @Deprecated
     public static String getStringFromConfigBlockList()
     {
         String list = "";
@@ -582,6 +594,7 @@ public final class TreeCapitator
         return replaceThirdPartyBlockTags(list.replaceFirst(" ! ", ""));
     }
     
+    @Deprecated
     public static String getStringFromParsedLists()
     {
         String list = "";
@@ -614,6 +627,7 @@ public final class TreeCapitator
         return list.replaceFirst(" ! ", "");
     }
     
+    @Deprecated
     public static void parseConfigBlockList(String list)
     {
         logIDList = new ArrayList<BlockID>();
@@ -621,7 +635,7 @@ public final class TreeCapitator
         logToLogListMap = new HashMap<BlockID, ArrayList<BlockID>>();
         logToLeafListMap = new HashMap<BlockID, ArrayList<BlockID>>();
         
-        debugString("Parsing Tree Block Config string: %s", list);
+        TCLog.debug("Parsing Tree Block Config string: %s", list);
         
         if (list.trim().length() > 0)
         {
@@ -630,7 +644,7 @@ public final class TreeCapitator
             {
                 if (entry.trim().length() > 0)
                 {
-                    TreeCapitator.debugString("  Parsing Tree entry: %s", entry);
+                    TCLog.debug("  Parsing Tree entry: %s", entry);
                     if (entry.trim().length() > 0)
                     {
                         String[] blockTypes = entry.trim().split("\\|");
@@ -639,13 +653,13 @@ public final class TreeCapitator
                         ArrayList<BlockID> logIDs = new ArrayList<BlockID>();
                         String[] logBlocks = blockTypes[0].trim().split(";");
                         
-                        TreeCapitator.debugString("    Found log ID list: %s", blockTypes[0].trim());
+                        TCLog.debug("    Found log ID list: %s", blockTypes[0].trim());
                         
                         for (String logBlockStr : logBlocks)
                         {
                             String[] logBlock = logBlockStr.trim().split(",");
                             
-                            TreeCapitator.debugString("    Found log ID: %s", logBlockStr);
+                            TCLog.debug("    Found log ID: %s", logBlockStr);
                             int blockID = CommonUtils.parseInt(logBlock[0].trim(), -1);
                             
                             if (blockID != -1)
@@ -654,7 +668,7 @@ public final class TreeCapitator
                                 
                                 if (logBlock.length > 1)
                                     metadata = CommonUtils.parseInt(logBlock[1].trim(), -1);
-                                TreeCapitator.debugString("    ++Configured log: %s, %s", blockID, metadata);
+                                TCLog.debug("    ++Configured log: %s, %s", blockID, metadata);
                                 
                                 BlockID logID = new BlockID(blockID, metadata);
                                 if (!logIDList.contains(logID))
@@ -664,7 +678,7 @@ public final class TreeCapitator
                                 }
                             }
                             else
-                                TreeCapitator.debugString("Block ID %s could not be parsed as an integer.  Ignoring entry.", logBlock[0].trim());
+                                TCLog.debug("Block ID %s could not be parsed as an integer.  Ignoring entry.", logBlock[0].trim());
                         }
                         
                         for (BlockID logID : logIDs)
@@ -677,13 +691,13 @@ public final class TreeCapitator
                         {
                             String[] leafBlocks = blockTypes[1].trim().split(";");
                             
-                            TreeCapitator.debugString("    Found leaf ID list: %s", blockTypes[1].trim());
+                            TCLog.debug("    Found leaf ID list: %s", blockTypes[1].trim());
                             
                             for (String block : leafBlocks)
                             {
                                 if (block.trim().length() > 0)
                                 {
-                                    TreeCapitator.debugString("    Found leaf ID: %s", block.trim());
+                                    TCLog.debug("    Found leaf ID: %s", block.trim());
                                     String[] leafBlock = block.trim().split(",");
                                     int blockID = CommonUtils.parseInt(leafBlock[0].trim(), -1);
                                     
@@ -694,7 +708,7 @@ public final class TreeCapitator
                                         if (leafBlock.length > 1)
                                             metadata = CommonUtils.parseInt(leafBlock[1].trim(), -1);
                                         
-                                        TreeCapitator.debugString("    ++Configured leaf: %s, %s", blockID, metadata);
+                                        TCLog.debug("    ++Configured leaf: %s, %s", blockID, metadata);
                                         
                                         BlockID leafID = new BlockID(blockID, metadata);
                                         if (!leafIDList.contains(leafID))
@@ -704,7 +718,7 @@ public final class TreeCapitator
                                             pairedLeaves.add(leafID);
                                     }
                                     else
-                                        TreeCapitator.debugString("Block ID %s could not be parsed as an integer.  Ignoring entry.", leafBlock[0].trim());
+                                        TCLog.debug("Block ID %s could not be parsed as an integer.  Ignoring entry.", leafBlock[0].trim());
                                 }
                             }
                         }

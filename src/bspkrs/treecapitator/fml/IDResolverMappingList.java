@@ -5,14 +5,85 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Properties;
+
+import sharose.mods.idresolver.IDResolverBasic;
+import bspkrs.treecapitator.TCLog;
+import bspkrs.treecapitator.TreeCapitator;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
 
 public class IDResolverMappingList implements List
 {
     private ArrayList<IDResolverMapping> list;
+    private static IDResolverMappingList instance;
     
-    public IDResolverMappingList()
+    public static IDResolverMappingList instance()
     {
+        if (instance == null)
+            new IDResolverMappingList();
+        
+        return instance;
+    }
+    
+    private IDResolverMappingList()
+    {
+        instance = this;
         list = new ArrayList<IDResolverMapping>();
+        init();
+    }
+    
+    private void init()
+    {
+        /*
+         * Get IDs from ID Resolver if it's loaded
+         */
+        if (Loader.instance().isModLoaded(TreeCapitator.idResolverModID))
+        {
+            TCLog.info("ID Resolver has been detected.  Processing ID config...");
+            
+            Properties idrKnownIDs = null;
+            
+            try
+            {
+                idrKnownIDs = ObfuscationReflectionHelper.getPrivateValue(IDResolverBasic.class, null, "knownIDs");
+            }
+            catch (Throwable e)
+            {
+                TCLog.debug("Error getting knownIDs from ID Resolver: %s", e.getMessage());
+                e.printStackTrace();
+            }
+            
+            if (idrKnownIDs != null)
+            {
+                for (String key : idrKnownIDs.stringPropertyNames())
+                {
+                    String value = idrKnownIDs.getProperty(key);
+                    try
+                    {
+                        if (!key.startsWith("ItemID.") && !key.startsWith("BlockID."))
+                            continue;
+                        
+                        IDResolverMapping mapping = new IDResolverMapping(key + "=" + value);
+                        
+                        if (mapping.oldID != 0 && mapping.newID != 0 && !mapping.isStaticMapping())
+                        {
+                            // IDs are not the same, add to the list of managed IDs
+                            add(mapping);
+                            TCLog.debug("Adding entry: %s", key + "=" + value);
+                        }
+                        else
+                            TCLog.debug("Ignoring entry: %s", key + "=" + value);
+                    }
+                    catch (Throwable e)
+                    {
+                        TCLog.severe("Exception caught for line: %s", key + "=" + value);
+                    }
+                }
+            }
+        }
+        else
+            TCLog.info("ID Resolver (Mod ID \"%s\") is not loaded.", TreeCapitator.idResolverModID);
     }
     
     public boolean hasMappingForModAndID(String className, int oldID)

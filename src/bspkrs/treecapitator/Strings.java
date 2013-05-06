@@ -24,7 +24,9 @@ public class Strings
     public static final String shearIDList           = "shearIDList";
     public static final String SHIFT_INDEX           = "useShiftedItemID";
     public static final String IDR_MOD_ID            = "idResolverModID";
+    @Deprecated
     public static final String TREE_BLOCK_CTGY       = "2_tree_definitions";
+    @Deprecated
     public static final String THIRD_PARTY_CFG_CTGY  = "1_third_party_configs";
     public static final String BLOCK_CTGY            = "block_settings";
     public static final String ITEM_CTGY             = "item_settings";

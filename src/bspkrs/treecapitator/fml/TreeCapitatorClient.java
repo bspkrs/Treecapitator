@@ -42,7 +42,7 @@ public class TreeCapitatorClient
     public void onServerConfigReceived(String blockIDList, String axeIDList, float logHardnessNormal, float logHardnessModified)
     {
         TreeCapitator.localBlockIDList = blockIDList;
-        TreeCapitator.debugString("Server sent block ID list: %s", blockIDList);
+        TCLog.debug("Server sent block ID list: %s", blockIDList);
         
         if (!FMLClientHandler.instance().getClient().isSingleplayer())
             TreeCapitator.parseConfigBlockList(TreeCapitator.localBlockIDList);

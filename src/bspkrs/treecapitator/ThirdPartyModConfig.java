@@ -1,8 +1,15 @@
 package bspkrs.treecapitator;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import bspkrs.treecapitator.fml.IDResolverMapping;
+import bspkrs.treecapitator.fml.IDResolverMappingList;
+import bspkrs.util.CommonUtils;
+import bspkrs.util.Configuration;
+import cpw.mods.fml.common.Loader;
 
 public class ThirdPartyModConfig
 {
@@ -25,34 +32,7 @@ public class ThirdPartyModConfig
         
         configTreesMap = new HashMap<String, ConfigTreeDefinition>();
         treesMap = new HashMap<String, TreeDefinition>();
-        tagMap = new HashMap<String, String>();
-    }
-    
-    public ThirdPartyModConfig setTagMap(Map<String, String> newTagMap)
-    {
-        tagMap.clear();
-        tagMap.putAll(newTagMap);
-        
-        return this;
-    }
-    
-    public void populateTreeDefsFromConfig()
-    {
-        for (Entry<String, ConfigTreeDefinition> e : configTreesMap.entrySet())
-        {
-            String key = e.getKey();
-            ConfigTreeDefinition ctd = e.getValue();
-            
-            for (String logs : ctd.getConfigLogList());
-        }
-    }
-    
-    public String replaceThirdPartyBlockTags(String input)
-    {
-        for (String tag : tagMap.keySet())
-            input = input.replace(tag, tagMap.get(tag));
-        
-        return input;
+        refreshReplacementTags();
     }
     
     public ThirdPartyModConfig addConfigTreeDef(String key, ConfigTreeDefinition tree)
@@ -93,5 +73,71 @@ public class ThirdPartyModConfig
     public boolean shiftIndex()
     {
         return shiftIndex;
+    }
+    
+    public void refreshTreeDefinitionsFromConfig()
+    {
+        treesMap.clear();
+        
+        for (Entry<String, ConfigTreeDefinition> e : configTreesMap.entrySet())
+            treesMap.put(e.getKey(), e.getValue().getTagsReplacedTreeDef(tagMap));
+    }
+    
+    private void refreshReplacementTags()
+    {
+        tagMap = new HashMap<String, String>();
+        
+        TCLog.debug("Processing Mod \"%s\" config file \"%s\"...", this.modID, this.configPath);
+        
+        if (Loader.instance().isModLoaded(this.modID))
+        {
+            File file = new File(Loader.instance().getConfigDir(), this.configPath.trim());
+            if (file.exists())
+            {
+                Configuration thirdPartyConfig = new Configuration(file);
+                String idrClassName = Loader.instance().getIndexedModList().get(this.modID).getMod().getClass().getName();
+                thirdPartyConfig.load();
+                getReplacementTagsForKeys(thirdPartyConfig, this.blockKeys, idrClassName, false);
+                getReplacementTagsForKeys(thirdPartyConfig, this.itemKeys, idrClassName, true);
+            }
+            else
+                TCLog.warning("Mod config file %s does not exist when processing Mod %s.", this.configPath, this.modID);
+        }
+        else
+            TCLog.debug("Mod " + this.modID + " is not loaded.");
+        
+    }
+    
+    private void getReplacementTagsForKeys(Configuration thirdPartyConfig, String keys, String idrClassName, boolean isItemList)
+    {
+        for (String configID : keys.trim().split(";"))
+        {
+            String[] subString = configID.trim().split(":");
+            String configValue = thirdPartyConfig.get(/* ctgy */subString[0].trim(), /* prop name */subString[1].trim(), 0).getString();
+            String tagID = "<" + subString[0].trim() + ":" + subString[1].trim() + ">";
+            
+            if (!tagMap.containsKey(tagID))
+            {
+                // TCLog.debug("configValue: %s", configValue);
+                IDResolverMapping mapping = IDResolverMappingList.instance().getMappingForModAndOldID(idrClassName, CommonUtils.parseInt(configValue));
+                
+                if (mapping != null)
+                    configValue = String.valueOf(mapping.newID);
+                // TCLog.debug("configValue: %s", configValue);
+                
+                if (isItemList && this.shiftIndex)
+                    configValue = String.valueOf(CommonUtils.parseInt(configValue, -256) + 256);
+                
+                // TCLog.debug("configValue: %s", configValue);
+                
+                if (!configValue.equals("0"))
+                {
+                    tagMap.put(tagID, configValue);
+                    TCLog.debug("Third Party Mod Config Tag %s will map to %s for mod %s", tagID, configValue, this.modID);
+                }
+            }
+            else
+                TCLog.warning("Duplicate Third Party Config Tag detected: " + tagID + " is already mapped to " + tagMap.get(tagID));
+        }
     }
 }
