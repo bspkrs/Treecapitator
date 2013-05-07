@@ -5,6 +5,8 @@ import bspkrs.util.Const;
 
 public class Strings
 {
+    public final static String VERSION_NUMBER        = Const.MCVERSION + ".r01";
+    
     public static final String OAK                   = "vanilla_oak";
     public static final String SPRUCE                = "vanilla_spruce";
     public static final String BIRCH                 = "vanilla_birch";
@@ -40,9 +42,10 @@ public class Strings
     public static final String maxLeafIDDist         = "maxLeafIDDist";
     public static final String maxLeafBreakDist      = "maxLeafBreakDist";
     public static final String minLeavesToID         = "minLeavesToID";
+    public static final String breakSpeedModifier    = "breakSpeedModifier";
     public static final String id                    = "id";
     public static final String metadata              = "metadata";
     
     public final static String maxBreakDistanceDesc  = "The maximum horizontal distance that the log breaking effect will travel (use -1 for no limit).";
-    public final static String VERSION_NUMBER        = Const.MCVERSION + ".r01";
+    
 }

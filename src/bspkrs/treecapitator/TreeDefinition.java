@@ -19,6 +19,7 @@ public class TreeDefinition
     protected int           maxLeafIDDist;
     protected int           maxLeafBreakDist;
     protected int           minLeavesToID;
+    protected float         breakSpeedModifier;
     
     public TreeDefinition()
     {
@@ -31,6 +32,7 @@ public class TreeDefinition
         maxLeafIDDist = TreeCapitator.maxLeafIDDist;
         maxLeafBreakDist = TreeCapitator.maxLeafBreakDist;
         minLeavesToID = TreeCapitator.minLeavesToID;
+        breakSpeedModifier = TreeCapitator.breakSpeedModifier;
     }
     
     public TreeDefinition(List<BlockID> logs, List<BlockID> leaves)
@@ -111,6 +113,8 @@ public class TreeDefinition
             maxLeafIDDist = toAdd.maxLeafIDDist;
         if (toAdd.minLeavesToID != TreeCapitator.minLeavesToID)
             minLeavesToID = toAdd.minLeavesToID;
+        if (toAdd.breakSpeedModifier != TreeCapitator.breakSpeedModifier)
+            breakSpeedModifier = toAdd.breakSpeedModifier;
         
         return this;
     }
@@ -129,6 +133,8 @@ public class TreeDefinition
             maxLeafIDDist = treeDefNBT.getInteger(Strings.maxLeafIDDist);
         if (treeDefNBT.hasKey(Strings.minLeavesToID))
             minLeavesToID = treeDefNBT.getInteger(Strings.minLeavesToID);
+        if (treeDefNBT.hasKey(Strings.breakSpeedModifier))
+            breakSpeedModifier = treeDefNBT.getFloat(Strings.breakSpeedModifier);
         
         logBlocks = new ArrayList<BlockID>();
         leafBlocks = new ArrayList<BlockID>();
@@ -163,6 +169,7 @@ public class TreeDefinition
         treeDefNBT.setInteger(Strings.maxLeafBreakDist, maxLeafBreakDist);
         treeDefNBT.setInteger(Strings.maxLeafIDDist, maxLeafIDDist);
         treeDefNBT.setInteger(Strings.minLeavesToID, minLeavesToID);
+        treeDefNBT.setFloat(Strings.breakSpeedModifier, breakSpeedModifier);
         
         NBTTagList logList = new NBTTagList();
         
@@ -228,6 +235,12 @@ public class TreeDefinition
         return this;
     }
     
+    public TreeDefinition setBreakSpeedModifier(float breakSpeedModifier)
+    {
+        this.breakSpeedModifier = breakSpeedModifier;
+        return this;
+    }
+    
     /**
      * Retrieves a copy of the list of logs in this TreeDefinition.
      * 
@@ -276,5 +289,10 @@ public class TreeDefinition
     public int minLeavesToID()
     {
         return minLeavesToID;
+    }
+    
+    public float breakSpeedModifier()
+    {
+        return breakSpeedModifier;
     }
 }

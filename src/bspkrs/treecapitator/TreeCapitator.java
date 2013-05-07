@@ -27,6 +27,7 @@ public final class TreeCapitator
     public static String                               remoteTreeConfigURL                = "http://bspk.rs/Minecraft/" + Const.MCVERSION + "/treeCapitatorTreeConfig.txt";
     public final static String                         remoteBlockIDConfigDesc            = "Incomplete - do not use";
     // "Values downloaded from: " + remoteTreeConfigURL;
+    @Deprecated
     public static String                               remoteBlockIDConfig                = "";
     public final static String                         localBlockIDListDesc               = "Automatically generated:";
     @Deprecated
@@ -63,10 +64,12 @@ public final class TreeCapitator
     public final static String                         shearIDListDesc                    = "IDs of items that when placed in the hotbar will allow leaves to be sheared when shearLeaves is true.\n" +
                                                                                                   "Use ',' to split item id from metadata and ';' to split items.";
     public static String                               shearIDList                        = Item.shears.itemID + "";
-    public final static String                         logHardnessNormalDesc              = "The hardness of Strings.LOGS for when you are using items that won't chop down the trees.";
+    public final static String                         logHardnessNormalDesc              = "The hardness of logs for when you are using items that won't chop down the trees.";
     public static float                                logHardnessNormal                  = 2.0F;
-    public final static String                         logHardnessModifiedDesc            = "The hardness of Strings.LOGS for when you are using items that can chop down trees.";
+    public final static String                         logHardnessModifiedDesc            = "The hardness of logs for when you are using items that can chop down trees.";
     public static float                                logHardnessModified                = 4.0F;
+    public final static String                         breakSpeedModifierDesc             = "When using an item that can chop trees, the break speed will by multiplied by this value.";
+    public static float                                breakSpeedModifier                 = 0.5F;
     public final static String                         disableInCreativeDesc              = "Flag to disable tree chopping in Creative mode";
     public static boolean                              disableInCreative                  = false;
     public final static String                         disableCreativeDropsDesc           = "Flag to disable drops in Creative mode";

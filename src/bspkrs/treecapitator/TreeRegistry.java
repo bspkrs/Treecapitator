@@ -37,7 +37,7 @@ public class TreeRegistry
         genericDefinition = new TreeDefinition();
         
         // Vanilla oak definition
-        treeDefs.put(Strings.OAK, (new TreeDefinition()).addLogID(new BlockID(17, 0)).addLogID(new BlockID(17, 4))
+        treeDefs.put(Strings.OAK, new TreeDefinition().addLogID(new BlockID(17, 0)).addLogID(new BlockID(17, 4))
                 .addLogID(new BlockID(17, 8)).addLogID(new BlockID(17, 12))
                 .addLeafID(new BlockID(18, 0)).addLeafID(new BlockID(18, 8)));
         for (BlockID log : treeDefs.get(Strings.OAK).getLogList())
@@ -80,7 +80,7 @@ public class TreeRegistry
                 .addLogID(new BlockID(17, 11)).addLogID(new BlockID(17, 15))
                 .addLeafID(new BlockID(18, 3)).addLeafID(new BlockID(18, 11))
                 .addLeafID(new BlockID(18, 0)).addLeafID(new BlockID(18, 8))
-                .setMaxLeafBreakDist(6)).setRequireLeafDecayCheck(false);
+                .setMaxLeafBreakDist(6).setRequireLeafDecayCheck(false));
         for (BlockID log : treeDefs.get(Strings.JUNGLE).getLogList())
         {
             masterLogList.add(log);
@@ -97,7 +97,7 @@ public class TreeRegistry
                 .addLeafID(new BlockID(99, 5)).addLeafID(new BlockID(99, 6))
                 .addLeafID(new BlockID(99, 7)).addLeafID(new BlockID(99, 8))
                 .addLeafID(new BlockID(99, 9)).addLeafID(new BlockID(99, 14))
-                .setMaxLeafBreakDist(6)).setRequireLeafDecayCheck(false);
+                .setMaxLeafBreakDist(6).setRequireLeafDecayCheck(false));
         for (BlockID log : treeDefs.get(Strings.MUSH_BROWN).getLogList())
         {
             masterLogList.add(log);
@@ -114,7 +114,7 @@ public class TreeRegistry
                 .addLeafID(new BlockID(100, 5)).addLeafID(new BlockID(100, 6))
                 .addLeafID(new BlockID(100, 7)).addLeafID(new BlockID(100, 8))
                 .addLeafID(new BlockID(100, 9)).addLeafID(new BlockID(100, 14))
-                .setMaxLeafBreakDist(6)).setRequireLeafDecayCheck(false);
+                .setMaxLeafBreakDist(6).setRequireLeafDecayCheck(false));
         for (BlockID log : treeDefs.get(Strings.MUSH_RED).getLogList())
         {
             masterLogList.add(log);
