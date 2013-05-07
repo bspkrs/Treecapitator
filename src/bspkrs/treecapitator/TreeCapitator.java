@@ -29,6 +29,7 @@ public final class TreeCapitator
     // "Values downloaded from: " + remoteTreeConfigURL;
     public static String                               remoteBlockIDConfig                = "";
     public final static String                         localBlockIDListDesc               = "Automatically generated:";
+    @Deprecated
     public static String                               localBlockIDList                   = "";
     public final static String                         useRemoteTreeConfigDesc            = "Incomplete - do not use";
     // "Set to true to use the remote block ID list (must also set allowGetOnlineTreeConfig to true), false to use local config.";

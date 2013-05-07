@@ -1,7 +1,6 @@
 package bspkrs.treecapitator;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -12,14 +11,14 @@ import bspkrs.util.HashCodeUtil;
 
 public class ConfigTreeDefinition extends TreeDefinition
 {
-    protected List<String> logKeys;
-    protected List<String> leafKeys;
+    protected String logKeys;
+    protected String leafKeys;
     
     public ConfigTreeDefinition()
     {
         super();
-        logKeys = new ArrayList<String>();
-        leafKeys = new ArrayList<String>();
+        logKeys = "";
+        leafKeys = "";
     }
     
     public ConfigTreeDefinition(List<BlockID> logs, List<BlockID> leaves)
@@ -29,21 +28,29 @@ public class ConfigTreeDefinition extends TreeDefinition
     
     public ConfigTreeDefinition(String configLogs, String configLeaves)
     {
-        logKeys = Arrays.asList(configLogs.split(";"));
-        leafKeys = Arrays.asList(configLeaves.split(";"));
+        logKeys = configLogs;
+        leafKeys = configLeaves;
     }
     
     public TreeDefinition getTagsReplacedTreeDef(Map<String, String> tagMap)
     {
         logBlocks = new ArrayList<BlockID>();
         leafBlocks = new ArrayList<BlockID>();
+        
+        String rLogs = logKeys;
+        String rLeaves = leafKeys;
+        
         for (Entry<String, String> e : tagMap.entrySet())
         {
-            for (String logID : logKeys)
-                super.addLogID(new BlockID(logID.replace(e.getKey(), e.getValue())));
-            for (String leafID : leafKeys)
-                super.addLeafID(new BlockID(leafID.replace(e.getKey(), e.getValue())));
+            rLogs = rLogs.replace(e.getKey(), e.getValue());
+            rLeaves = rLeaves.replace(e.getKey(), e.getValue());
         }
+        
+        for (String log : rLogs.split(";"))
+            super.addLogID(new BlockID(log));
+        
+        for (String leaf : rLeaves.split(";"))
+            super.addLeafID(new BlockID(leaf));
         
         return this;
     }
@@ -78,24 +85,11 @@ public class ConfigTreeDefinition extends TreeDefinition
     {
         super.readFromNBT(treeDefNBT);
         
-        logKeys = new ArrayList<String>();
-        leafKeys = new ArrayList<String>();
+        //if (treeDefNBT.hasKey(Strings.LOG_VALS))
+        logKeys = treeDefNBT.getString(Strings.LOG_VALS);
         
-        if (treeDefNBT.hasKey(Strings.LOG_VALS))
-        {
-            String logValues = treeDefNBT.getString(Strings.LOG_VALS);
-            
-            for (String s : logValues.split(";"))
-                logKeys.add(s.trim());
-        }
-        
-        if (treeDefNBT.hasKey(Strings.LEAF_VALS))
-        {
-            String leafValues = treeDefNBT.getString(Strings.LEAF_VALS);
-            
-            for (String s : leafValues.split(";"))
-                leafKeys.add(s.trim());
-        }
+        //if (treeDefNBT.hasKey(Strings.LEAF_VALS))
+        leafKeys = treeDefNBT.getString(Strings.LEAF_VALS);
         
         return this;
     }
@@ -105,19 +99,8 @@ public class ConfigTreeDefinition extends TreeDefinition
     {
         super.writeToNBT(treeDefNBT);
         
-        String keyList = "";
-        for (String logKey : logKeys)
-        {
-            keyList += "; " + logKey;
-        }
-        treeDefNBT.setString(Strings.LOG_VALS, keyList.replaceFirst("; ", ""));
-        
-        keyList = "";
-        for (String leafKey : leafKeys)
-        {
-            keyList += "; " + leafKey;
-        }
-        treeDefNBT.setString(Strings.LEAF_VALS, keyList.replaceFirst("; ", ""));
+        treeDefNBT.setString(Strings.LOG_VALS, logKeys);
+        treeDefNBT.setString(Strings.LEAF_VALS, leafKeys);
     }
     
     /**
@@ -125,9 +108,9 @@ public class ConfigTreeDefinition extends TreeDefinition
      * 
      * @return
      */
-    public List<String> getConfigLogList()
+    public String getConfigLogList()
     {
-        return new ArrayList<String>(logKeys);
+        return logKeys;
     }
     
     /**
@@ -135,8 +118,8 @@ public class ConfigTreeDefinition extends TreeDefinition
      * 
      * @return
      */
-    public List<String> getConfigLeafList()
+    public String getConfigLeafList()
     {
-        return new ArrayList<String>(leafKeys);
+        return leafKeys;
     }
 }

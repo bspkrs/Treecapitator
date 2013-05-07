@@ -55,6 +55,12 @@ public class ThirdPartyModConfig
         return this;
     }
     
+    public void registerAllTrees()
+    {
+        for (Entry<String, TreeDefinition> e : treesMap.entrySet())
+            TreeRegistry.instance().registerTree(e.getKey(), e.getValue());
+    }
+    
     public String modID()
     {
         return modID;
@@ -87,24 +93,24 @@ public class ThirdPartyModConfig
     {
         tagMap = new HashMap<String, String>();
         
-        TCLog.debug("Processing Mod \"%s\" config file \"%s\"...", this.modID, this.configPath);
+        TCLog.debug("Processing Mod \"%s\" config file \"%s\"...", modID, configPath);
         
-        if (Loader.instance().isModLoaded(this.modID))
+        if (Loader.instance().isModLoaded(modID))
         {
-            File file = new File(Loader.instance().getConfigDir(), this.configPath.trim());
+            File file = new File(Loader.instance().getConfigDir(), configPath.trim());
             if (file.exists())
             {
                 Configuration thirdPartyConfig = new Configuration(file);
-                String idrClassName = Loader.instance().getIndexedModList().get(this.modID).getMod().getClass().getName();
+                String idrClassName = Loader.instance().getIndexedModList().get(modID).getMod().getClass().getName();
                 thirdPartyConfig.load();
-                getReplacementTagsForKeys(thirdPartyConfig, this.blockKeys, idrClassName, false);
-                getReplacementTagsForKeys(thirdPartyConfig, this.itemKeys, idrClassName, true);
+                getReplacementTagsForKeys(thirdPartyConfig, blockKeys, idrClassName, false);
+                getReplacementTagsForKeys(thirdPartyConfig, itemKeys, idrClassName, true);
             }
             else
-                TCLog.warning("Mod config file %s does not exist when processing Mod %s.", this.configPath, this.modID);
+                TCLog.warning("Mod config file %s does not exist when processing Mod %s.", configPath, modID);
         }
         else
-            TCLog.debug("Mod " + this.modID + " is not loaded.");
+            TCLog.debug("Mod " + modID + " is not loaded.");
         
     }
     
@@ -125,7 +131,7 @@ public class ThirdPartyModConfig
                     configValue = String.valueOf(mapping.newID);
                 // TCLog.debug("configValue: %s", configValue);
                 
-                if (isItemList && this.shiftIndex)
+                if (isItemList && shiftIndex)
                     configValue = String.valueOf(CommonUtils.parseInt(configValue, -256) + 256);
                 
                 // TCLog.debug("configValue: %s", configValue);
@@ -133,7 +139,7 @@ public class ThirdPartyModConfig
                 if (!configValue.equals("0"))
                 {
                     tagMap.put(tagID, configValue);
-                    TCLog.debug("Third Party Mod Config Tag %s will map to %s for mod %s", tagID, configValue, this.modID);
+                    TCLog.debug("Third Party Mod Config Tag %s will map to %s for mod %s", tagID, configValue, modID);
                 }
             }
             else
