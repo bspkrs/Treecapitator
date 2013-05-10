@@ -2,7 +2,7 @@ package bspkrs.treecapitator.fml;
 
 import bspkrs.fml.util.ForgePacketHelper;
 import bspkrs.treecapitator.TCLog;
-import bspkrs.treecapitator.TreeCapitator;
+import bspkrs.treecapitator.TCSettings;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
@@ -41,14 +41,13 @@ public class TreeCapitatorClient
     
     public void onServerConfigReceived(String blockIDList, String axeIDList, float logHardnessNormal, float logHardnessModified)
     {
-        TreeCapitator.localBlockIDList = blockIDList;
         TCLog.debug("Server sent block ID list: %s", blockIDList);
         
         if (!FMLClientHandler.instance().getClient().isSingleplayer())
-            TreeCapitator.parseConfigBlockList(TreeCapitator.localBlockIDList);
+            ;
         
-        TreeCapitator.axeIDList = axeIDList;
-        TreeCapitator.logHardnessNormal = logHardnessNormal;
-        TreeCapitator.logHardnessModified = logHardnessModified;
+        TCSettings.axeIDList = axeIDList;
+        TCSettings.logHardnessNormal = logHardnessNormal;
+        TCSettings.logHardnessModified = logHardnessModified;
     }
 }

@@ -10,12 +10,12 @@ import bspkrs.util.BlockID;
 
 public class BlockTree extends BlockLog
 {
-    private TreeBlockBreaker breaker;
+    private TreeCapitator breaker;
     
     public BlockTree(int i)
     {
         super(i);
-        setHardness(TreeCapitator.logHardnessNormal);
+        setHardness(TCSettings.logHardnessNormal);
         setStepSound(Block.soundWoodFootstep);
         setUnlocalizedName("log");
         // setRequiresSelfNotify();
@@ -28,10 +28,10 @@ public class BlockTree extends BlockLog
     public void onBlockHarvested(World world, int x, int y, int z, int md, EntityPlayer entityPlayer)
     {
         ArrayList<BlockID> log = new ArrayList<BlockID>();
-        log.add(new BlockID(Block.wood.blockID, (TreeCapitator.useStrictBlockPairing ? md : -1)));
+        log.add(new BlockID(Block.wood.blockID, (TCSettings.useStrictBlockPairing ? md : -1)));
         ArrayList<BlockID> leaf = new ArrayList<BlockID>();
-        leaf.add(new BlockID(Block.leaves.blockID, (TreeCapitator.useStrictBlockPairing ? md : -1)));
-        breaker = new TreeBlockBreaker(entityPlayer, log, leaf);
+        leaf.add(new BlockID(Block.leaves.blockID, (TCSettings.useStrictBlockPairing ? md : -1)));
+        breaker = new TreeCapitator(entityPlayer, log, leaf);
         breaker.onBlockHarvested(world, x, y, z, md, entityPlayer);
     }
     
@@ -41,6 +41,6 @@ public class BlockTree extends BlockLog
     @Override
     public float getBlockHardness(World par1World, int par2, int par3, int par4)
     {
-        return breaker != null ? breaker.getBlockHardness() : TreeCapitator.logHardnessNormal;
+        return breaker != null ? breaker.getBlockHardness() : TCSettings.logHardnessNormal;
     }
 }

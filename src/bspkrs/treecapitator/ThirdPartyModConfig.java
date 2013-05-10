@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.minecraft.nbt.NBTTagCompound;
 import bspkrs.treecapitator.fml.IDResolverMapping;
 import bspkrs.treecapitator.fml.IDResolverMappingList;
 import bspkrs.util.CommonUtils;
@@ -17,6 +18,8 @@ public class ThirdPartyModConfig
     private String                            configPath;
     private String                            blockKeys;
     private String                            itemKeys;
+    private String                            axeKeys;
+    private String                            shearsKeys;
     private boolean                           shiftIndex;
     private Map<String, ConfigTreeDefinition> configTreesMap;
     private Map<String, TreeDefinition>       treesMap;
@@ -33,6 +36,86 @@ public class ThirdPartyModConfig
         configTreesMap = new HashMap<String, ConfigTreeDefinition>();
         treesMap = new HashMap<String, TreeDefinition>();
         refreshReplacementTags();
+    }
+    
+    public ThirdPartyModConfig readFromNBT(NBTTagCompound treeDefNBT)
+    {
+        /*if (treeDefNBT.hasKey(Strings.onlyDestroyUpwards))
+            onlyDestroyUpwards = treeDefNBT.getBoolean(Strings.onlyDestroyUpwards);
+        if (treeDefNBT.hasKey(Strings.requireLeafDecayCheck))
+            requireLeafDecayCheck = treeDefNBT.getBoolean(Strings.requireLeafDecayCheck);
+        if (treeDefNBT.hasKey(Strings.maxHorLogBreakDist))
+            maxLogBreakDist = treeDefNBT.getInteger(Strings.maxHorLogBreakDist);
+        if (treeDefNBT.hasKey(Strings.maxLeafBreakDist))
+            maxLeafBreakDist = treeDefNBT.getInteger(Strings.maxLeafBreakDist);
+        if (treeDefNBT.hasKey(Strings.maxLeafIDDist))
+            maxLeafIDDist = treeDefNBT.getInteger(Strings.maxLeafIDDist);
+        if (treeDefNBT.hasKey(Strings.minLeavesToID))
+            minLeavesToID = treeDefNBT.getInteger(Strings.minLeavesToID);
+        if (treeDefNBT.hasKey(Strings.breakSpeedModifier))
+            breakSpeedModifier = treeDefNBT.getFloat(Strings.breakSpeedModifier);
+        
+        logBlocks = new ArrayList<BlockID>();
+        leafBlocks = new ArrayList<BlockID>();
+        
+        NBTTagList logList = treeDefNBT.getTagList(Strings.LOGS);
+        
+        for (int i = 0; i < logList.tagCount(); i++)
+        {
+            NBTTagCompound log = (NBTTagCompound) logList.tagAt(i);
+            logBlocks.add(new BlockID(log.getInteger(Strings.id), log.getInteger(Strings.metadata)));
+        }
+        
+        if (treeDefNBT.hasKey(Strings.LEAVES))
+        {
+            NBTTagList leafList = treeDefNBT.getTagList(Strings.LEAVES);
+            
+            for (int i = 0; i < leafList.tagCount(); i++)
+            {
+                NBTTagCompound leaf = (NBTTagCompound) leafList.tagAt(i);
+                leafBlocks.add(new BlockID(leaf.getInteger(Strings.id), leaf.getInteger(Strings.metadata)));
+            }
+        }*/
+        
+        return this;
+    }
+    
+    public void writeToNBT(NBTTagCompound treeDefNBT)
+    {
+        /*treeDefNBT.setBoolean(Strings.onlyDestroyUpwards, onlyDestroyUpwards);
+        treeDefNBT.setBoolean(Strings.requireLeafDecayCheck, requireLeafDecayCheck);
+        treeDefNBT.setInteger(Strings.maxHorLogBreakDist, maxLogBreakDist);
+        treeDefNBT.setInteger(Strings.maxLeafBreakDist, maxLeafBreakDist);
+        treeDefNBT.setInteger(Strings.maxLeafIDDist, maxLeafIDDist);
+        treeDefNBT.setInteger(Strings.minLeavesToID, minLeavesToID);
+        treeDefNBT.setFloat(Strings.breakSpeedModifier, breakSpeedModifier);
+        
+        NBTTagList logList = new NBTTagList();
+        
+        for (BlockID logBlock : logBlocks)
+        {
+            NBTTagCompound log = new NBTTagCompound();
+            log.setInteger(Strings.id, logBlock.id);
+            log.setInteger(Strings.metadata, logBlock.metadata);
+            logList.appendTag(log);
+        }
+        
+        treeDefNBT.setTag(Strings.LOGS, logList);
+        
+        if (leafBlocks.size() > 0)
+        {
+            NBTTagList leafList = new NBTTagList();
+            
+            for (BlockID leafBlock : leafBlocks)
+            {
+                NBTTagCompound leaf = new NBTTagCompound();
+                leaf.setInteger(Strings.id, leafBlock.id);
+                leaf.setInteger(Strings.metadata, leafBlock.metadata);
+                leafList.appendTag(leaf);
+            }
+            
+            treeDefNBT.setTag(Strings.LEAVES, leafList);
+        }*/
     }
     
     public ThirdPartyModConfig addConfigTreeDef(String key, ConfigTreeDefinition tree)
@@ -59,6 +142,11 @@ public class ThirdPartyModConfig
     {
         for (Entry<String, TreeDefinition> e : treesMap.entrySet())
             TreeRegistry.instance().registerTree(e.getKey(), e.getValue());
+    }
+    
+    public void registerLawnTools()
+    {   
+        
     }
     
     public String modID()

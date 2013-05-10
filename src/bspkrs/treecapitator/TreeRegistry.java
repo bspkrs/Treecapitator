@@ -34,97 +34,57 @@ public class TreeRegistry
         logToStringMap = new HashMap<BlockID, String>();
         masterLogList = new ArrayList<BlockID>();
         masterLeafList = new ArrayList<BlockID>();
-        genericDefinition = new TreeDefinition();
+        
+        initToVanillaTreeDefs();
+        refreshGenericDefinition();
+    }
+    
+    protected void initToVanillaTreeDefs()
+    {
+        treeDefs = new HashMap<String, TreeDefinition>();
+        logToStringMap = new HashMap<BlockID, String>();
+        masterLogList = new ArrayList<BlockID>();
+        masterLeafList = new ArrayList<BlockID>();
         
         // Vanilla oak definition
-        treeDefs.put(Strings.OAK, new TreeDefinition().addLogID(new BlockID(17, 0)).addLogID(new BlockID(17, 4))
+        registerTree(Strings.OAK, new TreeDefinition().addLogID(new BlockID(17, 0)).addLogID(new BlockID(17, 4))
                 .addLogID(new BlockID(17, 8)).addLogID(new BlockID(17, 12))
                 .addLeafID(new BlockID(18, 0)).addLeafID(new BlockID(18, 8)));
-        for (BlockID log : treeDefs.get(Strings.OAK).getLogList())
-        {
-            masterLogList.add(log);
-            logToStringMap.put(log, Strings.OAK);
-        }
-        for (BlockID leaf : treeDefs.get(Strings.OAK).getLeafList())
-            if (!masterLeafList.contains(leaf))
-                masterLeafList.add(leaf);
         
         // Vanilla spruce definition
-        treeDefs.put(Strings.SPRUCE, (new TreeDefinition()).addLogID(new BlockID(17, 1)).addLogID(new BlockID(17, 5))
+        registerTree(Strings.SPRUCE, (new TreeDefinition()).addLogID(new BlockID(17, 1)).addLogID(new BlockID(17, 5))
                 .addLogID(new BlockID(17, 9)).addLogID(new BlockID(17, 13))
                 .addLeafID(new BlockID(18, 1)).addLeafID(new BlockID(18, 9)));
-        for (BlockID log : treeDefs.get(Strings.SPRUCE).getLogList())
-        {
-            masterLogList.add(log);
-            logToStringMap.put(log, Strings.SPRUCE);
-        }
-        for (BlockID leaf : treeDefs.get(Strings.SPRUCE).getLeafList())
-            if (!masterLeafList.contains(leaf))
-                masterLeafList.add(leaf);
         
         // Vanilla birch definition
-        treeDefs.put(Strings.BIRCH, (new TreeDefinition()).addLogID(new BlockID(17, 2)).addLogID(new BlockID(17, 6))
+        registerTree(Strings.BIRCH, (new TreeDefinition()).addLogID(new BlockID(17, 2)).addLogID(new BlockID(17, 6))
                 .addLogID(new BlockID(17, 10)).addLogID(new BlockID(17, 14))
                 .addLeafID(new BlockID(18, 2)).addLeafID(new BlockID(18, 10)));
-        for (BlockID log : treeDefs.get(Strings.BIRCH).getLogList())
-        {
-            masterLogList.add(log);
-            logToStringMap.put(log, Strings.BIRCH);
-        }
-        for (BlockID leaf : treeDefs.get(Strings.BIRCH).getLeafList())
-            if (!masterLeafList.contains(leaf))
-                masterLeafList.add(leaf);
         
         // Vanilla jungle definition
-        treeDefs.put(Strings.JUNGLE, (new TreeDefinition()).addLogID(new BlockID(17, 3)).addLogID(new BlockID(17, 7))
+        registerTree(Strings.JUNGLE, (new TreeDefinition()).addLogID(new BlockID(17, 3)).addLogID(new BlockID(17, 7))
                 .addLogID(new BlockID(17, 11)).addLogID(new BlockID(17, 15))
                 .addLeafID(new BlockID(18, 3)).addLeafID(new BlockID(18, 11))
                 .addLeafID(new BlockID(18, 0)).addLeafID(new BlockID(18, 8))
                 .setMaxLeafBreakDist(6).setRequireLeafDecayCheck(false));
-        for (BlockID log : treeDefs.get(Strings.JUNGLE).getLogList())
-        {
-            masterLogList.add(log);
-            logToStringMap.put(log, Strings.JUNGLE);
-        }
-        for (BlockID leaf : treeDefs.get(Strings.JUNGLE).getLeafList())
-            if (!masterLeafList.contains(leaf))
-                masterLeafList.add(leaf);
         
         // Vanilla Huge Brown Mushrooms
-        treeDefs.put(Strings.MUSH_BROWN, (new TreeDefinition()).addLogID(new BlockID(99, 10)).addLogID(new BlockID(99, 15))
+        registerTree(Strings.MUSH_BROWN, (new TreeDefinition()).addLogID(new BlockID(99, 10)).addLogID(new BlockID(99, 15))
                 .addLeafID(new BlockID(99, 1)).addLeafID(new BlockID(99, 2))
                 .addLeafID(new BlockID(99, 3)).addLeafID(new BlockID(99, 4))
                 .addLeafID(new BlockID(99, 5)).addLeafID(new BlockID(99, 6))
                 .addLeafID(new BlockID(99, 7)).addLeafID(new BlockID(99, 8))
                 .addLeafID(new BlockID(99, 9)).addLeafID(new BlockID(99, 14))
                 .setMaxLeafBreakDist(6).setRequireLeafDecayCheck(false));
-        for (BlockID log : treeDefs.get(Strings.MUSH_BROWN).getLogList())
-        {
-            masterLogList.add(log);
-            logToStringMap.put(log, Strings.MUSH_BROWN);
-        }
-        for (BlockID leaf : treeDefs.get(Strings.MUSH_BROWN).getLeafList())
-            if (!masterLeafList.contains(leaf))
-                masterLeafList.add(leaf);
         
         // Vanilla Huge Red Mushrooms
-        treeDefs.put(Strings.MUSH_RED, (new TreeDefinition()).addLogID(new BlockID(100, 10)).addLogID(new BlockID(100, 15))
+        registerTree(Strings.MUSH_RED, (new TreeDefinition()).addLogID(new BlockID(100, 10)).addLogID(new BlockID(100, 15))
                 .addLeafID(new BlockID(100, 1)).addLeafID(new BlockID(100, 2))
                 .addLeafID(new BlockID(100, 3)).addLeafID(new BlockID(100, 4))
                 .addLeafID(new BlockID(100, 5)).addLeafID(new BlockID(100, 6))
                 .addLeafID(new BlockID(100, 7)).addLeafID(new BlockID(100, 8))
                 .addLeafID(new BlockID(100, 9)).addLeafID(new BlockID(100, 14))
                 .setMaxLeafBreakDist(6).setRequireLeafDecayCheck(false));
-        for (BlockID log : treeDefs.get(Strings.MUSH_RED).getLogList())
-        {
-            masterLogList.add(log);
-            logToStringMap.put(log, Strings.MUSH_RED);
-        }
-        for (BlockID leaf : treeDefs.get(Strings.MUSH_RED).getLeafList())
-            if (!masterLeafList.contains(leaf))
-                masterLeafList.add(leaf);
-        
-        refreshGenericDefinition();
     }
     
     /**
@@ -203,16 +163,50 @@ public class TreeRegistry
         genericDefinition = new TreeDefinition(masterLogList, masterLeafList);
     }
     
+    /**
+     * Gets a comma-delimited string with all generic log IDs (no metadata).
+     * 
+     * @return
+     */
+    public String getMultiMineExclusionString()
+    {
+        String r = "";
+        List<Integer> processed = new ArrayList<Integer>();
+        
+        for (BlockID log : masterLogList)
+        {
+            if (!processed.contains(log.id))
+            {
+                processed.add(log.id);
+                r += ", " + log.id;
+            }
+        }
+        
+        return r.replaceFirst(", ", "");
+    }
+    
     public TreeDefinition genericDefinition()
     {
         return genericDefinition;
     }
     
+    /**
+     * Checks if a given tree definition key has been previously defined.
+     * 
+     * @param key
+     * @return
+     */
     public boolean isRegistered(String key)
     {
         return treeDefs.containsKey(key);
     }
     
+    /**
+     * Checks if a given BlockID has been registered with any tree.
+     * 
+     * @param log
+     * @return
+     */
     public boolean isRegistered(BlockID log)
     {
         return masterLogList.contains(log);

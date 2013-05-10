@@ -2,8 +2,8 @@ package bspkrs.treecapitator.fml;
 
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
-import bspkrs.treecapitator.TreeBlockBreaker;
 import bspkrs.treecapitator.TreeCapitator;
+import bspkrs.treecapitator.TCSettings;
 import bspkrs.treecapitator.TreeRegistry;
 import bspkrs.util.BlockID;
 
@@ -39,9 +39,9 @@ public class PlayerHandler
         BlockID blockID = new BlockID(event.block.blockID, event.metadata);
         
         if (TreeCapitatorMod.instance.proxy.isEnabled() && TreeRegistry.instance().isRegistered(blockID) &&
-                TreeBlockBreaker.isAxeItemEquipped(event.entityPlayer))
+                TreeCapitator.isAxeItemEquipped(event.entityPlayer))
         {
-            event.newSpeed = event.originalSpeed * TreeCapitator.breakSpeedModifier;
+            event.newSpeed = event.originalSpeed * TCSettings.breakSpeedModifier;
         }
     }
 }

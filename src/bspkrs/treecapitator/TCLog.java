@@ -55,7 +55,7 @@ public enum TCLog
     
     public static void debug(String format, Object... args)
     {
-        if (TreeCapitator.allowDebugLogging)
+        if (TCSettings.allowDebugLogging)
             TCLog.info("[DEBUG] " + format, args);
     }
 }

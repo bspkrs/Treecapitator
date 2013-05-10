@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.ForgeVersion;
 import bspkrs.treecapitator.Strings;
 import bspkrs.treecapitator.TCLog;
-import bspkrs.treecapitator.TreeCapitator;
+import bspkrs.treecapitator.TCSettings;
 import bspkrs.treecapitator.TreeRegistry;
 import bspkrs.treecapitator.fml.TreeCapitatorMod;
 import bspkrs.util.BSProp;
@@ -14,49 +14,49 @@ import bspkrs.util.ModVersionChecker;
 
 public class mod_TreeCapitator extends BaseMod
 {
-    @BSProp(info = TreeCapitator.axeIDListDesc + "\n")
-    public static String      axeIDList                  = TreeCapitator.axeIDList;
-    @BSProp(info = TreeCapitator.needItemDesc + "\n")
-    public static boolean     needItem                   = TreeCapitator.needItem;
-    @BSProp(info = TreeCapitator.onlyDestroyUpwardsDesc + "\n")
-    public static boolean     onlyDestroyUpwards         = TreeCapitator.onlyDestroyUpwards;
-    @BSProp(info = TreeCapitator.destroyLeavesDesc + "\n")
-    public static boolean     destroyLeaves              = TreeCapitator.destroyLeaves;
-    @BSProp(info = TreeCapitator.shearLeavesDesc + "\n")
-    public static boolean     shearLeaves                = TreeCapitator.shearLeaves;
-    @BSProp(info = TreeCapitator.shearVinesDesc + "\n")
-    public static boolean     shearVines                 = TreeCapitator.shearVines;
-    @BSProp(info = TreeCapitator.shearIDListDesc + "\n")
-    public static String      shearIDList                = TreeCapitator.shearIDList;
-    @BSProp(info = TreeCapitator.logHardnessNormalDesc + "\n")
-    public static float       logHardnessNormal          = TreeCapitator.logHardnessNormal;
-    @BSProp(info = TreeCapitator.logHardnessModifiedDesc + "\n")
-    public static float       logHardnessModified        = TreeCapitator.logHardnessModified;
-    @BSProp(info = TreeCapitator.disableInCreativeDesc + "\n")
-    public static boolean     disableInCreative          = TreeCapitator.disableInCreative;
-    @BSProp(info = TreeCapitator.disableCreativeDropsDesc + "\n")
-    public static boolean     disableCreativeDrops       = TreeCapitator.disableCreativeDrops;
-    @BSProp(info = TreeCapitator.allowItemDamageDesc + "\n")
-    public static boolean     allowItemDamage            = TreeCapitator.allowItemDamage;
-    @BSProp(info = TreeCapitator.allowMoreBlocksThanDamageDesc + "\n")
-    public static boolean     allowMoreBlocksThanDamage  = TreeCapitator.allowMoreBlocksThanDamage;
-    @BSProp(info = TreeCapitator.sneakActionDesc + "\n")
-    public static String      sneakAction                = TreeCapitator.sneakAction;
-    @BSProp(info = Strings.maxBreakDistanceDesc + "\n")
-    public static int         maxBreakDistance           = TreeCapitator.maxBreakDistance;
+    @BSProp(info = Strings.axeIDListDesc + "\n")
+    public static String      axeIDList                  = TCSettings.axeIDList;
+    @BSProp(info = Strings.needItemDesc + "\n")
+    public static boolean     needItem                   = TCSettings.needItem;
+    @BSProp(info = Strings.onlyDestroyUpwardsDesc + "\n")
+    public static boolean     onlyDestroyUpwards         = TCSettings.onlyDestroyUpwards;
+    @BSProp(info = Strings.destroyLeavesDesc + "\n")
+    public static boolean     destroyLeaves              = TCSettings.destroyLeaves;
+    @BSProp(info = Strings.shearLeavesDesc + "\n")
+    public static boolean     shearLeaves                = TCSettings.shearLeaves;
+    @BSProp(info = Strings.shearVinesDesc + "\n")
+    public static boolean     shearVines                 = TCSettings.shearVines;
+    @BSProp(info = Strings.shearIDListDesc + "\n")
+    public static String      shearIDList                = TCSettings.shearIDList;
+    @BSProp(info = Strings.logHardnessNormalDesc + "\n")
+    public static float       logHardnessNormal          = TCSettings.logHardnessNormal;
+    @BSProp(info = Strings.logHardnessModifiedDesc + "\n")
+    public static float       logHardnessModified        = TCSettings.logHardnessModified;
+    @BSProp(info = Strings.disableInCreativeDesc + "\n")
+    public static boolean     disableInCreative          = TCSettings.disableInCreative;
+    @BSProp(info = Strings.disableCreativeDropsDesc + "\n")
+    public static boolean     disableCreativeDrops       = TCSettings.disableCreativeDrops;
+    @BSProp(info = Strings.allowItemDamageDesc + "\n")
+    public static boolean     allowItemDamage            = TCSettings.allowItemDamage;
+    @BSProp(info = Strings.allowMoreBlocksThanDamageDesc + "\n")
+    public static boolean     allowMoreBlocksThanDamage  = TCSettings.allowMoreBlocksThanDamage;
+    @BSProp(info = Strings.sneakActionDesc + "\n")
+    public static String      sneakAction                = TCSettings.sneakAction;
+    @BSProp(info = Strings.maxHorBreakDistDesc + "\n")
+    public static int         maxBreakDistance           = TCSettings.maxHorLogBreakDist;
     
-    @BSProp(info = TreeCapitator.requireLeafDecayCheckDesc + "\n")
-    public static boolean     requireLeafDecayCheck      = TreeCapitator.requireLeafDecayCheck;
-    @BSProp(info = TreeCapitator.damageMultiplierDesc + "\n")
-    public static float       damageMultiplier           = TreeCapitator.damageMultiplier;
-    @BSProp(info = TreeCapitator.useIncreasingItemDamageDesc + "\n")
-    public static boolean     useIncreasingItemDamage    = TreeCapitator.useIncreasingItemDamage;
-    @BSProp(info = TreeCapitator.increaseDamageEveryXBlocksDesc + "\n")
-    public static int         increaseDamageEveryXBlocks = TreeCapitator.increaseDamageEveryXBlocks;
-    @BSProp(info = TreeCapitator.damageIncreaseAmountDesc + "\n")
-    public static float       damageIncreaseAmount       = TreeCapitator.damageIncreaseAmount;
-    @BSProp(info = TreeCapitator.allowSmartTreeDetectionDesc + "\n\n**ONLY EDIT WHAT IS BELOW THIS**")
-    public static boolean     allowSmartTreeDetection    = TreeCapitator.allowSmartTreeDetection;
+    @BSProp(info = Strings.requireLeafDecayCheckDesc + "\n")
+    public static boolean     requireLeafDecayCheck      = TCSettings.requireLeafDecayCheck;
+    @BSProp(info = Strings.damageMultiplierDesc + "\n")
+    public static float       damageMultiplier           = TCSettings.damageMultiplier;
+    @BSProp(info = Strings.useIncreasingItemDamageDesc + "\n")
+    public static boolean     useIncreasingItemDamage    = TCSettings.useIncreasingItemDamage;
+    @BSProp(info = Strings.increaseDamageEveryXBlocksDesc + "\n")
+    public static int         increaseDamageEveryXBlocks = TCSettings.increaseDamageEveryXBlocks;
+    @BSProp(info = Strings.damageIncreaseAmountDesc + "\n")
+    public static float       damageIncreaseAmount       = TCSettings.damageIncreaseAmount;
+    @BSProp(info = Strings.allowSmartTreeDetectionDesc + "\n\n**ONLY EDIT WHAT IS BELOW THIS**")
+    public static boolean     allowSmartTreeDetection    = TCSettings.allowSmartTreeDetection;
     
     private ModVersionChecker versionChecker;
     private final String      versionURL                 = "http://bspk.rs/Minecraft/" + Const.MCVERSION + "/treeCapitator.version";
@@ -116,29 +116,29 @@ public class mod_TreeCapitator extends BaseMod
             
             ModLoader.setInGameHook(this, true, true);
             
-            TreeCapitator.preInit(false);
-            TreeCapitator.axeIDList = axeIDList;
-            TreeCapitator.needItem = needItem;
-            TreeCapitator.onlyDestroyUpwards = onlyDestroyUpwards;
-            TreeCapitator.destroyLeaves = destroyLeaves;
-            TreeCapitator.shearLeaves = shearLeaves;
-            TreeCapitator.shearVines = shearVines;
-            TreeCapitator.shearIDList = shearIDList;
-            TreeCapitator.logHardnessNormal = logHardnessNormal;
-            TreeCapitator.logHardnessModified = logHardnessModified;
-            TreeCapitator.disableInCreative = disableInCreative;
-            TreeCapitator.disableCreativeDrops = disableCreativeDrops;
-            TreeCapitator.allowItemDamage = allowItemDamage;
-            TreeCapitator.allowMoreBlocksThanDamage = allowMoreBlocksThanDamage;
-            TreeCapitator.sneakAction = sneakAction;
-            TreeCapitator.maxBreakDistance = maxBreakDistance;
+            TCSettings.preInit(false);
+            TCSettings.axeIDList = axeIDList;
+            TCSettings.needItem = needItem;
+            TCSettings.onlyDestroyUpwards = onlyDestroyUpwards;
+            TCSettings.destroyLeaves = destroyLeaves;
+            TCSettings.shearLeaves = shearLeaves;
+            TCSettings.shearVines = shearVines;
+            TCSettings.shearIDList = shearIDList;
+            TCSettings.logHardnessNormal = logHardnessNormal;
+            TCSettings.logHardnessModified = logHardnessModified;
+            TCSettings.disableInCreative = disableInCreative;
+            TCSettings.disableCreativeDrops = disableCreativeDrops;
+            TCSettings.allowItemDamage = allowItemDamage;
+            TCSettings.allowMoreBlocksThanDamage = allowMoreBlocksThanDamage;
+            TCSettings.sneakAction = sneakAction;
+            TCSettings.maxHorLogBreakDist = maxBreakDistance;
             
-            TreeCapitator.requireLeafDecayCheck = requireLeafDecayCheck;
-            TreeCapitator.damageMultiplier = damageMultiplier;
-            TreeCapitator.useIncreasingItemDamage = useIncreasingItemDamage;
-            TreeCapitator.increaseDamageEveryXBlocks = increaseDamageEveryXBlocks;
-            TreeCapitator.damageIncreaseAmount = damageIncreaseAmount;
-            TreeCapitator.allowSmartTreeDetection = allowSmartTreeDetection;
+            TCSettings.requireLeafDecayCheck = requireLeafDecayCheck;
+            TCSettings.damageMultiplier = damageMultiplier;
+            TCSettings.useIncreasingItemDamage = useIncreasingItemDamage;
+            TCSettings.increaseDamageEveryXBlocks = increaseDamageEveryXBlocks;
+            TCSettings.damageIncreaseAmount = damageIncreaseAmount;
+            TCSettings.allowSmartTreeDetection = allowSmartTreeDetection;
             
             TreeRegistry.instance();
         }

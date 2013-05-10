@@ -9,7 +9,7 @@ import java.util.Properties;
 
 import sharose.mods.idresolver.IDResolverBasic;
 import bspkrs.treecapitator.TCLog;
-import bspkrs.treecapitator.TreeCapitator;
+import bspkrs.treecapitator.TCSettings;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 
@@ -38,7 +38,7 @@ public class IDResolverMappingList implements List
         /*
          * Get IDs from ID Resolver if it's loaded
          */
-        if (Loader.instance().isModLoaded(TreeCapitator.idResolverModID))
+        if (Loader.instance().isModLoaded(TCSettings.idResolverModID))
         {
             TCLog.info("ID Resolver has been detected.  Processing ID config...");
             
@@ -83,7 +83,7 @@ public class IDResolverMappingList implements List
             }
         }
         else
-            TCLog.info("ID Resolver (Mod ID \"%s\") is not loaded.", TreeCapitator.idResolverModID);
+            TCLog.info("ID Resolver (Mod ID \"%s\") is not loaded.", TCSettings.idResolverModID);
     }
     
     public boolean hasMappingForModAndID(String className, int oldID)
