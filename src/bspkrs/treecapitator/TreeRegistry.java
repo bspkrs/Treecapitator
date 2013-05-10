@@ -12,9 +12,13 @@ public class TreeRegistry
 {
     private Map<String, TreeDefinition> treeDefs;
     private Map<BlockID, String>        logToStringMap;
-    private List<BlockID>               masterLogList;
-    private List<BlockID>               masterLeafList;
-    private TreeDefinition              genericDefinition;
+    private TreeDefinition              masterDefinition;
+    private ConfigTreeDefinition        vanOak;
+    private ConfigTreeDefinition        vanSpruce;
+    private ConfigTreeDefinition        vanBirch;
+    private ConfigTreeDefinition        vanJungle;
+    private ConfigTreeDefinition        vanMushBrown;
+    private ConfigTreeDefinition        vanMushRed;
     
     private static TreeRegistry         instance;
     
@@ -30,61 +34,60 @@ public class TreeRegistry
     {
         instance = this;
         
-        treeDefs = new HashMap<String, TreeDefinition>();
-        logToStringMap = new HashMap<BlockID, String>();
-        masterLogList = new ArrayList<BlockID>();
-        masterLeafList = new ArrayList<BlockID>();
-        
-        initToVanillaTreeDefs();
-        refreshGenericDefinition();
+        initMapsAndLists();
+        initVanillaTreeDefs();
+        //registerVanillaTreeDefs();
     }
     
-    protected void initToVanillaTreeDefs()
+    protected void initMapsAndLists()
     {
         treeDefs = new HashMap<String, TreeDefinition>();
         logToStringMap = new HashMap<BlockID, String>();
-        masterLogList = new ArrayList<BlockID>();
-        masterLeafList = new ArrayList<BlockID>();
-        
-        // Vanilla oak definition
-        registerTree(Strings.OAK, new TreeDefinition().addLogID(new BlockID(17, 0)).addLogID(new BlockID(17, 4))
+    }
+    
+    protected void initVanillaTreeDefs()
+    {
+        vanOak = new ConfigTreeDefinition().addLogID(new BlockID(17, 0)).addLogID(new BlockID(17, 4))
                 .addLogID(new BlockID(17, 8)).addLogID(new BlockID(17, 12))
-                .addLeafID(new BlockID(18, 0)).addLeafID(new BlockID(18, 8)));
-        
-        // Vanilla spruce definition
-        registerTree(Strings.SPRUCE, (new TreeDefinition()).addLogID(new BlockID(17, 1)).addLogID(new BlockID(17, 5))
+                .addLeafID(new BlockID(18, 0)).addLeafID(new BlockID(18, 8));
+        vanSpruce = new ConfigTreeDefinition().addLogID(new BlockID(17, 1)).addLogID(new BlockID(17, 5))
                 .addLogID(new BlockID(17, 9)).addLogID(new BlockID(17, 13))
-                .addLeafID(new BlockID(18, 1)).addLeafID(new BlockID(18, 9)));
-        
-        // Vanilla birch definition
-        registerTree(Strings.BIRCH, (new TreeDefinition()).addLogID(new BlockID(17, 2)).addLogID(new BlockID(17, 6))
+                .addLeafID(new BlockID(18, 1)).addLeafID(new BlockID(18, 9));
+        vanBirch = new ConfigTreeDefinition().addLogID(new BlockID(17, 2)).addLogID(new BlockID(17, 6))
                 .addLogID(new BlockID(17, 10)).addLogID(new BlockID(17, 14))
-                .addLeafID(new BlockID(18, 2)).addLeafID(new BlockID(18, 10)));
-        
-        // Vanilla jungle definition
-        registerTree(Strings.JUNGLE, (new TreeDefinition()).addLogID(new BlockID(17, 3)).addLogID(new BlockID(17, 7))
+                .addLeafID(new BlockID(18, 2)).addLeafID(new BlockID(18, 10));
+        vanJungle = new ConfigTreeDefinition().addLogID(new BlockID(17, 3)).addLogID(new BlockID(17, 7))
                 .addLogID(new BlockID(17, 11)).addLogID(new BlockID(17, 15))
                 .addLeafID(new BlockID(18, 3)).addLeafID(new BlockID(18, 11))
                 .addLeafID(new BlockID(18, 0)).addLeafID(new BlockID(18, 8))
-                .setMaxLeafBreakDist(6).setRequireLeafDecayCheck(false));
-        
-        // Vanilla Huge Brown Mushrooms
-        registerTree(Strings.MUSH_BROWN, (new TreeDefinition()).addLogID(new BlockID(99, 10)).addLogID(new BlockID(99, 15))
+                .setMaxLeafBreakDist(6).setRequireLeafDecayCheck(false);
+        vanMushBrown = new ConfigTreeDefinition().addLogID(new BlockID(99, 10)).addLogID(new BlockID(99, 15))
                 .addLeafID(new BlockID(99, 1)).addLeafID(new BlockID(99, 2))
                 .addLeafID(new BlockID(99, 3)).addLeafID(new BlockID(99, 4))
                 .addLeafID(new BlockID(99, 5)).addLeafID(new BlockID(99, 6))
                 .addLeafID(new BlockID(99, 7)).addLeafID(new BlockID(99, 8))
                 .addLeafID(new BlockID(99, 9)).addLeafID(new BlockID(99, 14))
-                .setMaxLeafBreakDist(6).setRequireLeafDecayCheck(false));
-        
-        // Vanilla Huge Red Mushrooms
-        registerTree(Strings.MUSH_RED, (new TreeDefinition()).addLogID(new BlockID(100, 10)).addLogID(new BlockID(100, 15))
+                .setMaxLeafBreakDist(6).setRequireLeafDecayCheck(false);
+        vanMushRed = new ConfigTreeDefinition().addLogID(new BlockID(100, 10)).addLogID(new BlockID(100, 15))
                 .addLeafID(new BlockID(100, 1)).addLeafID(new BlockID(100, 2))
                 .addLeafID(new BlockID(100, 3)).addLeafID(new BlockID(100, 4))
                 .addLeafID(new BlockID(100, 5)).addLeafID(new BlockID(100, 6))
                 .addLeafID(new BlockID(100, 7)).addLeafID(new BlockID(100, 8))
                 .addLeafID(new BlockID(100, 9)).addLeafID(new BlockID(100, 14))
-                .setMaxLeafBreakDist(6).setRequireLeafDecayCheck(false));
+                .setMaxLeafBreakDist(6).setRequireLeafDecayCheck(false);
+    }
+    
+    /*
+     * This will probably go away as there is no reason to call it.
+     */
+    protected void registerVanillaTreeDefs()
+    {
+        registerTree(Strings.OAK, vanOak);
+        registerTree(Strings.SPRUCE, vanSpruce);
+        registerTree(Strings.BIRCH, vanBirch);
+        registerTree(Strings.JUNGLE, vanJungle);
+        registerTree(Strings.MUSH_BROWN, vanMushBrown);
+        registerTree(Strings.MUSH_RED, vanMushRed);
     }
     
     /**
@@ -107,19 +110,12 @@ public class TreeRegistry
         for (BlockID blockID : newTD.getLogList())
             if (!isRegistered(blockID))
             {
-                // never seen this log, add to masterLogList
-                masterLogList.add(blockID);
                 // build the toAdd map of new log keys
                 toAdd.put(blockID, newKey);
             }
             else if (!sharedLogTrees.contains(logToStringMap.get(blockID)))
                 // Whoa! this BlockID isn't new, we need to do some merging
                 sharedLogTrees.add(logToStringMap.get(blockID));
-        
-        // Update masterLeafList with any leaf IDs it doesn't have
-        for (BlockID blockID : newTD.getLeafList())
-            if (!masterLeafList.contains(blockID))
-                masterLeafList.add(blockID);
         
         if (!isRegistered(newKey) && sharedLogTrees.size() == 0)
         { // New definition all around.  Easy.
@@ -138,7 +134,7 @@ public class TreeRegistry
                             "The existing definition will be merged with the new tree.", newKey, existingKey);
                     
                     // append the existing definition to our new definition
-                    newTD.append(treeDefs.remove(existingKey));
+                    newTD.appendWithSettings(treeDefs.remove(existingKey));
                 }
                 
                 // update logToStringMap for all logs in the new definition
@@ -148,19 +144,13 @@ public class TreeRegistry
             else
             { // A tree is defined for that key; append the new definition to the existing tree
                 TCLog.info("\"%s\" is already registered.  The new definition will be appended to the existing entry.", newKey);
-                treeDefs.get(newKey).append(newTD);
+                treeDefs.get(newKey).appendWithSettings(newTD);
                 logToStringMap.putAll(toAdd);
             }
         }
-    }
-    
-    /**
-     * Updates the genericDefinition private object based on masterLogList and masterLeafList. Should be called once all tree definitions
-     * are registered.
-     */
-    public void refreshGenericDefinition()
-    {
-        genericDefinition = new TreeDefinition(masterLogList, masterLeafList);
+        
+        // Update our master tree definition
+        masterDefinition.append(treeDefs.get(newKey));
     }
     
     /**
@@ -173,7 +163,7 @@ public class TreeRegistry
         String r = "";
         List<Integer> processed = new ArrayList<Integer>();
         
-        for (BlockID log : masterLogList)
+        for (BlockID log : masterDefinition.logBlocks)
         {
             if (!processed.contains(log.id))
             {
@@ -185,9 +175,9 @@ public class TreeRegistry
         return r.replaceFirst(", ", "");
     }
     
-    public TreeDefinition genericDefinition()
+    public TreeDefinition masterDefinition()
     {
-        return genericDefinition;
+        return masterDefinition;
     }
     
     /**
@@ -209,7 +199,7 @@ public class TreeRegistry
      */
     public boolean isRegistered(BlockID log)
     {
-        return masterLogList.contains(log);
+        return masterDefinition.isLogBlock(log);
     }
     
     public TreeDefinition get(String key)
@@ -223,18 +213,26 @@ public class TreeRegistry
     public TreeDefinition get(BlockID blockID)
     {
         if (isRegistered(blockID))
-            return get(logToStringMap.get(blockID));
+            if (TCSettings.useStrictBlockPairing)
+                return get(logToStringMap.get(blockID));
+            else
+                return this.masterDefinition;
         else
             return null;
     }
     
     public List<BlockID> masterLogList()
     {
-        return new ArrayList<BlockID>(masterLogList);
+        return masterDefinition.getLogList();
     }
     
     public List<BlockID> masterLeafList()
     {
-        return new ArrayList<BlockID>(masterLeafList);
+        return masterDefinition.getLeafList();
+    }
+    
+    public TreeDefinition vanillaOak()
+    {
+        return vanOak;
     }
 }

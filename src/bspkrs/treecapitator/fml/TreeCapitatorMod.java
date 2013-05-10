@@ -335,7 +335,7 @@ public class TreeCapitatorMod extends DummyModContainer
                         if (TCSettings.useStrictBlockPairing)
                             breaker = new TreeCapitator(entityPlayer, TreeRegistry.instance().get(blockID));
                         else
-                            breaker = new TreeCapitator(entityPlayer, TreeRegistry.instance().genericDefinition());
+                            breaker = new TreeCapitator(entityPlayer, TreeRegistry.instance().masterDefinition());
                         
                         breaker.onBlockHarvested(world, x, y, z, metadata, entityPlayer);
                         

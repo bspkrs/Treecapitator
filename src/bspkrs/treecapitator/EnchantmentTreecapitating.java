@@ -14,7 +14,7 @@ public class EnchantmentTreecapitating extends Enchantment
     @Override
     public boolean canApply(ItemStack itemStack)
     {
-        return itemStack.isItemEnchantable() && TCSettings.isAxeItem(itemStack);
+        return itemStack.isItemEnchantable() && ToolRegistry.instance().isAxe(itemStack);
     }
     
     @Override

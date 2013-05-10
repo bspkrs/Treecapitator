@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import bspkrs.util.BlockID;
 import bspkrs.util.HashCodeUtil;
+import bspkrs.util.ListUtils;
 
 public class TreeDefinition
 {
@@ -103,6 +103,13 @@ public class TreeDefinition
             if (!leafBlocks.contains(blockID))
                 leafBlocks.add(blockID);
         
+        return this;
+    }
+    
+    public TreeDefinition appendWithSettings(TreeDefinition toAdd)
+    {
+        append(toAdd);
+        
         if (toAdd.onlyDestroyUpwards != TCSettings.onlyDestroyUpwards)
             onlyDestroyUpwards = toAdd.onlyDestroyUpwards;
         if (toAdd.requireLeafDecayCheck != TCSettings.requireLeafDecayCheck)
@@ -140,27 +147,8 @@ public class TreeDefinition
         if (treeDefNBT.hasKey(Strings.breakSpeedModifier))
             breakSpeedModifier = treeDefNBT.getFloat(Strings.breakSpeedModifier);
         
-        logBlocks = new ArrayList<BlockID>();
-        leafBlocks = new ArrayList<BlockID>();
-        
-        NBTTagList logList = treeDefNBT.getTagList(Strings.LOGS);
-        
-        for (int i = 0; i < logList.tagCount(); i++)
-        {
-            NBTTagCompound log = (NBTTagCompound) logList.tagAt(i);
-            logBlocks.add(new BlockID(log.getInteger(Strings.id), log.getInteger(Strings.metadata)));
-        }
-        
-        if (treeDefNBT.hasKey(Strings.LEAVES))
-        {
-            NBTTagList leafList = treeDefNBT.getTagList(Strings.LEAVES);
-            
-            for (int i = 0; i < leafList.tagCount(); i++)
-            {
-                NBTTagCompound leaf = (NBTTagCompound) leafList.tagAt(i);
-                leafBlocks.add(new BlockID(leaf.getInteger(Strings.id), leaf.getInteger(Strings.metadata)));
-            }
-        }
+        logBlocks = ListUtils.getDelimitedStringAsBlockIDList(treeDefNBT.getString(Strings.LOGS), ";");
+        leafBlocks = ListUtils.getDelimitedStringAsBlockIDList(treeDefNBT.getString(Strings.LEAVES), ";");
         
         return this;
     }
@@ -176,34 +164,13 @@ public class TreeDefinition
         treeDefNBT.setInteger(Strings.minLeavesToID, minLeavesToID);
         treeDefNBT.setFloat(Strings.breakSpeedModifier, breakSpeedModifier);
         
-        NBTTagList logList = new NBTTagList();
-        
-        for (BlockID logBlock : logBlocks)
-        {
-            NBTTagCompound log = new NBTTagCompound();
-            log.setInteger(Strings.id, logBlock.id);
-            log.setInteger(Strings.metadata, logBlock.metadata);
-            logList.appendTag(log);
-        }
-        
-        treeDefNBT.setTag(Strings.LOGS, logList);
-        
-        if (leafBlocks.size() > 0)
-        {
-            NBTTagList leafList = new NBTTagList();
-            
-            for (BlockID leafBlock : leafBlocks)
-            {
-                NBTTagCompound leaf = new NBTTagCompound();
-                leaf.setInteger(Strings.id, leafBlock.id);
-                leaf.setInteger(Strings.metadata, leafBlock.metadata);
-                leafList.appendTag(leaf);
-            }
-            
-            treeDefNBT.setTag(Strings.LEAVES, leafList);
-        }
+        treeDefNBT.setString(Strings.LOGS, ListUtils.getListAsDelimitedString(logBlocks, ";"));
+        treeDefNBT.setString(Strings.LEAVES, ListUtils.getListAsDelimitedString(leafBlocks, ";"));
     }
     
+    /*
+     * Field setters
+     */
     public TreeDefinition setOnlyDestroyUpwards(boolean onlyDestroyUpwards)
     {
         this.onlyDestroyUpwards = onlyDestroyUpwards;
@@ -216,9 +183,15 @@ public class TreeDefinition
         return this;
     }
     
-    public TreeDefinition setMaxLogBreakDist(int maxLogBreakDist)
+    public TreeDefinition setMaxHorLogBreakDist(int maxHorLogBreakDist)
     {
-        maxHorLogBreakDist = maxLogBreakDist;
+        this.maxHorLogBreakDist = maxHorLogBreakDist;
+        return this;
+    }
+    
+    public TreeDefinition setMaxVerLogBreakDist(int maxVerLogBreakDist)
+    {
+        this.maxVerLogBreakDist = maxVerLogBreakDist;
         return this;
     }
     
@@ -266,6 +239,9 @@ public class TreeDefinition
         return new ArrayList<BlockID>(leafBlocks);
     }
     
+    /*
+     * Field accessors
+     */
     public boolean onlyDestroyUpwards()
     {
         return onlyDestroyUpwards;

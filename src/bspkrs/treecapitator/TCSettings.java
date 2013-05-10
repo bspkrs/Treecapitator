@@ -9,11 +9,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockLog;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMultiTextureTile;
-import net.minecraft.item.ItemStack;
 import bspkrs.util.BlockID;
 import bspkrs.util.CommonUtils;
 import bspkrs.util.Coord;
-import bspkrs.util.ItemID;
 
 public final class TCSettings
 {
@@ -28,7 +26,7 @@ public final class TCSettings
     public static boolean                              enableEnchantmentMode          = false;
     public static boolean                              requireItemInAxeListForEnchant = false;
     @Deprecated
-    public static String                               axeIDList                      = Item.axeWood.itemID + "; " + Item.axeStone.itemID + "; " + Item.axeIron.itemID + "; " + Item.axeGold.itemID + "; " + Item.axeDiamond.itemID;
+    public static String                               axeIDList                      = "";
     public static boolean                              needItem                       = true;
     public static boolean                              onlyDestroyUpwards             = true;
     public static boolean                              destroyLeaves                  = true;
@@ -448,22 +446,11 @@ public final class TCSettings
         {}
     }
     
-    @Deprecated
-    public static boolean isLogBlock(BlockID blockID)
-    {
-        return logIDList.contains(blockID);
-    }
-    
-    @Deprecated
-    public static boolean isAxeItem(ItemStack itemStack)
-    {
-        return itemStack != null && itemStack.stackSize > 0 && CommonUtils.isItemInList(itemStack.itemID, itemStack.getItemDamage(), TCSettings.axeIDList);
-    }
-    
-    public static boolean isAxeItem(ItemID itemID)
-    {
-        return false;
-    }
+    //    @Deprecated
+    //    public static boolean isLogBlock(BlockID blockID)
+    //    {
+    //        return logIDList.contains(blockID);
+    //    }
     
     @Deprecated
     public static String getStringFromConfigBlockList()

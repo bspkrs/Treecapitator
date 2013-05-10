@@ -242,7 +242,7 @@ public class TreeCapitator
     private boolean isAxeItemEquipped()
     {
         ItemStack item = player.getCurrentEquippedItem();
-        if (TCSettings.isAxeItem(item))
+        if (ToolRegistry.instance().isAxe(item))
         {
             axe = item;
             return true;
@@ -260,7 +260,7 @@ public class TreeCapitator
     public static boolean isAxeItemEquipped(EntityPlayer entityPlayer)
     {
         ItemStack item = entityPlayer.getCurrentEquippedItem();
-        if (TCSettings.isAxeItem(item))
+        if (ToolRegistry.instance().isAxe(item))
         {
             return true;
         }

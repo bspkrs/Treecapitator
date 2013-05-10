@@ -5,7 +5,7 @@ import bspkrs.util.Const;
 
 public class Strings
 {
-    public static final String VERSION_NUMBER                     = Const.MCVERSION + ".r01";
+    public static final String VERSION_NUMBER                     = Const.MCVERSION + ".r02";
     
     public static final String OAK                                = "vanilla_oak";
     public static final String SPRUCE                             = "vanilla_spruce";
@@ -15,9 +15,9 @@ public class Strings
     public static final String MUSH_RED                           = "vanilla_huge_red_mushroom";
     
     public static final String LOGS                               = "logs";
-    public static final String LOG_VALS                           = "logValues";
+    public static final String LOG_CFG_KEYS                       = "logConfigKeys";
     public static final String LEAVES                             = "leaves";
-    public static final String LEAF_VALS                          = "leafValues";
+    public static final String LEAF_CFG_KEYS                      = "leafConfigKeys";
     public static final String MOD_ID                             = "modID";
     public static final String CONFIG_PATH                        = "configPath";
     public static final String BLOCK_VALUES                       = "blockValues";
@@ -45,8 +45,6 @@ public class Strings
     public static final String maxLeafBreakDist                   = "maxLeafBreakDist";
     public static final String minLeavesToID                      = "minLeavesToID";
     public static final String breakSpeedModifier                 = "breakSpeedModifier";
-    public static final String id                                 = "id";
-    public static final String metadata                           = "metadata";
     
     public static final String maxHorBreakDistDesc                = "The maximum horizontal distance that the log breaking effect will travel (use -1 for no limit).";
     public static final String maxVerLogBreakDistDesc             = "The maximum vertical distance that the log breaking effect will travel (use -1 for no limit).";
