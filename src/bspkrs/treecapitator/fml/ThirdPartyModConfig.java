@@ -6,12 +6,18 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import bspkrs.treecapitator.ConfigTreeDefinition;
+import bspkrs.treecapitator.Strings;
 import bspkrs.treecapitator.TCLog;
+import bspkrs.treecapitator.ToolRegistry;
 import bspkrs.treecapitator.TreeDefinition;
 import bspkrs.treecapitator.TreeRegistry;
 import bspkrs.util.CommonUtils;
+import bspkrs.util.ConfigCategory;
 import bspkrs.util.Configuration;
+import bspkrs.util.ItemID;
+import bspkrs.util.ListUtils;
 import cpw.mods.fml.common.Loader;
 
 public class ThirdPartyModConfig
@@ -27,12 +33,28 @@ public class ThirdPartyModConfig
     private Map<String, TreeDefinition>       treesMap;
     private Map<String, String>               tagMap;
     
-    public ThirdPartyModConfig(String modID, String configPath, String blockKeys, String itemKeys, boolean shiftIndex)
+    protected ThirdPartyModConfig()
+    {
+        this.modID = "TreeCapitator";
+        this.configPath = "";
+        this.blockKeys = "";
+        this.itemKeys = "";
+        this.axeKeys = "";
+        this.shearsKeys = "";
+        this.shiftIndex = false;
+        
+        configTreesMap = new HashMap<String, ConfigTreeDefinition>();
+        treesMap = new HashMap<String, TreeDefinition>();
+    }
+    
+    public ThirdPartyModConfig(String modID, String configPath, String blockKeys, String itemKeys, String axeKeys, String shearsKeys, boolean shiftIndex)
     {
         this.modID = modID;
         this.configPath = configPath;
         this.blockKeys = blockKeys;
         this.itemKeys = itemKeys;
+        this.axeKeys = axeKeys;
+        this.shearsKeys = shearsKeys;
         this.shiftIndex = shiftIndex;
         
         configTreesMap = new HashMap<String, ConfigTreeDefinition>();
@@ -40,84 +62,125 @@ public class ThirdPartyModConfig
         refreshReplacementTags();
     }
     
-    public ThirdPartyModConfig readFromNBT(NBTTagCompound treeDefNBT)
+    public ThirdPartyModConfig(String modID, String configPath, String blockKeys)
     {
-        /*if (treeDefNBT.hasKey(Strings.onlyDestroyUpwards))
-            onlyDestroyUpwards = treeDefNBT.getBoolean(Strings.onlyDestroyUpwards);
-        if (treeDefNBT.hasKey(Strings.requireLeafDecayCheck))
-            requireLeafDecayCheck = treeDefNBT.getBoolean(Strings.requireLeafDecayCheck);
-        if (treeDefNBT.hasKey(Strings.maxHorLogBreakDist))
-            maxLogBreakDist = treeDefNBT.getInteger(Strings.maxHorLogBreakDist);
-        if (treeDefNBT.hasKey(Strings.maxLeafBreakDist))
-            maxLeafBreakDist = treeDefNBT.getInteger(Strings.maxLeafBreakDist);
-        if (treeDefNBT.hasKey(Strings.maxLeafIDDist))
-            maxLeafIDDist = treeDefNBT.getInteger(Strings.maxLeafIDDist);
-        if (treeDefNBT.hasKey(Strings.minLeavesToID))
-            minLeavesToID = treeDefNBT.getInteger(Strings.minLeavesToID);
-        if (treeDefNBT.hasKey(Strings.breakSpeedModifier))
-            breakSpeedModifier = treeDefNBT.getFloat(Strings.breakSpeedModifier);
-        
-        logBlocks = new ArrayList<BlockID>();
-        leafBlocks = new ArrayList<BlockID>();
-        
-        NBTTagList logList = treeDefNBT.getTagList(Strings.LOGS);
-        
-        for (int i = 0; i < logList.tagCount(); i++)
+        this(modID, configPath, blockKeys, "", "", "", true);
+    }
+    
+    public ThirdPartyModConfig(String modID, String configPath, String itemKeys, String axeKeys, String shearsKeys, boolean shiftIndex)
+    {
+        this(modID, configPath, "", itemKeys, axeKeys, shearsKeys, shiftIndex);
+    }
+    
+    public ThirdPartyModConfig(Configuration config, String category)
+    {
+        this();
+        readFromConfiguration(config, category);
+    }
+    
+    public ThirdPartyModConfig(NBTTagCompound tpModCfg)
+    {
+        this();
+        readFromNBT(tpModCfg);
+    }
+    
+    public ThirdPartyModConfig readFromNBT(NBTTagCompound tpModCfg)
+    {
+        this.modID = tpModCfg.getString(Strings.MOD_ID);
+        this.configPath = tpModCfg.getString(Strings.CONFIG_PATH);
+        if (tpModCfg.hasKey(Strings.BLOCK_CFG_KEYS))
+            this.blockKeys = tpModCfg.getString(Strings.BLOCK_CFG_KEYS);
+        if (tpModCfg.hasKey(Strings.ITEM_CFG_KEYS))
         {
-            NBTTagCompound log = (NBTTagCompound) logList.tagAt(i);
-            logBlocks.add(new BlockID(log.getInteger(Strings.id), log.getInteger(Strings.metadata)));
+            this.itemKeys = tpModCfg.getString(Strings.ITEM_CFG_KEYS);
+            this.axeKeys = tpModCfg.getString(Strings.AXE_ID_LIST);
+            if (tpModCfg.hasKey(Strings.SHEARS_ID_LIST))
+                this.shearsKeys = tpModCfg.getString(Strings.SHEARS_ID_LIST);
+            this.shiftIndex = tpModCfg.getBoolean(Strings.SHIFT_INDEX);
         }
         
-        if (treeDefNBT.hasKey(Strings.LEAVES))
+        configTreesMap = new HashMap<String, ConfigTreeDefinition>();
+        
+        NBTTagList treeList = tpModCfg.getTagList(Strings.TREES);
+        
+        for (int i = 0; i < treeList.tagCount(); i++)
         {
-            NBTTagList leafList = treeDefNBT.getTagList(Strings.LEAVES);
-            
-            for (int i = 0; i < leafList.tagCount(); i++)
-            {
-                NBTTagCompound leaf = (NBTTagCompound) leafList.tagAt(i);
-                leafBlocks.add(new BlockID(leaf.getInteger(Strings.id), leaf.getInteger(Strings.metadata)));
-            }
-        }*/
+            NBTTagCompound tree = (NBTTagCompound) treeList.tagAt(i);
+            this.addConfigTreeDef(tree.getName(), new ConfigTreeDefinition(tree));
+        }
+        
+        refreshReplacementTags();
+        refreshTreeDefinitionsFromConfig();
         
         return this;
     }
     
-    public void writeToNBT(NBTTagCompound treeDefNBT)
+    public void writeToNBT(NBTTagCompound tpModCfg)
     {
-        /*treeDefNBT.setBoolean(Strings.onlyDestroyUpwards, onlyDestroyUpwards);
-        treeDefNBT.setBoolean(Strings.requireLeafDecayCheck, requireLeafDecayCheck);
-        treeDefNBT.setInteger(Strings.maxHorLogBreakDist, maxLogBreakDist);
-        treeDefNBT.setInteger(Strings.maxLeafBreakDist, maxLeafBreakDist);
-        treeDefNBT.setInteger(Strings.maxLeafIDDist, maxLeafIDDist);
-        treeDefNBT.setInteger(Strings.minLeavesToID, minLeavesToID);
-        treeDefNBT.setFloat(Strings.breakSpeedModifier, breakSpeedModifier);
-        
-        NBTTagList logList = new NBTTagList();
-        
-        for (BlockID logBlock : logBlocks)
+        tpModCfg.setName(this.modID);
+        tpModCfg.setString(Strings.MOD_ID, this.modID);
+        if (this.configPath.length() > 0)
+            tpModCfg.setString(Strings.CONFIG_PATH, this.configPath);
+        if (this.blockKeys.length() > 0)
+            tpModCfg.setString(Strings.BLOCK_CFG_KEYS, this.blockKeys);
+        if (this.itemKeys.length() > 0)
         {
-            NBTTagCompound log = new NBTTagCompound();
-            log.setInteger(Strings.id, logBlock.id);
-            log.setInteger(Strings.metadata, logBlock.metadata);
-            logList.appendTag(log);
+            tpModCfg.setString(Strings.ITEM_CFG_KEYS, this.itemKeys);
+            tpModCfg.setString(Strings.AXE_ID_LIST, this.axeKeys);
+            if (this.shearsKeys.length() > 0)
+                tpModCfg.setString(Strings.SHEARS_ID_LIST, this.shearsKeys);
+            tpModCfg.setBoolean(Strings.SHIFT_INDEX, this.shiftIndex);
         }
         
-        treeDefNBT.setTag(Strings.LOGS, logList);
-        
-        if (leafBlocks.size() > 0)
+        NBTTagList treeList = new NBTTagList();
+        treeList.setName(Strings.TREES);
+        for (Entry<String, ConfigTreeDefinition> e : configTreesMap.entrySet())
         {
-            NBTTagList leafList = new NBTTagList();
-            
-            for (BlockID leafBlock : leafBlocks)
+            NBTTagCompound tree = new NBTTagCompound();
+            e.getValue().writeToNBT(tree);
+            tree.setName(e.getKey());
+            treeList.appendTag(tree);
+        }
+        
+        tpModCfg.setTag(Strings.TREES, treeList);
+    }
+    
+    public ThirdPartyModConfig readFromConfiguration(Configuration config, String category)
+    {
+        this.modID = config.get(category, Strings.MOD_ID, "").getString();
+        this.configPath = config.get(category, Strings.CONFIG_PATH, "").getString();
+        if (config.getCategory(category).containsKey(Strings.BLOCK_CFG_KEYS))
+            this.blockKeys = config.get(category, Strings.BLOCK_CFG_KEYS, "").getString();
+        if (config.getCategory(category).containsKey(Strings.ITEM_CFG_KEYS))
+        {
+            this.itemKeys = config.get(category, Strings.ITEM_CFG_KEYS, "").getString();
+            this.axeKeys = config.get(category, Strings.AXE_ID_LIST, "").getString();
+            if (config.getCategory(category).containsKey(Strings.SHEARS_ID_LIST))
+                this.shearsKeys = config.get(category, Strings.SHEARS_ID_LIST, "").getString();
+            this.shiftIndex = config.get(category, Strings.SHIFT_INDEX, "").getBoolean(true);
+        }
+        
+        configTreesMap = new HashMap<String, ConfigTreeDefinition>();
+        
+        for (String ctgy : config.getCategoryNames())
+        {
+            if (ctgy.indexOf(category + ".") != -1)
             {
-                NBTTagCompound leaf = new NBTTagCompound();
-                leaf.setInteger(Strings.id, leafBlock.id);
-                leaf.setInteger(Strings.metadata, leafBlock.metadata);
-                leafList.appendTag(leaf);
+                ConfigCategory currentCtgy = config.getCategory(ctgy);
+                String treeName = currentCtgy.getName();
+                // TODO: add config tree def
             }
-            
-            treeDefNBT.setTag(Strings.LEAVES, leafList);
-        }*/
+        }
+        
+        refreshReplacementTags();
+        refreshTreeDefinitionsFromConfig();
+        
+        return this;
+    }
+    
+    public void writeToConfiguration(Configuration config, String category)
+    {
+        // TODO: finish this
     }
     
     public ThirdPartyModConfig addConfigTreeDef(String key, ConfigTreeDefinition tree)
@@ -140,15 +203,30 @@ public class ThirdPartyModConfig
         return this;
     }
     
-    public void registerAllTrees()
+    public void registerTrees()
     {
+        if (configTreesMap.size() != treesMap.size())
+            refreshTreeDefinitionsFromConfig();
+        
         for (Entry<String, TreeDefinition> e : treesMap.entrySet())
             TreeRegistry.instance().registerTree(e.getKey(), e.getValue());
     }
     
     public void registerTools()
-    {   
+    {
+        String axeList = this.axeKeys;
+        String shearsList = this.shearsKeys;
+        for (Entry<String, String> e : tagMap.entrySet())
+        {
+            axeList = axeList.replace(e.getKey(), e.getValue());
+            shearsList = shearsList.replace(e.getKey(), e.getValue());
+        }
         
+        for (ItemID axe : ListUtils.getDelimitedStringAsItemIDList(axeList, ";"))
+            ToolRegistry.instance().registerAxe(axe);
+        
+        for (ItemID shears : ListUtils.getDelimitedStringAsItemIDList(shearsList, ";"))
+            ToolRegistry.instance().registerShears(shears);
     }
     
     public String modID()

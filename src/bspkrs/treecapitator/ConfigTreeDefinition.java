@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import net.minecraft.nbt.NBTTagCompound;
 import bspkrs.util.BlockID;
+import bspkrs.util.Configuration;
 import bspkrs.util.HashCodeUtil;
 import bspkrs.util.ListUtils;
 
@@ -33,6 +34,45 @@ public class ConfigTreeDefinition extends TreeDefinition
     {
         logKeys = configLogs;
         leafKeys = configLeaves;
+    }
+    
+    public ConfigTreeDefinition(NBTTagCompound treeDefNBT)
+    {
+        readFromNBT(treeDefNBT);
+    }
+    
+    @Override
+    public ConfigTreeDefinition readFromNBT(NBTTagCompound treeDefNBT)
+    {
+        super.readFromNBT(treeDefNBT);
+        
+        if (treeDefNBT.hasKey(Strings.LOG_CFG_KEYS))
+            logKeys = treeDefNBT.getString(Strings.LOG_CFG_KEYS);
+        
+        if (treeDefNBT.hasKey(Strings.LEAF_CFG_KEYS))
+            leafKeys = treeDefNBT.getString(Strings.LEAF_CFG_KEYS);
+        
+        return this;
+    }
+    
+    @Override
+    public void writeToNBT(NBTTagCompound treeDefNBT)
+    {
+        super.writeToNBT(treeDefNBT);
+        
+        treeDefNBT.setString(Strings.LOG_CFG_KEYS, logKeys);
+        treeDefNBT.setString(Strings.LEAF_CFG_KEYS, leafKeys);
+    }
+    
+    public ConfigTreeDefinition readFromConfiguration(Configuration config, String category)
+    {
+        // TODO: finish this
+        return this;
+    }
+    
+    public void writeToConfiguration(Configuration config, String category)
+    {
+        // TODO: finish this
     }
     
     public TreeDefinition getTagsReplacedTreeDef(Map<String, String> tagMap)
@@ -99,29 +139,6 @@ public class ConfigTreeDefinition extends TreeDefinition
         result = HashCodeUtil.hash(result, logKeys);
         result = HashCodeUtil.hash(result, leafKeys);
         return result;
-    }
-    
-    @Override
-    public ConfigTreeDefinition readFromNBT(NBTTagCompound treeDefNBT)
-    {
-        super.readFromNBT(treeDefNBT);
-        
-        if (treeDefNBT.hasKey(Strings.LOG_CFG_KEYS))
-            logKeys = treeDefNBT.getString(Strings.LOG_CFG_KEYS);
-        
-        if (treeDefNBT.hasKey(Strings.LEAF_CFG_KEYS))
-            leafKeys = treeDefNBT.getString(Strings.LEAF_CFG_KEYS);
-        
-        return this;
-    }
-    
-    @Override
-    public void writeToNBT(NBTTagCompound treeDefNBT)
-    {
-        super.writeToNBT(treeDefNBT);
-        
-        treeDefNBT.setString(Strings.LOG_CFG_KEYS, logKeys);
-        treeDefNBT.setString(Strings.LEAF_CFG_KEYS, leafKeys);
     }
     
     /**
