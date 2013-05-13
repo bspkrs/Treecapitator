@@ -13,6 +13,7 @@ import bspkrs.treecapitator.TCSettings;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 
+@SuppressWarnings("rawtypes")
 public class IDResolverMappingList implements List
 {
     private ArrayList<IDResolverMapping> list;
@@ -38,7 +39,7 @@ public class IDResolverMappingList implements List
         /*
          * Get IDs from ID Resolver if it's loaded
          */
-        if (Loader.instance().isModLoaded(TCSettings.idResolverModID))
+        if (Loader.isModLoaded(TCSettings.idResolverModID))
         {
             TCLog.info("ID Resolver has been detected.  Processing ID config...");
             
@@ -136,6 +137,7 @@ public class IDResolverMappingList implements List
         return list.iterator();
     }
     
+    @SuppressWarnings("unchecked")
     public ArrayList<IDResolverMapping> toArrayList()
     {
         return (ArrayList<IDResolverMapping>) list.clone();
@@ -171,12 +173,14 @@ public class IDResolverMappingList implements List
         return list.containsAll(c);
     }
     
+    @SuppressWarnings("unchecked")
     @Override
     public boolean addAll(Collection c)
     {
         return list.addAll(c);
     }
     
+    @SuppressWarnings("unchecked")
     @Override
     public boolean addAll(int index, Collection c)
     {

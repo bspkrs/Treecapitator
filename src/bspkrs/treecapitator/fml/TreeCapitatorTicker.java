@@ -21,7 +21,7 @@ public class TreeCapitatorTicker implements ITickHandler
     public TreeCapitatorTicker(EnumSet<TickType> tickTypes)
     {
         this.tickTypes = tickTypes;
-        this.mcClient = FMLClientHandler.instance().getClient();
+        mcClient = FMLClientHandler.instance().getClient();
     }
     
     @Override
@@ -58,7 +58,7 @@ public class TreeCapitatorTicker implements ITickHandler
         if (mcClient != null && mcClient.thePlayer != null)
         {
             if (bspkrsCoreProxy.instance.allowUpdateCheck && TreeCapitatorMod.versionChecker != null)
-                if (!TreeCapitatorMod.versionChecker.isCurrentVersionBySubStringAsFloatNewer(TreeCapitatorMod.instance.metadata.version.length() - 1, TreeCapitatorMod.instance.metadata.version.length()))
+                if (!TreeCapitatorMod.versionChecker.isCurrentVersionBySubStringAsFloatNewer(TreeCapitatorMod.metadata.version.length() - 1, TreeCapitatorMod.metadata.version.length()))
                     for (String msg : TreeCapitatorMod.versionChecker.getInGameMessage())
                         mcClient.thePlayer.addChatMessage(msg);
             
@@ -74,7 +74,7 @@ public class TreeCapitatorTicker implements ITickHandler
     @Override
     public EnumSet<TickType> ticks()
     {
-        return this.tickTypes;
+        return tickTypes;
     }
     
     @Override

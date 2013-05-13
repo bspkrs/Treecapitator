@@ -37,17 +37,17 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
     /* Obfuscated Names for ItemInWorldManager Transformation */
     
     /* removeBlock */
-    private final String  targetMethodDesc = "(III)Z";
+    private final String                  targetMethodDesc = "(III)Z";
     
-    private final HashMap obfStrings;
-    private final HashMap mcpStrings;
+    private final HashMap<String, String> obfStrings;
+    private final HashMap<String, String> mcpStrings;
     
     public ItemInWorldManagerTransformer()
     {
         /*
          * create a HashMap to store the obfuscated names of classes, methods, and fields used in the transformation
          */
-        obfStrings = new HashMap();
+        obfStrings = new HashMap<String, String>();
         
         /* 1.5.1/1.5.2 mappings */
         /* net.minecraft.src.ItemInWorldManager */
@@ -196,7 +196,7 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
         /*
          * create a HashMap to store the MCP names of classes, methods, and fields used in the transformation
          */
-        mcpStrings = new HashMap();
+        mcpStrings = new HashMap<String, String>();
         // Forge 7.7.0.582 1.5.0 mappings
         // Forge 6.6.0.497 1.4.5/1.4.6/1.4.7 mappings
         mcpStrings.put("className", "net.minecraft.item.ItemInWorldManager");
@@ -241,7 +241,7 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
         return bytes;
     }
     
-    private byte[] transformItemInWorldManager(byte[] bytes, HashMap hm)
+    private byte[] transformItemInWorldManager(byte[] bytes, HashMap<String, String> hm)
     {
         TCLog.debug("TreeCapitator ASM Magic Time!");
         TCLog.debug("Class Transformation running on " + hm.get("javaClassName") + "...");
@@ -309,7 +309,7 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
                             offset++;
                         
                         TCLog.debug("Found ALOAD Node at offset " + offset + " from IFNULL Node");
-                        TCLog.debug("Patching method " + (String) hm.get("javaClassName") + "/" + m.name + m.desc + "...");
+                        TCLog.debug("Patching method " + hm.get("javaClassName") + "/" + m.name + m.desc + "...");
                         
                         // make a new label node for the end of our code
                         LabelNode lmm1Node = new LabelNode(new Label());
@@ -320,24 +320,24 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
                         // construct instruction nodes for list
                         toInject.add(new FieldInsnNode(GETSTATIC, "bspkrs/treecapitator/fml/TreeCapitatorMod", "instance", "Lbspkrs/treecapitator/fml/TreeCapitatorMod;"));
                         toInject.add(new VarInsnNode(ALOAD, 0));
-                        toInject.add(new FieldInsnNode(GETFIELD, (String) hm.get("javaClassName"), (String) hm.get("worldFieldName"), "L" + (String) hm.get("worldJavaClassName") + ";"));
+                        toInject.add(new FieldInsnNode(GETFIELD, hm.get("javaClassName"), hm.get("worldFieldName"), "L" + hm.get("worldJavaClassName") + ";"));
                         toInject.add(new VarInsnNode(ILOAD, 1));
                         toInject.add(new VarInsnNode(ILOAD, 2));
                         toInject.add(new VarInsnNode(ILOAD, 3));
                         toInject.add(new VarInsnNode(ALOAD, blockIndex));
                         toInject.add(new VarInsnNode(ILOAD, mdIndex));
                         toInject.add(new VarInsnNode(ALOAD, 0));
-                        toInject.add(new FieldInsnNode(GETFIELD, (String) hm.get("javaClassName"), (String) hm.get("entityPlayerFieldName"), "L" + (String) hm.get("entityPlayerMPJavaClassName") + ";"));
+                        toInject.add(new FieldInsnNode(GETFIELD, hm.get("javaClassName"), hm.get("entityPlayerFieldName"), "L" + hm.get("entityPlayerMPJavaClassName") + ";"));
                         toInject.add(new MethodInsnNode(INVOKEVIRTUAL, "bspkrs/treecapitator/fml/TreeCapitatorMod", "onBlockHarvested",
-                                "(L" + (String) hm.get("worldJavaClassName") + ";IIIL" + (String) hm.get("blockJavaClassName") + ";IL"
-                                        + (String) hm.get("entityPlayerJavaClassName") + ";)V"));
+                                "(L" + hm.get("worldJavaClassName") + ";IIIL" + hm.get("blockJavaClassName") + ";IL"
+                                        + hm.get("entityPlayerJavaClassName") + ";)V"));
                         toInject.add(lmm1Node);
                         
                         m.instructions.insertBefore(m.instructions.get(index + offset), toInject);
                         
-                        TCLog.debug("Method " + (String) hm.get("javaClassName") + "/" + m.name + m.desc + " patched at index " + (index + offset - 1));
+                        TCLog.debug("Method " + hm.get("javaClassName") + "/" + m.name + m.desc + " patched at index " + (index + offset - 1));
                         TCLog.info("TreeCapitator ASM Patching Complete!");
-                        TreeCapitatorMod.instance.isCoreModLoaded = true;
+                        TreeCapitatorMod.isCoreModLoaded = true;
                         break;
                     }
                 }

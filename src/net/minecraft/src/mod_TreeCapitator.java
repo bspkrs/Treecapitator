@@ -5,11 +5,13 @@ import net.minecraftforge.common.ForgeVersion;
 import bspkrs.treecapitator.Strings;
 import bspkrs.treecapitator.TCLog;
 import bspkrs.treecapitator.TCSettings;
-import bspkrs.treecapitator.TreeRegistry;
+import bspkrs.treecapitator.ToolRegistry;
 import bspkrs.treecapitator.fml.TreeCapitatorMod;
 import bspkrs.util.BSProp;
 import bspkrs.util.BSPropRegistry;
 import bspkrs.util.Const;
+import bspkrs.util.ItemID;
+import bspkrs.util.ListUtils;
 import bspkrs.util.ModVersionChecker;
 
 public class mod_TreeCapitator extends BaseMod
@@ -140,7 +142,10 @@ public class mod_TreeCapitator extends BaseMod
             TCSettings.damageIncreaseAmount = damageIncreaseAmount;
             TCSettings.allowSmartTreeDetection = allowSmartTreeDetection;
             
-            TreeRegistry.instance();
+            for (ItemID itemID : ListUtils.getDelimitedStringAsItemIDList(TCSettings.axeIDList, ";"))
+                ToolRegistry.instance().registerAxe(itemID);
+            for (ItemID itemID : ListUtils.getDelimitedStringAsItemIDList(TCSettings.shearIDList, ";"))
+                ToolRegistry.instance().registerShears(itemID);
         }
     }
     

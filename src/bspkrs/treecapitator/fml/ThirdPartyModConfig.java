@@ -1,4 +1,4 @@
-package bspkrs.treecapitator;
+package bspkrs.treecapitator.fml;
 
 import java.io.File;
 import java.util.HashMap;
@@ -6,8 +6,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import net.minecraft.nbt.NBTTagCompound;
-import bspkrs.treecapitator.fml.IDResolverMapping;
-import bspkrs.treecapitator.fml.IDResolverMappingList;
+import bspkrs.treecapitator.ConfigTreeDefinition;
+import bspkrs.treecapitator.TCLog;
+import bspkrs.treecapitator.TreeDefinition;
+import bspkrs.treecapitator.TreeRegistry;
 import bspkrs.util.CommonUtils;
 import bspkrs.util.Configuration;
 import cpw.mods.fml.common.Loader;
@@ -144,7 +146,7 @@ public class ThirdPartyModConfig
             TreeRegistry.instance().registerTree(e.getKey(), e.getValue());
     }
     
-    public void registerLawnTools()
+    public void registerTools()
     {   
         
     }
@@ -183,7 +185,7 @@ public class ThirdPartyModConfig
         
         TCLog.debug("Processing Mod \"%s\" config file \"%s\"...", modID, configPath);
         
-        if (Loader.instance().isModLoaded(modID))
+        if (Loader.isModLoaded(modID))
         {
             File file = new File(Loader.instance().getConfigDir(), configPath.trim());
             if (file.exists())

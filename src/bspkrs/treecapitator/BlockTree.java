@@ -1,12 +1,11 @@
 package bspkrs.treecapitator;
 
-import java.util.ArrayList;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLog;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import bspkrs.util.BlockID;
+import bspkrs.util.Coord;
 
 public class BlockTree extends BlockLog
 {
@@ -18,7 +17,16 @@ public class BlockTree extends BlockLog
         setHardness(TCSettings.logHardnessNormal);
         setStepSound(Block.soundWoodFootstep);
         setUnlocalizedName("log");
-        // setRequiresSelfNotify();
+    }
+    
+    /**
+     * Called when the block is clicked by a player. Args: x, y, z, entityPlayer
+     */
+    @Override
+    public void onBlockClicked(World world, int x, int y, int z, EntityPlayer entityPlayer)
+    {
+        breaker = new TreeCapitator(entityPlayer, TreeRegistry.instance().masterDefinition());
+        breaker.onBlockClicked(world, x, y, z, entityPlayer);
     }
     
     /**
@@ -27,12 +35,23 @@ public class BlockTree extends BlockLog
     @Override
     public void onBlockHarvested(World world, int x, int y, int z, int md, EntityPlayer entityPlayer)
     {
-        ArrayList<BlockID> log = new ArrayList<BlockID>();
-        log.add(new BlockID(Block.wood.blockID, (TCSettings.useStrictBlockPairing ? md : -1)));
-        ArrayList<BlockID> leaf = new ArrayList<BlockID>();
-        leaf.add(new BlockID(Block.leaves.blockID, (TCSettings.useStrictBlockPairing ? md : -1)));
-        breaker = new TreeCapitator(entityPlayer, log, leaf);
-        breaker.onBlockHarvested(world, x, y, z, md, entityPlayer);
+        Coord blockPos = new Coord(x, y, z);
+        if (TreeRegistry.instance().trackTreeChopEventAt(blockPos))
+        {
+            TCLog.debug("BlockID " + blockID + " is a log.");
+            
+            if (TreeCapitator.isBreakingPossible(world, entityPlayer))
+            {
+                
+                if (TCSettings.useStrictBlockPairing)
+                    breaker = new TreeCapitator(entityPlayer, TreeRegistry.instance().get(new BlockID(Block.wood.blockID, md)));
+                else
+                    breaker = new TreeCapitator(entityPlayer, TreeRegistry.instance().masterDefinition());
+                
+                breaker.onBlockHarvested(world, x, y, z, md, entityPlayer);
+            }
+        }
+        TreeRegistry.instance().endTreeChopEventAt(blockPos);
     }
     
     /**

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import bspkrs.util.BlockID;
+import bspkrs.util.Coord;
 
 public class TreeRegistry
 {
@@ -19,6 +20,7 @@ public class TreeRegistry
     private ConfigTreeDefinition        vanJungle;
     private ConfigTreeDefinition        vanMushBrown;
     private ConfigTreeDefinition        vanMushRed;
+    private List<Coord>                 blocksBeingChopped;
     
     private static TreeRegistry         instance;
     
@@ -36,13 +38,14 @@ public class TreeRegistry
         
         initMapsAndLists();
         initVanillaTreeDefs();
-        //registerVanillaTreeDefs();
     }
     
     protected void initMapsAndLists()
     {
         treeDefs = new HashMap<String, TreeDefinition>();
         logToStringMap = new HashMap<BlockID, String>();
+        masterDefinition = new TreeDefinition();
+        blocksBeingChopped = new ArrayList<Coord>();
     }
     
     protected void initVanillaTreeDefs()
@@ -77,9 +80,6 @@ public class TreeRegistry
                 .setMaxLeafBreakDist(6).setRequireLeafDecayCheck(false);
     }
     
-    /*
-     * This will probably go away as there is no reason to call it.
-     */
     protected void registerVanillaTreeDefs()
     {
         registerTree(Strings.OAK, vanOak);
@@ -153,6 +153,22 @@ public class TreeRegistry
         masterDefinition.append(treeDefs.get(newKey));
     }
     
+    public boolean trackTreeChopEventAt(Coord c)
+    {
+        if (!blocksBeingChopped.contains(c))
+        {
+            blocksBeingChopped.add(c);
+            return true;
+        }
+        return false;
+    }
+    
+    public void endTreeChopEventAt(Coord c)
+    {
+        if (blocksBeingChopped.contains(c))
+            blocksBeingChopped.remove(c);
+    }
+    
     /**
      * Gets a comma-delimited string with all generic log IDs (no metadata).
      * 
@@ -216,7 +232,7 @@ public class TreeRegistry
             if (TCSettings.useStrictBlockPairing)
                 return get(logToStringMap.get(blockID));
             else
-                return this.masterDefinition;
+                return masterDefinition;
         else
             return null;
     }

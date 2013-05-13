@@ -12,8 +12,8 @@ import net.minecraftforge.common.MinecraftForge;
 import bspkrs.fml.util.bspkrsCoreProxy;
 import bspkrs.treecapitator.Strings;
 import bspkrs.treecapitator.TCLog;
-import bspkrs.treecapitator.TreeCapitator;
 import bspkrs.treecapitator.TCSettings;
+import bspkrs.treecapitator.TreeCapitator;
 import bspkrs.treecapitator.TreeRegistry;
 import bspkrs.util.BlockID;
 import bspkrs.util.ConfigCategory;
@@ -64,11 +64,8 @@ public class TreeCapitatorMod extends DummyModContainer
     @Instance(value = "TreeCapitator")
     public static TreeCapitatorMod  instance;
     
-    private static Loader           loader;
-    
     public TreeCapitatorMod()
     {
-        loader = Loader.instance();
         new bspkrsCoreProxy();
     }
     
@@ -293,13 +290,13 @@ public class TreeCapitatorMod extends DummyModContainer
     @PostInit
     public void postInit(FMLPostInitializationEvent event)
     {
-        getReplacementTagListFromThirdPartyConfigs();
-        //Strings.localBlockIDList = TreeCapitator.replaceThirdPartyBlockTags(Strings.localBlockIDList);
-        TCSettings.axeIDList = TCSettings.replaceThirdPartyBlockTags(TCSettings.axeIDList);
-        TCSettings.shearIDList = TCSettings.replaceThirdPartyBlockTags(TCSettings.shearIDList);
+        //**getReplacementTagListFromThirdPartyConfigs();
+        //**Strings.localBlockIDList = TreeCapitator.replaceThirdPartyBlockTags(Strings.localBlockIDList);
+        //**TCSettings.axeIDList = TCSettings.replaceThirdPartyBlockTags(TCSettings.axeIDList);
+        //**TCSettings.shearIDList = TCSettings.replaceThirdPartyBlockTags(TCSettings.shearIDList);
         
         // Multi-Mine stuff
-        if (Loader.instance().isModLoaded(TCSettings.multiMineID))
+        if (Loader.isModLoaded(TCSettings.multiMineID))
         {
             TCLog.info("It looks like you're using Multi-Mine.  You should put this list in the S:\"Excluded Block IDs\" config setting in AS_MultiMine.cfg:\n\"%s\"",
                     TreeRegistry.instance().getMultiMineExclusionString());
@@ -322,14 +319,12 @@ public class TreeCapitatorMod extends DummyModContainer
             if (TreeRegistry.instance().isRegistered(blockID))
             {
                 Coord blockPos = new Coord(x, y, z);
-                if (!TCSettings.blocksBeingChopped.contains(blockPos))
+                if (TreeRegistry.instance().trackTreeChopEventAt(blockPos))
                 {
                     TCLog.debug("BlockID " + blockID + " is a log.");
                     
                     if (TreeCapitator.isBreakingPossible(world, entityPlayer))
                     {
-                        TCSettings.blocksBeingChopped.add(blockPos);
-                        
                         TreeCapitator breaker;
                         
                         if (TCSettings.useStrictBlockPairing)
@@ -338,10 +333,9 @@ public class TreeCapitatorMod extends DummyModContainer
                             breaker = new TreeCapitator(entityPlayer, TreeRegistry.instance().masterDefinition());
                         
                         breaker.onBlockHarvested(world, x, y, z, metadata, entityPlayer);
-                        
-                        TCSettings.blocksBeingChopped.remove(blockPos);
                     }
                 }
+                TreeRegistry.instance().endTreeChopEventAt(blockPos);
             }
         }
     }
@@ -349,11 +343,5 @@ public class TreeCapitatorMod extends DummyModContainer
     public static boolean isItemInWorldManagerReplaced(EntityPlayerMP player)
     {
         return !player.theItemInWorldManager.getClass().getSimpleName().equals(ItemInWorldManager.class.getSimpleName());
-    }
-    
-    @Deprecated
-    public void getReplacementTagListFromThirdPartyConfigs()
-    {   
-        
     }
 }

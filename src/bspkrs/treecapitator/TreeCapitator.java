@@ -89,9 +89,27 @@ public class TreeCapitator
                 && !(player.capabilities.isCreativeMode && TCSettings.disableInCreative);
     }
     
+    /**
+     * Call this method in the log block's onBlockClicked(World world, int x, int y, int z, EntityPlayer entityPlayer) method
+     */
+    public void onBlockClicked(World world, int x, int y, int z, EntityPlayer entityPlayer)
+    {
+        shouldFell = false;
+        player = entityPlayer;
+        
+        if (!world.isRemote && (isAxeItemEquipped(player) || !TCSettings.needItem))
+        {
+            shouldFell = true;
+            
+            if (!player.capabilities.isCreativeMode && TCSettings.allowItemDamage && axe != null
+                    && axe.getItemDamage() == axe.getMaxDamage() && !TCSettings.allowMoreBlocksThanDamage)
+                shouldFell = false;
+        }
+    }
+    
     public void onBlockHarvested(World world, int x, int y, int z, int md, EntityPlayer entityPlayer)
     {
-        TCLog.debug("In TreeBlockBreaker.onBlockHarvested() " + x + ", " + y + ", " + z);
+        TCLog.debug("In TreeCapitator.onBlockHarvested() " + x + ", " + y + ", " + z);
         player = entityPlayer;
         startPos = new Coord(x, y, z);
         
@@ -155,7 +173,7 @@ public class TreeCapitator
                 TCLog.debug("Tree Chopping is disabled due to player state or gamemode.");
         }
         else
-            TCLog.debug("World is remote, exiting TreeBlockBreaker.");
+            TCLog.debug("World is remote, exiting TreeCapitator.");
     }
     
     /**
@@ -307,11 +325,6 @@ public class TreeCapitator
         destroyBlocksWithChance(world, list, 1.0F, false);
     }
     
-    private void destroyBlocksWithChance(World world, List<Coord> list, float f)
-    {
-        destroyBlocksWithChance(world, list, f, false);
-    }
-    
     private void destroyBlocksWithChance(World world, List<Coord> list, float f, boolean canShear)
     {
         TCLog.debug("Breaking identified blocks...");
@@ -346,7 +359,7 @@ public class TreeCapitator
                     if (TCSettings.allowItemDamage && !player.capabilities.isCreativeMode && axe != null && axe.stackSize > 0
                             && !vineID.equals(new BlockID(block, metadata)) && !isLeafBlock(new BlockID(block, metadata)) && !pos.equals(startPos))
                     {
-                        if (!damageAxeAndContinue(world, id, pos.x, pos.y, pos.z))
+                        if (!damageAxeAndContinue(world, id, startPos.x, startPos.y, startPos.z))
                             list.clear();
                         
                         numLogsBroken++;
@@ -361,6 +374,8 @@ public class TreeCapitator
                 world.setBlock(pos.x, pos.y, pos.z, 0, 0, 3);
             }
         }
+        if (numLogsBroken > 0)
+            TCLog.debug("Number of logs broken: %i", numLogsBroken);
     }
     
     /**
@@ -501,7 +516,7 @@ public class TreeCapitator
         return list;
     }
     
-    public void addLeavesInDistance(World world, Coord pos, int range, List list)
+    public void addLeavesInDistance(World world, Coord pos, int range, List<Coord> list)
     {
         for (int x = -range; x <= range; x++)
             for (int y = -range; y <= range; y++)
@@ -509,7 +524,6 @@ public class TreeCapitator
                 {
                     int blockID = world.getBlockId(x + pos.x, y + pos.y, z + pos.z);
                     int md = world.getBlockMetadata(x + pos.x, y + pos.y, z + pos.z);
-                    Block block = Block.blocksList[blockID];
                     if (isLeafBlock(new BlockID(blockID, md)) || vineID.equals(new BlockID(blockID)))
                     {
                         int metadata = world.getBlockMetadata(x + pos.x, y + pos.y, z + pos.z);
@@ -523,9 +537,12 @@ public class TreeCapitator
                 }
     }
     
-    public void addConnectedLeavesInRange(World world, Coord pos, int range, int distance, List list)
+    /*
+     * So far this method is utter shit and doesn't work right
+     */
+    public void addConnectedLeavesInRange(World world, Coord pos, int range, int distance, List<Coord> list)
     {
-        // So far this method is utter shit and doesn't work right
+        
         if (!list.contains(pos))
         {
             int blockID = world.getBlockId(pos.x, pos.y, pos.z);

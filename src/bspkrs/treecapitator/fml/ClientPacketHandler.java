@@ -23,6 +23,7 @@ public class ClientPacketHandler implements IPacketHandler
         }
         else if (packetType == 1)
         {
+            @SuppressWarnings("rawtypes")
             Class[] decodeAs = { String.class, String.class, Float.class, Float.class };
             Object[] packetReadout = ForgePacketHelper.readPacketData(data, decodeAs);
             TreeCapitatorClient.instance.onServerConfigReceived((String) packetReadout[0], (String) packetReadout[1], (Float) packetReadout[2],
