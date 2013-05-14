@@ -84,6 +84,7 @@ public class TreeCapitatorMod extends DummyModContainer
                 file.delete();
         }
         
+        TreeRegistry.instance();
         IDResolverMappingList.instance();
         TCConfigHandler.setInstance(file);
         
@@ -93,7 +94,6 @@ public class TreeCapitatorMod extends DummyModContainer
             versionChecker.checkVersionWithLoggingBySubStringAsFloat(metadata.version.length() - 1, metadata.version.length());
         }
         
-        TreeRegistry.instance();
     }
     
     @Init
@@ -112,10 +112,7 @@ public class TreeCapitatorMod extends DummyModContainer
     @PostInit
     public void postInit(FMLPostInitializationEvent event)
     {
-        //**getReplacementTagListFromThirdPartyConfigs();
-        //**Strings.localBlockIDList = TreeCapitator.replaceThirdPartyBlockTags(Strings.localBlockIDList);
-        //**TCSettings.axeIDList = TCSettings.replaceThirdPartyBlockTags(TCSettings.axeIDList);
-        //**TCSettings.shearIDList = TCSettings.replaceThirdPartyBlockTags(TCSettings.shearIDList);
+        ModConfigRegistry.instance().refreshAllTagMaps();
         
         // Multi-Mine stuff
         if (Loader.isModLoaded(TCSettings.multiMineID))

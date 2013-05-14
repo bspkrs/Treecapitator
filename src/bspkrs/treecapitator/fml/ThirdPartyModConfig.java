@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagList;
 import bspkrs.treecapitator.ConfigTreeDefinition;
 import bspkrs.treecapitator.Strings;
 import bspkrs.treecapitator.TCLog;
+import bspkrs.treecapitator.TCSettings;
 import bspkrs.treecapitator.ToolRegistry;
 import bspkrs.treecapitator.TreeDefinition;
 import bspkrs.treecapitator.TreeRegistry;
@@ -28,23 +29,30 @@ public class ThirdPartyModConfig
     private String                            axeKeys;
     private String                            shearsKeys;
     private boolean                           shiftIndex;
+    private boolean                           overrideIMC;
     private Map<String, ConfigTreeDefinition> configTreesMap;
     private Map<String, TreeDefinition>       treesMap;
     private Map<String, String>               tagMap;
     
+    /*
+     * This special constructor provides the default vanilla tree "mod"
+     */
     protected ThirdPartyModConfig()
     {
-        modID = "TreeCapitator";
+        modID = Strings.VAN_TREES;
         configPath = "TreeCapitator.cfg";
         blockKeys = "";
         itemKeys = "";
         axeKeys = "";
         shearsKeys = "";
         shiftIndex = false;
+        overrideIMC = TCSettings.userConfigOverridesIMC;
         
-        configTreesMap = new HashMap<String, ConfigTreeDefinition>();
+        configTreesMap = TreeRegistry.instance().vanillaTrees();
+        tagMap = new HashMap<String, String>();
         treesMap = new HashMap<String, TreeDefinition>();
         
+        this.refreshTreeDefinitionsFromConfig();
     }
     
     public ThirdPartyModConfig(String modID, String configPath, String blockKeys, String itemKeys, String axeKeys, String shearsKeys, boolean shiftIndex)
@@ -56,10 +64,10 @@ public class ThirdPartyModConfig
         this.axeKeys = axeKeys;
         this.shearsKeys = shearsKeys;
         this.shiftIndex = shiftIndex;
+        this.overrideIMC = TCSettings.userConfigOverridesIMC;
         
         configTreesMap = new HashMap<String, ConfigTreeDefinition>();
         treesMap = new HashMap<String, TreeDefinition>();
-        refreshReplacementTags();
     }
     
     public ThirdPartyModConfig(String modID, String configPath, String blockKeys)
@@ -109,9 +117,6 @@ public class ThirdPartyModConfig
             this.addConfigTreeDef(tree.getName(), new ConfigTreeDefinition(tree));
         }
         
-        refreshReplacementTags();
-        refreshTreeDefinitionsFromConfig();
-        
         return this;
     }
     
@@ -159,6 +164,7 @@ public class ThirdPartyModConfig
                 shearsKeys = config.get(category, Strings.SHEARS_ID_LIST, "").getString();
             shiftIndex = config.get(category, Strings.SHIFT_INDEX, "").getBoolean(true);
         }
+        overrideIMC = config.get(category, Strings.OVERRIDE_IMC, "").getBoolean(TCSettings.userConfigOverridesIMC);
         
         configTreesMap = new HashMap<String, ConfigTreeDefinition>();
         
@@ -169,9 +175,6 @@ public class ThirdPartyModConfig
                 addConfigTreeDef(config.getCategory(ctgy).getName(), new ConfigTreeDefinition(config, ctgy));
             }
         }
-        
-        refreshReplacementTags();
-        refreshTreeDefinitionsFromConfig();
         
         return this;
     }
@@ -262,6 +265,16 @@ public class ThirdPartyModConfig
         return shiftIndex;
     }
     
+    public boolean overrideIMC()
+    {
+        return shiftIndex;
+    }
+    
+    public void setOverrideIMC(boolean bol)
+    {
+        this.overrideIMC = bol;
+    }
+    
     public void refreshTreeDefinitionsFromConfig()
     {
         treesMap.clear();
@@ -270,7 +283,7 @@ public class ThirdPartyModConfig
             treesMap.put(e.getKey(), e.getValue().getTagsReplacedTreeDef(tagMap));
     }
     
-    private void refreshReplacementTags()
+    protected void refreshReplacementTags()
     {
         tagMap = new HashMap<String, String>();
         
@@ -297,34 +310,35 @@ public class ThirdPartyModConfig
     
     private void getReplacementTagsForKeys(Configuration thirdPartyConfig, String keys, String idrClassName, boolean isItemList)
     {
-        for (String configID : keys.trim().split(";"))
-        {
-            String[] subString = configID.trim().split(":");
-            String configValue = thirdPartyConfig.get(/* ctgy */subString[0].trim(), /* prop name */subString[1].trim(), 0).getString();
-            String tagID = "<" + subString[0].trim() + ":" + subString[1].trim() + ">";
-            
-            if (!tagMap.containsKey(tagID))
+        if (keys.length() > 0)
+            for (String configID : keys.trim().split(";"))
             {
-                // TCLog.debug("configValue: %s", configValue);
-                IDResolverMapping mapping = IDResolverMappingList.instance().getMappingForModAndOldID(idrClassName, CommonUtils.parseInt(configValue));
+                String[] subString = configID.trim().split(":");
+                String configValue = thirdPartyConfig.get(/* ctgy */subString[0].trim(), /* prop name */subString[1].trim(), 0).getString();
+                String tagID = "<" + subString[0].trim() + ":" + subString[1].trim() + ">";
                 
-                if (mapping != null)
-                    configValue = String.valueOf(mapping.newID);
-                // TCLog.debug("configValue: %s", configValue);
-                
-                if (isItemList && shiftIndex)
-                    configValue = String.valueOf(CommonUtils.parseInt(configValue, -256) + 256);
-                
-                // TCLog.debug("configValue: %s", configValue);
-                
-                if (!configValue.equals("0"))
+                if (!tagMap.containsKey(tagID))
                 {
-                    tagMap.put(tagID, configValue);
-                    TCLog.debug("Third Party Mod Config Tag %s will map to %s for mod %s", tagID, configValue, modID);
+                    // TCLog.debug("configValue: %s", configValue);
+                    IDResolverMapping mapping = IDResolverMappingList.instance().getMappingForModAndOldID(idrClassName, CommonUtils.parseInt(configValue));
+                    
+                    if (mapping != null)
+                        configValue = String.valueOf(mapping.newID);
+                    // TCLog.debug("configValue: %s", configValue);
+                    
+                    if (isItemList && shiftIndex)
+                        configValue = String.valueOf(CommonUtils.parseInt(configValue, -256) + 256);
+                    
+                    // TCLog.debug("configValue: %s", configValue);
+                    
+                    if (!configValue.equals("0"))
+                    {
+                        tagMap.put(tagID, configValue);
+                        TCLog.debug("Third Party Mod Config Tag %s will map to %s for mod %s", tagID, configValue, modID);
+                    }
                 }
+                else
+                    TCLog.warning("Duplicate Third Party Config Tag detected: " + tagID + " is already mapped to " + tagMap.get(tagID));
             }
-            else
-                TCLog.warning("Duplicate Third Party Config Tag detected: " + tagID + " is already mapped to " + tagMap.get(tagID));
-        }
     }
 }

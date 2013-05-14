@@ -1,11 +1,14 @@
 package bspkrs.treecapitator.fml;
 
 import java.io.File;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import bspkrs.treecapitator.Strings;
 import bspkrs.treecapitator.TCLog;
 import bspkrs.treecapitator.TCSettings;
 import bspkrs.util.Configuration;
+import cpw.mods.fml.common.Loader;
 
 public class TCConfigHandler
 {
@@ -37,22 +40,6 @@ public class TCConfigHandler
         this();
         config = new Configuration(file);
         config.load();
-        
-        TCSettings.breakSpeedModifier = config.getFloat("breakSpeedModifier", Strings.PER_TREE_DEFAULTS_CTGY,
-                TCSettings.breakSpeedModifier, 0.01F, 1F, Strings.breakSpeedModifierDesc);
-        TCSettings.maxHorLogBreakDist = config.getInt("maxHorLogBreakDist", Strings.PER_TREE_DEFAULTS_CTGY,
-                TCSettings.maxHorLogBreakDist, -1, 100, Strings.maxHorBreakDistDesc);
-        TCSettings.maxVerLogBreakDist = config.getInt("maxVerLogBreakDist", Strings.PER_TREE_DEFAULTS_CTGY,
-                TCSettings.maxVerLogBreakDist, -1, 255, Strings.maxVerLogBreakDistDesc);
-        TCSettings.maxLeafIDDist = config.getInt("maxLeafIDDist", Strings.PER_TREE_DEFAULTS_CTGY,
-                TCSettings.maxLeafIDDist, 1, 8, Strings.maxLeafIDDistDesc);
-        TCSettings.minLeavesToID = config.getInt("minLeavesToID", Strings.PER_TREE_DEFAULTS_CTGY,
-                TCSettings.minLeavesToID, 0, 8, Strings.minLeavesToIDDesc);
-        TCSettings.onlyDestroyUpwards = config.getBoolean("onlyDestroyUpwards", Strings.PER_TREE_DEFAULTS_CTGY,
-                TCSettings.onlyDestroyUpwards, Strings.onlyDestroyUpwardsDesc);
-        TCSettings.requireLeafDecayCheck = config.getBoolean("requireLeafDecayCheck", Strings.PER_TREE_DEFAULTS_CTGY,
-                TCSettings.requireLeafDecayCheck, Strings.requireLeafDecayCheckDesc);
-        config.addCustomCategoryComment(Strings.PER_TREE_DEFAULTS_CTGY, Strings.PER_TREE_DEFAULTS_CTGY_DESC);
         
         TCSettings.allowDebugLogging = config.getBoolean("allowDebugLogging", Strings.GLOBALS_SETTINGS_CTGY,
                 TCSettings.allowDebugLogging, Strings.allowDebugLoggingDesc);
@@ -98,72 +85,52 @@ public class TCConfigHandler
                 TCSettings.useStrictBlockPairing, Strings.useStrictBlockPairingDesc);
         config.addCustomCategoryComment(Strings.GLOBALS_SETTINGS_CTGY, Strings.GLOBALS_SETTINGS_CTGY_DESC);
         
-        /*
-         * Get / Set 3rd Party Mod config lists
-         */
+        TCSettings.breakSpeedModifier = config.getFloat("breakSpeedModifier", Strings.PER_TREE_DEFAULTS_CTGY,
+                TCSettings.breakSpeedModifier, 0.01F, 1F, Strings.breakSpeedModifierDesc);
+        TCSettings.maxHorLogBreakDist = config.getInt("maxHorLogBreakDist", Strings.PER_TREE_DEFAULTS_CTGY,
+                TCSettings.maxHorLogBreakDist, -1, 100, Strings.maxHorBreakDistDesc);
+        TCSettings.maxVerLogBreakDist = config.getInt("maxVerLogBreakDist", Strings.PER_TREE_DEFAULTS_CTGY,
+                TCSettings.maxVerLogBreakDist, -1, 255, Strings.maxVerLogBreakDistDesc);
+        TCSettings.maxLeafIDDist = config.getInt("maxLeafIDDist", Strings.PER_TREE_DEFAULTS_CTGY,
+                TCSettings.maxLeafIDDist, 1, 8, Strings.maxLeafIDDistDesc);
+        TCSettings.minLeavesToID = config.getInt("minLeavesToID", Strings.PER_TREE_DEFAULTS_CTGY,
+                TCSettings.minLeavesToID, 0, 8, Strings.minLeavesToIDDesc);
+        TCSettings.onlyDestroyUpwards = config.getBoolean("onlyDestroyUpwards", Strings.PER_TREE_DEFAULTS_CTGY,
+                TCSettings.onlyDestroyUpwards, Strings.onlyDestroyUpwardsDesc);
+        TCSettings.requireLeafDecayCheck = config.getBoolean("requireLeafDecayCheck", Strings.PER_TREE_DEFAULTS_CTGY,
+                TCSettings.requireLeafDecayCheck, Strings.requireLeafDecayCheckDesc);
+        config.addCustomCategoryComment(Strings.PER_TREE_DEFAULTS_CTGY, Strings.PER_TREE_DEFAULTS_CTGY_DESC);
         
-        if (!config.hasCategory(Strings.TREE_MOD_CFG_CTGY))
+        /*
+         * Get / Set 3rd Party Mod configs
+         */
+        TCSettings.idResolverModID = config.getString("idResolverModID", Strings.TREE_MOD_CFG_CTGY,
+                TCSettings.idResolverModID, Strings.idResolverModIDDesc);
+        TCSettings.multiMineID = config.getString("multiMineID", Strings.TREE_MOD_CFG_CTGY,
+                TCSettings.multiMineID, Strings.multiMineIDDesc);
+        TCSettings.userConfigOverridesIMC = config.getBoolean("userConfigOverridesIMC", Strings.TREE_MOD_CFG_CTGY,
+                TCSettings.userConfigOverridesIMC, Strings.userConfigOverridesIMCDesc);
+        
+        if (!config.hasCategory(Strings.TREE_MOD_CFG_CTGY + "." + Strings.VAN_TREES))
         {
-            TCSettings.idResolverModID = config.getString("idResolverModID", Strings.TREE_MOD_CFG_CTGY, TCSettings.idResolverModID, Strings.idResolverModIDDesc);
-            TCSettings.multiMineID = config.getString("multiMineID", Strings.TREE_MOD_CFG_CTGY, TCSettings.multiMineID, Strings.multiMineIDDesc);
+            // Write default tree/mod settings to config
+            Map<String, ThirdPartyModConfig> m = ModConfigRegistry.instance().defaultConfigs();
+            for (Entry<String, ThirdPartyModConfig> e : m.entrySet())
+                e.getValue().writeToConfiguration(config, Strings.TREE_MOD_CFG_CTGY + "." + e.getKey());
             
-            //TODO: load default 3rd party configs
-            TCLog.info("Default block config loaded.");
+            TCLog.info("Looks like a fresh config; default config loaded.");
         }
         else
-        {
-            TCSettings.idResolverModID = config.getString("idResolverModID", Strings.TREE_MOD_CFG_CTGY, TCSettings.idResolverModID, Strings.idResolverModIDDesc);
-            TCSettings.multiMineID = config.getString("multiMineID", Strings.TREE_MOD_CFG_CTGY, TCSettings.multiMineID, Strings.multiMineIDDesc);
-            
-            // TODO: load config shit
-            TCLog.info("File block config loaded.");
-        }
+            TCLog.info("Proceeding to load tree/mod configs from file.");
         
-        /* config.addCustomCategoryComment(Strings.TREE_BLOCK_CTGY, Strings.configBlockIDDesc);
-         
-         if (!config.hasCategory(Strings.THIRD_PARTY_CFG_CTGY))
-         {
-             for (String key : TCSettings.thirdPartyConfig.keySet())
-             {
-                 HashMap<String, String> tpconfig = TCSettings.thirdPartyConfig.get(key);
-                 for (String entry : tpconfig.keySet())
-                     config.get(Strings.THIRD_PARTY_CFG_CTGY + "." + key, entry, tpconfig.get(entry));
-                 
-             }
-         }
-         else
-         {
-             TCSettings.thirdPartyConfig = new HashMap<String, HashMap<String, String>>();
-             
-             for (String ctgy : config.getCategoryNames())
-             {
-                 if (ctgy.indexOf(Strings.THIRD_PARTY_CFG_CTGY + ".") != -1)
-                 {
-                     HashMap<String, String> entries = new HashMap<String, String>();
-                     ConfigCategory currentCtgy = config.getCategory(ctgy);
-                     
-                     // fixed issue with old configs not having the right prop name
-                     if (currentCtgy.containsKey("modName"))
-                         config.renameProperty(ctgy, "modName", Strings.MOD_ID);
-                     
-                     if (currentCtgy.containsKey(Strings.MOD_ID))
-                     {
-                         for (String tpCfgEntry : currentCtgy.keySet())
-                             entries.put(tpCfgEntry, currentCtgy.get(tpCfgEntry).getString());
-                         
-                         if (entries.containsKey(Strings.ITEM_VALUES) && !entries.containsKey(Strings.SHIFT_INDEX))
-                             entries.put(Strings.SHIFT_INDEX, "true");
-                         
-                         TCSettings.thirdPartyConfig.put(ctgy, entries);
-                     }
-                 }
-             }
-         }
-         
-         //Strings.localBlockIDList = TreeCapitator.getStringFromConfigBlockList();
-         //config.get(Strings.BLOCK_CTGY, "localTreeConfig", "", TreeCapitator.localBlockIDListDesc).set(Strings.localBlockIDList);
-         
-         config.addCustomCategoryComment(Strings.THIRD_PARTY_CFG_CTGY, Strings.thirdPartyConfigDesc);*/
+        for (String ctgy : config.getCategoryNames())
+        {
+            if (ctgy.indexOf(Strings.TREE_MOD_CFG_CTGY + ".") != -1 && config.getCategory(ctgy).containsKey(Strings.MOD_ID))
+            {
+                if (Loader.isModLoaded(config.getCategory(ctgy).get(Strings.MOD_ID).getString()))
+                    ModConfigRegistry.instance().registerUserModConfig(new ThirdPartyModConfig(config, ctgy));
+            }
+        }
         
         config.save();
     }

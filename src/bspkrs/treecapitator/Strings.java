@@ -13,6 +13,7 @@ public class Strings
     public static final String JUNGLE                             = "vanilla_jungle";
     public static final String MUSH_BROWN                         = "vanilla_huge_brown_mushroom";
     public static final String MUSH_RED                           = "vanilla_huge_red_mushroom";
+    public static final String VAN_TREES                          = "vanilla_trees";
     
     public static final String LOGS                               = "logs";
     public static final String TREES                              = "trees";
@@ -26,6 +27,7 @@ public class Strings
     public static final String AXE_ID_LIST                        = "axeIDList";
     public static final String SHEARS_ID_LIST                     = "shearsIDList";
     public static final String SHIFT_INDEX                        = "useShiftedItemID";
+    public static final String OVERRIDE_IMC                       = "overrideIMC";
     public static final String IDR_MOD_ID                         = "idResolverModID";
     public static final String TREE_MOD_CFG_CTGY                  = "tree_and_mod_configs";
     public static final String SETTINGS_CTGY                      = "general_settings";
@@ -50,11 +52,13 @@ public class Strings
     public static final String BREAK_SPEED_MOD                    = "breakSpeedModifier";
     
     public static final String GLOBALS_SETTINGS_CTGY_DESC         = "These are the general preference settings. They are used globally to tune how TreeCapitator works.";
-    public static final String PER_TREE_DEFAULTS_CTGY_DESC        = "These are the default values of settings that can be defined on a per-tree basis. If a user-/mod-defined tree sets one of these values it will override the default value here.";
+    public static final String PER_TREE_DEFAULTS_CTGY_DESC        = "These are the default values of settings that can be defined on a per-tree basis. If a user-/mod-\n" +
+                                                                          "defined tree sets one of these values it will override the default value here.";
     public static final String maxHorBreakDistDesc                = "[Global, PerTree] The maximum horizontal distance that the log breaking effect will travel (use -1 for no limit).";
     public static final String maxVerLogBreakDistDesc             = "[Global, PerTree] The maximum vertical distance that the log breaking effect will travel (use -1 for no limit).";
     public static final String idResolverModIDDesc                = "The mod ID value for ID Resolver.";
     public static final String multiMineIDDesc                    = "The mod ID value for Multi-Mine.";
+    public static final String userConfigOverridesIMCDesc         = "This setting controls the default behavior when a mod is both configured manually (in the config file) and by IMC (inter-mod communication).";
     public static final String remoteTreeConfigURLDesc            = "Incomplete - do not use";
     // "Leave this URL as is to get the latest tree definitions from my master list.\nFeel free to start your own remote list to share with your friends or send your suggestions to me for the master list!";
     @Deprecated

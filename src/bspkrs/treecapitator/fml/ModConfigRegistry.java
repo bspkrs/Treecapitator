@@ -49,9 +49,28 @@ public class ModConfigRegistry
             TCLog.warning("Mod \"%s\" sent multiple IMC messages. The first message will be used.", tpmc.modID());
     }
     
+    protected void refreshUserTagMaps()
+    {
+        for (ThirdPartyModConfig tpmc : this.userModCfgs.values())
+            tpmc.refreshReplacementTags();
+    }
+    
+    protected void refreshIMCTagMaps()
+    {
+        for (ThirdPartyModConfig tpmc : this.imcModCfgs.values())
+            tpmc.refreshReplacementTags();
+    }
+    
+    protected void refreshAllTagMaps()
+    {
+        refreshUserTagMaps();
+        refreshIMCTagMaps();
+    }
+    
     protected void initDefaultModConfigs()
     {
         defaultModCfgs = new HashMap<String, ThirdPartyModConfig>();
+        defaultModCfgs.put(Strings.VAN_TREES, new ThirdPartyModConfig());
         defaultModCfgs.put("ExtrabiomesXL", new ThirdPartyModConfig("ExtrabiomesXL", "extrabiomes/extrabiomes.cfg",
                 "block:customlog.id; block:quarterlog0.id; block:quarterlog1.id; block:quarterlog2.id; block:quarterlog3.id; " +
                         "block:autumnleaves.id; block:greenleaves.id")

@@ -18,11 +18,6 @@ public final class TCSettings
     
     public static String                               idResolverModID                = "IDResolver";
     public static String                               multiMineID                    = "AS_MultiMine";
-    @Deprecated
-    public static boolean                              useRemoteTreeConfig            = false;
-    @Deprecated
-    public static boolean                              allowGetRemoteTreeConfig       = false;
-    
     public static boolean                              enableEnchantmentMode          = false;
     public static boolean                              requireItemInAxeListForEnchant = false;
     public static String                               axeIDList                      = ListUtils.getListAsDelimitedString(ToolRegistry.instance().vanillaAxeList(), "; ");
@@ -52,7 +47,7 @@ public final class TCSettings
     public static int                                  maxLeafBreakDist               = 4;
     public static int                                  minLeavesToID                  = 3;
     public static boolean                              useStrictBlockPairing          = true;
-    
+    public static boolean                              userConfigOverridesIMC         = false;
     public static boolean                              allowDebugOutput               = false;
     public static boolean                              allowDebugLogging              = false;
     
@@ -73,13 +68,14 @@ public final class TCSettings
     public static Map<String, HashMap<String, String>> thirdPartyConfig               = new HashMap<String, HashMap<String, String>>();
     @Deprecated
     public static Map<String, String>                  tagMap                         = new HashMap<String, String>();
+    
     @Deprecated
-    public static String replaceThirdPartyBlockTags(String input)
+    public static String getStringFromConfigBlockList()
     {
-        for (String tag : tagMap.keySet())
-            input = input.replace(tag, tagMap.get(tag));
-        
-        return input;
+        String list = "";
+        for (HashMap<String, String> group : configBlockList.values())
+            list += " ! " + group.get(Strings.LOGS) + (group.containsKey(Strings.LEAVES) ? "|" + group.get(Strings.LEAVES) : "");
+        return replaceThirdPartyBlockTags(list.replaceFirst(" ! ", ""));
     }
     
     //    public static String getRemoteConfig()
@@ -97,45 +93,6 @@ public final class TCSettings
     //        }
     //        return Strings.remoteBlockIDConfig;
     //    }
-    
-    public static void preInit()
-    {
-        preInit(false);
-    }
-    
-    public static void preInit(boolean isForgeVersion)
-    {
-        isForge = isForgeVersion;
-        
-        if (!isForge)
-        {
-            Block.blocksList[Block.wood.blockID] = null;
-            wood = new BlockTree(Block.wood.blockID);
-            Block.blocksList[wood.blockID] = wood;
-            Item.itemsList[wood.blockID] = null;
-            Item.itemsList[wood.blockID] = (new ItemMultiTextureTile(wood.blockID - 256, wood, BlockLog.woodType)).setUnlocalizedName("log");
-            
-            //**logIDList.add(new BlockID(wood.blockID));
-            TreeRegistry.instance().registerVanillaTreeDefs();
-        }
-        else
-        {}
-    }
-    
-    //    @Deprecated
-    //    public static boolean isLogBlock(BlockID blockID)
-    //    {
-    //        return logIDList.contains(blockID);
-    //    }
-    
-    @Deprecated
-    public static String getStringFromConfigBlockList()
-    {
-        String list = "";
-        for (HashMap<String, String> group : configBlockList.values())
-            list += " ! " + group.get(Strings.LOGS) + (group.containsKey(Strings.LEAVES) ? "|" + group.get(Strings.LEAVES) : "");
-        return replaceThirdPartyBlockTags(list.replaceFirst(" ! ", ""));
-    }
     
     @Deprecated
     public static String getStringFromParsedLists()
@@ -274,5 +231,44 @@ public final class TCSettings
             }
         }
         TCLog.info("Block ID list parsing complete.");
+    }
+    
+    //    @Deprecated
+    //    public static boolean isLogBlock(BlockID blockID)
+    //    {
+    //        return logIDList.contains(blockID);
+    //    }
+    
+    public static void preInit()
+    {
+        preInit(false);
+    }
+    
+    public static void preInit(boolean isForgeVersion)
+    {
+        isForge = isForgeVersion;
+        
+        if (!isForge)
+        {
+            Block.blocksList[Block.wood.blockID] = null;
+            wood = new BlockTree(Block.wood.blockID);
+            Block.blocksList[wood.blockID] = wood;
+            Item.itemsList[wood.blockID] = null;
+            Item.itemsList[wood.blockID] = (new ItemMultiTextureTile(wood.blockID - 256, wood, BlockLog.woodType)).setUnlocalizedName("log");
+            
+            //**logIDList.add(new BlockID(wood.blockID));
+            TreeRegistry.instance().registerVanillaTreeDefs();
+        }
+        else
+        {}
+    }
+    
+    @Deprecated
+    public static String replaceThirdPartyBlockTags(String input)
+    {
+        for (String tag : tagMap.keySet())
+            input = input.replace(tag, tagMap.get(tag));
+        
+        return input;
     }
 }
