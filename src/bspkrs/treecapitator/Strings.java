@@ -40,14 +40,14 @@ public class Strings
     public static final String LEAF_CTGY                          = "leaf_and_vine_settings";
     public static final String MISC_CTGY                          = "miscellaneous_settings";
     public static final String GENERAL                            = Configuration.CATEGORY_GENERAL;
-    public static final String onlyDestroyUpwards                 = "onlyDestroyUpwards";
-    public static final String requireLeafDecayCheck              = "requireLeafDecayCheck";
-    public static final String maxHorLogBreakDist                 = "maxHorLogBreakDist";
-    public static final String maxVerLogBreakDist                 = "maxVerLogBreakDist";
-    public static final String maxLeafIDDist                      = "maxLeafIDDist";
-    public static final String maxLeafBreakDist                   = "maxLeafBreakDist";
-    public static final String minLeavesToID                      = "minLeavesToID";
-    public static final String breakSpeedModifier                 = "breakSpeedModifier";
+    public static final String ONLY_DESTROY_UPWARDS               = "onlyDestroyUpwards";
+    public static final String REQ_DECAY_CHECK                    = "requireLeafDecayCheck";
+    public static final String MAX_H_LOG_DIST                     = "maxHorLogBreakDist";
+    public static final String MAX_V_LOG_DIST                     = "maxVerLogBreakDist";
+    public static final String MAX_LEAF_ID_DIST                   = "maxLeafIDDist";
+    public static final String MAX_LEAF_DIST                      = "maxLeafBreakDist";
+    public static final String MIN_LEAF_ID                        = "minLeavesToID";
+    public static final String BREAK_SPEED_MOD                    = "breakSpeedModifier";
     
     public static final String GLOBALS_SETTINGS_CTGY_DESC         = "These are the general preference settings. They are used globally to tune how TreeCapitator works.";
     public static final String PER_TREE_DEFAULTS_CTGY_DESC        = "These are the default values of settings that can be defined on a per-tree basis. If a user-/mod-defined tree sets one of these values it will override the default value here.";

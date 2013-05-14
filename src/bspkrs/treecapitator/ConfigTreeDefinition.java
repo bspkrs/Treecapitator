@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import net.minecraft.nbt.NBTTagCompound;
 import bspkrs.util.BlockID;
+import bspkrs.util.ConfigCategory;
 import bspkrs.util.Configuration;
 import bspkrs.util.HashCodeUtil;
 import bspkrs.util.ListUtils;
@@ -34,6 +35,11 @@ public class ConfigTreeDefinition extends TreeDefinition
     {
         logKeys = configLogs;
         leafKeys = configLeaves;
+    }
+    
+    public ConfigTreeDefinition(Configuration config, String category)
+    {
+        readFromConfiguration(config, category);
     }
     
     public ConfigTreeDefinition(NBTTagCompound treeDefNBT)
@@ -66,13 +72,51 @@ public class ConfigTreeDefinition extends TreeDefinition
     
     public ConfigTreeDefinition readFromConfiguration(Configuration config, String category)
     {
-        // TODO: finish this
+        ConfigCategory cc = config.getCategory(category);
+        if (cc.containsKey(Strings.ONLY_DESTROY_UPWARDS))
+            onlyDestroyUpwards = cc.get(Strings.ONLY_DESTROY_UPWARDS).getBoolean(TCSettings.onlyDestroyUpwards);
+        if (cc.containsKey(Strings.REQ_DECAY_CHECK))
+            requireLeafDecayCheck = cc.get(Strings.REQ_DECAY_CHECK).getBoolean(TCSettings.requireLeafDecayCheck);
+        if (cc.containsKey(Strings.MAX_H_LOG_DIST))
+            maxHorLogBreakDist = cc.get(Strings.MAX_H_LOG_DIST).getInt(TCSettings.maxHorLogBreakDist);
+        if (cc.containsKey(Strings.MAX_V_LOG_DIST))
+            maxVerLogBreakDist = cc.get(Strings.MAX_V_LOG_DIST).getInt(TCSettings.maxVerLogBreakDist);
+        if (cc.containsKey(Strings.MAX_LEAF_DIST))
+            maxLeafBreakDist = cc.get(Strings.MAX_LEAF_DIST).getInt(TCSettings.maxLeafBreakDist);
+        if (cc.containsKey(Strings.MAX_LEAF_ID_DIST))
+            maxLeafIDDist = cc.get(Strings.MAX_LEAF_ID_DIST).getInt(TCSettings.maxLeafIDDist);
+        if (cc.containsKey(Strings.MIN_LEAF_ID))
+            minLeavesToID = cc.get(Strings.MIN_LEAF_ID).getInt();
+        if (cc.containsKey(Strings.BREAK_SPEED_MOD))
+            breakSpeedModifier = (float) cc.get(Strings.BREAK_SPEED_MOD).getDouble(TCSettings.breakSpeedModifier);
+        
+        logKeys = cc.get(Strings.LOG_CFG_KEYS).getString();
+        leafKeys = cc.get(Strings.LEAF_CFG_KEYS).getString();
+        
         return this;
     }
     
     public void writeToConfiguration(Configuration config, String category)
     {
-        // TODO: finish this
+        if (onlyDestroyUpwards != TCSettings.onlyDestroyUpwards)
+            config.get(category, Strings.ONLY_DESTROY_UPWARDS, onlyDestroyUpwards);
+        if (requireLeafDecayCheck != TCSettings.requireLeafDecayCheck)
+            config.get(category, Strings.REQ_DECAY_CHECK, requireLeafDecayCheck);
+        if (maxHorLogBreakDist != TCSettings.maxHorLogBreakDist)
+            config.get(category, Strings.MAX_H_LOG_DIST, maxHorLogBreakDist);
+        if (maxVerLogBreakDist != TCSettings.maxVerLogBreakDist)
+            config.get(category, Strings.MAX_V_LOG_DIST, maxVerLogBreakDist);
+        if (maxLeafBreakDist != TCSettings.maxLeafBreakDist)
+            config.get(category, Strings.MAX_LEAF_DIST, maxLeafBreakDist);
+        if (maxLeafIDDist != TCSettings.maxLeafIDDist)
+            config.get(category, Strings.MAX_LEAF_ID_DIST, maxLeafIDDist);
+        if (minLeavesToID != TCSettings.minLeavesToID)
+            config.get(category, Strings.MIN_LEAF_ID, minLeavesToID);
+        if (breakSpeedModifier != TCSettings.breakSpeedModifier)
+            config.get(category, Strings.BREAK_SPEED_MOD, breakSpeedModifier);
+        
+        config.get(category, Strings.LOG_CFG_KEYS, logKeys);
+        config.get(category, Strings.LEAF_CFG_KEYS, leafKeys);
     }
     
     public TreeDefinition getTagsReplacedTreeDef(Map<String, String> tagMap)
@@ -117,7 +161,6 @@ public class ConfigTreeDefinition extends TreeDefinition
     }
     
     @Override
-    // TODO: fix this up
     public boolean equals(Object o)
     {
         if (!(o instanceof ConfigTreeDefinition))
@@ -132,7 +175,6 @@ public class ConfigTreeDefinition extends TreeDefinition
     }
     
     @Override
-    // TODO: fix this up
     public int hashCode()
     {
         int result = super.hashCode();

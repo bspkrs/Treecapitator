@@ -14,7 +14,6 @@ import bspkrs.treecapitator.ToolRegistry;
 import bspkrs.treecapitator.TreeDefinition;
 import bspkrs.treecapitator.TreeRegistry;
 import bspkrs.util.CommonUtils;
-import bspkrs.util.ConfigCategory;
 import bspkrs.util.Configuration;
 import bspkrs.util.ItemID;
 import bspkrs.util.ListUtils;
@@ -35,16 +34,17 @@ public class ThirdPartyModConfig
     
     protected ThirdPartyModConfig()
     {
-        this.modID = "TreeCapitator";
-        this.configPath = "";
-        this.blockKeys = "";
-        this.itemKeys = "";
-        this.axeKeys = "";
-        this.shearsKeys = "";
-        this.shiftIndex = false;
+        modID = "TreeCapitator";
+        configPath = "TreeCapitator.cfg";
+        blockKeys = "";
+        itemKeys = "";
+        axeKeys = "";
+        shearsKeys = "";
+        shiftIndex = false;
         
         configTreesMap = new HashMap<String, ConfigTreeDefinition>();
         treesMap = new HashMap<String, TreeDefinition>();
+        
     }
     
     public ThirdPartyModConfig(String modID, String configPath, String blockKeys, String itemKeys, String axeKeys, String shearsKeys, boolean shiftIndex)
@@ -86,17 +86,17 @@ public class ThirdPartyModConfig
     
     public ThirdPartyModConfig readFromNBT(NBTTagCompound tpModCfg)
     {
-        this.modID = tpModCfg.getString(Strings.MOD_ID);
-        this.configPath = tpModCfg.getString(Strings.CONFIG_PATH);
+        modID = tpModCfg.getString(Strings.MOD_ID);
+        configPath = tpModCfg.getString(Strings.CONFIG_PATH);
         if (tpModCfg.hasKey(Strings.BLOCK_CFG_KEYS))
-            this.blockKeys = tpModCfg.getString(Strings.BLOCK_CFG_KEYS);
+            blockKeys = tpModCfg.getString(Strings.BLOCK_CFG_KEYS);
         if (tpModCfg.hasKey(Strings.ITEM_CFG_KEYS))
         {
-            this.itemKeys = tpModCfg.getString(Strings.ITEM_CFG_KEYS);
-            this.axeKeys = tpModCfg.getString(Strings.AXE_ID_LIST);
+            itemKeys = tpModCfg.getString(Strings.ITEM_CFG_KEYS);
+            axeKeys = tpModCfg.getString(Strings.AXE_ID_LIST);
             if (tpModCfg.hasKey(Strings.SHEARS_ID_LIST))
-                this.shearsKeys = tpModCfg.getString(Strings.SHEARS_ID_LIST);
-            this.shiftIndex = tpModCfg.getBoolean(Strings.SHIFT_INDEX);
+                shearsKeys = tpModCfg.getString(Strings.SHEARS_ID_LIST);
+            shiftIndex = tpModCfg.getBoolean(Strings.SHIFT_INDEX);
         }
         
         configTreesMap = new HashMap<String, ConfigTreeDefinition>();
@@ -117,19 +117,19 @@ public class ThirdPartyModConfig
     
     public void writeToNBT(NBTTagCompound tpModCfg)
     {
-        tpModCfg.setName(this.modID);
-        tpModCfg.setString(Strings.MOD_ID, this.modID);
-        if (this.configPath.length() > 0)
-            tpModCfg.setString(Strings.CONFIG_PATH, this.configPath);
-        if (this.blockKeys.length() > 0)
-            tpModCfg.setString(Strings.BLOCK_CFG_KEYS, this.blockKeys);
-        if (this.itemKeys.length() > 0)
+        tpModCfg.setName(modID);
+        tpModCfg.setString(Strings.MOD_ID, modID);
+        if (configPath.length() > 0)
+            tpModCfg.setString(Strings.CONFIG_PATH, configPath);
+        if (blockKeys.length() > 0)
+            tpModCfg.setString(Strings.BLOCK_CFG_KEYS, blockKeys);
+        if (itemKeys.length() > 0)
         {
-            tpModCfg.setString(Strings.ITEM_CFG_KEYS, this.itemKeys);
-            tpModCfg.setString(Strings.AXE_ID_LIST, this.axeKeys);
-            if (this.shearsKeys.length() > 0)
-                tpModCfg.setString(Strings.SHEARS_ID_LIST, this.shearsKeys);
-            tpModCfg.setBoolean(Strings.SHIFT_INDEX, this.shiftIndex);
+            tpModCfg.setString(Strings.ITEM_CFG_KEYS, itemKeys);
+            tpModCfg.setString(Strings.AXE_ID_LIST, axeKeys);
+            if (shearsKeys.length() > 0)
+                tpModCfg.setString(Strings.SHEARS_ID_LIST, shearsKeys);
+            tpModCfg.setBoolean(Strings.SHIFT_INDEX, shiftIndex);
         }
         
         NBTTagList treeList = new NBTTagList();
@@ -147,17 +147,17 @@ public class ThirdPartyModConfig
     
     public ThirdPartyModConfig readFromConfiguration(Configuration config, String category)
     {
-        this.modID = config.get(category, Strings.MOD_ID, "").getString();
-        this.configPath = config.get(category, Strings.CONFIG_PATH, "").getString();
+        modID = config.get(category, Strings.MOD_ID, "").getString();
+        configPath = config.get(category, Strings.CONFIG_PATH, "").getString();
         if (config.getCategory(category).containsKey(Strings.BLOCK_CFG_KEYS))
-            this.blockKeys = config.get(category, Strings.BLOCK_CFG_KEYS, "").getString();
+            blockKeys = config.get(category, Strings.BLOCK_CFG_KEYS, "").getString();
         if (config.getCategory(category).containsKey(Strings.ITEM_CFG_KEYS))
         {
-            this.itemKeys = config.get(category, Strings.ITEM_CFG_KEYS, "").getString();
-            this.axeKeys = config.get(category, Strings.AXE_ID_LIST, "").getString();
+            itemKeys = config.get(category, Strings.ITEM_CFG_KEYS, "").getString();
+            axeKeys = config.get(category, Strings.AXE_ID_LIST, "").getString();
             if (config.getCategory(category).containsKey(Strings.SHEARS_ID_LIST))
-                this.shearsKeys = config.get(category, Strings.SHEARS_ID_LIST, "").getString();
-            this.shiftIndex = config.get(category, Strings.SHIFT_INDEX, "").getBoolean(true);
+                shearsKeys = config.get(category, Strings.SHEARS_ID_LIST, "").getString();
+            shiftIndex = config.get(category, Strings.SHIFT_INDEX, "").getBoolean(true);
         }
         
         configTreesMap = new HashMap<String, ConfigTreeDefinition>();
@@ -166,9 +166,7 @@ public class ThirdPartyModConfig
         {
             if (ctgy.indexOf(category + ".") != -1)
             {
-                ConfigCategory currentCtgy = config.getCategory(ctgy);
-                String treeName = currentCtgy.getName();
-                // TODO: add config tree def
+                addConfigTreeDef(config.getCategory(ctgy).getName(), new ConfigTreeDefinition(config, ctgy));
             }
         }
         
@@ -180,7 +178,22 @@ public class ThirdPartyModConfig
     
     public void writeToConfiguration(Configuration config, String category)
     {
-        // TODO: finish this
+        config.get(category, Strings.MOD_ID, modID);
+        if (configPath.length() > 0)
+            config.get(category, Strings.CONFIG_PATH, configPath);
+        if (blockKeys.length() > 0)
+            config.get(category, Strings.BLOCK_CFG_KEYS, blockKeys);
+        if (itemKeys.length() > 0)
+        {
+            config.get(category, Strings.ITEM_CFG_KEYS, itemKeys);
+            config.get(category, Strings.AXE_ID_LIST, axeKeys);
+            if (shearsKeys.length() > 0)
+                config.get(category, Strings.SHEARS_ID_LIST, shearsKeys);
+            config.get(category, Strings.SHIFT_INDEX, shiftIndex);
+        }
+        
+        for (Entry<String, ConfigTreeDefinition> e : configTreesMap.entrySet())
+            e.getValue().writeToConfiguration(config, category + "." + e.getKey());
     }
     
     public ThirdPartyModConfig addConfigTreeDef(String key, ConfigTreeDefinition tree)
@@ -214,8 +227,8 @@ public class ThirdPartyModConfig
     
     public void registerTools()
     {
-        String axeList = this.axeKeys;
-        String shearsList = this.shearsKeys;
+        String axeList = axeKeys;
+        String shearsList = shearsKeys;
         for (Entry<String, String> e : tagMap.entrySet())
         {
             axeList = axeList.replace(e.getKey(), e.getValue());

@@ -130,22 +130,22 @@ public class TreeDefinition
     
     public TreeDefinition readFromNBT(NBTTagCompound treeDefNBT)
     {
-        if (treeDefNBT.hasKey(Strings.onlyDestroyUpwards))
-            onlyDestroyUpwards = treeDefNBT.getBoolean(Strings.onlyDestroyUpwards);
-        if (treeDefNBT.hasKey(Strings.requireLeafDecayCheck))
-            requireLeafDecayCheck = treeDefNBT.getBoolean(Strings.requireLeafDecayCheck);
-        if (treeDefNBT.hasKey(Strings.maxHorLogBreakDist))
-            maxHorLogBreakDist = treeDefNBT.getInteger(Strings.maxHorLogBreakDist);
-        if (treeDefNBT.hasKey(Strings.maxVerLogBreakDist))
-            maxVerLogBreakDist = treeDefNBT.getInteger(Strings.maxVerLogBreakDist);
-        if (treeDefNBT.hasKey(Strings.maxLeafBreakDist))
-            maxLeafBreakDist = treeDefNBT.getInteger(Strings.maxLeafBreakDist);
-        if (treeDefNBT.hasKey(Strings.maxLeafIDDist))
-            maxLeafIDDist = treeDefNBT.getInteger(Strings.maxLeafIDDist);
-        if (treeDefNBT.hasKey(Strings.minLeavesToID))
-            minLeavesToID = treeDefNBT.getInteger(Strings.minLeavesToID);
-        if (treeDefNBT.hasKey(Strings.breakSpeedModifier))
-            breakSpeedModifier = treeDefNBT.getFloat(Strings.breakSpeedModifier);
+        if (treeDefNBT.hasKey(Strings.ONLY_DESTROY_UPWARDS))
+            onlyDestroyUpwards = treeDefNBT.getBoolean(Strings.ONLY_DESTROY_UPWARDS);
+        if (treeDefNBT.hasKey(Strings.REQ_DECAY_CHECK))
+            requireLeafDecayCheck = treeDefNBT.getBoolean(Strings.REQ_DECAY_CHECK);
+        if (treeDefNBT.hasKey(Strings.MAX_H_LOG_DIST))
+            maxHorLogBreakDist = treeDefNBT.getInteger(Strings.MAX_H_LOG_DIST);
+        if (treeDefNBT.hasKey(Strings.MAX_V_LOG_DIST))
+            maxVerLogBreakDist = treeDefNBT.getInteger(Strings.MAX_V_LOG_DIST);
+        if (treeDefNBT.hasKey(Strings.MAX_LEAF_DIST))
+            maxLeafBreakDist = treeDefNBT.getInteger(Strings.MAX_LEAF_DIST);
+        if (treeDefNBT.hasKey(Strings.MAX_LEAF_ID_DIST))
+            maxLeafIDDist = treeDefNBT.getInteger(Strings.MAX_LEAF_ID_DIST);
+        if (treeDefNBT.hasKey(Strings.MIN_LEAF_ID))
+            minLeavesToID = treeDefNBT.getInteger(Strings.MIN_LEAF_ID);
+        if (treeDefNBT.hasKey(Strings.BREAK_SPEED_MOD))
+            breakSpeedModifier = treeDefNBT.getFloat(Strings.BREAK_SPEED_MOD);
         
         logBlocks = ListUtils.getDelimitedStringAsBlockIDList(treeDefNBT.getString(Strings.LOGS), ";");
         leafBlocks = ListUtils.getDelimitedStringAsBlockIDList(treeDefNBT.getString(Strings.LEAVES), ";");
@@ -155,14 +155,14 @@ public class TreeDefinition
     
     public void writeToNBT(NBTTagCompound treeDefNBT)
     {
-        treeDefNBT.setBoolean(Strings.onlyDestroyUpwards, onlyDestroyUpwards);
-        treeDefNBT.setBoolean(Strings.requireLeafDecayCheck, requireLeafDecayCheck);
-        treeDefNBT.setInteger(Strings.maxHorLogBreakDist, maxHorLogBreakDist);
-        treeDefNBT.setInteger(Strings.maxVerLogBreakDist, maxVerLogBreakDist);
-        treeDefNBT.setInteger(Strings.maxLeafBreakDist, maxLeafBreakDist);
-        treeDefNBT.setInteger(Strings.maxLeafIDDist, maxLeafIDDist);
-        treeDefNBT.setInteger(Strings.minLeavesToID, minLeavesToID);
-        treeDefNBT.setFloat(Strings.breakSpeedModifier, breakSpeedModifier);
+        treeDefNBT.setBoolean(Strings.ONLY_DESTROY_UPWARDS, onlyDestroyUpwards);
+        treeDefNBT.setBoolean(Strings.REQ_DECAY_CHECK, requireLeafDecayCheck);
+        treeDefNBT.setInteger(Strings.MAX_H_LOG_DIST, maxHorLogBreakDist);
+        treeDefNBT.setInteger(Strings.MAX_V_LOG_DIST, maxVerLogBreakDist);
+        treeDefNBT.setInteger(Strings.MAX_LEAF_DIST, maxLeafBreakDist);
+        treeDefNBT.setInteger(Strings.MAX_LEAF_ID_DIST, maxLeafIDDist);
+        treeDefNBT.setInteger(Strings.MIN_LEAF_ID, minLeavesToID);
+        treeDefNBT.setFloat(Strings.BREAK_SPEED_MOD, breakSpeedModifier);
         
         treeDefNBT.setString(Strings.LOGS, ListUtils.getListAsDelimitedString(logBlocks, ";"));
         treeDefNBT.setString(Strings.LEAVES, ListUtils.getListAsDelimitedString(leafBlocks, ";"));

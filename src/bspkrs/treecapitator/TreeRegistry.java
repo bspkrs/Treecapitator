@@ -5,24 +5,20 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import bspkrs.util.BlockID;
 import bspkrs.util.Coord;
 
 public class TreeRegistry
 {
-    private Map<String, TreeDefinition> treeDefs;
-    private Map<BlockID, String>        logToStringMap;
-    private TreeDefinition              masterDefinition;
-    private ConfigTreeDefinition        vanOak;
-    private ConfigTreeDefinition        vanSpruce;
-    private ConfigTreeDefinition        vanBirch;
-    private ConfigTreeDefinition        vanJungle;
-    private ConfigTreeDefinition        vanMushBrown;
-    private ConfigTreeDefinition        vanMushRed;
-    private List<Coord>                 blocksBeingChopped;
+    private Map<String, TreeDefinition>       treeDefs;
+    private Map<BlockID, String>              logToStringMap;
+    private TreeDefinition                    masterDefinition;
+    private Map<String, ConfigTreeDefinition> vanTrees;
+    private List<Coord>                       blocksBeingChopped;
     
-    private static TreeRegistry         instance;
+    private static TreeRegistry               instance;
     
     public static TreeRegistry instance()
     {
@@ -50,44 +46,41 @@ public class TreeRegistry
     
     protected void initVanillaTreeDefs()
     {
-        vanOak = new ConfigTreeDefinition().addLogID(new BlockID(17, 0)).addLogID(new BlockID(17, 4))
+        vanTrees = new HashMap<String, ConfigTreeDefinition>();
+        vanTrees.put(Strings.OAK, new ConfigTreeDefinition().addLogID(new BlockID(17, 0)).addLogID(new BlockID(17, 4))
                 .addLogID(new BlockID(17, 8)).addLogID(new BlockID(17, 12))
-                .addLeafID(new BlockID(18, 0)).addLeafID(new BlockID(18, 8));
-        vanSpruce = new ConfigTreeDefinition().addLogID(new BlockID(17, 1)).addLogID(new BlockID(17, 5))
+                .addLeafID(new BlockID(18, 0)).addLeafID(new BlockID(18, 8)));
+        vanTrees.put(Strings.SPRUCE, new ConfigTreeDefinition().addLogID(new BlockID(17, 1)).addLogID(new BlockID(17, 5))
                 .addLogID(new BlockID(17, 9)).addLogID(new BlockID(17, 13))
-                .addLeafID(new BlockID(18, 1)).addLeafID(new BlockID(18, 9));
-        vanBirch = new ConfigTreeDefinition().addLogID(new BlockID(17, 2)).addLogID(new BlockID(17, 6))
+                .addLeafID(new BlockID(18, 1)).addLeafID(new BlockID(18, 9)));
+        vanTrees.put(Strings.BIRCH, new ConfigTreeDefinition().addLogID(new BlockID(17, 2)).addLogID(new BlockID(17, 6))
                 .addLogID(new BlockID(17, 10)).addLogID(new BlockID(17, 14))
-                .addLeafID(new BlockID(18, 2)).addLeafID(new BlockID(18, 10));
-        vanJungle = new ConfigTreeDefinition().addLogID(new BlockID(17, 3)).addLogID(new BlockID(17, 7))
+                .addLeafID(new BlockID(18, 2)).addLeafID(new BlockID(18, 10)));
+        vanTrees.put(Strings.JUNGLE, new ConfigTreeDefinition().addLogID(new BlockID(17, 3)).addLogID(new BlockID(17, 7))
                 .addLogID(new BlockID(17, 11)).addLogID(new BlockID(17, 15))
                 .addLeafID(new BlockID(18, 3)).addLeafID(new BlockID(18, 11))
                 .addLeafID(new BlockID(18, 0)).addLeafID(new BlockID(18, 8))
-                .setMaxLeafBreakDist(6).setRequireLeafDecayCheck(false);
-        vanMushBrown = new ConfigTreeDefinition().addLogID(new BlockID(99, 10)).addLogID(new BlockID(99, 15))
+                .setMaxLeafBreakDist(6).setRequireLeafDecayCheck(false));
+        vanTrees.put(Strings.MUSH_BROWN, new ConfigTreeDefinition().addLogID(new BlockID(99, 10)).addLogID(new BlockID(99, 15))
                 .addLeafID(new BlockID(99, 1)).addLeafID(new BlockID(99, 2))
                 .addLeafID(new BlockID(99, 3)).addLeafID(new BlockID(99, 4))
                 .addLeafID(new BlockID(99, 5)).addLeafID(new BlockID(99, 6))
                 .addLeafID(new BlockID(99, 7)).addLeafID(new BlockID(99, 8))
                 .addLeafID(new BlockID(99, 9)).addLeafID(new BlockID(99, 14))
-                .setMaxLeafBreakDist(6).setRequireLeafDecayCheck(false);
-        vanMushRed = new ConfigTreeDefinition().addLogID(new BlockID(100, 10)).addLogID(new BlockID(100, 15))
+                .setMaxLeafBreakDist(6).setRequireLeafDecayCheck(false));
+        vanTrees.put(Strings.MUSH_RED, new ConfigTreeDefinition().addLogID(new BlockID(100, 10)).addLogID(new BlockID(100, 15))
                 .addLeafID(new BlockID(100, 1)).addLeafID(new BlockID(100, 2))
                 .addLeafID(new BlockID(100, 3)).addLeafID(new BlockID(100, 4))
                 .addLeafID(new BlockID(100, 5)).addLeafID(new BlockID(100, 6))
                 .addLeafID(new BlockID(100, 7)).addLeafID(new BlockID(100, 8))
                 .addLeafID(new BlockID(100, 9)).addLeafID(new BlockID(100, 14))
-                .setMaxLeafBreakDist(6).setRequireLeafDecayCheck(false);
+                .setMaxLeafBreakDist(6).setRequireLeafDecayCheck(false));
     }
     
     protected void registerVanillaTreeDefs()
     {
-        registerTree(Strings.OAK, vanOak);
-        registerTree(Strings.SPRUCE, vanSpruce);
-        registerTree(Strings.BIRCH, vanBirch);
-        registerTree(Strings.JUNGLE, vanJungle);
-        registerTree(Strings.MUSH_BROWN, vanMushBrown);
-        registerTree(Strings.MUSH_RED, vanMushRed);
+        for (Entry<String, ConfigTreeDefinition> e : vanTrees.entrySet())
+            this.registerTree(e.getKey(), e.getValue());
     }
     
     /**
@@ -247,8 +240,8 @@ public class TreeRegistry
         return masterDefinition.getLeafList();
     }
     
-    public TreeDefinition vanillaOak()
+    public Map<String, ConfigTreeDefinition> vanillaTrees()
     {
-        return vanOak;
+        return new HashMap<String, ConfigTreeDefinition>(vanTrees);
     }
 }
