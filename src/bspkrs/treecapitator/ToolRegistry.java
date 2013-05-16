@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import bspkrs.util.ItemID;
 
 public class ToolRegistry
@@ -57,6 +58,16 @@ public class ToolRegistry
         vanAxeList.add(new ItemID(Item.axeDiamond));
         
         vanShearsList.add(new ItemID(Item.shears));
+    }
+    
+    protected void readFromNBT(NBTTagCompound ntc)
+    {
+        // TODO
+    }
+    
+    protected void writeToNBT(NBTTagCompound ntc)
+    {
+        // TODO
     }
     
     public void registerAxe(ItemID axe)

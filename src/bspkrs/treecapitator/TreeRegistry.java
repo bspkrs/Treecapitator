@@ -250,7 +250,7 @@ public class TreeRegistry
     
     protected void readFromNBT(NBTTagCompound ntc)
     {
-        //        treeDefs;
+        // treeDefs;
         treeDefs = new HashMap<String, TreeDefinition>();
         NBTTagList l = ntc.getTagList(Strings.TREES);
         for (int i = 0; i < l.tagCount(); i++)
@@ -259,8 +259,17 @@ public class TreeRegistry
             treeDefs.put(tree.getName(), new TreeDefinition(tree));
         }
         
-        //        TODO: logToStringMap;
-        //        masterDefinition;
+        // logToStringMap;
+        logToStringMap = new HashMap<BlockID, String>();
+        l = ntc.getTagList(Strings.LOG_STR_MAP);
+        for (int i = 0; i < l.tagCount(); i++)
+        {
+            NBTTagString s = (NBTTagString) l.tagAt(i);
+            logToStringMap.put(new BlockID(s.getName()), s.data);
+        }
+        
+        // masterDefinition;
+        masterDefinition = new TreeDefinition(ntc.getCompoundTag(Strings.MASTER_DEF));
     }
     
     protected void writeToNBT(NBTTagCompound ntc)
