@@ -27,7 +27,7 @@ public class TreeCapitatorClient
     {
         serverDetected = true;
         
-        if (!TreeCapitatorMod.instance.isCoreModLoaded && FMLClientHandler.instance().getClient().isSingleplayer())
+        if (!TreeCapitatorMod.isCoreModLoaded && FMLClientHandler.instance().getClient().isSingleplayer())
         {
             String s = "TreeCapitator CoreMod code has not been injected. Ensure the downloaded .jar file is in the coremods folder and not mods.";
             FMLClientHandler.instance().getClient().thePlayer.addChatMessage(s);

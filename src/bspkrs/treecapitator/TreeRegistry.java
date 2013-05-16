@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import bspkrs.util.BlockID;
 import bspkrs.util.Coord;
 
@@ -243,5 +246,47 @@ public class TreeRegistry
     public Map<String, ConfigTreeDefinition> vanillaTrees()
     {
         return new HashMap<String, ConfigTreeDefinition>(vanTrees);
+    }
+    
+    protected void readFromNBT(NBTTagCompound ntc)
+    {
+        //        treeDefs;
+        treeDefs = new HashMap<String, TreeDefinition>();
+        NBTTagList l = ntc.getTagList(Strings.TREES);
+        for (int i = 0; i < l.tagCount(); i++)
+        {
+            NBTTagCompound tree = (NBTTagCompound) l.tagAt(i);
+            treeDefs.put(tree.getName(), new TreeDefinition(tree));
+        }
+        
+        //        TODO: logToStringMap;
+        //        masterDefinition;
+    }
+    
+    protected void writeToNBT(NBTTagCompound ntc)
+    {
+        // treeDefs
+        NBTTagList trees = new NBTTagList();
+        trees.setName(Strings.TREES);
+        for (Entry<String, TreeDefinition> e : treeDefs.entrySet())
+        {
+            NBTTagCompound tree = new NBTTagCompound();
+            e.getValue().writeToNBT(tree);
+            tree.setName(e.getKey());
+            trees.appendTag(tree);
+        }
+        ntc.setTag(Strings.TREE_DEFS, trees);
+        
+        //        logToStringMap;
+        NBTTagList entries = new NBTTagList();
+        entries.setName(Strings.LOG_STR_MAP);
+        for (Entry<BlockID, String> e : logToStringMap.entrySet())
+            entries.appendTag(new NBTTagString(e.getKey().toString(), e.getValue()));
+        ntc.setTag(Strings.LOG_STR_MAP, entries);
+        
+        //        masterDefinition;
+        NBTTagCompound md = new NBTTagCompound();
+        masterDefinition.writeToNBT(md);
+        ntc.setTag(Strings.MASTER_DEF, md);
     }
 }

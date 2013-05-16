@@ -44,6 +44,12 @@ public class TreeDefinition
         leafBlocks.addAll(leaves);
     }
     
+    public TreeDefinition(NBTTagCompound tree)
+    {
+        this();
+        this.readFromNBT(tree);
+    }
+    
     @Override
     public boolean equals(Object o)
     {

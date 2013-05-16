@@ -15,6 +15,7 @@ import bspkrs.treecapitator.ToolRegistry;
 import bspkrs.treecapitator.TreeDefinition;
 import bspkrs.treecapitator.TreeRegistry;
 import bspkrs.util.CommonUtils;
+import bspkrs.util.ConfigCategory;
 import bspkrs.util.Configuration;
 import bspkrs.util.ItemID;
 import bspkrs.util.ListUtils;
@@ -64,7 +65,7 @@ public class ThirdPartyModConfig
         this.axeKeys = axeKeys;
         this.shearsKeys = shearsKeys;
         this.shiftIndex = shiftIndex;
-        this.overrideIMC = TCSettings.userConfigOverridesIMC;
+        overrideIMC = TCSettings.userConfigOverridesIMC;
         
         configTreesMap = new HashMap<String, ConfigTreeDefinition>();
         treesMap = new HashMap<String, TreeDefinition>();
@@ -152,19 +153,21 @@ public class ThirdPartyModConfig
     
     public ThirdPartyModConfig readFromConfiguration(Configuration config, String category)
     {
-        modID = config.get(category, Strings.MOD_ID, "").getString();
-        configPath = config.get(category, Strings.CONFIG_PATH, "").getString();
-        if (config.getCategory(category).containsKey(Strings.BLOCK_CFG_KEYS))
-            blockKeys = config.get(category, Strings.BLOCK_CFG_KEYS, "").getString();
-        if (config.getCategory(category).containsKey(Strings.ITEM_CFG_KEYS))
+        ConfigCategory cc = config.getCategory(category);
+        modID = cc.get(Strings.MOD_ID).getString();
+        configPath = cc.get(Strings.CONFIG_PATH).getString();
+        if (cc.containsKey(Strings.BLOCK_CFG_KEYS))
+            blockKeys = cc.get(Strings.BLOCK_CFG_KEYS).getString();
+        if (cc.containsKey(Strings.ITEM_CFG_KEYS))
         {
-            itemKeys = config.get(category, Strings.ITEM_CFG_KEYS, "").getString();
-            axeKeys = config.get(category, Strings.AXE_ID_LIST, "").getString();
-            if (config.getCategory(category).containsKey(Strings.SHEARS_ID_LIST))
-                shearsKeys = config.get(category, Strings.SHEARS_ID_LIST, "").getString();
-            shiftIndex = config.get(category, Strings.SHIFT_INDEX, "").getBoolean(true);
+            itemKeys = cc.get(Strings.ITEM_CFG_KEYS).getString();
+            axeKeys = cc.get(Strings.AXE_ID_LIST).getString();
+            if (cc.containsKey(Strings.SHEARS_ID_LIST))
+                shearsKeys = cc.get(Strings.SHEARS_ID_LIST).getString();
+            shiftIndex = cc.get(Strings.SHIFT_INDEX).getBoolean(true);
         }
-        overrideIMC = config.get(category, Strings.OVERRIDE_IMC, "").getBoolean(TCSettings.userConfigOverridesIMC);
+        if (cc.containsKey(Strings.OVERRIDE_IMC))
+            overrideIMC = cc.get(Strings.OVERRIDE_IMC).getBoolean(TCSettings.userConfigOverridesIMC);
         
         configTreesMap = new HashMap<String, ConfigTreeDefinition>();
         
@@ -267,12 +270,12 @@ public class ThirdPartyModConfig
     
     public boolean overrideIMC()
     {
-        return shiftIndex;
+        return overrideIMC;
     }
     
     public void setOverrideIMC(boolean bol)
     {
-        this.overrideIMC = bol;
+        overrideIMC = bol;
     }
     
     public void refreshTreeDefinitionsFromConfig()
