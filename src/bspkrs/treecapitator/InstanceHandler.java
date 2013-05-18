@@ -11,7 +11,7 @@ public class InstanceHandler
     private NBTTagCompound remoteTreeRegistry;
     private NBTTagCompound remoteToolRegistry;
     
-    protected InstanceHandler(NBTTagCompound tcSettingsNBT, NBTTagCompound treeRegistryNBT, NBTTagCompound toolRegistryNBT)
+    public InstanceHandler(NBTTagCompound tcSettingsNBT, NBTTagCompound treeRegistryNBT, NBTTagCompound toolRegistryNBT)
     {
         this();
         this.setRemoteTCSettings(tcSettingsNBT);
@@ -52,33 +52,33 @@ public class InstanceHandler
     
     public InstanceHandler setRemoteTCSettings(NBTTagCompound ntc)
     {
-        this.remoteTCSettings = ntc;
+        remoteTCSettings = ntc;
         return this;
     }
     
     public InstanceHandler setRemoteTreeRegistry(NBTTagCompound ntc)
     {
-        this.remoteTreeRegistry = ntc;
+        remoteTreeRegistry = ntc;
         return this;
     }
     
     public InstanceHandler setRemoteToolRegistry(NBTTagCompound ntc)
     {
-        this.remoteToolRegistry = ntc;
+        remoteToolRegistry = ntc;
         return this;
     }
     
     public void registerLocalInstances()
     {
-        TCSettings.instance().readFromNBT(this.localTCSettings);
-        TreeRegistry.instance().readFromNBT(this.localTreeRegistry);
-        ToolRegistry.instance().readFromNBT(this.localToolRegistry);
+        TCSettings.instance().readFromNBT(localTCSettings);
+        TreeRegistry.instance().readFromNBT(localTreeRegistry);
+        ToolRegistry.instance().readFromNBT(localToolRegistry);
     }
     
     public void registerRemoteInstances()
     {
-        TCSettings.instance().readFromNBT(this.remoteTCSettings);
-        TreeRegistry.instance().readFromNBT(this.remoteTreeRegistry);
-        ToolRegistry.instance().readFromNBT(this.remoteToolRegistry);
+        TCSettings.instance().readFromNBT(remoteTCSettings);
+        TreeRegistry.instance().readFromNBT(remoteTreeRegistry);
+        ToolRegistry.instance().readFromNBT(remoteToolRegistry);
     }
 }

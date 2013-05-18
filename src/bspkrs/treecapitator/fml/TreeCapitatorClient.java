@@ -1,8 +1,9 @@
 package bspkrs.treecapitator.fml;
 
+import net.minecraft.nbt.NBTTagCompound;
 import bspkrs.fml.util.ForgePacketHelper;
+import bspkrs.treecapitator.InstanceHandler;
 import bspkrs.treecapitator.TCLog;
-import bspkrs.treecapitator.TCSettings;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
@@ -39,15 +40,9 @@ public class TreeCapitatorClient
             FMLClientHandler.instance().getClient().thePlayer.addChatMessage("TreeCapitator client-side features enabled.");
     }
     
-    public void onServerConfigReceived(String blockIDList, String axeIDList, float logHardnessNormal, float logHardnessModified)
+    public void onServerConfigReceived(NBTTagCompound nbtTCSettings, NBTTagCompound nbtTreeRegistry, NBTTagCompound nbtToolRegistry)
     {
-        TCLog.debug("Server sent block ID list: %s", blockIDList);
+        InstanceHandler ih = new InstanceHandler(nbtTCSettings, nbtTreeRegistry, nbtToolRegistry);
         
-        if (!FMLClientHandler.instance().getClient().isSingleplayer())
-            ;
-        
-        TCSettings.axeIDList = axeIDList;
-        TCSettings.logHardnessNormal = logHardnessNormal;
-        TCSettings.logHardnessModified = logHardnessModified;
     }
 }

@@ -272,7 +272,7 @@ public class TreeRegistry
         masterDefinition = new TreeDefinition(ntc.getCompoundTag(Strings.MASTER_DEF));
     }
     
-    protected void writeToNBT(NBTTagCompound ntc)
+    public void writeToNBT(NBTTagCompound ntc)
     {
         // treeDefs
         NBTTagList trees = new NBTTagList();

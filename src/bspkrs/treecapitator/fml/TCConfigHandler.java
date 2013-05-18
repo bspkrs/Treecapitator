@@ -65,10 +65,6 @@ public class TCConfigHandler
                 TCSettings.disableInCreative, Strings.disableInCreativeDesc);
         TCSettings.increaseDamageEveryXBlocks = config.getInt("increaseDamageEveryXBlocks", Strings.GLOBALS_SETTINGS_CTGY,
                 TCSettings.increaseDamageEveryXBlocks, 1, 500, Strings.increaseDamageEveryXBlocksDesc);
-        //        TCSettings.logHardnessNormal = config.getFloat("logHardnessNormal", Strings.BLOCK_CTGY, 
-        //TCSettings.logHardnessNormal, 0F, 100F, Strings.logHardnessNormalDesc);
-        //        TCSettings.logHardnessModified = config.getFloat("logHardnessModified", Strings.BLOCK_CTGY, 
-        //TCSettings.logHardnessModified, 0F, 100F, Strings.logHardnessModifiedDesc);
         TCSettings.needItem = config.getBoolean("needItem", Strings.GLOBALS_SETTINGS_CTGY,
                 TCSettings.needItem, Strings.needItemDesc);
         TCSettings.shearIDList = config.getString("shearIDList", Strings.GLOBALS_SETTINGS_CTGY,

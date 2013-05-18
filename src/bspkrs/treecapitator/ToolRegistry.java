@@ -7,6 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import bspkrs.util.ItemID;
+import bspkrs.util.ListUtils;
 
 public class ToolRegistry
 {
@@ -62,12 +63,14 @@ public class ToolRegistry
     
     protected void readFromNBT(NBTTagCompound ntc)
     {
-        // TODO
+        axeList = ListUtils.getDelimitedStringAsItemIDList(ntc.getString(Strings.AXE_ID_LIST), ";");
+        shearsList = ListUtils.getDelimitedStringAsItemIDList(ntc.getString(Strings.SHEARS_ID_LIST), ";");
     }
     
-    protected void writeToNBT(NBTTagCompound ntc)
+    public void writeToNBT(NBTTagCompound ntc)
     {
-        // TODO
+        ntc.setString(Strings.AXE_ID_LIST, ListUtils.getListAsDelimitedString(axeList, ";"));
+        ntc.setString(Strings.SHEARS_ID_LIST, ListUtils.getListAsDelimitedString(shearsList, ";"));
     }
     
     public void registerAxe(ItemID axe)

@@ -3,6 +3,7 @@ package bspkrs.treecapitator.fml;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import bspkrs.fml.util.ForgePacketHelper;
@@ -24,10 +25,10 @@ public class ClientPacketHandler implements IPacketHandler
         else if (packetType == 1)
         {
             @SuppressWarnings("rawtypes")
-            Class[] decodeAs = { String.class, String.class, Float.class, Float.class };
+            Class[] decodeAs = { NBTTagCompound.class, NBTTagCompound.class, NBTTagCompound.class };
             Object[] packetReadout = ForgePacketHelper.readPacketData(data, decodeAs);
-            TreeCapitatorClient.instance.onServerConfigReceived((String) packetReadout[0], (String) packetReadout[1], (Float) packetReadout[2],
-                    (Float) packetReadout[3]);
+            TreeCapitatorClient.instance.onServerConfigReceived((NBTTagCompound) packetReadout[0], (NBTTagCompound) packetReadout[1],
+                    (NBTTagCompound) packetReadout[2]);
         }
     }
 }
