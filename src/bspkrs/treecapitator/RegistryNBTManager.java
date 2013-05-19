@@ -2,7 +2,7 @@ package bspkrs.treecapitator;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class InstanceHandler
+public class RegistryNBTManager
 {
     private NBTTagCompound localTCSettings;
     private NBTTagCompound localTreeRegistry;
@@ -11,7 +11,7 @@ public class InstanceHandler
     private NBTTagCompound remoteTreeRegistry;
     private NBTTagCompound remoteToolRegistry;
     
-    public InstanceHandler(NBTTagCompound tcSettingsNBT, NBTTagCompound treeRegistryNBT, NBTTagCompound toolRegistryNBT)
+    public RegistryNBTManager(NBTTagCompound tcSettingsNBT, NBTTagCompound treeRegistryNBT, NBTTagCompound toolRegistryNBT)
     {
         this();
         this.setRemoteTCSettings(tcSettingsNBT);
@@ -19,7 +19,7 @@ public class InstanceHandler
         this.setRemoteToolRegistry(toolRegistryNBT);
     }
     
-    protected InstanceHandler()
+    public RegistryNBTManager()
     {
         this.saveCurrentTCSettingsToLocal();
         this.saveCurrentTreeRegistryToLocal();
@@ -29,43 +29,48 @@ public class InstanceHandler
         this.setRemoteToolRegistry(localToolRegistry);
     }
     
-    public InstanceHandler saveCurrentTCSettingsToLocal()
+    protected RegistryNBTManager saveCurrentTCSettingsToLocal()
     {
         localTCSettings = new NBTTagCompound();
         TCSettings.instance().writeToNBT(localTCSettings);
         return this;
     }
     
-    public InstanceHandler saveCurrentTreeRegistryToLocal()
+    protected RegistryNBTManager saveCurrentTreeRegistryToLocal()
     {
         localTCSettings = new NBTTagCompound();
         TreeRegistry.instance().writeToNBT(localTreeRegistry);
         return this;
     }
     
-    public InstanceHandler saveCurrentToolRegistryToLocal()
+    protected RegistryNBTManager saveCurrentToolRegistryToLocal()
     {
         localTCSettings = new NBTTagCompound();
         ToolRegistry.instance().writeToNBT(localToolRegistry);
         return this;
     }
     
-    public InstanceHandler setRemoteTCSettings(NBTTagCompound ntc)
+    public RegistryNBTManager setRemoteTCSettings(NBTTagCompound ntc)
     {
         remoteTCSettings = ntc;
         return this;
     }
     
-    public InstanceHandler setRemoteTreeRegistry(NBTTagCompound ntc)
+    public RegistryNBTManager setRemoteTreeRegistry(NBTTagCompound ntc)
     {
         remoteTreeRegistry = ntc;
         return this;
     }
     
-    public InstanceHandler setRemoteToolRegistry(NBTTagCompound ntc)
+    public RegistryNBTManager setRemoteToolRegistry(NBTTagCompound ntc)
     {
         remoteToolRegistry = ntc;
         return this;
+    }
+    
+    public RegistryNBTManager setRemoteNBTs(NBTTagCompound set, NBTTagCompound tree, NBTTagCompound tool)
+    {
+        return setRemoteTCSettings(set).setRemoteTreeRegistry(tree).setRemoteToolRegistry(tool);
     }
     
     public void registerLocalInstances()
@@ -80,5 +85,10 @@ public class InstanceHandler
         TCSettings.instance().readFromNBT(remoteTCSettings);
         TreeRegistry.instance().readFromNBT(remoteTreeRegistry);
         ToolRegistry.instance().readFromNBT(remoteToolRegistry);
+    }
+    
+    public Object[] getPacketArray()
+    {
+        return new Object[] { localTCSettings, localTreeRegistry, localToolRegistry };
     }
 }

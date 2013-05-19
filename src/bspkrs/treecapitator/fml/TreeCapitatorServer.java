@@ -1,33 +1,48 @@
 package bspkrs.treecapitator.fml;
 
-import net.minecraft.nbt.NBTTagCompound;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import bspkrs.fml.util.ForgePacketHelper;
-import bspkrs.treecapitator.TCSettings;
-import bspkrs.treecapitator.ToolRegistry;
-import bspkrs.treecapitator.TreeRegistry;
+import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
-public class TreeCapitatorServer
+public class TreeCapitatorServer implements IPacketHandler
 {
-    public static TreeCapitatorServer instance;
+    private static TreeCapitatorServer instance;
     
-    public TreeCapitatorServer()
+    public static TreeCapitatorServer instance()
+    {
+        if (instance == null)
+            new TreeCapitatorServer();
+        
+        return instance;
+    }
+    
+    private TreeCapitatorServer()
     {
         instance = this;
     }
     
     public void onPlayerLoggedIn(Player player)
     {
-        NBTTagCompound nbtTCSettings = new NBTTagCompound();
-        NBTTagCompound nbtTreeRegistry = new NBTTagCompound();
-        NBTTagCompound nbtToolRegistry = new NBTTagCompound();
+        //        Object[] paquetaUno = { nbtTCSettings, nbtTreeRegistry, nbtToolRegistry };
+        PacketDispatcher.sendPacketToPlayer(ForgePacketHelper.createPacket("TreeCapitator", 1, TreeCapitatorMod.instance.nbtManager().getPacketArray()), player);
+    }
+    
+    @Override
+    public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player)
+    {
+        DataInputStream data = new DataInputStream(new ByteArrayInputStream(packet.data));
+        int packetType = ForgePacketHelper.readPacketID(data);
         
-        TCSettings.instance().writeToNBT(nbtTCSettings);
-        TreeRegistry.instance().writeToNBT(nbtTreeRegistry);
-        ToolRegistry.instance().writeToNBT(nbtToolRegistry);
-        
-        Object[] paquetaUno = { nbtTCSettings, nbtTreeRegistry, nbtToolRegistry };
-        PacketDispatcher.sendPacketToPlayer(ForgePacketHelper.createPacket("TreeCapitator", 1, paquetaUno), player);
+        if (packetType == 0)
+        {
+            PacketDispatcher.sendPacketToPlayer(ForgePacketHelper.createPacket("TreeCapitator", 0, null), player);
+            onPlayerLoggedIn(player);
+        }
     }
 }

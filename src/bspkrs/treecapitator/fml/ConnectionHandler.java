@@ -35,6 +35,6 @@ public class ConnectionHandler implements IConnectionHandler
     @Override
     public void clientLoggedIn(NetHandler clientHandler, INetworkManager manager, Packet1Login login)
     {
-        TreeCapitatorClient.instance.onClientConnect();
+        TreeCapitatorClient.instance().onClientConnect();
     }
 }

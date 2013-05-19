@@ -9,7 +9,7 @@ import net.minecraft.item.ItemInWorldManager;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import bspkrs.fml.util.bspkrsCoreProxy;
-import bspkrs.treecapitator.InstanceHandler;
+import bspkrs.treecapitator.RegistryNBTManager;
 import bspkrs.treecapitator.Strings;
 import bspkrs.treecapitator.TCLog;
 import bspkrs.treecapitator.TCSettings;
@@ -42,8 +42,8 @@ import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 
 @Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge " + Strings.VERSION_NUMBER, dependencies = "required-after:mod_bspkrsCore", useMetadata = true)
 @NetworkMod(clientSideRequired = false, serverSideRequired = false,
-        clientPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = ClientPacketHandler.class),
-        serverPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = ServerPacketHandler.class),
+        clientPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = TreeCapitatorClient.class),
+        serverPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = TreeCapitatorServer.class),
         connectionHandler = ConnectionHandler.class)
 public class TreeCapitatorMod extends DummyModContainer
 {
@@ -52,7 +52,7 @@ public class TreeCapitatorMod extends DummyModContainer
     private final String            mcfTopic        = "http://www.minecraftforum.net/topic/1009577-";
     
     public static boolean           isCoreModLoaded = false;
-    public InstanceHandler          instanceHandler;
+    private RegistryNBTManager      nbtManager;
     public Configuration            config;
     
     @Metadata(value = "TreeCapitator")
@@ -109,8 +109,8 @@ public class TreeCapitatorMod extends DummyModContainer
     
     @IMCCallback
     public void processIMCMessages(IMCEvent event)
-    {   
-        
+    {
+        // TODO
     }
     
     @PostInit
@@ -124,13 +124,14 @@ public class TreeCapitatorMod extends DummyModContainer
             TCLog.info("It looks like you're using Multi-Mine.  You should put this list in the S:\"Excluded Block IDs\" config setting in AS_MultiMine.cfg:\n\"%s\"",
                     TreeRegistry.instance().getMultiMineExclusionString());
         }
+        
+        nbtManager();
     }
     
     @ServerStarted
     public void serverStarted(FMLServerStartedEvent event)
     {
-        new TreeCapitatorServer();
-        //TreeCapitator.parseConfigBlockList(Strings.localBlockIDList);
+        // new TreeCapitatorServer();
     }
     
     public void onBlockHarvested(World world, int x, int y, int z, Block block, int metadata, EntityPlayer entityPlayer)
@@ -166,5 +167,13 @@ public class TreeCapitatorMod extends DummyModContainer
     public static boolean isItemInWorldManagerReplaced(EntityPlayerMP player)
     {
         return !player.theItemInWorldManager.getClass().getSimpleName().equals(ItemInWorldManager.class.getSimpleName());
+    }
+    
+    public RegistryNBTManager nbtManager()
+    {
+        if (nbtManager == null)
+            nbtManager = new RegistryNBTManager();
+        
+        return nbtManager;
     }
 }

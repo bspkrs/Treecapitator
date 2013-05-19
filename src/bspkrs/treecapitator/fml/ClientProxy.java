@@ -21,7 +21,7 @@ public class ClientProxy extends CommonProxy
     @Override
     public boolean isEnabled()
     {
-        return TreeCapitatorClient.instance.serverDetected;
+        return TreeCapitatorClient.instance().serverDetected;
     }
     
     @Override

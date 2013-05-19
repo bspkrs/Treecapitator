@@ -14,6 +14,6 @@ public class CommonProxy
     
     public void debugOutputBlockID(int id, int metadata)
     {
-        TCLog.debug("Clicked Block: %s, %s", id, metadata);
+        TCLog.debug("Block Clicked: %s, %s", id, metadata);
     }
 }
