@@ -8,6 +8,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import bspkrs.util.BlockID;
@@ -16,9 +17,11 @@ import bspkrs.util.Coord;
 
 public class TreeCapitator
 {
+    // The player chopping
     public EntityPlayer          player;
     public boolean               shouldFell;
     private Coord                startPos;
+    // The axe of the player currently chopping
     private ItemStack            axe;
     private ItemStack            shears;
     private final TreeDefinition treeDef;
@@ -45,13 +48,6 @@ public class TreeCapitator
         leafDamageMultiplier = TCSettings.damageMultiplier;
         numLogsBroken = 0;
         numLeavesSheared = 0;
-        
-    }
-    
-    @Deprecated
-    public TreeCapitator(EntityPlayer entityPlayer, ArrayList<BlockID> logIDList, ArrayList<BlockID> leafIDList)
-    {
-        this(entityPlayer, new TreeDefinition(logIDList, leafIDList));
     }
     
     public static boolean isBreakingPossible(World world, EntityPlayer entityPlayer)
@@ -109,12 +105,12 @@ public class TreeCapitator
     
     public void onBlockHarvested(World world, int x, int y, int z, int md, EntityPlayer entityPlayer)
     {
-        TCLog.debug("In TreeCapitator.onBlockHarvested() " + x + ", " + y + ", " + z);
-        player = entityPlayer;
-        startPos = new Coord(x, y, z);
-        
         if (!world.isRemote)
         {
+            TCLog.debug("In TreeCapitator.onBlockHarvested() " + x + ", " + y + ", " + z);
+            player = entityPlayer;
+            startPos = new Coord(x, y, z);
+            
             if (isBreakingEnabled(entityPlayer))
             {
                 Coord topLog = getTopLog(world, new Coord(x, y, z));
@@ -173,7 +169,7 @@ public class TreeCapitator
                 TCLog.debug("Tree Chopping is disabled due to player state or gamemode.");
         }
         else
-            TCLog.debug("World is remote, exiting TreeCapitator.");
+            TCLog.debug("World is remote, skipping TreeCapitator.onBlockHarvested().");
     }
     
     /**
@@ -260,7 +256,24 @@ public class TreeCapitator
     private boolean isAxeItemEquipped()
     {
         ItemStack item = player.getCurrentEquippedItem();
-        if (ToolRegistry.instance().isAxe(item))
+        
+        if (TCSettings.enableEnchantmentMode)
+        {
+            if (item.isItemEnchanted())
+                for (int i = 0; i < item.getEnchantmentTagList().tagCount(); i++)
+                {
+                    NBTTagCompound tag = (NBTTagCompound) item.getEnchantmentTagList().tagAt(i);
+                    if (tag.getShort("id") == TCSettings.treecapitating.effectId)
+                    {
+                        axe = item;
+                        return true;
+                    }
+                }
+            
+            axe = null;
+            return false;
+        }
+        else if (ToolRegistry.instance().isAxe(item))
         {
             axe = item;
             return true;
@@ -278,14 +291,21 @@ public class TreeCapitator
     public static boolean isAxeItemEquipped(EntityPlayer entityPlayer)
     {
         ItemStack item = entityPlayer.getCurrentEquippedItem();
-        if (ToolRegistry.instance().isAxe(item))
+        
+        if (TCSettings.enableEnchantmentMode)
         {
-            return true;
-        }
-        else
-        {
+            if (item.isItemEnchanted())
+                for (int i = 0; i < item.getEnchantmentTagList().tagCount(); i++)
+                {
+                    NBTTagCompound tag = (NBTTagCompound) item.getEnchantmentTagList().tagAt(i);
+                    if (tag.getShort("id") == TCSettings.treecapitating.effectId)
+                        return true;
+                }
+            
             return false;
         }
+        else
+            return ToolRegistry.instance().isAxe(item);
     }
     
     /**

@@ -40,7 +40,7 @@ public class ThirdPartyModConfig
      */
     protected ThirdPartyModConfig()
     {
-        modID = Strings.VAN_TREES_CTGY;
+        modID = Strings.VAN_TREES_ITEMS_CTGY;
         configPath = "TreeCapitator.cfg";
         blockKeys = "";
         itemKeys = "";
@@ -97,12 +97,10 @@ public class ThirdPartyModConfig
     {
         modID = tpModCfg.getString(Strings.MOD_ID);
         configPath = tpModCfg.getString(Strings.CONFIG_PATH);
-        if (tpModCfg.hasKey(Strings.BLOCK_CFG_KEYS))
-            blockKeys = tpModCfg.getString(Strings.BLOCK_CFG_KEYS);
+        blockKeys = tpModCfg.getString(Strings.BLOCK_CFG_KEYS);
         itemKeys = tpModCfg.getString(Strings.ITEM_CFG_KEYS);
         axeKeys = tpModCfg.getString(Strings.AXE_ID_LIST);
-        if (tpModCfg.hasKey(Strings.SHEARS_ID_LIST))
-            shearsKeys = tpModCfg.getString(Strings.SHEARS_ID_LIST);
+        shearsKeys = tpModCfg.getString(Strings.SHEARS_ID_LIST);
         shiftIndex = tpModCfg.getBoolean(Strings.SHIFT_INDEX);
         
         configTreesMap = new HashMap<String, ConfigTreeDefinition>();
@@ -126,14 +124,13 @@ public class ThirdPartyModConfig
             tpModCfg.setString(Strings.CONFIG_PATH, configPath);
         if (blockKeys.length() > 0)
             tpModCfg.setString(Strings.BLOCK_CFG_KEYS, blockKeys);
-        if (itemKeys.length() > 0 || axeKeys.length() > 0 || shearsKeys.length() > 0)
-        {
+        if (itemKeys.length() > 0)
             tpModCfg.setString(Strings.ITEM_CFG_KEYS, itemKeys);
+        if (axeKeys.length() > 0)
             tpModCfg.setString(Strings.AXE_ID_LIST, axeKeys);
-            if (shearsKeys.length() > 0)
-                tpModCfg.setString(Strings.SHEARS_ID_LIST, shearsKeys);
-            tpModCfg.setBoolean(Strings.SHIFT_INDEX, shiftIndex);
-        }
+        if (shearsKeys.length() > 0)
+            tpModCfg.setString(Strings.SHEARS_ID_LIST, shearsKeys);
+        tpModCfg.setBoolean(Strings.SHIFT_INDEX, shiftIndex);
         
         NBTTagList treeList = new NBTTagList();
         treeList.setName(Strings.TREES);
@@ -155,14 +152,13 @@ public class ThirdPartyModConfig
         configPath = cc.get(Strings.CONFIG_PATH).getString();
         if (cc.containsKey(Strings.BLOCK_CFG_KEYS))
             blockKeys = cc.get(Strings.BLOCK_CFG_KEYS).getString();
-        if (cc.containsKey(Strings.ITEM_CFG_KEYS) || cc.containsKey(Strings.AXE_ID_LIST) || cc.containsKey(Strings.SHEARS_ID_LIST))
-        {
+        if (cc.containsKey(Strings.ITEM_CFG_KEYS))
             itemKeys = cc.get(Strings.ITEM_CFG_KEYS).getString();
+        if (cc.containsKey(Strings.AXE_ID_LIST))
             axeKeys = cc.get(Strings.AXE_ID_LIST).getString();
-            if (cc.containsKey(Strings.SHEARS_ID_LIST))
-                shearsKeys = cc.get(Strings.SHEARS_ID_LIST).getString();
-            shiftIndex = cc.get(Strings.SHIFT_INDEX).getBoolean(true);
-        }
+        if (cc.containsKey(Strings.SHEARS_ID_LIST))
+            shearsKeys = cc.get(Strings.SHEARS_ID_LIST).getString();
+        shiftIndex = cc.get(Strings.SHIFT_INDEX).getBoolean(true);
         if (cc.containsKey(Strings.OVERRIDE_IMC))
             overrideIMC = cc.get(Strings.OVERRIDE_IMC).getBoolean(TCSettings.userConfigOverridesIMC);
         
@@ -187,13 +183,12 @@ public class ThirdPartyModConfig
         if (blockKeys.length() > 0)
             config.get(category, Strings.BLOCK_CFG_KEYS, blockKeys);
         if (itemKeys.length() > 0)
-        {
             config.get(category, Strings.ITEM_CFG_KEYS, itemKeys);
+        if (axeKeys.length() > 0)
             config.get(category, Strings.AXE_ID_LIST, axeKeys);
-            if (shearsKeys.length() > 0)
-                config.get(category, Strings.SHEARS_ID_LIST, shearsKeys);
-            config.get(category, Strings.SHIFT_INDEX, shiftIndex);
-        }
+        if (shearsKeys.length() > 0)
+            config.get(category, Strings.SHEARS_ID_LIST, shearsKeys);
+        config.get(category, Strings.SHIFT_INDEX, shiftIndex);
         
         for (Entry<String, ConfigTreeDefinition> e : configTreesMap.entrySet())
             e.getValue().writeToConfiguration(config, category + "." + e.getKey());

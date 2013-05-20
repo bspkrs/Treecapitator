@@ -14,13 +14,15 @@ public class EnchantmentTreecapitating extends Enchantment
     @Override
     public boolean canApply(ItemStack itemStack)
     {
-        return itemStack.isItemEnchantable() && ToolRegistry.instance().isAxe(itemStack);
+        return itemStack.isItemEnchantable() && TCSettings.enableEnchantmentMode &&
+                TCSettings.requireItemInAxeListForEnchant ? ToolRegistry.instance().isAxe(itemStack) : type.canEnchantItem(itemStack.getItem());
     }
     
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack itemStack)
     {
-        return type.canEnchantItem(itemStack.getItem());
+        return itemStack.isItemEnchantable() && TCSettings.enableEnchantmentMode &&
+                TCSettings.requireItemInAxeListForEnchant ? ToolRegistry.instance().isAxe(itemStack) : type.canEnchantItem(itemStack.getItem());
     }
     
     @Override

@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import bspkrs.treecapitator.ConfigTreeDefinition;
 import bspkrs.treecapitator.Strings;
 import bspkrs.treecapitator.TCLog;
+import bspkrs.util.Configuration;
 
 public class ModConfigRegistry
 {
@@ -93,7 +94,7 @@ public class ModConfigRegistry
     protected void initDefaultModConfigs()
     {
         defaultModCfgs = new HashMap<String, ThirdPartyModConfig>();
-        defaultModCfgs.put(Strings.VAN_TREES, new ThirdPartyModConfig());
+        defaultModCfgs.put(Strings.VAN_TREES_ITEMS_CTGY, new ThirdPartyModConfig());
         defaultModCfgs.put("ExtrabiomesXL", new ThirdPartyModConfig("ExtrabiomesXL", "extrabiomes/extrabiomes.cfg",
                 "block:customlog.id; block:quarterlog0.id; block:quarterlog1.id; block:quarterlog2.id; block:quarterlog3.id; " +
                         "block:autumnleaves.id; block:greenleaves.id")
@@ -125,6 +126,11 @@ public class ModConfigRegistry
     public Map<String, ThirdPartyModConfig> defaultConfigs()
     {
         return new HashMap<String, ThirdPartyModConfig>(defaultModCfgs);
+    }
+    
+    public void readFromConfiguration(Configuration config)
+    {   
+        
     }
     
     /*static

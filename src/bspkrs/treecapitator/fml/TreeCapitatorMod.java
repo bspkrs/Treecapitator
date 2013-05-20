@@ -128,7 +128,7 @@ public class TreeCapitatorMod extends DummyModContainer
         ModConfigRegistry.instance().applyPrioritizedModConfigs();
         
         // Multi-Mine stuff
-        if (Loader.isModLoaded(TCSettings.multiMineID))
+        if (Loader.isModLoaded(TCSettings.multiMineModID))
         {
             TCLog.info("It looks like you're using Multi-Mine.  You should put this list in the S:\"Excluded Block IDs\" config setting in AS_MultiMine.cfg:\n\"%s\"",
                     TreeRegistry.instance().getMultiMineExclusionString());

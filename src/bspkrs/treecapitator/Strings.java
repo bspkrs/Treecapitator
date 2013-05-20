@@ -13,8 +13,7 @@ public class Strings
     public static final String JUNGLE                             = "vanilla_jungle";
     public static final String MUSH_BROWN                         = "vanilla_huge_brown_mushroom";
     public static final String MUSH_RED                           = "vanilla_huge_red_mushroom";
-    public static final String VAN_TREES                          = "vanilla_trees";
-    public static final String VAN_TREES_CTGY                     = "1_" + VAN_TREES;
+    public static final String VAN_TREES_ITEMS_CTGY               = "1_vanilla_trees_and_items";
     
     public static final String LOGS                               = "logs";
     public static final String TREES                              = "trees";
@@ -56,15 +55,16 @@ public class Strings
     public static final String BREAK_SPEED_MOD                    = "breakSpeedModifier";
     
     public static final String GLOBALS_SETTINGS_CTGY_DESC         = "These are the general preference settings. They are used globally to tune how TreeCapitator works.";
-    public static final String PER_TREE_DEFAULTS_CTGY_DESC        = "These are the default values of settings that can be defined on a per-tree basis. If a user-/mod-\n" +
-                                                                          "defined tree sets one of these values it will override the default value here.";
+    public static final String PER_TREE_DEFAULTS_CTGY_DESC        = "These are the default values of settings that can be defined on a per-tree basis. If a \n" +
+                                                                          "user-/mod-defined tree sets one of these values it will override the default value here.";
     public static final String maxHorLogBreakDistDesc             = "[Global, PerTree] The maximum horizontal distance that the log breaking effect will travel (use -1 for no limit).";
     public static final String maxVerLogBreakDistDesc             = "[Global, PerTree] The maximum vertical distance that the log breaking effect will travel (use -1 for no limit).";
     public static final String idResolverModIDDesc                = "The mod ID value for ID Resolver.";
     public static final String multiMineIDDesc                    = "The mod ID value for Multi-Mine.";
-    public static final String userConfigOverridesIMCDesc         = "This setting controls the default behavior when a mod is both configured manually (in the config file) and by IMC (inter-mod communication).";
+    public static final String userConfigOverridesIMCDesc         = "This setting controls the default behavior when a mod is both configured manually (in the config file) and by the mod itself via IMC (inter-mod communication).";
     public static final String enableEnchantmentModeDesc          = "[Global] Toggle for whether or not to use the Treecapitating enchantment as opposed to requiring an item to be in the axeIDList to chop a tree.";
-    public static final String requireItemInAxeListForEnchantDesc = "[Global] Whether or not to check axeIDList for an item when determining if a given item can be imbued with the Treecapitating enchantment.\n" +
+    public static final String enchantmentIDDesc                  = "[Global] The internal ID for the Treecapitating enchantment.  Change this if the default ID is conflicting with another mod.";
+    public static final String requireItemInAxeListForEnchantDesc = "[Global] Whether or not to check the axe ID list for an item when determining if a given item can be imbued with the Treecapitating enchantment.\n" +
                                                                           "NOTE: when set to false, any ItemTool type item (pickaxes, shovels, etc) with a high enough enchantability level can get the enchantment, not just axes.";
     public static final String axeIDListDesc                      = "[Global] IDs of items that can chop down trees. Use ',' to split item id from metadata and ';' to split items.";
     public static final String needItemDesc                       = "[Global] Whether you need an item from the axeIDList to chop down a tree. Disabling will let you chop trees with any item.";
@@ -102,11 +102,13 @@ public class Strings
                                                                           "Increasing this value will search further.  I would try to keep it below 3.";
     public static final String maxLeafBreakDistDesc               = "[Global, PerTree] The maximum distance to instantly decay leaves from any log block that is removed by TreeCapitator.";
     public static final String minLeavesToIDDesc                  = "[Global, PerTree] The minimum number of leaves within maxLeafIDDist of the top log block required to identify a tree.";
-    public static final String useStrictBlockPairingDesc          = "[Global] Set to true if you want only the leaf blocks listed with each log in blockIDList\n"
+    public static final String useStrictBlockPairingDesc          = "[Global] Set to true if you want only the log/leaf blocks listed with each log in a tree\n"
                                                                           + "to break when that log type is chopped.  When set to false it will break\n"
-                                                                          + "any leaf type within range of the tree, not just the type for that tree.";
+                                                                          + "any log/leaf type blocks connected to the tree, not just the types for that tree.";
     public static final String allowDebugOutputDesc               = "[Global] Set to true if you want TreeCapitator to tell you what kind of block you have clicked when sneaking, false to disable.";
-    public static final String allowDebugLoggingDesc              = "[Global] Set to true if you want TreeCapitator to log info about what it's doing, false to disable";
+    public static final String allowDebugLoggingDesc              = "[Global] Set to true if you want TreeCapitator to log info about what it's doing, false to disable.\n" +
+                                                                          "If you are having an issue with the mod, set this option to true and post the resulting log to the\n" +
+                                                                          "TreeCapitator Minecraftforum.net thread along with a detailed description of the issue.";
     // TODO: write a new config category description
     public static final String configBlockIDDesc                  = "Add the log and leaf block IDs for all trees you want to be able to chop down.\n" +
                                                                           "Each section below represents a type of tree.  Each list may contain block IDs\n" +
