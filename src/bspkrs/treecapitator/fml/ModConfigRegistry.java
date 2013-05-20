@@ -1,7 +1,10 @@
 package bspkrs.treecapitator.fml;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import bspkrs.treecapitator.ConfigTreeDefinition;
 import bspkrs.treecapitator.Strings;
@@ -51,13 +54,13 @@ public class ModConfigRegistry
     
     protected void refreshUserTagMaps()
     {
-        for (ThirdPartyModConfig tpmc : this.userModCfgs.values())
+        for (ThirdPartyModConfig tpmc : userModCfgs.values())
             tpmc.refreshReplacementTags();
     }
     
     protected void refreshIMCTagMaps()
     {
-        for (ThirdPartyModConfig tpmc : this.imcModCfgs.values())
+        for (ThirdPartyModConfig tpmc : imcModCfgs.values())
             tpmc.refreshReplacementTags();
     }
     
@@ -65,6 +68,26 @@ public class ModConfigRegistry
     {
         refreshUserTagMaps();
         refreshIMCTagMaps();
+    }
+    
+    protected void applyPrioritizedModConfigs()
+    {
+        List<ThirdPartyModConfig> finalList = new ArrayList<ThirdPartyModConfig>();
+        
+        for (Entry<String, ThirdPartyModConfig> e : imcModCfgs.entrySet())
+            if (!userModCfgs.containsKey(e.getKey()))
+                finalList.add(e.getValue());
+            else if (!userModCfgs.get(e.getKey()).overrideIMC())
+                finalList.add(e.getValue());
+        
+        for (Entry<String, ThirdPartyModConfig> e : userModCfgs.entrySet())
+            if (!imcModCfgs.containsKey(e.getKey()))
+                finalList.add(e.getValue());
+            else if (e.getValue().overrideIMC())
+                finalList.add(e.getValue());
+        
+        for (ThirdPartyModConfig cfg : finalList)
+            cfg.registerTools().registerTrees();
     }
     
     protected void initDefaultModConfigs()
@@ -101,7 +124,7 @@ public class ModConfigRegistry
     
     public Map<String, ThirdPartyModConfig> defaultConfigs()
     {
-        return new HashMap<String, ThirdPartyModConfig>(this.defaultModCfgs);
+        return new HashMap<String, ThirdPartyModConfig>(defaultModCfgs);
     }
     
     /*static

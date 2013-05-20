@@ -44,7 +44,7 @@ public class mod_TreeCapitator extends BaseMod
     public static boolean     allowMoreBlocksThanDamage  = TCSettings.allowMoreBlocksThanDamage;
     @BSProp(info = Strings.sneakActionDesc + "\n")
     public static String      sneakAction                = TCSettings.sneakAction;
-    @BSProp(info = Strings.maxHorBreakDistDesc + "\n")
+    @BSProp(info = Strings.maxHorLogBreakDistDesc + "\n")
     public static int         maxBreakDistance           = TCSettings.maxHorLogBreakDist;
     
     @BSProp(info = Strings.requireLeafDecayCheckDesc + "\n")
@@ -59,6 +59,8 @@ public class mod_TreeCapitator extends BaseMod
     public static float       damageIncreaseAmount       = TCSettings.damageIncreaseAmount;
     @BSProp(info = Strings.allowSmartTreeDetectionDesc + "\n\n**ONLY EDIT WHAT IS BELOW THIS**")
     public static boolean     allowSmartTreeDetection    = TCSettings.allowSmartTreeDetection;
+    @BSProp(info = Strings.useStrictBlockPairingDesc + "\n")
+    public static boolean     useStrictBlockPairing      = TCSettings.useStrictBlockPairing;
     
     private ModVersionChecker versionChecker;
     private final String      versionURL                 = "http://bspk.rs/Minecraft/" + Const.MCVERSION + "/treeCapitator.version";
@@ -141,6 +143,7 @@ public class mod_TreeCapitator extends BaseMod
             TCSettings.increaseDamageEveryXBlocks = increaseDamageEveryXBlocks;
             TCSettings.damageIncreaseAmount = damageIncreaseAmount;
             TCSettings.allowSmartTreeDetection = allowSmartTreeDetection;
+            TCSettings.useStrictBlockPairing = useStrictBlockPairing;
             
             for (ItemID itemID : ListUtils.getDelimitedStringAsItemIDList(TCSettings.axeIDList, ";"))
                 ToolRegistry.instance().registerAxe(itemID);

@@ -14,6 +14,7 @@ public class Strings
     public static final String MUSH_BROWN                         = "vanilla_huge_brown_mushroom";
     public static final String MUSH_RED                           = "vanilla_huge_red_mushroom";
     public static final String VAN_TREES                          = "vanilla_trees";
+    public static final String VAN_TREES_CTGY                     = "1_" + VAN_TREES;
     
     public static final String LOGS                               = "logs";
     public static final String TREES                              = "trees";
@@ -57,17 +58,11 @@ public class Strings
     public static final String GLOBALS_SETTINGS_CTGY_DESC         = "These are the general preference settings. They are used globally to tune how TreeCapitator works.";
     public static final String PER_TREE_DEFAULTS_CTGY_DESC        = "These are the default values of settings that can be defined on a per-tree basis. If a user-/mod-\n" +
                                                                           "defined tree sets one of these values it will override the default value here.";
-    public static final String maxHorBreakDistDesc                = "[Global, PerTree] The maximum horizontal distance that the log breaking effect will travel (use -1 for no limit).";
+    public static final String maxHorLogBreakDistDesc             = "[Global, PerTree] The maximum horizontal distance that the log breaking effect will travel (use -1 for no limit).";
     public static final String maxVerLogBreakDistDesc             = "[Global, PerTree] The maximum vertical distance that the log breaking effect will travel (use -1 for no limit).";
     public static final String idResolverModIDDesc                = "The mod ID value for ID Resolver.";
     public static final String multiMineIDDesc                    = "The mod ID value for Multi-Mine.";
     public static final String userConfigOverridesIMCDesc         = "This setting controls the default behavior when a mod is both configured manually (in the config file) and by IMC (inter-mod communication).";
-    public static final String remoteTreeConfigURLDesc            = "Incomplete - do not use";
-    // "Leave this URL as is to get the latest tree definitions from my master list.\nFeel free to start your own remote list to share with your friends or send your suggestions to me for the master list!";
-    @Deprecated
-    public static String       remoteTreeConfigURL                = "http://bspk.rs/Minecraft/" + Const.MCVERSION + "/treeCapitatorTreeConfig.txt";
-    public static final String remoteBlockIDConfigDesc            = "Incomplete - do not use";
-    public static final String useRemoteTreeConfigDesc            = "Incomplete - do not use";
     public static final String enableEnchantmentModeDesc          = "[Global] Toggle for whether or not to use the Treecapitating enchantment as opposed to requiring an item to be in the axeIDList to chop a tree.";
     public static final String requireItemInAxeListForEnchantDesc = "[Global] Whether or not to check axeIDList for an item when determining if a given item can be imbued with the Treecapitating enchantment.\n" +
                                                                           "NOTE: when set to false, any ItemTool type item (pickaxes, shovels, etc) with a high enough enchantability level can get the enchantment, not just axes.";

@@ -84,7 +84,7 @@ public class TCConfigHandler
         TCSettings.breakSpeedModifier = config.getFloat("breakSpeedModifier", Strings.PER_TREE_DEFAULTS_CTGY,
                 TCSettings.breakSpeedModifier, 0.01F, 1F, Strings.breakSpeedModifierDesc);
         TCSettings.maxHorLogBreakDist = config.getInt("maxHorLogBreakDist", Strings.PER_TREE_DEFAULTS_CTGY,
-                TCSettings.maxHorLogBreakDist, -1, 100, Strings.maxHorBreakDistDesc);
+                TCSettings.maxHorLogBreakDist, -1, 100, Strings.maxHorLogBreakDistDesc);
         TCSettings.maxVerLogBreakDist = config.getInt("maxVerLogBreakDist", Strings.PER_TREE_DEFAULTS_CTGY,
                 TCSettings.maxVerLogBreakDist, -1, 255, Strings.maxVerLogBreakDistDesc);
         TCSettings.maxLeafIDDist = config.getInt("maxLeafIDDist", Strings.PER_TREE_DEFAULTS_CTGY,

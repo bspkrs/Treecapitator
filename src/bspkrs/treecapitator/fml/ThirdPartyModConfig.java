@@ -40,12 +40,12 @@ public class ThirdPartyModConfig
      */
     protected ThirdPartyModConfig()
     {
-        modID = Strings.VAN_TREES;
+        modID = Strings.VAN_TREES_CTGY;
         configPath = "TreeCapitator.cfg";
         blockKeys = "";
         itemKeys = "";
-        axeKeys = "";
-        shearsKeys = "";
+        axeKeys = ListUtils.getListAsDelimitedString(ToolRegistry.instance().vanillaAxeList(), "; ");
+        shearsKeys = ListUtils.getListAsDelimitedString(ToolRegistry.instance().vanillaShearsList(), "; ");
         shiftIndex = false;
         overrideIMC = TCSettings.userConfigOverridesIMC;
         
@@ -99,14 +99,11 @@ public class ThirdPartyModConfig
         configPath = tpModCfg.getString(Strings.CONFIG_PATH);
         if (tpModCfg.hasKey(Strings.BLOCK_CFG_KEYS))
             blockKeys = tpModCfg.getString(Strings.BLOCK_CFG_KEYS);
-        if (tpModCfg.hasKey(Strings.ITEM_CFG_KEYS))
-        {
-            itemKeys = tpModCfg.getString(Strings.ITEM_CFG_KEYS);
-            axeKeys = tpModCfg.getString(Strings.AXE_ID_LIST);
-            if (tpModCfg.hasKey(Strings.SHEARS_ID_LIST))
-                shearsKeys = tpModCfg.getString(Strings.SHEARS_ID_LIST);
-            shiftIndex = tpModCfg.getBoolean(Strings.SHIFT_INDEX);
-        }
+        itemKeys = tpModCfg.getString(Strings.ITEM_CFG_KEYS);
+        axeKeys = tpModCfg.getString(Strings.AXE_ID_LIST);
+        if (tpModCfg.hasKey(Strings.SHEARS_ID_LIST))
+            shearsKeys = tpModCfg.getString(Strings.SHEARS_ID_LIST);
+        shiftIndex = tpModCfg.getBoolean(Strings.SHIFT_INDEX);
         
         configTreesMap = new HashMap<String, ConfigTreeDefinition>();
         
@@ -129,7 +126,7 @@ public class ThirdPartyModConfig
             tpModCfg.setString(Strings.CONFIG_PATH, configPath);
         if (blockKeys.length() > 0)
             tpModCfg.setString(Strings.BLOCK_CFG_KEYS, blockKeys);
-        if (itemKeys.length() > 0)
+        if (itemKeys.length() > 0 || axeKeys.length() > 0 || shearsKeys.length() > 0)
         {
             tpModCfg.setString(Strings.ITEM_CFG_KEYS, itemKeys);
             tpModCfg.setString(Strings.AXE_ID_LIST, axeKeys);
@@ -158,7 +155,7 @@ public class ThirdPartyModConfig
         configPath = cc.get(Strings.CONFIG_PATH).getString();
         if (cc.containsKey(Strings.BLOCK_CFG_KEYS))
             blockKeys = cc.get(Strings.BLOCK_CFG_KEYS).getString();
-        if (cc.containsKey(Strings.ITEM_CFG_KEYS))
+        if (cc.containsKey(Strings.ITEM_CFG_KEYS) || cc.containsKey(Strings.AXE_ID_LIST) || cc.containsKey(Strings.SHEARS_ID_LIST))
         {
             itemKeys = cc.get(Strings.ITEM_CFG_KEYS).getString();
             axeKeys = cc.get(Strings.AXE_ID_LIST).getString();
@@ -222,16 +219,18 @@ public class ThirdPartyModConfig
         return this;
     }
     
-    public void registerTrees()
+    public ThirdPartyModConfig registerTrees()
     {
         if (configTreesMap.size() != treesMap.size())
             refreshTreeDefinitionsFromConfig();
         
         for (Entry<String, TreeDefinition> e : treesMap.entrySet())
             TreeRegistry.instance().registerTree(e.getKey(), e.getValue());
+        
+        return this;
     }
     
-    public void registerTools()
+    public ThirdPartyModConfig registerTools()
     {
         String axeList = axeKeys;
         String shearsList = shearsKeys;
@@ -246,6 +245,8 @@ public class ThirdPartyModConfig
         
         for (ItemID shears : ListUtils.getDelimitedStringAsItemIDList(shearsList, ";"))
             ToolRegistry.instance().registerShears(shears);
+        
+        return this;
     }
     
     public String modID()

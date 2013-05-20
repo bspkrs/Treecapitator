@@ -443,9 +443,10 @@ public class TreeCapitator
                             newPos = new Coord(currentLog.x + x, currentLog.y + y, currentLog.z + z);
                             
                             if (treeDef.maxHorLogBreakDist() == -1 || (Math.abs(newPos.x - startPos.x) <= treeDef.maxHorLogBreakDist()
-                                    && Math.abs(newPos.z - startPos.z) <= treeDef.maxHorLogBreakDist()))
-                                if (!list.contains(newPos) && (newPos.y >= lowY || !treeDef.onlyDestroyUpwards()))
-                                    list.add(newPos);
+                                    && Math.abs(newPos.z - startPos.z) <= treeDef.maxHorLogBreakDist())
+                                    && (treeDef.maxVerLogBreakDist() == -1 || (Math.abs(newPos.y - startPos.y) <= treeDef.maxVerLogBreakDist()))
+                                    && !list.contains(newPos) && (newPos.y >= lowY || !treeDef.onlyDestroyUpwards()))
+                                list.add(newPos);
                         }
         }
         while (++index < list.size());

@@ -34,6 +34,7 @@ import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCEvent;
+import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
@@ -110,13 +111,21 @@ public class TreeCapitatorMod extends DummyModContainer
     @IMCCallback
     public void processIMCMessages(IMCEvent event)
     {
-        // TODO
+        for (IMCMessage msg : event.getMessages().asList())
+            if (msg.isNBTMessage())
+            {
+                TCLog.debug("Received IMC message from mod %s.", msg.getSender());
+                ModConfigRegistry.instance().registerIMCModConfig(new ThirdPartyModConfig(msg.getNBTValue()));
+            }
+            else
+                TCLog.warning("Mod %s send an IMC message, but it is not an NBT tag message. The message will be ignored.", msg.getSender());
     }
     
     @PostInit
     public void postInit(FMLPostInitializationEvent event)
     {
         ModConfigRegistry.instance().refreshAllTagMaps();
+        ModConfigRegistry.instance().applyPrioritizedModConfigs();
         
         // Multi-Mine stuff
         if (Loader.isModLoaded(TCSettings.multiMineID))
@@ -124,14 +133,13 @@ public class TreeCapitatorMod extends DummyModContainer
             TCLog.info("It looks like you're using Multi-Mine.  You should put this list in the S:\"Excluded Block IDs\" config setting in AS_MultiMine.cfg:\n\"%s\"",
                     TreeRegistry.instance().getMultiMineExclusionString());
         }
-        
-        nbtManager();
     }
     
     @ServerStarted
     public void serverStarted(FMLServerStartedEvent event)
     {
-        // new TreeCapitatorServer();
+        // Make sure the NBT manager is initialized while we can still be sure of the values in our local objects
+        nbtManager();
     }
     
     public void onBlockHarvested(World world, int x, int y, int z, Block block, int metadata, EntityPlayer entityPlayer)
