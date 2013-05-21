@@ -1,20 +1,13 @@
 package bspkrs.treecapitator;
 
-import java.util.Map;
-import java.util.Map.Entry;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLog;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMultiTextureTile;
 import net.minecraft.nbt.NBTTagCompound;
-import bspkrs.treecapitator.fml.ModConfigRegistry;
-import bspkrs.treecapitator.fml.ThirdPartyModConfig;
-import bspkrs.util.ConfigCategory;
 import bspkrs.util.Configuration;
 import bspkrs.util.ListUtils;
-import cpw.mods.fml.common.Loader;
 
 public final class TCSettings
 {
@@ -254,43 +247,6 @@ public final class TCSettings
         
         TCLog.configs(config, Strings.GLOBALS_SETTINGS_CTGY);
         TCLog.configs(config, Strings.PER_TREE_DEFAULTS_CTGY);
-        
-        /*
-         * Get / Set 3rd Party Mod configs
-         */
-        TCSettings.idResolverModID = config.getString("idResolverModID", Strings.TREE_MOD_CFG_CTGY,
-                TCSettings.idResolverModID, Strings.idResolverModIDDesc);
-        TCSettings.multiMineModID = config.getString("multiMineID", Strings.TREE_MOD_CFG_CTGY,
-                TCSettings.multiMineModID, Strings.multiMineIDDesc);
-        TCSettings.userConfigOverridesIMC = config.getBoolean("userConfigOverridesIMC", Strings.TREE_MOD_CFG_CTGY,
-                TCSettings.userConfigOverridesIMC, Strings.userConfigOverridesIMCDesc);
-        
-        TCLog.configs(config, Strings.TREE_MOD_CFG_CTGY);
-        
-        if (!config.hasCategory(Strings.TREE_MOD_CFG_CTGY + "." + Strings.VAN_TREES_ITEMS_CTGY))
-        {
-            // Write default tree/mod settings to config
-            Map<String, ThirdPartyModConfig> m = ModConfigRegistry.instance().defaultConfigs();
-            for (Entry<String, ThirdPartyModConfig> e : m.entrySet())
-                e.getValue().writeToConfiguration(config, Strings.TREE_MOD_CFG_CTGY + "." + e.getKey());
-            
-            TCLog.info("Looks like a fresh config; default config loaded.");
-        }
-        else
-            TCLog.info("Proceeding to load tree/mod configs from file.");
-        
-        // Load all configs found in the file to ModConfigRegistry
-        for (String ctgy : config.getCategoryNames())
-        {
-            ConfigCategory cc = config.getCategory(ctgy);
-            if (ctgy.indexOf(Strings.TREE_MOD_CFG_CTGY + ".") != -1 && cc.containsKey(Strings.MOD_ID))
-                if (Loader.isModLoaded(cc.get(Strings.MOD_ID).getString())
-                        || cc.get(Strings.MOD_ID).equals(Strings.VAN_TREES_ITEMS_CTGY))
-                    ModConfigRegistry.instance().registerUserModConfig(new ThirdPartyModConfig(config, ctgy));
-        }
-        
-        if (TCSettings.enableEnchantmentMode)
-            treecapitating = new EnchantmentTreecapitating(enchantmentID, 5);
     }
     
     public void writeToConfiguration(Configuration config)

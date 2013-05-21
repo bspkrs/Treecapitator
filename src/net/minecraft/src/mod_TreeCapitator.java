@@ -45,8 +45,9 @@ public class mod_TreeCapitator extends BaseMod
     @BSProp(info = Strings.sneakActionDesc + "\n")
     public static String      sneakAction                = TCSettings.sneakAction;
     @BSProp(info = Strings.maxHorLogBreakDistDesc + "\n")
-    public static int         maxBreakDistance           = TCSettings.maxHorLogBreakDist;
-    
+    public static int         maxHorLogBreakDist         = TCSettings.maxHorLogBreakDist;
+    @BSProp(info = Strings.maxVerLogBreakDistDesc + "\n")
+    public static int         maxVerLogBreakDist         = TCSettings.maxVerLogBreakDist;
     @BSProp(info = Strings.requireLeafDecayCheckDesc + "\n")
     public static boolean     requireLeafDecayCheck      = TCSettings.requireLeafDecayCheck;
     @BSProp(info = Strings.damageMultiplierDesc + "\n")
@@ -57,10 +58,14 @@ public class mod_TreeCapitator extends BaseMod
     public static int         increaseDamageEveryXBlocks = TCSettings.increaseDamageEveryXBlocks;
     @BSProp(info = Strings.damageIncreaseAmountDesc + "\n")
     public static float       damageIncreaseAmount       = TCSettings.damageIncreaseAmount;
-    @BSProp(info = Strings.allowSmartTreeDetectionDesc + "\n\n**ONLY EDIT WHAT IS BELOW THIS**")
+    @BSProp(info = Strings.allowSmartTreeDetectionDesc + "\n")
     public static boolean     allowSmartTreeDetection    = TCSettings.allowSmartTreeDetection;
     @BSProp(info = Strings.useStrictBlockPairingDesc + "\n")
     public static boolean     useStrictBlockPairing      = TCSettings.useStrictBlockPairing;
+    @BSProp(info = Strings.enableEnchantmentModeDesc + "\n")
+    public static boolean     enableEnchantmentMode      = TCSettings.enableEnchantmentMode;
+    @BSProp(info = Strings.enchantmentIDDesc + "\n\n**ONLY EDIT WHAT IS BELOW THIS**")
+    public static int         enchantmentID              = TCSettings.enchantmentID;
     
     private ModVersionChecker versionChecker;
     private final String      versionURL                 = "http://bspk.rs/Minecraft/" + Const.MCVERSION + "/treeCapitator.version";
@@ -135,7 +140,8 @@ public class mod_TreeCapitator extends BaseMod
             TCSettings.allowItemDamage = allowItemDamage;
             TCSettings.allowMoreBlocksThanDamage = allowMoreBlocksThanDamage;
             TCSettings.sneakAction = sneakAction;
-            TCSettings.maxHorLogBreakDist = maxBreakDistance;
+            TCSettings.maxHorLogBreakDist = maxHorLogBreakDist;
+            TCSettings.maxVerLogBreakDist = maxVerLogBreakDist;
             
             TCSettings.requireLeafDecayCheck = requireLeafDecayCheck;
             TCSettings.damageMultiplier = damageMultiplier;

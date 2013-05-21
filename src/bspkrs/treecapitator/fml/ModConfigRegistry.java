@@ -9,7 +9,10 @@ import java.util.Map.Entry;
 import bspkrs.treecapitator.ConfigTreeDefinition;
 import bspkrs.treecapitator.Strings;
 import bspkrs.treecapitator.TCLog;
+import bspkrs.treecapitator.TCSettings;
+import bspkrs.util.ConfigCategory;
 import bspkrs.util.Configuration;
+import cpw.mods.fml.common.Loader;
 
 public class ModConfigRegistry
 {
@@ -39,6 +42,7 @@ public class ModConfigRegistry
     
     public void registerUserModConfig(ThirdPartyModConfig tpmc)
     {
+        TCLog.debug("Registering user mod config %s", tpmc.modID());
         if (!userModCfgs.containsKey(tpmc.modID()))
             userModCfgs.put(tpmc.modID(), tpmc);
         else
@@ -47,6 +51,7 @@ public class ModConfigRegistry
     
     public void registerIMCModConfig(ThirdPartyModConfig tpmc)
     {
+        TCLog.debug("Registering IMC mod config %s", tpmc.modID());
         if (!imcModCfgs.containsKey(tpmc.modID()))
             imcModCfgs.put(tpmc.modID(), tpmc);
         else
@@ -108,7 +113,7 @@ public class ModConfigRegistry
                                 "<block:quarterlog3.id>,0", "<block:greenleaves.id>,1"))
                 .addConfigTreeDef("fir",
                         new ConfigTreeDefinition("<block:customlog.id>,0; <block:quarterlog0.id>,1; <block:quarterlog1.id>,1; " +
-                                "<block:quarterlog2.id>,1; <block:quarterlog3.id>,1", "block:greenleaves.id>,0"))
+                                "<block:quarterlog2.id>,1; <block:quarterlog3.id>,1", "<block:greenleaves.id>,0"))
                 .addConfigTreeDef("acacia", new ConfigTreeDefinition("<block:customlog.id>,1", "<block:greenleaves.id>,2")));
         
         defaultModCfgs.put("IC2", new ThirdPartyModConfig("IC2", "IC2.cfg", "block:blockRubWood; block:blockRubLeaves",
@@ -128,11 +133,43 @@ public class ModConfigRegistry
         return new HashMap<String, ThirdPartyModConfig>(defaultModCfgs);
     }
     
+    /*
+     * Registers user configs from the config object
+     */
     public void readFromConfiguration(Configuration config)
-    {   
+    {
+        /*
+         * Get / Set 3rd Party Mod configs
+         */
+        TCSettings.idResolverModID = config.getString("idResolverModID", Strings.TREE_MOD_CFG_CTGY,
+                TCSettings.idResolverModID, Strings.idResolverModIDDesc);
+        TCSettings.multiMineModID = config.getString("multiMineID", Strings.TREE_MOD_CFG_CTGY,
+                TCSettings.multiMineModID, Strings.multiMineIDDesc);
+        TCSettings.userConfigOverridesIMC = config.getBoolean("userConfigOverridesIMC", Strings.TREE_MOD_CFG_CTGY,
+                TCSettings.userConfigOverridesIMC, Strings.userConfigOverridesIMCDesc);
         
+        TCLog.configs(config, Strings.TREE_MOD_CFG_CTGY);
+        
+        if (!config.hasCategory(Strings.TREE_MOD_CFG_CTGY + "." + Strings.VAN_TREES_ITEMS_CTGY))
+        {
+            // Write default tree/mod settings to config
+            Map<String, ThirdPartyModConfig> m = ModConfigRegistry.instance().defaultConfigs();
+            for (Entry<String, ThirdPartyModConfig> e : m.entrySet())
+                e.getValue().writeToConfiguration(config, Strings.TREE_MOD_CFG_CTGY + "." + e.getKey());
+            
+            TCLog.info("Looks like a fresh config; default config loaded.");
+        }
+        else
+            TCLog.info("Proceeding to load tree/mod configs from file.");
+        
+        // Load all configs found in the file to ModConfigRegistry
+        for (String ctgy : config.getCategoryNames())
+        {
+            ConfigCategory cc = config.getCategory(ctgy);
+            if (ctgy.indexOf(Strings.TREE_MOD_CFG_CTGY + ".") != -1 && cc.containsKey(Strings.MOD_ID) && Loader.isModLoaded(cc.get(Strings.MOD_ID).getString()))
+                ModConfigRegistry.instance().registerUserModConfig(new ThirdPartyModConfig(config, ctgy));
+        }
     }
-    
     /*static
     {
         HashMap<String, String> vanilla_oak;

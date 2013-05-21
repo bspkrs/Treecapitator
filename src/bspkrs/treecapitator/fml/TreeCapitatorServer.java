@@ -22,7 +22,7 @@ public class TreeCapitatorServer implements IPacketHandler
         return instance;
     }
     
-    private TreeCapitatorServer()
+    public TreeCapitatorServer()
     {
         instance = this;
     }

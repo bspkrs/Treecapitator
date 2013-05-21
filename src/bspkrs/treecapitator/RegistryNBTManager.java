@@ -38,14 +38,14 @@ public class RegistryNBTManager
     
     protected RegistryNBTManager saveCurrentTreeRegistryToLocal()
     {
-        localTCSettings = new NBTTagCompound();
+        localTreeRegistry = new NBTTagCompound();
         TreeRegistry.instance().writeToNBT(localTreeRegistry);
         return this;
     }
     
     protected RegistryNBTManager saveCurrentToolRegistryToLocal()
     {
-        localTCSettings = new NBTTagCompound();
+        localToolRegistry = new NBTTagCompound();
         ToolRegistry.instance().writeToNBT(localToolRegistry);
         return this;
     }

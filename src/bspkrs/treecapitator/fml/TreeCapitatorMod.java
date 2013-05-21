@@ -20,7 +20,6 @@ import bspkrs.util.Configuration;
 import bspkrs.util.Const;
 import bspkrs.util.Coord;
 import bspkrs.util.ModVersionChecker;
-import cpw.mods.fml.common.DummyModContainer;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.IMCCallback;
@@ -46,7 +45,7 @@ import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
         clientPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = TreeCapitatorClient.class),
         serverPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = TreeCapitatorServer.class),
         connectionHandler = ConnectionHandler.class)
-public class TreeCapitatorMod extends DummyModContainer
+public class TreeCapitatorMod
 {
     public static ModVersionChecker versionChecker;
     private final String            versionURL      = "http://bspk.rs/Minecraft/" + Const.MCVERSION + "/treeCapitatorForge.version";
@@ -159,6 +158,7 @@ public class TreeCapitatorMod extends DummyModContainer
                     {
                         TreeCapitator breaker;
                         
+                        // TODO: sort out how to safely query TreeRegistry
                         if (TCSettings.useStrictBlockPairing)
                             breaker = new TreeCapitator(entityPlayer, TreeRegistry.instance().get(blockID));
                         else

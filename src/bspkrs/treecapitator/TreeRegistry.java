@@ -90,8 +90,6 @@ public class TreeRegistry
      * Registers the given tree definition. If the new key already exists the existing definition is updated. If the new definition contains
      * a log that is already part of a tree, the existing definition is merged into the new definition.
      * 
-     * TreeRegistry.instance().updateGenericDefinition() should be called once all trees are registered.
-     * 
      * @param newKey
      * @param newTD
      */
@@ -109,7 +107,7 @@ public class TreeRegistry
                 // build the toAdd map of new log keys
                 toAdd.put(blockID, newKey);
             }
-            else if (!sharedLogTrees.contains(logToStringMap.get(blockID)))
+            else if (logToStringMap.containsKey(blockID) && !sharedLogTrees.contains(logToStringMap.get(blockID)))
                 // Whoa! this BlockID isn't new, we need to do some merging
                 sharedLogTrees.add(logToStringMap.get(blockID));
         
@@ -180,7 +178,7 @@ public class TreeRegistry
             if (!processed.contains(log.id))
             {
                 processed.add(log.id);
-                r += ", " + log.id;
+                r += "," + log.id;
             }
         }
         

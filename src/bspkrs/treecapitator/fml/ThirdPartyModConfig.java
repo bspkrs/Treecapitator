@@ -40,7 +40,7 @@ public class ThirdPartyModConfig
      */
     protected ThirdPartyModConfig()
     {
-        modID = Strings.VAN_TREES_ITEMS_CTGY;
+        modID = TreeCapitatorMod.metadata.modId;
         configPath = "TreeCapitator.cfg";
         blockKeys = "";
         itemKeys = "";
