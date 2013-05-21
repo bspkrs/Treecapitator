@@ -20,7 +20,7 @@ public class PlayerHandler
     //                int metadata = event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z);
     //                
     //                if (TCSettings.allowDebugOutput)
-    //                    TreeCapitatorMod.instance.proxy.debugOutputBlockID(block.blockID, metadata);
+    //                    TreeCapitatorMod.proxy.debugOutputBlockID(block.blockID, metadata);
     //                
     //                BlockID blockID = new BlockID(block, metadata);
     //                

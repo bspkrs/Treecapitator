@@ -14,6 +14,7 @@ import bspkrs.treecapitator.Strings;
 import bspkrs.treecapitator.TCLog;
 import bspkrs.treecapitator.TCSettings;
 import bspkrs.treecapitator.TreeCapitator;
+import bspkrs.treecapitator.TreeDefinition;
 import bspkrs.treecapitator.TreeRegistry;
 import bspkrs.util.BlockID;
 import bspkrs.util.Configuration;
@@ -79,6 +80,7 @@ public class TreeCapitatorMod
         
         if (Block.class.getSimpleName().equals("Block"))
         { // debug settings for deobfuscated execution
+            TCLog.info("Deobfuscated environment detected... using debug settings.");
             TCSettings.allowDebugLogging = true;
             TCSettings.onlyDestroyUpwards = true;
             TCSettings.sneakAction = "disable";
@@ -158,13 +160,17 @@ public class TreeCapitatorMod
                     {
                         TreeCapitator breaker;
                         
-                        // TODO: sort out how to safely query TreeRegistry
-                        if (TCSettings.useStrictBlockPairing)
-                            breaker = new TreeCapitator(entityPlayer, TreeRegistry.instance().get(blockID));
-                        else
-                            breaker = new TreeCapitator(entityPlayer, TreeRegistry.instance().masterDefinition());
+                        TreeDefinition treeDef = TreeRegistry.instance().get(blockID);
                         
-                        breaker.onBlockHarvested(world, x, y, z, metadata, entityPlayer);
+                        if (treeDef != null)
+                        {
+                            breaker = new TreeCapitator(entityPlayer, treeDef);
+                            breaker.onBlockHarvested(world, x, y, z, metadata, entityPlayer);
+                        }
+                        else
+                            TCLog.severe("TreeRegistry reported block ID %s is a log, but TreeDefinition lookup failed! " +
+                                    "Please report this to bspkrs (include a copy of this log and your config).", blockID);
+                        
                     }
                 }
                 TreeRegistry.instance().endTreeChopEventAt(blockPos);

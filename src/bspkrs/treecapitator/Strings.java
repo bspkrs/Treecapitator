@@ -18,6 +18,7 @@ public class Strings
     public static final String LOGS                               = "logs";
     public static final String TREES                              = "trees";
     public static final String TREE_DEFS                          = "treeDefs";
+    public static final String TREE_NAME                          = "treeName";
     public static final String MASTER_DEF                         = "masterDefinition";
     public static final String LOG_STR_MAP                        = "logToStringMap";
     public static final String LOG_CFG_KEYS                       = "logConfigKeys";

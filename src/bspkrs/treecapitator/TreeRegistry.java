@@ -95,56 +95,93 @@ public class TreeRegistry
      */
     public void registerTree(String newKey, TreeDefinition newTD)
     {
-        // list of trees that have at least one log blockID common with this tree
-        List<String> sharedLogTrees = new LinkedList<String>();
-        // logToStringMap entries to add
-        Map<BlockID, String> toAdd = new HashMap<BlockID, String>();
-        
-        // Check each log to see if an existing definition already uses it
-        for (BlockID blockID : newTD.getLogList())
-            if (!isRegistered(blockID))
-            {
-                // build the toAdd map of new log keys
-                toAdd.put(blockID, newKey);
-            }
-            else if (logToStringMap.containsKey(blockID) && !sharedLogTrees.contains(logToStringMap.get(blockID)))
-                // Whoa! this BlockID isn't new, we need to do some merging
-                sharedLogTrees.add(logToStringMap.get(blockID));
-        
-        if (!isRegistered(newKey) && sharedLogTrees.size() == 0)
-        { // New definition all around.  Easy.
-            TCLog.info("Tree Definition \"%s\" is new.  Proceeding to insert new key.", newKey);
-            treeDefs.put(newKey, newTD);
-            logToStringMap.putAll(toAdd);
-        }
-        else
+        // Do NOT register null tree defs!
+        if (newTD != null)
         {
-            if (sharedLogTrees.size() > 0)
-            {
-                // merge all shared log TreeDefinition objects with our new TreeDefinition
-                for (String existingKey : sharedLogTrees)
+            // list of trees that have at least one log blockID common with this tree
+            List<String> sharedLogTrees = new LinkedList<String>();
+            // logToStringMap entries to add
+            Map<BlockID, String> toAdd = new HashMap<BlockID, String>();
+            
+            // Check each log to see if an existing definition already uses it
+            for (BlockID blockID : newTD.getLogList())
+                if (!isRegistered(blockID))
                 {
-                    TCLog.info("Tree Definition \"%s\" contains a log that is registered with an existing tree (%s).  " +
-                            "The existing definition will be merged with the new tree.", newKey, existingKey);
-                    
-                    // append the existing definition to our new definition
-                    newTD.appendWithSettings(treeDefs.remove(existingKey));
+                    // build the toAdd map of new log keys
+                    toAdd.put(blockID, newKey);
                 }
-                
-                // update logToStringMap for all logs in the new definition
-                for (BlockID blockID : newTD.getLogList())
-                    logToStringMap.put(blockID, newKey);
-            }
-            else
-            { // A tree is defined for that key; append the new definition to the existing tree
-                TCLog.info("\"%s\" is already registered.  The new definition will be appended to the existing entry.", newKey);
-                treeDefs.get(newKey).appendWithSettings(newTD);
+                else if (logToStringMap.containsKey(blockID) && !sharedLogTrees.contains(logToStringMap.get(blockID)))
+                    // Whoa! this BlockID isn't new, we need to do some merging
+                    sharedLogTrees.add(logToStringMap.get(blockID));
+            
+            if (!newKey.trim().isEmpty() && !isRegistered(newKey) && sharedLogTrees.size() == 0)
+            {
+                // New definition all around.  Easy.
+                TCLog.info("Tree Definition \"%s\" is new.  Proceeding to insert new key.", newKey);
+                // insert newTD
+                treeDefs.put(newKey, newTD);
+                // update logToStringMap
                 logToStringMap.putAll(toAdd);
             }
+            else if (!newKey.trim().isEmpty())
+            {
+                if (sharedLogTrees.size() > 0)
+                {
+                    // merge all shared log TreeDefinition objects with our new TreeDefinition
+                    for (String existingKey : sharedLogTrees)
+                    {
+                        TCLog.info("Tree Definition \"%s\" contains a log that is registered with an existing tree (%s).  " +
+                                "The existing definition will be merged with the new tree.", newKey, existingKey);
+                        
+                        // append the existing definition to our new definition
+                        newTD.appendWithSettings(treeDefs.remove(existingKey));
+                    }
+                    
+                    // insert newTD
+                    treeDefs.put(newKey, newTD);
+                    
+                    // update logToStringMap for all logs in the new definition
+                    for (BlockID blockID : newTD.getLogList())
+                        logToStringMap.put(blockID, newKey);
+                }
+                else
+                { // A tree is defined for that key; append the new definition to the existing tree
+                    TCLog.info("\"%s\" is already registered.  The new definition will be appended to the existing entry.", newKey);
+                    treeDefs.get(newKey).appendWithSettings(newTD);
+                    logToStringMap.putAll(toAdd);
+                }
+            }
+            else
+            /* newKey is empty! */
+            {
+                if (sharedLogTrees.size() == 1)
+                {
+                    String existingTree = sharedLogTrees.remove(0);
+                    // append the new def to the existing tree
+                    treeDefs.get(existingTree).appendWithSettings(newTD);
+                    
+                    // update logToStringMap
+                    for (BlockID log : newTD.getLogList())
+                        if (!logToStringMap.containsKey(log))
+                            logToStringMap.put(log, existingTree);
+                    
+                    // update the master def
+                    masterDefinition.append(newTD);
+                    
+                }
+                else
+                {
+                    TCLog.warning("TreeDefinition cannot be registered with an empty Key.");
+                    return;
+                }
+            }
+            // Update our master tree definition
+            
+            if (!newKey.trim().isEmpty())
+                masterDefinition.append(treeDefs.get(newKey));
         }
-        
-        // Update our master tree definition
-        masterDefinition.append(treeDefs.get(newKey));
+        else
+            TCLog.warning("TreeDefinition cannot be null when registering a tree!");
     }
     
     public boolean trackTreeChopEventAt(Coord c)
@@ -250,11 +287,11 @@ public class TreeRegistry
     {
         // treeDefs;
         treeDefs = new HashMap<String, TreeDefinition>();
-        NBTTagList l = ntc.getTagList(Strings.TREES);
+        NBTTagList l = ntc.getTagList(Strings.TREE_DEFS);
         for (int i = 0; i < l.tagCount(); i++)
         {
-            NBTTagCompound tree = (NBTTagCompound) l.tagAt(i);
-            treeDefs.put(tree.getName(), new TreeDefinition(tree));
+            NBTTagCompound treeNBT = (NBTTagCompound) l.tagAt(i);
+            treeDefs.put(treeNBT.getString(Strings.TREE_NAME), new TreeDefinition(treeNBT));
         }
         
         // logToStringMap;
@@ -263,7 +300,8 @@ public class TreeRegistry
         for (int i = 0; i < l.tagCount(); i++)
         {
             NBTTagString s = (NBTTagString) l.tagAt(i);
-            logToStringMap.put(new BlockID(s.getName()), s.data);
+            String[] t = s.data.split("=");
+            logToStringMap.put(new BlockID(t[0], ","), t[1]);
         }
         
         // masterDefinition;
@@ -274,21 +312,24 @@ public class TreeRegistry
     {
         // treeDefs
         NBTTagList trees = new NBTTagList();
-        trees.setName(Strings.TREES);
+        trees.setName(Strings.TREE_DEFS);
         for (Entry<String, TreeDefinition> e : treeDefs.entrySet())
         {
             NBTTagCompound tree = new NBTTagCompound();
             e.getValue().writeToNBT(tree);
-            tree.setName(e.getKey());
+            tree.setString(Strings.TREE_NAME, e.getKey());
             trees.appendTag(tree);
         }
         ntc.setTag(Strings.TREE_DEFS, trees);
         
-        //        logToStringMap;
+        //        logToStringMap;   
         NBTTagList entries = new NBTTagList();
         entries.setName(Strings.LOG_STR_MAP);
         for (Entry<BlockID, String> e : logToStringMap.entrySet())
-            entries.appendTag(new NBTTagString(e.getKey().toString(), e.getValue()));
+        {
+            NBTTagString s = new NBTTagString("", e.getKey() + "=" + e.getValue());
+            entries.appendTag(s);
+        }
         ntc.setTag(Strings.LOG_STR_MAP, entries);
         
         //        masterDefinition;
