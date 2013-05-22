@@ -219,7 +219,7 @@ public class TreeRegistry
             }
         }
         
-        return r.replaceFirst(", ", "");
+        return r.replaceFirst(",", "");
     }
     
     public TreeDefinition masterDefinition()

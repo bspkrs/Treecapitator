@@ -86,6 +86,7 @@ public class TreeCapitatorMod
             TCSettings.sneakAction = "disable";
             TCSettings.maxHorLogBreakDist = 16;
             TCSettings.allowSmartTreeDetection = true;
+            TCSettings.enableEnchantmentMode = true;
             if (file.exists())
                 file.delete();
         }

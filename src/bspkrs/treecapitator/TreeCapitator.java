@@ -46,8 +46,8 @@ public class TreeCapitator
         vineID = new BlockID(Block.vine.blockID);
         logDamageMultiplier = TCSettings.damageMultiplier;
         leafDamageMultiplier = TCSettings.damageMultiplier;
-        numLogsBroken = 0;
-        numLeavesSheared = 0;
+        numLogsBroken = 1;
+        numLeavesSheared = 1;
     }
     
     public static boolean isBreakingPossible(World world, EntityPlayer entityPlayer)
@@ -126,20 +126,25 @@ public class TreeCapitator
                         
                         TCLog.debug("Destroying log blocks...");
                         destroyBlocks(world, logs);
+                        if (numLogsBroken > 1)
+                            TCLog.debug("Number of logs broken: %d", numLogsBroken);
+                        
                         if (TCSettings.destroyLeaves && leafList.size() != 0)
                         {
-                            TCLog.debug("Finding leaf blocks...");
+                            TCLog.debug("Destroying leaf blocks...");
                             for (Coord pos : listFinal)
                             {
                                 List<Coord> leaves = addLeaves(world, pos);
                                 //removeLeavesWithLogsAround(world, leaves);
                                 destroyBlocksWithChance(world, leaves, 0.5F, hasShearsInHotbar(player));
                             }
+                            if (numLeavesSheared > 1)
+                                TCLog.debug("Number of leaves sheared: %d", numLeavesSheared);
                         }
                         
                         /*
                          * Apply remaining damage if it rounds to a non-zero value
-                         */
+                        q   */
                         if (currentAxeDamage > 0.0F && axe != null)
                         {
                             currentAxeDamage = Math.round(currentAxeDamage);
@@ -347,7 +352,6 @@ public class TreeCapitator
     
     private void destroyBlocksWithChance(World world, List<Coord> list, float f, boolean canShear)
     {
-        TCLog.debug("Breaking identified blocks...");
         while (list.size() > 0)
         {
             Coord pos = list.remove(0);
@@ -394,8 +398,6 @@ public class TreeCapitator
                 world.setBlock(pos.x, pos.y, pos.z, 0, 0, 3);
             }
         }
-        if (numLogsBroken > 0)
-            TCLog.debug("Number of logs broken: %i", numLogsBroken);
     }
     
     /**
