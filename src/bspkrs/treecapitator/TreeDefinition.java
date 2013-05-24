@@ -18,7 +18,7 @@ public class TreeDefinition
     protected int           maxHorLogBreakDist;
     protected int           maxVerLogBreakDist;
     protected int           maxLeafIDDist;
-    protected int           maxLeafBreakDist;
+    protected int           maxHorLeafBreakDist;
     protected int           minLeavesToID;
     protected float         breakSpeedModifier;
     
@@ -32,7 +32,7 @@ public class TreeDefinition
         maxHorLogBreakDist = TCSettings.maxHorLogBreakDist;
         maxVerLogBreakDist = TCSettings.maxVerLogBreakDist;
         maxLeafIDDist = TCSettings.maxLeafIDDist;
-        maxLeafBreakDist = TCSettings.maxLeafBreakDist;
+        maxHorLeafBreakDist = TCSettings.maxHorLeafBreakDist;
         minLeavesToID = TCSettings.minLeavesToID;
         breakSpeedModifier = TCSettings.breakSpeedModifier;
     }
@@ -122,8 +122,8 @@ public class TreeDefinition
             requireLeafDecayCheck = toAdd.requireLeafDecayCheck;
         if (toAdd.maxHorLogBreakDist != TCSettings.maxHorLogBreakDist)
             maxHorLogBreakDist = toAdd.maxHorLogBreakDist;
-        if (toAdd.maxLeafBreakDist != TCSettings.maxLeafBreakDist)
-            maxLeafBreakDist = toAdd.maxLeafBreakDist;
+        if (toAdd.maxHorLeafBreakDist != TCSettings.maxHorLeafBreakDist)
+            maxHorLeafBreakDist = toAdd.maxHorLeafBreakDist;
         if (toAdd.maxLeafIDDist != TCSettings.maxLeafIDDist)
             maxLeafIDDist = toAdd.maxLeafIDDist;
         if (toAdd.minLeavesToID != TCSettings.minLeavesToID)
@@ -144,8 +144,8 @@ public class TreeDefinition
             maxHorLogBreakDist = treeDefNBT.getInteger(Strings.MAX_H_LOG_DIST);
         if (treeDefNBT.hasKey(Strings.MAX_V_LOG_DIST))
             maxVerLogBreakDist = treeDefNBT.getInteger(Strings.MAX_V_LOG_DIST);
-        if (treeDefNBT.hasKey(Strings.MAX_LEAF_DIST))
-            maxLeafBreakDist = treeDefNBT.getInteger(Strings.MAX_LEAF_DIST);
+        if (treeDefNBT.hasKey(Strings.MAX_H_LEAF_DIST))
+            maxHorLeafBreakDist = treeDefNBT.getInteger(Strings.MAX_H_LEAF_DIST);
         if (treeDefNBT.hasKey(Strings.MAX_LEAF_ID_DIST))
             maxLeafIDDist = treeDefNBT.getInteger(Strings.MAX_LEAF_ID_DIST);
         if (treeDefNBT.hasKey(Strings.MIN_LEAF_ID))
@@ -165,7 +165,7 @@ public class TreeDefinition
         treeDefNBT.setBoolean(Strings.REQ_DECAY_CHECK, requireLeafDecayCheck);
         treeDefNBT.setInteger(Strings.MAX_H_LOG_DIST, maxHorLogBreakDist);
         treeDefNBT.setInteger(Strings.MAX_V_LOG_DIST, maxVerLogBreakDist);
-        treeDefNBT.setInteger(Strings.MAX_LEAF_DIST, maxLeafBreakDist);
+        treeDefNBT.setInteger(Strings.MAX_H_LEAF_DIST, maxHorLeafBreakDist);
         treeDefNBT.setInteger(Strings.MAX_LEAF_ID_DIST, maxLeafIDDist);
         treeDefNBT.setInteger(Strings.MIN_LEAF_ID, minLeavesToID);
         treeDefNBT.setFloat(Strings.BREAK_SPEED_MOD, breakSpeedModifier);
@@ -207,9 +207,9 @@ public class TreeDefinition
         return this;
     }
     
-    public TreeDefinition setMaxLeafBreakDist(int maxLeafBreakDist)
+    public TreeDefinition setMaxHorLeafBreakDist(int maxLeafBreakDist)
     {
-        this.maxLeafBreakDist = maxLeafBreakDist;
+        this.maxHorLeafBreakDist = maxLeafBreakDist;
         return this;
     }
     
@@ -273,9 +273,9 @@ public class TreeDefinition
         return maxLeafIDDist;
     }
     
-    public int maxLeafBreakDist()
+    public int maxHorLeafBreakDist()
     {
-        return maxLeafBreakDist;
+        return maxHorLeafBreakDist;
     }
     
     public int minLeavesToID()

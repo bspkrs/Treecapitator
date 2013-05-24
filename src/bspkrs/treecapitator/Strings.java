@@ -33,6 +33,8 @@ public class Strings
     public static final String SHIFT_INDEX                        = "useShiftedItemID";
     public static final String OVERRIDE_IMC                       = "overrideIMC";
     public static final String IDR_MOD_ID                         = "idResolverModID";
+    public static final String MM_EXCL_LIST                       = "Excluded Block IDs";
+    public static final String MM_EXCL_LIST_DESC                  = "For Multi-Mine compatibility you should put this list in the S:\"Excluded Block IDs\" config setting in AS_MultiMine.cfg";
     public static final String TREE_MOD_CFG_CTGY                  = "tree_and_mod_configs";
     public static final String SETTINGS_CTGY                      = "general_settings";
     public static final String GLOBAL_SETTINGS                    = "global_settings";
@@ -51,7 +53,7 @@ public class Strings
     public static final String MAX_H_LOG_DIST                     = "maxHorLogBreakDist";
     public static final String MAX_V_LOG_DIST                     = "maxVerLogBreakDist";
     public static final String MAX_LEAF_ID_DIST                   = "maxLeafIDDist";
-    public static final String MAX_LEAF_DIST                      = "maxLeafBreakDist";
+    public static final String MAX_H_LEAF_DIST                    = "maxHorLeafBreakDist";
     public static final String MIN_LEAF_ID                        = "minLeavesToID";
     public static final String BREAK_SPEED_MOD                    = "breakSpeedModifier";
     

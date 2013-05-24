@@ -110,7 +110,7 @@ public class ThirdPartyModConfig
         for (int i = 0; i < treeList.tagCount(); i++)
         {
             NBTTagCompound tree = (NBTTagCompound) treeList.tagAt(i);
-            this.addConfigTreeDef(tree.getName(), new ConfigTreeDefinition(tree));
+            this.addConfigTreeDef(tree.getString(Strings.TREE_NAME), new ConfigTreeDefinition(tree));
         }
         
         return this;
@@ -133,12 +133,11 @@ public class ThirdPartyModConfig
         tpModCfg.setBoolean(Strings.SHIFT_INDEX, shiftIndex);
         
         NBTTagList treeList = new NBTTagList();
-        treeList.setName(Strings.TREES);
         for (Entry<String, ConfigTreeDefinition> e : configTreesMap.entrySet())
         {
             NBTTagCompound tree = new NBTTagCompound();
             e.getValue().writeToNBT(tree);
-            tree.setName(e.getKey());
+            tree.setString(Strings.TREE_NAME, e.getKey());
             treeList.appendTag(tree);
         }
         

@@ -81,8 +81,8 @@ public class ConfigTreeDefinition extends TreeDefinition
             maxHorLogBreakDist = cc.get(Strings.MAX_H_LOG_DIST).getInt(TCSettings.maxHorLogBreakDist);
         if (cc.containsKey(Strings.MAX_V_LOG_DIST))
             maxVerLogBreakDist = cc.get(Strings.MAX_V_LOG_DIST).getInt(TCSettings.maxVerLogBreakDist);
-        if (cc.containsKey(Strings.MAX_LEAF_DIST))
-            maxLeafBreakDist = cc.get(Strings.MAX_LEAF_DIST).getInt(TCSettings.maxLeafBreakDist);
+        if (cc.containsKey(Strings.MAX_H_LEAF_DIST))
+            maxHorLeafBreakDist = cc.get(Strings.MAX_H_LEAF_DIST).getInt(TCSettings.maxHorLeafBreakDist);
         if (cc.containsKey(Strings.MAX_LEAF_ID_DIST))
             maxLeafIDDist = cc.get(Strings.MAX_LEAF_ID_DIST).getInt(TCSettings.maxLeafIDDist);
         if (cc.containsKey(Strings.MIN_LEAF_ID))
@@ -106,8 +106,8 @@ public class ConfigTreeDefinition extends TreeDefinition
             config.get(category, Strings.MAX_H_LOG_DIST, maxHorLogBreakDist);
         if (maxVerLogBreakDist != TCSettings.maxVerLogBreakDist)
             config.get(category, Strings.MAX_V_LOG_DIST, maxVerLogBreakDist);
-        if (maxLeafBreakDist != TCSettings.maxLeafBreakDist)
-            config.get(category, Strings.MAX_LEAF_DIST, maxLeafBreakDist);
+        if (maxHorLeafBreakDist != TCSettings.maxHorLeafBreakDist)
+            config.get(category, Strings.MAX_H_LEAF_DIST, maxHorLeafBreakDist);
         if (maxLeafIDDist != TCSettings.maxLeafIDDist)
             config.get(category, Strings.MAX_LEAF_ID_DIST, maxLeafIDDist);
         if (minLeavesToID != TCSettings.minLeavesToID)
@@ -239,9 +239,9 @@ public class ConfigTreeDefinition extends TreeDefinition
     }
     
     @Override
-    public ConfigTreeDefinition setMaxLeafBreakDist(int maxLeafBreakDist)
+    public ConfigTreeDefinition setMaxHorLeafBreakDist(int maxHorLeafBreakDist)
     {
-        this.maxLeafBreakDist = maxLeafBreakDist;
+        this.maxHorLeafBreakDist = maxHorLeafBreakDist;
         return this;
     }
     

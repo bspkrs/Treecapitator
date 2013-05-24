@@ -63,21 +63,21 @@ public class TreeRegistry
                 .addLogID(new BlockID(17, 11)).addLogID(new BlockID(17, 15))
                 .addLeafID(new BlockID(18, 3)).addLeafID(new BlockID(18, 11))
                 .addLeafID(new BlockID(18, 0)).addLeafID(new BlockID(18, 8))
-                .setMaxLeafBreakDist(6).setRequireLeafDecayCheck(false));
+                .setMaxHorLeafBreakDist(6).setRequireLeafDecayCheck(false));
         vanTrees.put(Strings.MUSH_BROWN, new ConfigTreeDefinition().addLogID(new BlockID(99, 10)).addLogID(new BlockID(99, 15))
                 .addLeafID(new BlockID(99, 1)).addLeafID(new BlockID(99, 2))
                 .addLeafID(new BlockID(99, 3)).addLeafID(new BlockID(99, 4))
                 .addLeafID(new BlockID(99, 5)).addLeafID(new BlockID(99, 6))
                 .addLeafID(new BlockID(99, 7)).addLeafID(new BlockID(99, 8))
                 .addLeafID(new BlockID(99, 9)).addLeafID(new BlockID(99, 14))
-                .setMaxLeafBreakDist(6).setRequireLeafDecayCheck(false));
+                .setMaxHorLeafBreakDist(6).setRequireLeafDecayCheck(false));
         vanTrees.put(Strings.MUSH_RED, new ConfigTreeDefinition().addLogID(new BlockID(100, 10)).addLogID(new BlockID(100, 15))
                 .addLeafID(new BlockID(100, 1)).addLeafID(new BlockID(100, 2))
                 .addLeafID(new BlockID(100, 3)).addLeafID(new BlockID(100, 4))
                 .addLeafID(new BlockID(100, 5)).addLeafID(new BlockID(100, 6))
                 .addLeafID(new BlockID(100, 7)).addLeafID(new BlockID(100, 8))
                 .addLeafID(new BlockID(100, 9)).addLeafID(new BlockID(100, 14))
-                .setMaxLeafBreakDist(6).setRequireLeafDecayCheck(false));
+                .setMaxHorLeafBreakDist(6).setRequireLeafDecayCheck(false));
     }
     
     protected void registerVanillaTreeDefs()

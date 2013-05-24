@@ -80,18 +80,26 @@ public class ModConfigRegistry
     {
         List<ThirdPartyModConfig> finalList = new ArrayList<ThirdPartyModConfig>();
         
+        TCLog.info("Prioritizing User and IMC mod configs...");
         for (Entry<String, ThirdPartyModConfig> e : imcModCfgs.entrySet())
-            if (!userModCfgs.containsKey(e.getKey()))
+            if (!userModCfgs.containsKey(e.getKey()) || !userModCfgs.get(e.getKey()).overrideIMC())
+            {
                 finalList.add(e.getValue());
-            else if (!userModCfgs.get(e.getKey()).overrideIMC())
-                finalList.add(e.getValue());
+                TCLog.debug("IMC mod config loaded for %s.", e.getValue().modID());
+            }
         
         for (Entry<String, ThirdPartyModConfig> e : userModCfgs.entrySet())
-            if (!imcModCfgs.containsKey(e.getKey()))
+            if (!imcModCfgs.containsKey(e.getKey()) || e.getValue().overrideIMC())
+            {
                 finalList.add(e.getValue());
-            else if (e.getValue().overrideIMC())
-                finalList.add(e.getValue());
+                TCLog.debug("User mod config loaded for %s.", e.getValue().modID());
+            }
         
+        TCLog.info("Getting tag replacements from configs...");
+        for (ThirdPartyModConfig cfg : finalList)
+            cfg.refreshReplacementTags();
+        
+        TCLog.info("Registering items and trees...");
         for (ThirdPartyModConfig cfg : finalList)
             cfg.registerTools().registerTrees();
     }
@@ -110,10 +118,12 @@ public class ModConfigRegistry
                         new ConfigTreeDefinition("", "<block:autumnleaves.id>"))
                 .addConfigTreeDef("redwood",
                         new ConfigTreeDefinition("<block:quarterlog0.id>,0; <block:quarterlog1.id>,0; <block:quarterlog2.id>,0; " +
-                                "<block:quarterlog3.id>,0", "<block:greenleaves.id>,1"))
+                                "<block:quarterlog3.id>,0", "<block:greenleaves.id>,1; <block:greenleaves.id>,9")
+                                .setMaxHorLeafBreakDist(10).setRequireLeafDecayCheck(false))
                 .addConfigTreeDef("fir",
                         new ConfigTreeDefinition("<block:customlog.id>,0; <block:quarterlog0.id>,1; <block:quarterlog1.id>,1; " +
-                                "<block:quarterlog2.id>,1; <block:quarterlog3.id>,1", "<block:greenleaves.id>,0"))
+                                "<block:quarterlog2.id>,1; <block:quarterlog3.id>,1", "<block:greenleaves.id>,0; <block:greenleaves.id>,8")
+                                .setMaxHorLeafBreakDist(10).setRequireLeafDecayCheck(false))
                 .addConfigTreeDef("acacia", new ConfigTreeDefinition("<block:customlog.id>,1", "<block:greenleaves.id>,2")));
         
         defaultModCfgs.put("IC2", new ThirdPartyModConfig("IC2", "IC2.cfg", "block:blockRubWood; block:blockRubLeaves",
@@ -135,6 +145,7 @@ public class ModConfigRegistry
     
     /*
      * Registers user configs from the config object
+     * (kind of a misnomer, but I'm lazy)
      */
     public void readFromConfiguration(Configuration config)
     {

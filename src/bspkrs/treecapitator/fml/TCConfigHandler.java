@@ -39,7 +39,7 @@ public class TCConfigHandler
         config.load();
         
         TCLog.info("Loading configuration file %s", file.getAbsolutePath().replace(CommonUtils.getMinecraftDir(), "./"));
-        TCSettings.instance().readFromConfiguration(config);
+        TCSettings.instance().syncConfiguration(config);
         ModConfigRegistry.instance().readFromConfiguration(config);
         
         config.save();

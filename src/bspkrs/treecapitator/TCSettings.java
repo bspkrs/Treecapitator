@@ -1,5 +1,7 @@
 package bspkrs.treecapitator;
 
+import java.util.logging.Level;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLog;
 import net.minecraft.enchantment.Enchantment;
@@ -28,7 +30,7 @@ public final class TCSettings
     public static int         increaseDamageEveryXBlocks     = 15;
     public static boolean     needItem                       = true;
     public static boolean     onlyDestroyUpwards             = true;
-    public static boolean     requireItemInAxeListForEnchant = false;
+    public static boolean     requireItemInAxeListForEnchant = true;
     public static boolean     shearLeaves                    = false;
     public static boolean     shearVines                     = false;
     public static String      sneakAction                    = "disable";
@@ -36,9 +38,9 @@ public final class TCSettings
     public static boolean     useStrictBlockPairing          = true;
     
     // Per-tree
-    public static float       breakSpeedModifier             = 0.3F;
+    public static float       breakSpeedModifier             = 0.256F;
     public static int         maxHorLogBreakDist             = 16;
-    public static int         maxLeafBreakDist               = 4;
+    public static int         maxHorLeafBreakDist            = 4;
     public static int         maxLeafIDDist                  = 1;
     public static int         maxVerLogBreakDist             = -1;
     public static int         minLeavesToID                  = 3;
@@ -101,12 +103,14 @@ public final class TCSettings
     
     protected void handleEnchantmentID(int id)
     {
-        if (enableEnchantmentMode && enchantmentID != id && id > 0 && id < 256)
+        if (enableEnchantmentMode && id >= 0 && id < 256)
         {
             if (Enchantment.enchantmentsList[enchantmentID] != null)
                 Enchantment.enchantmentsList[enchantmentID] = null;
             enchantmentID = id;
             treecapitating = new EnchantmentTreecapitating(enchantmentID, enchantmentWeight);
+            if (isForge)
+                Enchantment.addToBookList(treecapitating);
         }
     }
     
@@ -127,7 +131,7 @@ public final class TCSettings
         
         increaseDamageEveryXBlocks = ntc.getInteger("increaseDamageEveryXBlocks");
         maxHorLogBreakDist = ntc.getInteger("maxHorLogBreakDist");
-        maxLeafBreakDist = ntc.getInteger("maxLeafBreakDist");
+        maxHorLeafBreakDist = ntc.getInteger("maxHorLeafBreakDist");
         maxLeafIDDist = ntc.getInteger("maxLeafIDDist");
         maxVerLogBreakDist = ntc.getInteger("maxVerLogBreakDist");
         minLeavesToID = ntc.getInteger("minLeavesToID");
@@ -157,7 +161,7 @@ public final class TCSettings
         ntc.setInteger("enchantmentID", enchantmentID);
         ntc.setInteger("increaseDamageEveryXBlocks", increaseDamageEveryXBlocks);
         ntc.setInteger("maxHorLogBreakDist", maxHorLogBreakDist);
-        ntc.setInteger("maxLeafBreakDist", maxLeafBreakDist);
+        ntc.setInteger("maxHorLeafBreakDist", maxHorLeafBreakDist);
         ntc.setInteger("maxLeafIDDist", maxLeafIDDist);
         ntc.setInteger("maxVerLogBreakDist", maxVerLogBreakDist);
         ntc.setInteger("minLeavesToID", minLeavesToID);
@@ -177,7 +181,7 @@ public final class TCSettings
      * 
      * @param config
      */
-    public void readFromConfiguration(Configuration config)
+    public void syncConfiguration(Configuration config)
     {
         // Global settings
         TCSettings.allowDebugLogging = config.getBoolean("allowDebugLogging", Strings.GLOBALS_SETTINGS_CTGY,
@@ -206,7 +210,7 @@ public final class TCSettings
                 TCSettings.enableEnchantmentMode, Strings.enableEnchantmentModeDesc);
         
         handleEnchantmentID(config.getInt("enchantmentID", Strings.GLOBALS_SETTINGS_CTGY,
-                TCSettings.enchantmentID, 0, Enchantment.enchantmentsList.length, Strings.enchantmentIDDesc));
+                TCSettings.enchantmentID, 0, Enchantment.enchantmentsList.length - 1, Strings.enchantmentIDDesc));
         
         TCSettings.increaseDamageEveryXBlocks = config.getInt("increaseDamageEveryXBlocks", Strings.GLOBALS_SETTINGS_CTGY,
                 TCSettings.increaseDamageEveryXBlocks, 1, 500, Strings.increaseDamageEveryXBlocksDesc);
@@ -245,6 +249,8 @@ public final class TCSettings
                 TCSettings.requireLeafDecayCheck, Strings.requireLeafDecayCheckDesc);
         config.addCustomCategoryComment(Strings.PER_TREE_DEFAULTS_CTGY, Strings.PER_TREE_DEFAULTS_CTGY_DESC);
         
+        if (allowDebugLogging)
+            TCLog.INSTANCE.getLogger().setLevel(Level.CONFIG);
         TCLog.configs(config, Strings.GLOBALS_SETTINGS_CTGY);
         TCLog.configs(config, Strings.PER_TREE_DEFAULTS_CTGY);
     }

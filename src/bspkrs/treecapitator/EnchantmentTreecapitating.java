@@ -28,7 +28,7 @@ public class EnchantmentTreecapitating extends Enchantment
     @Override
     public int getMinEnchantability(int par1)
     {
-        return 10;
+        return 20;
     }
     
     @Override

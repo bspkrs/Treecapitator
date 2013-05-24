@@ -6,6 +6,8 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemInWorldManager;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import bspkrs.fml.util.bspkrsCoreProxy;
@@ -33,6 +35,7 @@ import cpw.mods.fml.common.Mod.ServerStarted;
 import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCEvent;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -79,14 +82,17 @@ public class TreeCapitatorMod
         File file = event.getSuggestedConfigurationFile();
         
         if (Block.class.getSimpleName().equals("Block"))
-        { // debug settings for deobfuscated execution
+        {
+            // debug settings for deobfuscated execution
             TCLog.info("Deobfuscated environment detected... using debug settings.");
             TCSettings.allowDebugLogging = true;
+            TCSettings.allowDebugOutput = true;
             TCSettings.onlyDestroyUpwards = true;
             TCSettings.sneakAction = "disable";
             TCSettings.maxHorLogBreakDist = 16;
             TCSettings.allowSmartTreeDetection = true;
-            TCSettings.enableEnchantmentMode = true;
+            TCSettings.useStrictBlockPairing = true;
+            // TCSettings.enableEnchantmentMode = true;
             if (file.exists())
                 file.delete();
         }
@@ -108,6 +114,69 @@ public class TreeCapitatorMod
     {
         MinecraftForge.EVENT_BUS.register(new PlayerHandler());
         proxy.onLoad();
+        
+    }
+    
+    protected void example()
+    {
+        if (Loader.isModLoaded("TreeCapitator"))
+        {
+            NBTTagCompound tpModCfg = new NBTTagCompound();
+            tpModCfg.setName("ExtraBiomesXL");
+            tpModCfg.setString("modID", "ExtraBiomesXL");
+            tpModCfg.setString("configPath", "extrabiomes/extrabiomes.cfg");
+            tpModCfg.setString("blockConfigKeys", "block:customlog.id; block:quarterlog0.id; block:quarterlog1.id; block:quarterlog2.id; block:quarterlog3.id; " +
+                    "block:autumnleaves.id; block:greenleaves.id");
+            tpModCfg.setString("itemConfigKeys", "");
+            tpModCfg.setString("axeIDList", "");
+            tpModCfg.setString("shearsIDList", "");
+            tpModCfg.setBoolean("useShiftedItemID", true);
+            
+            NBTTagList treeList = new NBTTagList();
+            
+            // Vanilla Oak additions
+            NBTTagCompound tree = new NBTTagCompound();
+            tree.setString("treeName", "vanilla_oak");
+            tree.setString("logConfigKeys", "<block:quarterlog0.id>,2; <block:quarterlog1.id>,2; <block:quarterlog2.id>,2; <block:quarterlog3.id>,2;");
+            tree.setString("leafConfigKeys", "<block:autumnleaves.id>");
+            treeList.appendTag(tree);
+            
+            // Vanilla Spruce additions
+            tree = new NBTTagCompound();
+            tree.setString("treeName", "vanilla_spruce");
+            tree.setString("logConfigKeys", "");
+            tree.setString("leafConfigKeys", "<block:autumnleaves.id>");
+            treeList.appendTag(tree);
+            
+            // EBXL fir
+            tree = new NBTTagCompound();
+            tree.setString("treeName", "fir");
+            tree.setString("logConfigKeys", "<block:customlog.id>,0; <block:quarterlog0.id>,1; <block:quarterlog1.id>,1; <block:quarterlog2.id>,1; <block:quarterlog3.id>,1");
+            tree.setString("leafConfigKeys", "<block:greenleaves.id>,0; <block:greenleaves.id>,8");
+            tree.setInteger("maxHorLeafBreakDist", 10);
+            tree.setBoolean("requireLeafDecayCheck", false);
+            treeList.appendTag(tree);
+            
+            // EBXL redwood
+            tree = new NBTTagCompound();
+            tree.setString("treeName", "redwood");
+            tree.setString("logConfigKeys", "<block:quarterlog0.id>,0; <block:quarterlog1.id>,0; <block:quarterlog2.id>,0; <block:quarterlog3.id>,0");
+            tree.setString("leafConfigKeys", "<block:greenleaves.id>,1; <block:greenleaves.id>,9");
+            tree.setInteger("maxHorLeafBreakDist", 10);
+            tree.setBoolean("requireLeafDecayCheck", false);
+            treeList.appendTag(tree);
+            
+            // EBXL acacia
+            tree = new NBTTagCompound();
+            tree.setString("treeName", "acacia");
+            tree.setString("logConfigKeys", "<block:customlog.id>,1");
+            tree.setString("leafConfigKeys", "<block:greenleaves.id>,2");
+            treeList.appendTag(tree);
+            
+            tpModCfg.setTag("trees", treeList);
+            
+            FMLInterModComms.sendMessage("TreeCapitator", metadata.modId, tpModCfg);
+        }
     }
     
     @IMCCallback
@@ -126,14 +195,16 @@ public class TreeCapitatorMod
     @PostInit
     public void postInit(FMLPostInitializationEvent event)
     {
-        ModConfigRegistry.instance().refreshAllTagMaps();
         ModConfigRegistry.instance().applyPrioritizedModConfigs();
         
         // Multi-Mine stuff
         if (Loader.isModLoaded(TCSettings.multiMineModID))
         {
-            TCLog.info("It looks like you're using Multi-Mine.  You should put this list in the S:\"Excluded Block IDs\" config setting in AS_MultiMine.cfg:\n\"%s\"",
-                    TreeRegistry.instance().getMultiMineExclusionString());
+            String s = TreeRegistry.instance().getMultiMineExclusionString();
+            TCLog.warning("For Multi-Mine compatibility you should put this list in the S:\"Excluded Block IDs\" config setting in AS_MultiMine.cfg:");
+            TCLog.info("\"%s\"", s);
+            TCConfigHandler.instance().config.get(Strings.TREE_MOD_CFG_CTGY, Strings.MM_EXCL_LIST, "", Strings.MM_EXCL_LIST_DESC).set(s);
+            TCConfigHandler.instance().config.save();
         }
     }
     

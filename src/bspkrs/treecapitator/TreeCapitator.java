@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import bspkrs.util.BlockID;
@@ -124,20 +126,25 @@ public class TreeCapitator
                         List<Coord> logs = addLogs(world, new Coord(x, y, z));
                         addLogsAbove(world, new Coord(x, y, z), listFinal);
                         
-                        TCLog.debug("Destroying log blocks...");
+                        TCLog.debug("Destroying %d log blocks...", logs.size());
                         destroyBlocks(world, logs);
                         if (numLogsBroken > 1)
                             TCLog.debug("Number of logs broken: %d", numLogsBroken);
                         
                         if (TCSettings.destroyLeaves && leafList.size() != 0)
                         {
-                            TCLog.debug("Destroying leaf blocks...");
+                            TCLog.debug("Finding leaf blocks...");
+                            List<Coord> leaves = new ArrayList<Coord>();
                             for (Coord pos : listFinal)
                             {
-                                List<Coord> leaves = addLeaves(world, pos);
-                                //removeLeavesWithLogsAround(world, leaves);
-                                destroyBlocksWithChance(world, leaves, 0.5F, hasShearsInHotbar(player));
+                                addLeaves(world, pos, leaves);
+                                
+                                // Deprecated in favor of simply not adding the "has log close" leaves in the first place
+                                // removeLeavesWithLogsAround(world, leaves);
                             }
+                            TCLog.debug("Destroying %d leaf blocks...", leaves.size());
+                            destroyBlocksWithChance(world, leaves, 0.5F, hasShearsInHotbar(player));
+                            
                             if (numLeavesSheared > 1)
                                 TCLog.debug("Number of leaves sheared: %d", numLeavesSheared);
                         }
@@ -278,7 +285,7 @@ public class TreeCapitator
             axe = null;
             return false;
         }
-        else if (ToolRegistry.instance().isAxe(item))
+        else if (item != null && ToolRegistry.instance().isAxe(item))
         {
             axe = item;
             return true;
@@ -288,6 +295,22 @@ public class TreeCapitator
             axe = null;
             return false;
         }
+    }
+    
+    private int getFortuneLevel(ItemStack itemStack)
+    {
+        if (itemStack != null)
+        {
+            NBTTagList list = itemStack.getEnchantmentTagList();
+            if (list != null)
+                for (int i = 0; i < list.tagCount(); i++)
+                {
+                    NBTTagCompound tag = (NBTTagCompound) list.tagAt(i);
+                    if (tag.getShort("id") == Enchantment.fortune.effectId)
+                        return tag.getShort("lvl");
+                }
+        }
+        return 0;
     }
     
     /**
@@ -378,7 +401,7 @@ public class TreeCapitator
                 }
                 else if (!(player.capabilities.isCreativeMode && TCSettings.disableCreativeDrops))
                 {
-                    block.dropBlockAsItem(world, pos.x, pos.y, pos.z, metadata, 0);
+                    block.dropBlockAsItem(world, pos.x, pos.y, pos.z, metadata, getFortuneLevel(axe));
                     
                     if (TCSettings.allowItemDamage && !player.capabilities.isCreativeMode && axe != null && axe.stackSize > 0
                             && !vineID.equals(new BlockID(block, metadata)) && !isLeafBlock(new BlockID(block, metadata)) && !pos.equals(startPos))
@@ -521,18 +544,19 @@ public class TreeCapitator
         while (listAbove.size() > 0);
     }
     
-    public List<Coord> addLeaves(World world, Coord pos)
+    public List<Coord> addLeaves(World world, Coord pos, List<Coord> list)
     {
         int index = -1;
-        List<Coord> list = new ArrayList<Coord>();
         
-        //addConnectedLeavesInRange(world, pos, treeDef.maxLeafBreakDist(), 0, list);
-        addLeavesInDistance(world, pos, treeDef.maxLeafBreakDist(), list);
+        if (list == null)
+            list = new ArrayList<Coord>();
+        
+        addLeavesInDistance(world, pos, treeDef.maxHorLeafBreakDist(), list);
         
         while (++index < list.size())
         {
             Coord pos2 = list.get(index);
-            if (CommonUtils.getSphericalDistance(pos, pos2) < treeDef.maxLeafBreakDist())
+            if (CommonUtils.getHorSquaredDistance(pos, pos2) < treeDef.maxHorLeafBreakDist())
                 addLeavesInDistance(world, pos2, 1, list);
         }
         
