@@ -235,6 +235,8 @@ public final class TCSettings
         // Per-tree settings
         TCSettings.breakSpeedModifier = config.getFloat("breakSpeedModifier", Strings.PER_TREE_DEFAULTS_CTGY,
                 TCSettings.breakSpeedModifier, 0.01F, 1F, Strings.breakSpeedModifierDesc);
+        TCSettings.maxHorLeafBreakDist = config.getInt("maxHorLeafBreakDist", Strings.PER_TREE_DEFAULTS_CTGY,
+                TCSettings.maxHorLeafBreakDist, -1, 100, Strings.maxHorLeafBreakDistDesc);
         TCSettings.maxHorLogBreakDist = config.getInt("maxHorLogBreakDist", Strings.PER_TREE_DEFAULTS_CTGY,
                 TCSettings.maxHorLogBreakDist, -1, 100, Strings.maxHorLogBreakDistDesc);
         TCSettings.maxVerLogBreakDist = config.getInt("maxVerLogBreakDist", Strings.PER_TREE_DEFAULTS_CTGY,

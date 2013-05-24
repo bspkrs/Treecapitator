@@ -44,6 +44,8 @@ public class mod_TreeCapitator extends BaseMod
     public static boolean     allowMoreBlocksThanDamage  = TCSettings.allowMoreBlocksThanDamage;
     @BSProp(info = Strings.sneakActionDesc + "\n")
     public static String      sneakAction                = TCSettings.sneakAction;
+    @BSProp(info = Strings.maxHorLeafBreakDistDesc + "\n")
+    public static int         maxHorLeafBreakDist        = TCSettings.maxHorLeafBreakDist;
     @BSProp(info = Strings.maxHorLogBreakDistDesc + "\n")
     public static int         maxHorLogBreakDist         = TCSettings.maxHorLogBreakDist;
     @BSProp(info = Strings.maxVerLogBreakDistDesc + "\n")
@@ -141,6 +143,7 @@ public class mod_TreeCapitator extends BaseMod
             TCSettings.allowMoreBlocksThanDamage = allowMoreBlocksThanDamage;
             TCSettings.sneakAction = sneakAction;
             TCSettings.maxHorLogBreakDist = maxHorLogBreakDist;
+            TCSettings.maxHorLeafBreakDist = maxHorLeafBreakDist;
             TCSettings.maxVerLogBreakDist = maxVerLogBreakDist;
             
             TCSettings.requireLeafDecayCheck = requireLeafDecayCheck;
