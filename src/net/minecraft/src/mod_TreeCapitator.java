@@ -120,7 +120,7 @@ public class mod_TreeCapitator extends BaseMod
             if (mod_bspkrsCore.allowUpdateCheck)
             {
                 versionChecker = new ModVersionChecker(getName(), getVersion(), versionURL, mcfTopic);
-                versionChecker.checkVersionWithLogging();
+                versionChecker.checkVersionWithLoggingBySubStringAsFloat(getVersion().length() - 1, getVersion().length());
             }
             
             ModLoader.setInGameHook(this, true, true);
@@ -165,7 +165,7 @@ public class mod_TreeCapitator extends BaseMod
     {
         if (mod_bspkrsCore.allowUpdateCheck && versionChecker != null)
         {
-            if (!versionChecker.isCurrentVersion())
+            if (!versionChecker.isCurrentVersionBySubStringAsFloatNewer(getVersion().length() - 1, getVersion().length()))
                 for (String msg : versionChecker.getInGameMessage())
                     mc.thePlayer.addChatMessage(msg);
         }
