@@ -111,6 +111,7 @@ public class ModConfigRegistry
         defaultModCfgs.put("ExtrabiomesXL", new ThirdPartyModConfig("ExtrabiomesXL", "extrabiomes/extrabiomes.cfg",
                 "block:customlog.id; block:quarterlog0.id; block:quarterlog1.id; block:quarterlog2.id; block:quarterlog3.id; " +
                         "block:autumnleaves.id; block:greenleaves.id")
+                .setOverrideIMC(false)
                 .addConfigTreeDef(Strings.OAK,
                         new ConfigTreeDefinition("<block:quarterlog0.id>,2; <block:quarterlog1.id>,2; <block:quarterlog2.id>,2; <block:quarterlog3.id>,2;",
                                 "<block:autumnleaves.id>"))
@@ -129,12 +130,14 @@ public class ModConfigRegistry
         defaultModCfgs.put("IC2", new ThirdPartyModConfig("IC2", "IC2.cfg", "block:blockRubWood; block:blockRubLeaves",
                 "item:itemToolBronzeAxe; item:itemToolChainsaw", "<item:itemToolBronzeAxe>; <item:itemToolChainsaw>",
                 "<item:itemToolChainsaw>", true)
+                .setOverrideIMC(false)
                 .addConfigTreeDef("rubber", new ConfigTreeDefinition("<block:blockRubWood>", "<block:blockRubLeaves>")));
         
         defaultModCfgs.put("RedPowerWorld", new ThirdPartyModConfig("RedPowerWorld", "redpower/redpower.cfg",
                 "blocks.world:log.id; blocks.world:leaves.id",
                 "items.world:axeRuby.id; items.world:axeGreenSapphire.id; items.world:axeSapphire.id",
                 "<items.world:axeRuby.id>; <items.world:axeGreenSapphire.id>; <items.world:axeSapphire.id>", "", true)
+                .setOverrideIMC(false)
                 .addConfigTreeDef("rubber", new ConfigTreeDefinition("<blocks.world:log.id>", "<blocks.world:leaves.id>")));
     }
     
@@ -144,10 +147,9 @@ public class ModConfigRegistry
     }
     
     /*
-     * Registers user configs from the config object
-     * (kind of a misnomer, but I'm lazy)
+     * Gets/Sets user configs from the config object
      */
-    public void readFromConfiguration(Configuration config)
+    public void syncConfiguration(Configuration config)
     {
         /*
          * Get / Set 3rd Party Mod configs
@@ -161,6 +163,8 @@ public class ModConfigRegistry
         
         TCLog.configs(config, Strings.TREE_MOD_CFG_CTGY);
         
+        config.addCustomCategoryComment(Strings.TREE_MOD_CFG_CTGY, Strings.TREE_MOD_CFG_CTGY_DESC);
+        
         if (!config.hasCategory(Strings.TREE_MOD_CFG_CTGY + "." + Strings.VAN_TREES_ITEMS_CTGY))
         {
             // Write default tree/mod settings to config
@@ -172,6 +176,8 @@ public class ModConfigRegistry
         }
         else
             TCLog.info("Proceeding to load tree/mod configs from file.");
+        
+        config.addCustomCategoryComment(Strings.TREE_MOD_CFG_CTGY + "." + Strings.VAN_TREES_ITEMS_CTGY, Strings.VAN_TREES_ITEMS_CTGY_DESC);
         
         // Load all configs found in the file to ModConfigRegistry
         for (String ctgy : config.getCategoryNames())

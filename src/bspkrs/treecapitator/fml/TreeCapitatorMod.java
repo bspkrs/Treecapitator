@@ -117,12 +117,15 @@ public class TreeCapitatorMod
         
     }
     
-    protected void example()
+    /**
+     * This method is provided as an example for mods to use if they want to send an IMC message to TreeCapitator. The message should be
+     * sent in the @Init mod event method.
+     */
+    protected void exampleIMCSendMessage()
     {
         if (Loader.isModLoaded("TreeCapitator"))
         {
             NBTTagCompound tpModCfg = new NBTTagCompound();
-            tpModCfg.setName("ExtraBiomesXL");
             tpModCfg.setString("modID", "ExtraBiomesXL");
             tpModCfg.setString("configPath", "extrabiomes/extrabiomes.cfg");
             tpModCfg.setString("blockConfigKeys", "block:customlog.id; block:quarterlog0.id; block:quarterlog1.id; block:quarterlog2.id; block:quarterlog3.id; " +
@@ -201,8 +204,7 @@ public class TreeCapitatorMod
         if (Loader.isModLoaded(TCSettings.multiMineModID))
         {
             String s = TreeRegistry.instance().getMultiMineExclusionString();
-            TCLog.warning("For Multi-Mine compatibility you should put this list in the S:\"Excluded Block IDs\" config setting in AS_MultiMine.cfg:");
-            TCLog.info("\"%s\"", s);
+            TCLog.info("For Multi-Mine compatibility you should put this list in the S:\"Excluded Block IDs\" config setting in AS_MultiMine.cfg: \"%s\"", s);
             TCConfigHandler.instance().config.get(Strings.TREE_MOD_CFG_CTGY, Strings.MM_EXCL_LIST, "", Strings.MM_EXCL_LIST_DESC).set(s);
             TCConfigHandler.instance().config.save();
         }

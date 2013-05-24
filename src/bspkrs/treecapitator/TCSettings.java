@@ -101,9 +101,9 @@ public final class TCSettings
         instance = this;
     }
     
-    protected void handleEnchantmentID(int id)
+    public void handleEnchantmentID(int id)
     {
-        if (enableEnchantmentMode && id >= 0 && id < 256)
+        if (id >= 0 && id < 256)
         {
             if (Enchantment.enchantmentsList[enchantmentID] != null)
                 Enchantment.enchantmentsList[enchantmentID] = null;
@@ -194,8 +194,8 @@ public final class TCSettings
                 TCSettings.allowMoreBlocksThanDamage, Strings.allowMoreBlocksThanDamageDesc);
         TCSettings.allowSmartTreeDetection = config.getBoolean("allowSmartTreeDetection", Strings.GLOBALS_SETTINGS_CTGY,
                 TCSettings.allowSmartTreeDetection, Strings.allowSmartTreeDetectionDesc);
-        TCSettings.axeIDList = config.getString("axeIDList", Strings.GLOBALS_SETTINGS_CTGY,
-                TCSettings.axeIDList, Strings.axeIDListDesc);
+        //        TCSettings.axeIDList = config.getString("axeIDList", Strings.GLOBALS_SETTINGS_CTGY,
+        //                TCSettings.axeIDList, Strings.axeIDListDesc);
         TCSettings.damageIncreaseAmount = config.getFloat("damageIncreaseAmount", Strings.GLOBALS_SETTINGS_CTGY,
                 TCSettings.damageIncreaseAmount, 0.1F, 100.0F, Strings.damageIncreaseAmountDesc);
         TCSettings.damageMultiplier = config.getFloat("damageMultiplier", Strings.GLOBALS_SETTINGS_CTGY,
@@ -218,8 +218,8 @@ public final class TCSettings
                 TCSettings.needItem, Strings.needItemDesc);
         TCSettings.requireItemInAxeListForEnchant = config.getBoolean("requireItemInAxeListForEnchant", Strings.GLOBALS_SETTINGS_CTGY,
                 TCSettings.requireItemInAxeListForEnchant, Strings.requireItemInAxeListForEnchantDesc);
-        TCSettings.shearIDList = config.getString("shearIDList", Strings.GLOBALS_SETTINGS_CTGY,
-                TCSettings.shearIDList, Strings.shearIDListDesc);
+        //        TCSettings.shearIDList = config.getString("shearIDList", Strings.GLOBALS_SETTINGS_CTGY,
+        //                TCSettings.shearIDList, Strings.shearIDListDesc);
         TCSettings.shearLeaves = config.getBoolean("shearLeaves", Strings.GLOBALS_SETTINGS_CTGY,
                 TCSettings.shearLeaves, Strings.shearLeavesDesc);
         TCSettings.shearVines = config.getBoolean("shearVines", Strings.GLOBALS_SETTINGS_CTGY,
@@ -249,14 +249,15 @@ public final class TCSettings
                 TCSettings.requireLeafDecayCheck, Strings.requireLeafDecayCheckDesc);
         config.addCustomCategoryComment(Strings.PER_TREE_DEFAULTS_CTGY, Strings.PER_TREE_DEFAULTS_CTGY_DESC);
         
+        // Log configs if we are in debug logging mode
+        Level level = TCLog.INSTANCE.getLogger().getLevel();
         if (allowDebugLogging)
             TCLog.INSTANCE.getLogger().setLevel(Level.CONFIG);
+        
         TCLog.configs(config, Strings.GLOBALS_SETTINGS_CTGY);
         TCLog.configs(config, Strings.PER_TREE_DEFAULTS_CTGY);
-    }
-    
-    public void writeToConfiguration(Configuration config)
-    {
-        // TODO, not sure if even needed since the read method pretty much just synchs up
+        
+        if (allowDebugLogging)
+            TCLog.INSTANCE.getLogger().setLevel(level);
     }
 }

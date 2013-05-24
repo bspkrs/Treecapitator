@@ -189,6 +189,9 @@ public class ThirdPartyModConfig
             config.get(category, Strings.SHEARS_ID_LIST, shearsKeys);
         config.get(category, Strings.SHIFT_INDEX, shiftIndex);
         
+        if (this.overrideIMC != TCSettings.userConfigOverridesIMC)
+            config.get(category, Strings.OVERRIDE_IMC, overrideIMC);
+        
         for (Entry<String, ConfigTreeDefinition> e : configTreesMap.entrySet())
             e.getValue().writeToConfiguration(config, category + "." + e.getKey());
     }
@@ -268,9 +271,10 @@ public class ThirdPartyModConfig
         return overrideIMC;
     }
     
-    public void setOverrideIMC(boolean bol)
+    public ThirdPartyModConfig setOverrideIMC(boolean bol)
     {
         overrideIMC = bol;
+        return this;
     }
     
     public void refreshTreeDefinitionsFromConfig()
@@ -317,17 +321,13 @@ public class ThirdPartyModConfig
                 
                 if (!tagMap.containsKey(tagID))
                 {
-                    // TCLog.debug("configValue: %s", configValue);
                     IDResolverMapping mapping = IDResolverMappingList.instance().getMappingForModAndOldID(idrClassName, CommonUtils.parseInt(configValue));
                     
                     if (mapping != null)
                         configValue = String.valueOf(mapping.newID);
-                    // TCLog.debug("configValue: %s", configValue);
                     
                     if (isItemList && shiftIndex)
                         configValue = String.valueOf(CommonUtils.parseInt(configValue, -256) + 256);
-                    
-                    // TCLog.debug("configValue: %s", configValue);
                     
                     if (!configValue.equals("0"))
                     {

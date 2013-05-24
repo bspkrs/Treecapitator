@@ -117,7 +117,7 @@ public class TreeRegistry
             if (!newKey.trim().isEmpty() && !isRegistered(newKey) && sharedLogTrees.size() == 0)
             {
                 // New definition all around.  Easy.
-                TCLog.info("Tree Definition \"%s\" is new.  Proceeding to insert new key.", newKey);
+                TCLog.debug("Tree Definition \"%s\" is new.  Proceeding to insert new key.", newKey);
                 // insert newTD
                 treeDefs.put(newKey, newTD);
                 // update logToStringMap
@@ -130,7 +130,7 @@ public class TreeRegistry
                     // merge all shared log TreeDefinition objects with our new TreeDefinition
                     for (String existingKey : sharedLogTrees)
                     {
-                        TCLog.info("Tree Definition \"%s\" contains a log that is registered with an existing tree (%s).  " +
+                        TCLog.debug("Tree Definition \"%s\" contains a log that is registered with an existing tree (%s).  " +
                                 "The existing definition will be merged with the new tree.", newKey, existingKey);
                         
                         // append the existing definition to our new definition
@@ -146,7 +146,7 @@ public class TreeRegistry
                 }
                 else
                 { // A tree is defined for that key; append the new definition to the existing tree
-                    TCLog.info("\"%s\" is already registered.  The new definition will be appended to the existing entry.", newKey);
+                    TCLog.debug("\"%s\" is already registered.  The new definition will be appended to the existing entry.", newKey);
                     treeDefs.get(newKey).appendWithSettings(newTD);
                     logToStringMap.putAll(toAdd);
                 }

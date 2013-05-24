@@ -99,21 +99,21 @@ public class ConfigTreeDefinition extends TreeDefinition
     public void writeToConfiguration(Configuration config, String category)
     {
         if (onlyDestroyUpwards != TCSettings.onlyDestroyUpwards)
-            config.get(category, Strings.ONLY_DESTROY_UPWARDS, onlyDestroyUpwards);
+            config.get(category, Strings.ONLY_DESTROY_UPWARDS, TCSettings.onlyDestroyUpwards, Strings.OPTIONAL).set(onlyDestroyUpwards);
         if (requireLeafDecayCheck != TCSettings.requireLeafDecayCheck)
-            config.get(category, Strings.REQ_DECAY_CHECK, requireLeafDecayCheck);
+            config.get(category, Strings.REQ_DECAY_CHECK, TCSettings.requireLeafDecayCheck, Strings.OPTIONAL).set(requireLeafDecayCheck);
         if (maxHorLogBreakDist != TCSettings.maxHorLogBreakDist)
-            config.get(category, Strings.MAX_H_LOG_DIST, maxHorLogBreakDist);
+            config.get(category, Strings.MAX_H_LOG_DIST, TCSettings.maxHorLogBreakDist, Strings.OPTIONAL).set(maxHorLogBreakDist);
         if (maxVerLogBreakDist != TCSettings.maxVerLogBreakDist)
-            config.get(category, Strings.MAX_V_LOG_DIST, maxVerLogBreakDist);
+            config.get(category, Strings.MAX_V_LOG_DIST, TCSettings.maxVerLogBreakDist, Strings.OPTIONAL).set(maxVerLogBreakDist);
         if (maxHorLeafBreakDist != TCSettings.maxHorLeafBreakDist)
-            config.get(category, Strings.MAX_H_LEAF_DIST, maxHorLeafBreakDist);
+            config.get(category, Strings.MAX_H_LEAF_DIST, TCSettings.maxHorLeafBreakDist, Strings.OPTIONAL).set(maxHorLeafBreakDist);
         if (maxLeafIDDist != TCSettings.maxLeafIDDist)
-            config.get(category, Strings.MAX_LEAF_ID_DIST, maxLeafIDDist);
+            config.get(category, Strings.MAX_LEAF_ID_DIST, TCSettings.maxLeafIDDist, Strings.OPTIONAL).set(maxLeafIDDist);
         if (minLeavesToID != TCSettings.minLeavesToID)
-            config.get(category, Strings.MIN_LEAF_ID, minLeavesToID);
+            config.get(category, Strings.MIN_LEAF_ID, TCSettings.minLeavesToID, Strings.OPTIONAL).set(minLeavesToID);
         if (breakSpeedModifier != TCSettings.breakSpeedModifier)
-            config.get(category, Strings.BREAK_SPEED_MOD, breakSpeedModifier);
+            config.get(category, Strings.BREAK_SPEED_MOD, TCSettings.breakSpeedModifier, Strings.OPTIONAL).set(breakSpeedModifier);
         
         config.get(category, Strings.LOG_CFG_KEYS, logKeys);
         config.get(category, Strings.LEAF_CFG_KEYS, leafKeys);

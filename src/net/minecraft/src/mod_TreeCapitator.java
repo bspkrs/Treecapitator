@@ -150,6 +150,8 @@ public class mod_TreeCapitator extends BaseMod
             TCSettings.damageIncreaseAmount = damageIncreaseAmount;
             TCSettings.allowSmartTreeDetection = allowSmartTreeDetection;
             TCSettings.useStrictBlockPairing = useStrictBlockPairing;
+            TCSettings.enableEnchantmentMode = enableEnchantmentMode;
+            TCSettings.instance().handleEnchantmentID(enchantmentID);
             
             for (ItemID itemID : ListUtils.getDelimitedStringAsItemIDList(TCSettings.axeIDList, ";"))
                 ToolRegistry.instance().registerAxe(itemID);
