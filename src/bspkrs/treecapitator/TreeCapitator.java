@@ -285,7 +285,7 @@ public class TreeCapitator
             axe = null;
             return false;
         }
-        else if (item != null && ToolRegistry.instance().isAxe(item))
+        else if (ToolRegistry.instance().isAxe(item))
         {
             axe = item;
             return true;
@@ -353,7 +353,7 @@ public class TreeCapitator
         {
             ItemStack item = entityPlayer.inventory.mainInventory[i];
             
-            if (item != null && item.stackSize > 0 && CommonUtils.isItemInList(item.itemID, item.getItemDamage(), TCSettings.shearIDList))
+            if (item != null && item.stackSize > 0 && ToolRegistry.instance().isShears(item))
             {
                 shears = item;
                 return i;
@@ -577,6 +577,8 @@ public class TreeCapitator
                         if (!treeDef.requireLeafDecayCheck() || ((metadata & 8) != 0 && (metadata & 4) == 0))
                         {
                             Coord newPos = new Coord(x + pos.x, y + pos.y, z + pos.z);
+                            // check hasLogClose() here so we don't have to reiterate the list to remove other trees' leaves
+                            // @Deprecates removeLeavesWithLogsAround()
                             if (!list.contains(newPos) && !hasLogClose(world, newPos, 1))
                                 list.add(newPos);
                         }
@@ -587,7 +589,7 @@ public class TreeCapitator
     /*
      * So far this method is utter shit and doesn't work right
      */
-    public void addConnectedLeavesInRange(World world, Coord pos, int range, int distance, List<Coord> list)
+    protected void addConnectedLeavesInRange(World world, Coord pos, int range, int distance, List<Coord> list)
     {
         
         if (!list.contains(pos))

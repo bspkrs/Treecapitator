@@ -75,13 +75,13 @@ public class ToolRegistry
     
     public void registerAxe(ItemID axe)
     {
-        if (!axeList.contains(axe))
+        if (axe != null && !axeList.contains(axe))
             axeList.add(axe);
     }
     
     public void registerShears(ItemID shears)
     {
-        if (!shearsList.contains(shears))
+        if (shears != null && !shearsList.contains(shears))
             shearsList.add(shears);
     }
     
@@ -112,12 +112,18 @@ public class ToolRegistry
     
     public boolean isAxe(Item item)
     {
-        return axeList.contains(new ItemID(item));
+        if (item != null)
+            return axeList.contains(new ItemID(item));
+        else
+            return false;
     }
     
     public boolean isAxe(ItemStack itemStack)
     {
-        return axeList.contains(new ItemID(itemStack));
+        if (itemStack != null)
+            return axeList.contains(new ItemID(itemStack));
+        else
+            return false;
     }
     
     public boolean isShears(ItemID itemID)
@@ -127,11 +133,17 @@ public class ToolRegistry
     
     public boolean isShears(Item item)
     {
-        return shearsList.contains(new ItemID(item));
+        if (item != null)
+            return shearsList.contains(new ItemID(item));
+        else
+            return false;
     }
     
     public boolean isShears(ItemStack itemStack)
     {
-        return shearsList.contains(new ItemID(itemStack));
+        if (itemStack != null)
+            return shearsList.contains(new ItemID(itemStack));
+        else
+            return false;
     }
 }
