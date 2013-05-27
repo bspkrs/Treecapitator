@@ -66,8 +66,8 @@
 
     <target name="merge-source">
         <!-- merge sources -->
-        <antcall target="merge-mod"/>
         <antcall target="merge-core"/>
+        <antcall target="merge-mod"/>
     </target>
 
     <target name="merge-mod" if="${has.dev.src}">

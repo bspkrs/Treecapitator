@@ -134,10 +134,18 @@ public class ConfigTreeDefinition extends TreeDefinition
         }
         
         for (String log : rLogs.split(";"))
-            super.addLogID(new BlockID(log, ",", 17));
+        {
+            BlockID blockID = new BlockID(log, ",", 0);
+            if (blockID.id > 0)
+                super.addLogID(blockID);
+        }
         
         for (String leaf : rLeaves.split(";"))
-            super.addLeafID(new BlockID(leaf, ",", 17));
+        {
+            BlockID blockID = new BlockID(leaf, ",", 0);
+            if (blockID.id > 0)
+                super.addLeafID(blockID);
+        }
         
         return this;
     }

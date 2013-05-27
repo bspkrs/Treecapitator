@@ -260,10 +260,29 @@ public class TreeRegistry
     public TreeDefinition get(BlockID blockID)
     {
         if (isRegistered(blockID))
+        {
             if (TCSettings.useStrictBlockPairing)
-                return get(logToStringMap.get(blockID));
-            else
-                return masterDefinition;
+            {
+                String treeKey = logToStringMap.get(blockID);
+                TreeDefinition treeDef = get(logToStringMap.get(blockID));
+                
+                if (treeDef != null)
+                {
+                    TCLog.debug("BlockID %s maps to tree %s.", blockID.toString(), treeKey);
+                    return treeDef;
+                }
+                else
+                {
+                    if (blockID.metadata > -1)
+                    {
+                        treeKey = logToStringMap.get(new BlockID(blockID.id));
+                        TCLog.debug("BlockID %s maps to tree %s.", blockID.toString(), treeKey);
+                        return get(treeKey);
+                    }
+                }
+            }
+            return masterDefinition;
+        }
         else
             return null;
     }

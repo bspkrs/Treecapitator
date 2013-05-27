@@ -27,8 +27,10 @@ public class ClientProxy extends CommonProxy
     @Override
     public void debugOutputBlockID(int id, int metadata)
     {
-        super.debugOutputBlockID(id, metadata);
         if (FMLClientHandler.instance().getClient().thePlayer.isSneaking())
+        {
+            super.debugOutputBlockID(id, metadata);
             FMLClientHandler.instance().getClient().thePlayer.addChatMessage("Block Clicked: " + id + ", " + metadata);
+        }
     }
 }
