@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -51,7 +52,7 @@ public class ThirdPartyModConfig
         
         configTreesMap = TreeRegistry.instance().vanillaTrees();
         tagMap = new HashMap<String, String>();
-        treesMap = new HashMap<String, TreeDefinition>();
+        treesMap = new TreeMap<String, TreeDefinition>();
         
         this.refreshTreeDefinitionsFromConfig();
     }
@@ -67,8 +68,8 @@ public class ThirdPartyModConfig
         this.shiftIndex = shiftIndex;
         overrideIMC = TCSettings.userConfigOverridesIMC;
         
-        configTreesMap = new HashMap<String, ConfigTreeDefinition>();
-        treesMap = new HashMap<String, TreeDefinition>();
+        configTreesMap = new TreeMap<String, ConfigTreeDefinition>();
+        treesMap = new TreeMap<String, TreeDefinition>();
     }
     
     public ThirdPartyModConfig(String modID, String configPath, String blockKeys)
@@ -103,7 +104,7 @@ public class ThirdPartyModConfig
         shearsKeys = tpModCfg.getString(Strings.SHEARS_ID_LIST);
         shiftIndex = tpModCfg.getBoolean(Strings.SHIFT_INDEX);
         
-        configTreesMap = new HashMap<String, ConfigTreeDefinition>();
+        configTreesMap = new TreeMap<String, ConfigTreeDefinition>();
         
         NBTTagList treeList = tpModCfg.getTagList(Strings.TREES);
         
@@ -189,8 +190,7 @@ public class ThirdPartyModConfig
             config.get(category, Strings.SHEARS_ID_LIST, shearsKeys);
         config.get(category, Strings.SHIFT_INDEX, shiftIndex);
         
-        if (this.overrideIMC != TCSettings.userConfigOverridesIMC)
-            config.get(category, Strings.OVERRIDE_IMC, overrideIMC);
+        config.get(category, Strings.OVERRIDE_IMC, overrideIMC);
         
         for (Entry<String, ConfigTreeDefinition> e : configTreesMap.entrySet())
             e.getValue().writeToConfiguration(config, category + "." + e.getKey());

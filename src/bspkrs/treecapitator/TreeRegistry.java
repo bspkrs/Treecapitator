@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -49,7 +50,7 @@ public class TreeRegistry
     
     protected void initVanillaTreeDefs()
     {
-        vanTrees = new HashMap<String, ConfigTreeDefinition>();
+        vanTrees = new TreeMap<String, ConfigTreeDefinition>();
         vanTrees.put(Strings.OAK, new ConfigTreeDefinition().addLogID(new BlockID(17, 0)).addLogID(new BlockID(17, 4))
                 .addLogID(new BlockID(17, 8)).addLogID(new BlockID(17, 12))
                 .addLeafID(new BlockID(18, 0)).addLeafID(new BlockID(18, 8)));
@@ -299,7 +300,7 @@ public class TreeRegistry
     
     public Map<String, ConfigTreeDefinition> vanillaTrees()
     {
-        return new HashMap<String, ConfigTreeDefinition>(vanTrees);
+        return new TreeMap<String, ConfigTreeDefinition>(vanTrees);
     }
     
     protected void readFromNBT(NBTTagCompound ntc)

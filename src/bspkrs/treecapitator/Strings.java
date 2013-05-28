@@ -135,12 +135,62 @@ public class Strings
                                                                           "If you are having an issue with the mod, set this option to true and post the resulting log to the\n" +
                                                                           "TreeCapitator Minecraftforum.net thread along with a detailed description of the issue.";
     public static final String OPTIONAL                           = "Optional";
-    // TODO: write a new config category description
     //public static final String COMMENT_SEPARATOR                = "#--------------------------------------------------------------------------------------------------------#";
     //public static final String COMMENT_SEPARATOR_2              = "      #--------------------------------------------------------------------------------------------------------#";
-    public static final String TREE_MOD_CFG_CTGY_DESC             = "TBD";
+    public static final String TREE_MOD_CFG_CTGY_DESC             = "This category is where all your settings live that are related to 3rd party mods. There are two methods \n" +
+                                                                          "to set up a 3rd party mod's trees and items: \n\n" +
+                                                                          "(1) Config Method: uses the mod's config file to lookup block ID and item ID values. 3rd party config \n" +
+                                                                          "settings tell TreeCapitator how to find a mod's config, what config values we need (log/leaf blocks, \n" +
+                                                                          "axes, etc), how to use those values to define the mod's trees (if applicable), and what kind of tools the \n" +
+                                                                          "items are (if applicable).\n\n" +
+                                                                          "(2) Integer IDs Method: alternatively you can always just use the integer block and item IDs to define what \n" +
+                                                                          "a tree or axe is.\n\n" +
+                                                                          "Keep in mind that you can also include certain settings on a per-tree basis to override the global values.\n\n" +
+                                                                          "Format:\n" +
+                                                                          "    <section_name> { (typically same as modID)\n" +
+                                                                          "        S:modID=<modID> (this can be found on the Mods screen in game or in mcmod.info)\n" +
+                                                                          "        S:configPath=<path to config file relative to .minecraft/config/> (most of the time this is the same as <modID>.cfg)\n" +
+                                                                          "        S:blockConfigKeys=<block config category>:<property name>; block:customLogBlockID; block:customLeafBlockID (config category is usually \"block\")\n" +
+                                                                          "        S:itemConfigKeys=<item config category>:<property name>; item:superAwesomeAxeShearsID (config category is usually \"item\")\n" +
+                                                                          "        S:axeIDList=<<item config category>:<property name>>; <item:superAwesomeAxeShearsID>\n" +
+                                                                          "        S:shearsIDList=<item:superAwesomeAxeShearsID>\n" +
+                                                                          "        B:useShiftedItemID=<(optional, defaults to true) whether or not to use the +256 shifted item ID> (true/false, almost always true)\n" +
+                                                                          "        B:overrideIMC=<optional, defaults to false) whether or not a mod's user config (this file) should override a mod's IMC config (IMC allows mods to send messages to each other for compatibility)\n\n" +
+                                                                          "        <tree_name> { (the tree name is just for organization and clarity)\n" +
+                                                                          "            # logConfigKeys/leafConfigKeys: list of config key tags or raw integer block ID values. \",\" separates ID and metadata, \";\" separates block entries\n" +
+                                                                          "            S:logConfigKeys=<<block config category>:<property name>>; <block:customLogBlockID>,0; 17,0\n" +
+                                                                          "            S:leafConfigKeys=<<block config category>:<property name>>; <block:customLeafBlockID>,0; 18\n" +
+                                                                          "            (per-tree settings)\n\n" +
+                                                                          "        }\n" +
+                                                                          "    }\n\n" +
+                                                                          "Examples:\n" +
+                                                                          "    ic2_using_config_method {\n" +
+                                                                          "        S:modID=IC2\n" +
+                                                                          "        S:configPath=IC2.cfg\n" +
+                                                                          "        S:blockConfigKeys=block:blockRubWood; block:blockRubLeaves\n" +
+                                                                          "        S:itemConfigKeys=item:itemToolBronzeAxe; item:itemToolChainsaw\n" +
+                                                                          "        S:axeIDList=<item:itemToolBronzeAxe>; <item:itemToolChainsaw>\n" +
+                                                                          "        S:shearsIDList=<item:itemToolChainsaw>\n" +
+                                                                          "        B:useShiftedItemID=true\n\n" +
+                                                                          "        rubber {\n" +
+                                                                          "            S:logConfigKeys=<block:blockRubWood>\n" +
+                                                                          "            S:leafConfigKeys=<block:blockRubLeaves>\n" +
+                                                                          "        }\n" +
+                                                                          "    }\n\n" +
+                                                                          "    ic2_using_integer_method {\n" +
+                                                                          "        S:modID=IC2\n" +
+                                                                          "        S:configPath=IC2.cfg\n" +
+                                                                          "        S:blockConfigKeys=\n" +
+                                                                          "        S:itemConfigKeys=\n" +
+                                                                          "        S:axeIDList=30199; 30233\n" +
+                                                                          "        S:shearsIDList=30233\n\n" +
+                                                                          "        rubber {\n" +
+                                                                          "            S:logConfigKeys=243\n" +
+                                                                          "            S:leafConfigKeys=242\n" +
+                                                                          "        }\n" +
+                                                                          "    }";
     public static final String VAN_TREES_ITEMS_CTGY_DESC          = "This special category is the home of the vanilla tree block and item configurations. You can change the \n" +
-                                                                          "values in this category to suit your needs.\n" +
+                                                                          "values in this category to suit your preferences.\n\n" +
                                                                           "WARNING: This config category must not be removed! If this category is renamed or removed TreeCapitator \n" +
                                                                           "will assume your config file is new and reload the default user mod config settings!";
     
