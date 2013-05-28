@@ -58,6 +58,8 @@ public class ModConfigRegistry
             TCLog.warning("Mod \"%s\" sent multiple IMC messages. The first message will be used.", tpmc.modID());
     }
     
+    // TODO: add code to write IMC configs to the user config if the mod is not already configured there and a flag is set in config
+    
     protected void refreshUserTagMaps()
     {
         for (ThirdPartyModConfig tpmc : userModCfgs.values())
@@ -108,6 +110,7 @@ public class ModConfigRegistry
     {
         defaultModCfgs = new HashMap<String, ThirdPartyModConfig>();
         defaultModCfgs.put(Strings.VAN_TREES_ITEMS_CTGY, new ThirdPartyModConfig());
+        
         defaultModCfgs.put("ExtrabiomesXL", new ThirdPartyModConfig("ExtrabiomesXL", "extrabiomes/extrabiomes.cfg",
                 "block:customlog.id; block:quarterlog0.id; block:quarterlog1.id; block:quarterlog2.id; block:quarterlog3.id; " +
                         "block:autumnleaves.id; block:greenleaves.id")
@@ -127,11 +130,80 @@ public class ModConfigRegistry
                                 .setMaxHorLeafBreakDist(10).setRequireLeafDecayCheck(false))
                 .addConfigTreeDef("acacia", new ConfigTreeDefinition("<block:customlog.id>,1", "<block:greenleaves.id>,2")));
         
+        defaultModCfgs.put("Forestry", new ThirdPartyModConfig("Forestry", "forestry/base.conf", "block:log1; block:log2; block:log3; block:log4; block:leaves")
+                .setOverrideIMC(false)
+                .addConfigTreeDef("larch", new ConfigTreeDefinition("<block:log1>,0; <block:log1>,4; <block:log1>,8", "<block:leaves>,0; <block:leaves>,8")
+                        .setRequireLeafDecayCheck(false))
+                .addConfigTreeDef("teak", new ConfigTreeDefinition("<block:log1>,1; <block:log1>,5; <block:log1>,9", "<block:leaves>,0; <block:leaves>,8")
+                        .setRequireLeafDecayCheck(false))
+                .addConfigTreeDef("acacia", new ConfigTreeDefinition("<block:log1>,2; <block:log1>,6; <block:log1>,10", "<block:leaves>,0; <block:leaves>,8")
+                        .setRequireLeafDecayCheck(false))
+                .addConfigTreeDef("lime", new ConfigTreeDefinition("<block:log1>,3; <block:log1>,7; <block:log1>,11", "<block:leaves>,0; <block:leaves>,8")
+                        .setRequireLeafDecayCheck(false))
+                .addConfigTreeDef("chestnut", new ConfigTreeDefinition("<block:log2>,0; <block:log2>,4; <block:log2>,8", "<block:leaves>,0; <block:leaves>,8")
+                        .setRequireLeafDecayCheck(false))
+                .addConfigTreeDef("wenge", new ConfigTreeDefinition("<block:log2>,1; <block:log2>,5; <block:log2>,9", "<block:leaves>,0; <block:leaves>,8")
+                        .setRequireLeafDecayCheck(false))
+                .addConfigTreeDef("baobab", new ConfigTreeDefinition("<block:log2>,2; <block:log2>,6; <block:log2>,10", "<block:leaves>,0; <block:leaves>,8")
+                        .setRequireLeafDecayCheck(false))
+                .addConfigTreeDef("sequoia", new ConfigTreeDefinition("<block:log2>,3; <block:log2>,7; <block:log2>,11", "<block:leaves>,0; <block:leaves>,8")
+                        .setRequireLeafDecayCheck(false))
+                .addConfigTreeDef("kapok", new ConfigTreeDefinition("<block:log3>,0; <block:log3>,4; <block:log3>,8", "<block:leaves>,0; <block:leaves>,8")
+                        .setRequireLeafDecayCheck(false))
+                .addConfigTreeDef("ebony", new ConfigTreeDefinition("<block:log3>,1; <block:log3>,5; <block:log3>,9", "<block:leaves>,0; <block:leaves>,8")
+                        .setRequireLeafDecayCheck(false))
+                .addConfigTreeDef("mahogany", new ConfigTreeDefinition("<block:log3>,2; <block:log3>,6; <block:log3>,10", "<block:leaves>,0; <block:leaves>,8")
+                        .setRequireLeafDecayCheck(false))
+                .addConfigTreeDef("balsa", new ConfigTreeDefinition("<block:log3>,3; <block:log3>,7; <block:log3>,11", "<block:leaves>,0; <block:leaves>,8")
+                        .setRequireLeafDecayCheck(false))
+                .addConfigTreeDef("willow", new ConfigTreeDefinition("<block:log4>,0; <block:log4>,4; <block:log4>,8", "<block:leaves>,0; <block:leaves>,8")
+                        .setRequireLeafDecayCheck(false))
+                .addConfigTreeDef("walnut", new ConfigTreeDefinition("<block:log4>,1; <block:log4>,5; <block:log4>,9", "<block:leaves>,0; <block:leaves>,8")
+                        .setRequireLeafDecayCheck(false))
+                .addConfigTreeDef("boojum", new ConfigTreeDefinition("<block:log4>,2; <block:log4>,6; <block:log4>,10", "<block:leaves>,0; <block:leaves>,8")
+                        .setRequireLeafDecayCheck(false))
+                .addConfigTreeDef("cherry", new ConfigTreeDefinition("<block:log4>,3; <block:log4>,7; <block:log4>,11", "<block:leaves>,0; <block:leaves>,8")
+                        .setRequireLeafDecayCheck(false)));
+        
         defaultModCfgs.put("IC2", new ThirdPartyModConfig("IC2", "IC2.cfg", "block:blockRubWood; block:blockRubLeaves",
                 "item:itemToolBronzeAxe; item:itemToolChainsaw", "<item:itemToolBronzeAxe>; <item:itemToolChainsaw>",
                 "<item:itemToolChainsaw>", true)
                 .setOverrideIMC(false)
                 .addConfigTreeDef("rubber", new ConfigTreeDefinition("<block:blockRubWood>", "<block:blockRubLeaves>")));
+        
+        /*
+         * 
+        Natura
+        
+        HashMap<String, String> inficraft = new HashMap<String, String>();
+        TODO inficraft.put(Strings.MOD_ID, "Flora Trees");
+        inficraft.put(Strings.CONFIG_PATH, "InfiCraft/FloraSoma.txt");
+        inficraft.put(Strings.BLOCK_CFG_KEYS, "block:Bloodwood Block; block:Flora Leaves; block:Redwood Block; block:Sakura Leaves; block:Wood Block");
+        
+        HashMap<String, String> inficraft_bloodwood = new HashMap<String, String>();
+        inficraft_bloodwood.put(Strings.LOGS, "<block:Bloodwood Block>");
+        inficraft_bloodwood.put(Strings.LEAVES, "<block:Sakura Leaves>,2");
+        
+        HashMap<String, String> inficraft_eucalyptus = new HashMap<String, String>();
+        inficraft_eucalyptus.put(Strings.LOGS, "<block:Wood Block>,0; <block:Wood Block>,4; <block:Wood Block>,8");
+        inficraft_eucalyptus.put(Strings.LEAVES, "<block:Flora Leaves>,1");
+        
+        HashMap<String, String> inficraft_ghostwood = new HashMap<String, String>();
+        inficraft_ghostwood.put(Strings.LOGS, "<block:Wood Block>,2; <block:Wood Block>, 6; <block:Wood Block>, 10");
+        inficraft_ghostwood.put(Strings.LEAVES, "<block:Sakura Leaves>,1");
+        
+        HashMap<String, String> inficraft_hopseed = new HashMap<String, String>();
+        inficraft_hopseed.put(Strings.LOGS, "<block:Wood Block>,3; <block:Wood Block>, 7; <block:Wood Block>, 11");
+        inficraft_hopseed.put(Strings.LEAVES, "<block:Flora Leaves>,2");
+        
+        HashMap<String, String> inficraft_redwood = new HashMap<String, String>();
+        inficraft_redwood.put(Strings.LOGS, "<block:Redwood Block>");
+        inficraft_redwood.put(Strings.LEAVES, "<block:Flora Leaves>,0");
+        
+        HashMap<String, String> inficraft_sakura = new HashMap<String, String>();
+        inficraft_sakura.put(Strings.LOGS, "<block:Wood Block>, 1; <block:Wood Block>, 5; <block:Wood Block>, 9");
+        inficraft_sakura.put(Strings.LEAVES, "<block:Sakura Leaves>,0");
+         */
         
         defaultModCfgs.put("RedPowerWorld", new ThirdPartyModConfig("RedPowerWorld", "redpower/redpower.cfg",
                 "blocks.world:log.id; blocks.world:leaves.id",
@@ -139,6 +211,16 @@ public class ModConfigRegistry
                 "<items.world:axeRuby.id>; <items.world:axeGreenSapphire.id>; <items.world:axeSapphire.id>", "", true)
                 .setOverrideIMC(false)
                 .addConfigTreeDef("rubber", new ConfigTreeDefinition("<blocks.world:log.id>", "<blocks.world:leaves.id>")));
+        
+        defaultModCfgs.put("Thaumcraft", new ThirdPartyModConfig("Thaumcraft", "Thaumcraft.cfg", "block:BlockMagicalLog; block:BlockMagicalLeaves",
+                "item:Thaumaxe", "<item:Thaumaxe>", "", true)
+                .setOverrideIMC(false)
+                .addConfigTreeDef("greatwood",
+                        new ConfigTreeDefinition("<block:BlockMagicalLog>,0; <block:BlockMagicalLog>,4; <block:BlockMagicalLog>,8",
+                                "<block:BlockMagicalLeaves>,0; <block:BlockMagicalLeaves>,8"))
+                .addConfigTreeDef("silverwood",
+                        new ConfigTreeDefinition("<block:BlockMagicalLog>,1; <block:BlockMagicalLog>,5; <block:BlockMagicalLog>,9",
+                                "<block:BlockMagicalLeaves>,1; <block:BlockMagicalLeaves>,9")));
     }
     
     public Map<String, ThirdPartyModConfig> defaultConfigs()
@@ -195,7 +277,7 @@ public class ModConfigRegistry
         HashMap<String, String> vanilla_jungle;
         
         HashMap<String, String> biomesoplenty = new HashMap<String, String>();
-        biomesoplenty.put(Strings.MOD_ID, "BiomesOPlenty");
+        TODO biomesoplenty.put(Strings.MOD_ID, "BiomesOPlenty");
         biomesoplenty.put(Strings.CONFIG_PATH, "BiomesOPlenty.cfg");
         biomesoplenty.put(Strings.BLOCK_CFG_KEYS, "block:Acacia Leaves ID; block:Acacia Log ID; block:Apple Leaves ID; " +
                 "block:Fruitless Apple Leaves ID; block:Bamboo ID; block:Bamboo Leaves ID; block:Cherry Log ID; " +
@@ -257,7 +339,7 @@ public class ModConfigRegistry
         biomesoplenty_willow.put(Strings.LEAVES, "<block:Willow Leaves ID>");
         
         HashMap<String, String> divinerpg = new HashMap<String, String>();
-        divinerpg.put(Strings.MOD_ID, "DivineRPG");
+        TODO divinerpg.put(Strings.MOD_ID, "DivineRPG");
         divinerpg.put(Strings.CONFIG_PATH, "DivineRPG.cfg");
         divinerpg.put(Strings.BLOCK_CFG_KEYS, "block:eucalyptus");
         divinerpg.put(Strings.ITEM_CFG_KEYS, "item:Bedrock Axe; item:Crystal Axe; item:Realmite Axe; item:azuriteaxe; item:corruptedaxe; " +
@@ -272,106 +354,8 @@ public class ModConfigRegistry
         divinerpg_eucalyptus.put(Strings.LOGS, "<block:eucalyptus>");
         divinerpg_eucalyptus.put(Strings.LEAVES, "18"); // not sure on this? haven't found any of them yet and no sapling
         
-        HashMap<String, String> forestry = new HashMap<String, String>();
-        forestry.put(Strings.MOD_ID, "Forestry");
-        forestry.put(Strings.CONFIG_PATH, "forestry/base.conf");
-        forestry.put(Strings.BLOCK_CFG_KEYS, "block:log1; block:log2; block:log3; block:log4; block:leaves");
-        
-        HashMap<String, String> forestry_larch = new HashMap<String, String>();
-        forestry_larch.put(Strings.LOGS, "<block:log1>,0; <block:log1>,4; <block:log1>,8");
-        forestry_larch.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
-        
-        HashMap<String, String> forestry_teak = new HashMap<String, String>();
-        forestry_teak.put(Strings.LOGS, "<block:log1>,1; <block:log1>,5; <block:log1>,9");
-        forestry_teak.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
-        
-        HashMap<String, String> forestry_acacia = new HashMap<String, String>();
-        forestry_acacia.put(Strings.LOGS, "<block:log1>,2; <block:log1>,6; <block:log1>,10");
-        forestry_acacia.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
-        
-        HashMap<String, String> forestry_lime = new HashMap<String, String>();
-        forestry_lime.put(Strings.LOGS, "<block:log1>,3; <block:log1>,7; <block:log1>,11");
-        forestry_lime.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
-        
-        HashMap<String, String> forestry_chestnut = new HashMap<String, String>();
-        forestry_chestnut.put(Strings.LOGS, "<block:log2>,0; <block:log2>,4; <block:log2>,8");
-        forestry_chestnut.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
-        
-        HashMap<String, String> forestry_wenge = new HashMap<String, String>();
-        forestry_wenge.put(Strings.LOGS, "<block:log2>,1; <block:log2>,5; <block:log2>,9");
-        forestry_wenge.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
-        
-        HashMap<String, String> forestry_baobab = new HashMap<String, String>();
-        forestry_baobab.put(Strings.LOGS, "<block:log2>,2; <block:log2>,6; <block:log2>,10");
-        forestry_baobab.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
-        
-        HashMap<String, String> forestry_sequoia = new HashMap<String, String>();
-        forestry_sequoia.put(Strings.LOGS, "<block:log2>,3; <block:log2>,7; <block:log2>,11");
-        forestry_sequoia.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
-        
-        HashMap<String, String> forestry_kapok = new HashMap<String, String>();
-        forestry_kapok.put(Strings.LOGS, "<block:log3>,0; <block:log3>,4; <block:log3>,8");
-        forestry_kapok.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
-        
-        HashMap<String, String> forestry_ebony = new HashMap<String, String>();
-        forestry_ebony.put(Strings.LOGS, "<block:log3>,1; <block:log3>,5; <block:log3>,9");
-        forestry_ebony.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
-        
-        HashMap<String, String> forestry_mahogany = new HashMap<String, String>();
-        forestry_mahogany.put(Strings.LOGS, "<block:log3>,2; <block:log3>,6; <block:log3>,10");
-        forestry_mahogany.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
-        
-        HashMap<String, String> forestry_balsa = new HashMap<String, String>();
-        forestry_balsa.put(Strings.LOGS, "<block:log3>,3; <block:log3>,7; <block:log3>,11");
-        forestry_balsa.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
-        
-        HashMap<String, String> forestry_willow = new HashMap<String, String>();
-        forestry_willow.put(Strings.LOGS, "<block:log4>,0; <block:log4>,4; <block:log4>,8");
-        forestry_willow.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
-        
-        HashMap<String, String> forestry_walnut = new HashMap<String, String>();
-        forestry_walnut.put(Strings.LOGS, "<block:log4>,1; <block:log4>,5; <block:log4>,9");
-        forestry_walnut.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
-        
-        HashMap<String, String> forestry_boojum = new HashMap<String, String>();
-        forestry_boojum.put(Strings.LOGS, "<block:log4>,2; <block:log4>,6; <block:log4>,10");
-        forestry_boojum.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
-        
-        HashMap<String, String> forestry_cherry = new HashMap<String, String>();
-        forestry_cherry.put(Strings.LOGS, "<block:log4>,3; <block:log4>,7; <block:log4>,11");
-        forestry_cherry.put(Strings.LEAVES, "<block:leaves>,0; <block:leaves>,8");
-        
-        HashMap<String, String> inficraft = new HashMap<String, String>();
-        inficraft.put(Strings.MOD_ID, "Flora Trees");
-        inficraft.put(Strings.CONFIG_PATH, "InfiCraft/FloraSoma.txt");
-        inficraft.put(Strings.BLOCK_CFG_KEYS, "block:Bloodwood Block; block:Flora Leaves; block:Redwood Block; block:Sakura Leaves; block:Wood Block");
-        
-        HashMap<String, String> inficraft_bloodwood = new HashMap<String, String>();
-        inficraft_bloodwood.put(Strings.LOGS, "<block:Bloodwood Block>");
-        inficraft_bloodwood.put(Strings.LEAVES, "<block:Sakura Leaves>,2");
-        
-        HashMap<String, String> inficraft_eucalyptus = new HashMap<String, String>();
-        inficraft_eucalyptus.put(Strings.LOGS, "<block:Wood Block>,0; <block:Wood Block>,4; <block:Wood Block>,8");
-        inficraft_eucalyptus.put(Strings.LEAVES, "<block:Flora Leaves>,1");
-        
-        HashMap<String, String> inficraft_ghostwood = new HashMap<String, String>();
-        inficraft_ghostwood.put(Strings.LOGS, "<block:Wood Block>,2; <block:Wood Block>, 6; <block:Wood Block>, 10");
-        inficraft_ghostwood.put(Strings.LEAVES, "<block:Sakura Leaves>,1");
-        
-        HashMap<String, String> inficraft_hopseed = new HashMap<String, String>();
-        inficraft_hopseed.put(Strings.LOGS, "<block:Wood Block>,3; <block:Wood Block>, 7; <block:Wood Block>, 11");
-        inficraft_hopseed.put(Strings.LEAVES, "<block:Flora Leaves>,2");
-        
-        HashMap<String, String> inficraft_redwood = new HashMap<String, String>();
-        inficraft_redwood.put(Strings.LOGS, "<block:Redwood Block>");
-        inficraft_redwood.put(Strings.LEAVES, "<block:Flora Leaves>,0");
-        
-        HashMap<String, String> inficraft_sakura = new HashMap<String, String>();
-        inficraft_sakura.put(Strings.LOGS, "<block:Wood Block>, 1; <block:Wood Block>, 5; <block:Wood Block>, 9");
-        inficraft_sakura.put(Strings.LEAVES, "<block:Sakura Leaves>,0");
-        
         HashMap<String, String> mfreloaded = new HashMap<String, String>();
-        mfreloaded.put(Strings.MOD_ID, "MFReloaded");
+        TODO mfreloaded.put(Strings.MOD_ID, "MFReloaded");
         mfreloaded.put(Strings.CONFIG_PATH, "MFReloaded.cfg");
         mfreloaded.put(Strings.BLOCK_CFG_KEYS, "block:ID.RubberWood; block:ID.RubberLeaves; block:ID.RubberSapling");
         
@@ -379,24 +363,8 @@ public class ModConfigRegistry
         mfr_rubber.put(Strings.LOGS, "<block:ID.RubberWood>");
         mfr_rubber.put(Strings.LEAVES, "<block:ID.RubberLeaves>");
         
-        HashMap<String, String> thaumcraft = new HashMap<String, String>();
-        thaumcraft.put(Strings.MOD_ID, "Thaumcraft");
-        thaumcraft.put(Strings.CONFIG_PATH, "Thaumcraft.cfg");
-        thaumcraft.put(Strings.BLOCK_CFG_KEYS, "block:BlockMagicalLog; block:BlockMagicalLeaves");
-        thaumcraft.put(Strings.ITEM_CFG_KEYS, "item:Thaumaxe");
-        thaumcraft.put(Strings.AXE_ID_LIST, "<item:Thaumaxe>");
-        thaumcraft.put(Strings.SHIFT_INDEX, "true");
-        
-        HashMap<String, String> thaum_greatwood = new HashMap<String, String>();
-        thaum_greatwood.put(Strings.LOGS, "<block:BlockMagicalLog>,0; <block:BlockMagicalLog>,4; <block:BlockMagicalLog>,8");
-        thaum_greatwood.put(Strings.LEAVES, "<block:BlockMagicalLeaves>,0; <block:BlockMagicalLeaves>,8");
-        
-        HashMap<String, String> thaum_silverwood = new HashMap<String, String>();
-        thaum_silverwood.put(Strings.LOGS, "<Thaumcraft.BlockMagicalLog>,1; <Thaumcraft.BlockMagicalLog>,5; <Thaumcraft.BlockMagicalLog>,9");
-        thaum_silverwood.put(Strings.LEAVES, "<Thaumcraft.BlockMagicalLeaves>,1");
-        
         HashMap<String, String> twilightforest = new HashMap<String, String>();
-        twilightforest.put(Strings.MOD_ID, "TwilightForest");
+        TODO twilightforest.put(Strings.MOD_ID, "TwilightForest");
         twilightforest.put(Strings.CONFIG_PATH, "TwilightForest.cfg");
         twilightforest.put(Strings.BLOCK_CFG_KEYS, "block:Log; block:MagicLog; block:MagicStrings.LOGSpecial; block:Leaves; block:MagicLeaves; block:Hedge");
         twilightforest.put(Strings.ITEM_CFG_KEYS, "item:IronwoodAxe; item:SteeleafAxe; item:MinotaurAxe");
@@ -423,6 +391,7 @@ public class ModConfigRegistry
         twilight_time.put(Strings.LOGS, "<block:MagicLog>,0; <block:Log>,4; <block:Log>,8; <block:MagicLog>,12");
         twilight_time.put(Strings.LEAVES, "<block:MagicLeaves>,0; <block:MagicLeaves>,8");
         
+        // This one can go, me thinks... looks like he's hung up the wrench
         HashMap<String, String> zapapples = new HashMap<String, String>();
         zapapples.put(Strings.MOD_ID, "ZapApples");
         zapapples.put(Strings.CONFIG_PATH, "ZapApples.cfg");
