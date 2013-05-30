@@ -269,7 +269,6 @@ public class TreeRegistry
                 
                 if (treeDef != null)
                 {
-                    TCLog.debug("BlockID %s maps to tree %s.", blockID.toString(), treeKey);
                     return treeDef;
                 }
                 else
@@ -277,7 +276,6 @@ public class TreeRegistry
                     if (blockID.metadata > -1)
                     {
                         treeKey = logToStringMap.get(new BlockID(blockID.id));
-                        TCLog.debug("BlockID %s maps to tree %s.", blockID.toString(), treeKey);
                         return get(treeKey);
                     }
                 }

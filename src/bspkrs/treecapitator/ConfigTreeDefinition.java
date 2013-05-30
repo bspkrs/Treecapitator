@@ -91,7 +91,8 @@ public class ConfigTreeDefinition extends TreeDefinition
             breakSpeedModifier = (float) cc.get(Strings.BREAK_SPEED_MOD).getDouble(TCSettings.breakSpeedModifier);
         
         logKeys = cc.get(Strings.LOG_CFG_KEYS).getString();
-        leafKeys = cc.get(Strings.LEAF_CFG_KEYS).getString();
+        if (cc.containsKey(Strings.LEAF_CFG_KEYS))
+            leafKeys = cc.get(Strings.LEAF_CFG_KEYS).getString();
         
         return this;
     }

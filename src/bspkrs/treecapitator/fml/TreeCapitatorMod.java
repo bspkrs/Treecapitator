@@ -19,6 +19,7 @@ import bspkrs.treecapitator.TreeCapitator;
 import bspkrs.treecapitator.TreeDefinition;
 import bspkrs.treecapitator.TreeRegistry;
 import bspkrs.util.BlockID;
+import bspkrs.util.CommonUtils;
 import bspkrs.util.Configuration;
 import bspkrs.util.Const;
 import bspkrs.util.Coord;
@@ -81,20 +82,20 @@ public class TreeCapitatorMod
         
         File file = event.getSuggestedConfigurationFile();
         
-        if (Block.class.getSimpleName().equals("Block"))
+        if (!CommonUtils.isObfuscatedEnv())
         {
             // debug settings for deobfuscated execution
-            //            TCLog.info("Deobfuscated environment detected... using debug settings.");
-            //            TCSettings.allowDebugLogging = true;
-            //            TCSettings.allowDebugOutput = true;
-            //            TCSettings.onlyDestroyUpwards = true;
-            //            TCSettings.sneakAction = "disable";
-            //            TCSettings.maxHorLogBreakDist = 16;
-            //            TCSettings.allowSmartTreeDetection = true;
-            //            TCSettings.useStrictBlockPairing = true;
-            //            // TCSettings.enableEnchantmentMode = true;
-            //            if (file.exists())
-            //                file.delete();
+            TCLog.info("Deobfuscated environment detected... using debug settings.");
+            TCSettings.allowDebugLogging = true;
+            TCSettings.allowDebugOutput = true;
+            TCSettings.onlyDestroyUpwards = true;
+            TCSettings.sneakAction = "disable";
+            TCSettings.maxHorLogBreakDist = 16;
+            TCSettings.allowSmartTreeDetection = true;
+            TCSettings.useStrictBlockPairing = true;
+            // TCSettings.enableEnchantmentMode = true;
+            if (file.exists())
+                file.delete();
         }
         
         TreeRegistry.instance();

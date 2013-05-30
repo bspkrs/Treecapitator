@@ -39,22 +39,36 @@ public class ThirdPartyModConfig
     /*
      * This special constructor provides the default vanilla tree "mod"
      */
-    protected ThirdPartyModConfig()
+    protected ThirdPartyModConfig(boolean init)
     {
         modID = TreeCapitatorMod.metadata.modId;
         configPath = "TreeCapitator.cfg";
         blockKeys = "";
         itemKeys = "";
-        axeKeys = ListUtils.getListAsDelimitedString(ToolRegistry.instance().vanillaAxeList(), "; ");
-        shearsKeys = ListUtils.getListAsDelimitedString(ToolRegistry.instance().vanillaShearsList(), "; ");
         shiftIndex = false;
         overrideIMC = TCSettings.userConfigOverridesIMC;
         
-        configTreesMap = TreeRegistry.instance().vanillaTrees();
         tagMap = new HashMap<String, String>();
         treesMap = new TreeMap<String, TreeDefinition>();
         
-        this.refreshTreeDefinitionsFromConfig();
+        if (init)
+        {
+            axeKeys = ListUtils.getListAsDelimitedString(ToolRegistry.instance().vanillaAxeList(), "; ");
+            shearsKeys = ListUtils.getListAsDelimitedString(ToolRegistry.instance().vanillaShearsList(), "; ");
+            configTreesMap = TreeRegistry.instance().vanillaTrees();
+            refreshTreeDefinitionsFromConfig();
+        }
+        else
+        {
+            axeKeys = "";
+            shearsKeys = "";
+            configTreesMap = new TreeMap<String, ConfigTreeDefinition>();
+        }
+    }
+    
+    protected ThirdPartyModConfig()
+    {
+        this(true);
     }
     
     public ThirdPartyModConfig(String modID, String configPath, String blockKeys, String itemKeys, String axeKeys, String shearsKeys, boolean shiftIndex)
@@ -84,13 +98,13 @@ public class ThirdPartyModConfig
     
     public ThirdPartyModConfig(Configuration config, String category)
     {
-        this();
+        this(false);
         readFromConfiguration(config, category);
     }
     
     public ThirdPartyModConfig(NBTTagCompound tpModCfg)
     {
-        this();
+        this(false);
         readFromNBT(tpModCfg);
     }
     
@@ -162,7 +176,7 @@ public class ThirdPartyModConfig
         if (cc.containsKey(Strings.OVERRIDE_IMC))
             overrideIMC = cc.get(Strings.OVERRIDE_IMC).getBoolean(TCSettings.userConfigOverridesIMC);
         
-        configTreesMap = new HashMap<String, ConfigTreeDefinition>();
+        configTreesMap = new TreeMap<String, ConfigTreeDefinition>();
         
         for (String ctgy : config.getCategoryNames())
         {
@@ -218,8 +232,7 @@ public class ThirdPartyModConfig
     
     public ThirdPartyModConfig registerTrees()
     {
-        if (configTreesMap.size() != treesMap.size())
-            refreshTreeDefinitionsFromConfig();
+        refreshTreeDefinitionsFromConfig();
         
         for (Entry<String, TreeDefinition> e : treesMap.entrySet())
             TreeRegistry.instance().registerTree(e.getKey(), e.getValue());
@@ -277,12 +290,14 @@ public class ThirdPartyModConfig
         return this;
     }
     
-    public void refreshTreeDefinitionsFromConfig()
+    public ThirdPartyModConfig refreshTreeDefinitionsFromConfig()
     {
         treesMap.clear();
         
         for (Entry<String, ConfigTreeDefinition> e : configTreesMap.entrySet())
             treesMap.put(e.getKey(), e.getValue().getTagsReplacedTreeDef(tagMap));
+        
+        return this;
     }
     
     protected void refreshReplacementTags()

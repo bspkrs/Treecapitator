@@ -220,15 +220,16 @@ public class TreeCapitator
                     if (x != 0 || y != 0 || z != 0)
                     {
                         BlockID blockID = new BlockID(world, pos.x + x, pos.y + y, pos.z + z);
-                        if (isLeafBlock(blockID))
-                        {
-                            TCLog.debug("Found leaf block: %s", blockID);
-                            i++;
-                            if (i >= limit)
-                                return true;
-                        }
-                        else
-                            TCLog.debug("Not a leaf block: %s", blockID);
+                        if (blockID.id > 0)
+                            if (isLeafBlock(blockID))
+                            {
+                                TCLog.debug("Found leaf block: %s", blockID);
+                                i++;
+                                if (i >= limit)
+                                    return true;
+                            }
+                            else
+                                TCLog.debug("Not a leaf block: %s", blockID);
                     }
         
         TCLog.debug("Number of leaf blocks is less than the limit. Found: %s", i);
