@@ -5,7 +5,7 @@ import bspkrs.util.Const;
 
 public class Strings
 {
-    public static final String VERSION_NUMBER                     = Const.MCVERSION + ".r08";
+    public static final String VERSION_NUMBER                     = Const.MCVERSION + ".r09";
     
     public static final String OAK                                = "vanilla_oak";
     public static final String SPRUCE                             = "vanilla_spruce";
@@ -56,6 +56,8 @@ public class Strings
     public static final String MAX_H_LEAF_DIST                    = "maxHorLeafBreakDist";
     public static final String MIN_LEAF_ID                        = "minLeavesToID";
     public static final String BREAK_SPEED_MOD                    = "breakSpeedModifier";
+    
+    public static final String COREMOD_WARNING                    = "TreeCapitator CoreMod code has not been injected. Ensure the downloaded .jar file is in the coremods folder and not mods.";
     
     //public static final String COMMENT_SEPARATOR                = "#--------------------------------------------------------------------------------------------------------#";
     //public static final String COMMENT_SEPARATOR_2              = "      #--------------------------------------------------------------------------------------------------------#";

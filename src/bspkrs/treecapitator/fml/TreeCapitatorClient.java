@@ -7,7 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import bspkrs.fml.util.ForgePacketHelper;
-import bspkrs.treecapitator.TCLog;
+import bspkrs.treecapitator.Strings;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -42,11 +42,9 @@ public class TreeCapitatorClient implements IPacketHandler
     {
         serverDetected = true;
         
-        if (!TreeCapitatorMod.isCoreModLoaded)
+        if (!TreeCapitatorMod.isCoreModLoaded && FMLClientHandler.instance().getClient().isSingleplayer())
         {
-            String s = "TreeCapitator CoreMod code has not been injected. Ensure the downloaded .jar file is in the coremods folder and not mods.";
-            FMLClientHandler.instance().getClient().thePlayer.addChatMessage(s);
-            TCLog.severe(s);
+            FMLClientHandler.instance().getClient().thePlayer.addChatMessage(Strings.COREMOD_WARNING);
             serverDetected = false;
         }
         
