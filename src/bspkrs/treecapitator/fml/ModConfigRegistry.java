@@ -111,16 +111,9 @@ public class ModConfigRegistry
     {
         defaultModCfgs = new TreeMap<String, ThirdPartyModConfig>();
         defaultModCfgs.put(Strings.VAN_TREES_ITEMS_CTGY, new ThirdPartyModConfig());
-        /*
-         * TODO: appliedenergistics {
-        S:axeIDList=<item:appeng.toolQuartzAxe>
-        S:configPath=AppliedEnergistics.cfg
-        S:itemConfigKeys=item:appeng.toolQuartzAxe
-        S:modID=AppliedEnergistics
-        B:overrideIMC=false
-        B:useShiftedItemID=true
-        }
-         */
+        
+        defaultModCfgs.put("AppliedEnergistics", new ThirdPartyModConfig("AppliedEnergistics", "AppliedEnergistics.cfg", "", "item:appeng.toolQuartzAxe",
+                "<item:appeng.toolQuartzAxe>", "", true).setOverrideIMC(false));
         
         defaultModCfgs.put("BiomesOPlenty", new ThirdPartyModConfig("BiomesOPlenty", "BiomesOPlenty.cfg",
                 "block:Bamboo ID; block:Colourized Leaves ID; block:Fruit Leaf Block ID; block:Leaf Block ID 1; block:Leaf Block ID 2; " +
@@ -318,17 +311,8 @@ public class ModConfigRegistry
                 .addConfigTreeDef("willow", new ConfigTreeDefinition("<block:Willow Log>",
                         "<block:Sakura Leaves>,3; <block:Sakura Leaves>,11; <block:Sakura Leaves>,15").setMaxHorLeafBreakDist(5)));
         
-        /*
-         *  TODO:   railcraft {
-            S:axeIDList=<item:tool.steel.axe>
-            S:configPath=railcraft/railcraft.cfg
-            S:itemConfigKeys=item:tool.steel.axe
-            S:modID=Railcraft
-            B:overrideIMC=false
-            B:useShiftedItemID=true
-        }
-
-         */
+        defaultModCfgs.put("Railcraft", new ThirdPartyModConfig("Railcraft", "railcraft/railcraft.cfg", "", "item:tool.steel.axe", "<item:tool.steel.axe>",
+                "", true).setOverrideIMC(false));
         
         defaultModCfgs.put("RedPowerWorld", new ThirdPartyModConfig("RedPowerWorld", "redpower/redpower.cfg",
                 "blocks.world:log.id; blocks.world:leaves.id",
@@ -352,7 +336,7 @@ public class ModConfigRegistry
                 .setOverrideIMC(false));
         
         defaultModCfgs.put("TwilightForest", new ThirdPartyModConfig("TwilightForest", "TwilightForest.cfg",
-                "block:Log; block:MagicLog; block:Leaves; block:MagicLeaves; block:Hedge",
+                "block:Log; block:MagicLog; block:Leaves; block:MagicLeaves; block:MagicLogSpecial; block:Hedge", "item:IronwoodAxe; item:SteeleafAxe; item:MinotaurAxe",
                 "<item:IronwoodAxe>; <item:SteeleafAxe>; <item:MinotaurAxe>", "", true)
                 .setOverrideIMC(false)
                 .addConfigTreeDef("oak", new ConfigTreeDefinition("<block:Log>,0; <block:Log>,4; <block:Log>,8; <block:Log>,12",
@@ -360,11 +344,21 @@ public class ModConfigRegistry
                 .addConfigTreeDef("canopy", new ConfigTreeDefinition("<block:Log>,1; <block:Log>,5; <block:Log>,9; <block:Log>,13",
                         "<block:Leaves>, 1; <block:Leaves>,9"))
                 .addConfigTreeDef("mangrove", new ConfigTreeDefinition("<block:Log>,2; <block:Log>,6; <block:Log>,10; <block:Log>,14",
-                        "<block:Leaves>, 1; <block:Leaves>,9"))
+                        "<block:Leaves>, 2; <block:Leaves>,10"))
                 .addConfigTreeDef("darkwood", new ConfigTreeDefinition("<block:Log>,3; <block:Log>,7; <block:Log>,11;  <block:Log>,15",
-                        "<block:Hedge>,1"))
-                .addConfigTreeDef("time", new ConfigTreeDefinition("<block:MagicLog>,0; <block:MagicLog>,4; <block:MagicLog>,8; <block:MagicLog>,12",
-                        "<block:MagicLeaves>,0; <block:MagicLeaves>,8")));
+                        "<block:Hedge>,1").setMaxLeafIDDist(2).setRequireLeafDecayCheck(false).setMaxHorLeafBreakDist(5))
+                .addConfigTreeDef("time", new ConfigTreeDefinition("<block:MagicLog>,0; <block:MagicLog>,4; <block:MagicLog>,8; <block:MagicLog>,12; " +
+                        "<block:MagicLogSpecial>,0",
+                        "<block:MagicLeaves>,0; <block:MagicLeaves>,8"))
+                .addConfigTreeDef("transformation", new ConfigTreeDefinition("<block:MagicLog>,1; <block:MagicLog>,5; <block:MagicLog>,9; <block:MagicLog>,13; " +
+                        "<block:MagicLogSpecial>,1",
+                        "<block:MagicLeaves>,1; <block:MagicLeaves>,9"))
+                .addConfigTreeDef("miner", new ConfigTreeDefinition("<block:MagicLog>,2; <block:MagicLog>,6; <block:MagicLog>,10; <block:MagicLog>,14; " +
+                        "<block:MagicLogSpecial>,2",
+                        "<block:MagicLeaves>,2; <block:MagicLeaves>,10").setOnlyDestroyUpwards(false))
+                .addConfigTreeDef("sorting", new ConfigTreeDefinition("<block:MagicLog>,3; <block:MagicLog>,7; <block:MagicLog>,11; <block:MagicLog>,15; " +
+                        "<block:MagicLogSpecial>,3",
+                        "<block:MagicLeaves>,3; <block:MagicLeaves>,11")));
     }
     
     public Map<String, ThirdPartyModConfig> defaultConfigs()
