@@ -45,7 +45,8 @@ import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 
-@Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge " + Strings.VERSION_NUMBER, dependencies = "required-after:mod_bspkrsCore", useMetadata = true)
+@Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge " + Strings.VERSION_NUMBER,
+        dependencies = "required-after:mod_bspkrsCore", useMetadata = true)
 @NetworkMod(clientSideRequired = false, serverSideRequired = false,
         clientPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = TreeCapitatorClient.class),
         serverPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = TreeCapitatorServer.class),
@@ -85,9 +86,8 @@ public class TreeCapitatorMod
         if (!CommonUtils.isObfuscatedEnv())
         {
             // debug settings for deobfuscated execution
-            TCLog.info("Deobfuscated environment detected... using debug settings.");
+            TCLog.info("*** Deobfuscated environment detected... using debug settings ***");
             TCSettings.allowDebugLogging = true;
-            TCSettings.allowDebugOutput = true;
             TCSettings.onlyDestroyUpwards = true;
             TCSettings.sneakAction = "disable";
             TCSettings.maxHorLogBreakDist = 16;
