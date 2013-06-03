@@ -57,9 +57,9 @@ public class ModConfigRegistry
             imcModCfgs.put(tpmc.modID(), tpmc);
         else
             TCLog.warning("Mod \"%s\" sent multiple IMC messages. The first message will be used.", tpmc.modID());
+        
+        // TODO: add code to write IMC configs to the user config if the mod is not already configured there and a flag is set in config
     }
-    
-    // TODO: add code to write IMC configs to the user config if the mod is not already configured there and a flag is set in config
     
     protected void refreshUserTagMaps()
     {
