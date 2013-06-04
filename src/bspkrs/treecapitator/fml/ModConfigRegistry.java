@@ -429,7 +429,158 @@ public class ModConfigRegistry
         {
             ConfigCategory cc = config.getCategory(ctgy);
             if (ctgy.indexOf(Strings.TREE_MOD_CFG_CTGY + ".") != -1 && cc.containsKey(Strings.MOD_ID) && Loader.isModLoaded(cc.get(Strings.MOD_ID).getString()))
+            {
+                TCLog.debug("Loading file config for mod %s (config category %s)...", cc.get(Strings.MOD_ID).getString(), ctgy);
                 registerUserModConfig(new ThirdPartyModConfig(config, ctgy));
+            }
+        }
+    }
+    
+    protected void imcSendMessageBoP()
+    {
+        if (Loader.isModLoaded("TreeCapitator"))
+        {
+            NBTTagCompound tpModCfg = new NBTTagCompound();
+            tpModCfg.setString("modID", "BiomesOPlenty");
+            tpModCfg.setString("configPath", "BiomesOPlenty.cfg");
+            tpModCfg.setString("blockConfigKeys", "block:Bamboo ID; block:Colourized Leaves ID; block:Fruit Leaf Block ID; " +
+                    "block:Leaf Block ID 1; block:Leaf Block ID 2; block:Log Block ID 1; block:Log Block ID 2; " +
+                    "block:Log Block ID 3; block:Log Block ID 4; block:Petal ID");
+            tpModCfg.setString("itemConfigKeys", "item:Muddy Axe ID; item:Amethyst Axe ID");
+            tpModCfg.setString("axeIDList", "<item:Muddy Axe ID>; <item:Amethyst Axe ID>");
+            tpModCfg.setString("shearsIDList", "");
+            tpModCfg.setBoolean("useShiftedItemID", true);
+            
+            NBTTagList treeList = new NBTTagList();
+            
+            // Vanilla Oak additions
+            NBTTagCompound tree = new NBTTagCompound();
+            tree.setString("treeName", "vanilla_oak");
+            tree.setString("logConfigKeys", "");
+            tree.setString("leafConfigKeys", "<block:Leaf Block ID 1>,4; <block:Leaf Block ID 1>,7; " +
+                    "<block:Leaf Block ID 1>,12; <block:Leaf Block ID 1>,15; <block:Fruit Leaf Block ID>; <block:Leaf Block ID 2>,0; " +
+                    "<block:Leaf Block ID 2>,8; <block:Leaf Block ID 2>,2; <block:Leaf Block ID 2>,10");
+            treeList.appendTag(tree);
+            
+            // Vanilla Birch additions
+            tree = new NBTTagCompound();
+            tree.setString("treeName", "vanilla_birch");
+            tree.setString("logConfigKeys", "");
+            tree.setString("leafConfigKeys", "<block:Leaf Block ID 1>,0; <block:Leaf Block ID 1>,8");
+            treeList.appendTag(tree);
+            
+            // BoP acacia
+            tree = new NBTTagCompound();
+            tree.setString("treeName", "acacia");
+            tree.setString("logConfigKeys", "<block:Log Block ID 1>,0; <block:Log Block ID 1>,4; <block:Log Block ID 1>,8");
+            tree.setString("leafConfigKeys", "<block:Colourized Leaves ID>,0; <block:Colourized Leaves ID>,8");
+            tree.setBoolean("requireLeafDecayCheck", false);
+            treeList.appendTag(tree);
+            // BoP cherry
+            tree = new NBTTagCompound();
+            tree.setString("treeName", "cherry");
+            tree.setString("logConfigKeys", "<block:Log Block ID 1>,1; <block:Log Block ID 1>,5; <block:Log Block ID 1>,9");
+            tree.setString("leafConfigKeys", "<block:Leaf Block ID 2>,1; <block:Leaf Block ID 2>,3; <block:Leaf Block ID 2>,9; <block:Leaf Block ID 2>,11");
+            tree.setBoolean("requireLeafDecayCheck", false);
+            treeList.appendTag(tree);
+            // BoP darkwood
+            tree = new NBTTagCompound();
+            tree.setString("treeName", "darkwood");
+            tree.setString("logConfigKeys", "<block:Log Block ID 1>,2; <block:Log Block ID 1>,6; <block:Log Block ID 1>,10");
+            tree.setString("leafConfigKeys", "<block:Leaf Block ID 1>,3; <block:Leaf Block ID 1>,11");
+            tree.setBoolean("requireLeafDecayCheck", false);
+            treeList.appendTag(tree);
+            // BoP fir
+            tree = new NBTTagCompound();
+            tree.setString("treeName", "fir");
+            tree.setString("logConfigKeys", "<block:Log Block ID 1>,3; <block:Log Block ID 1>,7; <block:Log Block ID 1>,11");
+            tree.setString("leafConfigKeys", "<block:Leaf Block ID 1>,5; <block:Leaf Block ID 1>,13");
+            tree.setBoolean("requireLeafDecayCheck", false);
+            treeList.appendTag(tree);
+            
+            // BoP holy
+            tree = new NBTTagCompound();
+            tree.setString("treeName", "holy");
+            tree.setString("logConfigKeys", "<block:Log Block ID 2>,0; <block:Log Block ID 2>,4; <block:Log Block ID 2>,8");
+            tree.setString("leafConfigKeys", "<block:Leaf Block ID 1>,6; <block:Leaf Block ID 1>,14");
+            tree.setBoolean("requireLeafDecayCheck", false);
+            treeList.appendTag(tree);
+            // BoP magic
+            tree = new NBTTagCompound();
+            tree.setString("treeName", "magic");
+            tree.setString("logConfigKeys", "<block:Log Block ID 2>,1; <block:Log Block ID 2>,5; <block:Log Block ID 2>,9");
+            tree.setString("leafConfigKeys", "<block:Leaf Block ID 1>,2; <block:Leaf Block ID 1>,10");
+            tree.setBoolean("requireLeafDecayCheck", false);
+            treeList.appendTag(tree);
+            // BoP mangrove
+            tree = new NBTTagCompound();
+            tree.setString("treeName", "mangrove");
+            tree.setString("logConfigKeys", "<block:Log Block ID 2>,2; <block:Log Block ID 2>,6; <block:Log Block ID 2>,10");
+            tree.setString("leafConfigKeys", "<block:Colourized Leaves ID>,1; <block:Colourized Leaves ID>,9");
+            tree.setBoolean("requireLeafDecayCheck", false);
+            treeList.appendTag(tree);
+            // BoP palm
+            tree = new NBTTagCompound();
+            tree.setString("treeName", "palm");
+            tree.setString("logConfigKeys", "<block:Log Block ID 2>,3; <block:Log Block ID 2>,7; <block:Log Block ID 2>,11");
+            tree.setString("leafConfigKeys", "<block:Colourized Leaves ID>,2; <block:Colourized Leaves ID>,10");
+            tree.setBoolean("requireLeafDecayCheck", false);
+            treeList.appendTag(tree);
+            
+            // BoP redwood
+            tree = new NBTTagCompound();
+            tree.setString("treeName", "redwood");
+            tree.setString("logConfigKeys", "<block:Log Block ID 3>,0; <block:Log Block ID 3>,4; <block:Log Block ID 3>,8");
+            tree.setString("leafConfigKeys", "<block:Colourized Leaves ID>,3; <block:Colourized Leaves ID>,11");
+            tree.setBoolean("requireLeafDecayCheck", false);
+            treeList.appendTag(tree);
+            // BoP willow
+            tree = new NBTTagCompound();
+            tree.setString("treeName", "willow");
+            tree.setString("logConfigKeys", "<block:Log Block ID 3>,1; <block:Log Block ID 3>,5; <block:Log Block ID 3>,9");
+            tree.setString("leafConfigKeys", "<block:Colourized Leaves ID>,4; <block:Colourized Leaves ID>,12");
+            tree.setBoolean("requireLeafDecayCheck", false);
+            treeList.appendTag(tree);
+            // BoP dead
+            tree = new NBTTagCompound();
+            tree.setString("treeName", "dead");
+            tree.setString("logConfigKeys", "<block:Log Block ID 3>,2; <block:Log Block ID 3>,6; <block:Log Block ID 3>,10");
+            tree.setString("leafConfigKeys", "");
+            tree.setBoolean("requireLeafDecayCheck", false);
+            treeList.appendTag(tree);
+            // BoP big_flower
+            tree = new NBTTagCompound();
+            tree.setString("treeName", "big_flower");
+            tree.setString("logConfigKeys", "<block:Log Block ID 3>,3; <block:Log Block ID 3>,7; <block:Log Block ID 3>,11");
+            tree.setString("leafConfigKeys", "<block:Petal ID>");
+            tree.setBoolean("requireLeafDecayCheck", false);
+            treeList.appendTag(tree);
+            
+            // BoP pine
+            tree = new NBTTagCompound();
+            tree.setString("treeName", "pine");
+            tree.setString("logConfigKeys", "<block:Log Block ID 4>,0; <block:Log Block ID 4>,4; <block:Log Block ID 4>,8");
+            tree.setString("leafConfigKeys", "<block:Colourized Leaves ID>,5; <block:Colourized Leaves ID>,13");
+            tree.setBoolean("requireLeafDecayCheck", false);
+            treeList.appendTag(tree);
+            // BoP hellbark
+            tree = new NBTTagCompound();
+            tree.setString("treeName", "hellbark");
+            tree.setString("logConfigKeys", "<block:Log Block ID 4>,1; <block:Log Block ID 4>,5; <block:Log Block ID 4>,9");
+            tree.setString("leafConfigKeys", "<block:Leaf Block ID 2>,4; <block:Leaf Block ID 2>,12");
+            tree.setBoolean("requireLeafDecayCheck", false);
+            treeList.appendTag(tree);
+            // BoP jacaranda
+            tree = new NBTTagCompound();
+            tree.setString("treeName", "jacaranda");
+            tree.setString("logConfigKeys", "<block:Log Block ID 4>,2; <block:Log Block ID 4>,6; <block:Log Block ID 4>,10");
+            tree.setString("leafConfigKeys", "<block:Leaf Block ID 1>,5; <block:Leaf Block ID 1>,13");
+            tree.setBoolean("requireLeafDecayCheck", false);
+            treeList.appendTag(tree);
+            
+            tpModCfg.setTag("trees", treeList);
+            
+            FMLInterModComms.sendMessage("TreeCapitator", "ThirdPartyModConfig", tpModCfg);
         }
     }
     
@@ -494,7 +645,7 @@ public class ModConfigRegistry
             
             tpModCfg.setTag("trees", treeList);
             
-            FMLInterModComms.sendMessage("TreeCapitator", TreeCapitatorMod.metadata.modId, tpModCfg);
+            FMLInterModComms.sendMessage("TreeCapitator", "ThirdPartyModConfig", tpModCfg);
         }
     }
     /*static

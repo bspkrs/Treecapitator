@@ -56,6 +56,7 @@ public class Strings
     public static final String MAX_H_LEAF_DIST                    = "maxHorLeafBreakDist";
     public static final String MIN_LEAF_ID                        = "minLeavesToID";
     public static final String BREAK_SPEED_MOD                    = "breakSpeedModifier";
+    public static final String THIRD_PARTY_MOD_CONFIG             = "ThirdPartyModConfig";
     
     public static final String COREMOD_WARNING                    = "TreeCapitator CoreMod code has not been injected. Ensure the downloaded .jar file is in the coremods folder and not mods.";
     

@@ -58,7 +58,7 @@ public class TreeCapitatorTicker implements ITickHandler
         if (mcClient != null && mcClient.thePlayer != null)
         {
             if (bspkrsCoreProxy.instance.allowUpdateCheck && TreeCapitatorMod.versionChecker != null)
-                if (!TreeCapitatorMod.versionChecker.isCurrentVersionBySubStringAsFloatNewer(TreeCapitatorMod.metadata.version.length() - 1, TreeCapitatorMod.metadata.version.length()))
+                if (!TreeCapitatorMod.versionChecker.isCurrentVersionBySubStringAsFloatNewer(TreeCapitatorMod.metadata.version.length() - 2, TreeCapitatorMod.metadata.version.length()))
                     for (String msg : TreeCapitatorMod.versionChecker.getInGameMessage())
                         mcClient.thePlayer.addChatMessage(msg);
             

@@ -102,7 +102,7 @@ public class TreeCapitatorMod
         if (bspkrsCoreProxy.instance.allowUpdateCheck)
         {
             versionChecker = new ModVersionChecker(metadata.name, metadata.version, versionURL, mcfTopic);
-            versionChecker.checkVersionWithLoggingBySubStringAsFloat(metadata.version.length() - 1, metadata.version.length());
+            versionChecker.checkVersionWithLoggingBySubStringAsFloat(metadata.version.length() - 2, metadata.version.length());
         }
         
     }
@@ -121,11 +121,11 @@ public class TreeCapitatorMod
         for (IMCMessage msg : event.getMessages().asList())
             if (msg.isNBTMessage())
             {
-                TCLog.debug("Received IMC message from mod %s.", msg.getSender());
+                TCLog.info("Received IMC message from mod %s.", msg.getSender());
                 ModConfigRegistry.instance().registerIMCModConfig(new ThirdPartyModConfig(msg.getNBTValue()));
             }
             else
-                TCLog.warning("Mod %s send an IMC message, but it is not an NBT tag message. The message will be ignored.", msg.getSender());
+                TCLog.warning("Mod %s send an IMC message, but it is not an NBT object message. The message will be ignored.", msg.getSender());
     }
     
     @PostInit

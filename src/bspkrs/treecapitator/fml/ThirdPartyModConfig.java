@@ -42,7 +42,7 @@ public class ThirdPartyModConfig
     protected ThirdPartyModConfig(boolean init)
     {
         modID = TreeCapitatorMod.metadata.modId;
-        configPath = "TreeCapitator.cfg";
+        configPath = "";
         blockKeys = "";
         itemKeys = "";
         shiftIndex = false;
@@ -111,12 +111,18 @@ public class ThirdPartyModConfig
     public ThirdPartyModConfig readFromNBT(NBTTagCompound tpModCfg)
     {
         modID = tpModCfg.getString(Strings.MOD_ID);
-        configPath = tpModCfg.getString(Strings.CONFIG_PATH);
-        blockKeys = tpModCfg.getString(Strings.BLOCK_CFG_KEYS);
-        itemKeys = tpModCfg.getString(Strings.ITEM_CFG_KEYS);
-        axeKeys = tpModCfg.getString(Strings.AXE_ID_LIST);
-        shearsKeys = tpModCfg.getString(Strings.SHEARS_ID_LIST);
-        shiftIndex = tpModCfg.getBoolean(Strings.SHIFT_INDEX);
+        if (tpModCfg.hasKey(Strings.CONFIG_PATH))
+            configPath = tpModCfg.getString(Strings.CONFIG_PATH);
+        if (tpModCfg.hasKey(Strings.BLOCK_CFG_KEYS))
+            blockKeys = tpModCfg.getString(Strings.BLOCK_CFG_KEYS);
+        if (tpModCfg.hasKey(Strings.ITEM_CFG_KEYS))
+            itemKeys = tpModCfg.getString(Strings.ITEM_CFG_KEYS);
+        if (tpModCfg.hasKey(Strings.AXE_ID_LIST))
+            axeKeys = tpModCfg.getString(Strings.AXE_ID_LIST);
+        if (tpModCfg.hasKey(Strings.SHEARS_ID_LIST))
+            shearsKeys = tpModCfg.getString(Strings.SHEARS_ID_LIST);
+        if (tpModCfg.hasKey(Strings.SHIFT_INDEX))
+            shiftIndex = tpModCfg.getBoolean(Strings.SHIFT_INDEX);
         
         configTreesMap = new TreeMap<String, ConfigTreeDefinition>();
         
@@ -163,7 +169,8 @@ public class ThirdPartyModConfig
     {
         ConfigCategory cc = config.getCategory(category);
         modID = cc.get(Strings.MOD_ID).getString();
-        configPath = cc.get(Strings.CONFIG_PATH).getString();
+        if (cc.containsKey(Strings.CONFIG_PATH))
+            configPath = cc.get(Strings.CONFIG_PATH).getString();
         if (cc.containsKey(Strings.BLOCK_CFG_KEYS))
             blockKeys = cc.get(Strings.BLOCK_CFG_KEYS).getString();
         if (cc.containsKey(Strings.ITEM_CFG_KEYS))
@@ -251,10 +258,12 @@ public class ThirdPartyModConfig
         }
         
         for (ItemID axe : ListUtils.getDelimitedStringAsItemIDList(axeList, ";"))
-            ToolRegistry.instance().registerAxe(axe);
+            if (axe.id > 0)
+                ToolRegistry.instance().registerAxe(axe);
         
         for (ItemID shears : ListUtils.getDelimitedStringAsItemIDList(shearsList, ";"))
-            ToolRegistry.instance().registerShears(shears);
+            if (shears.id > 0)
+                ToolRegistry.instance().registerShears(shears);
         
         return this;
     }
@@ -304,24 +313,29 @@ public class ThirdPartyModConfig
     {
         tagMap = new HashMap<String, String>();
         
-        TCLog.debug("Processing Mod \"%s\" config file \"%s\"...", modID, configPath);
-        
-        if (Loader.isModLoaded(modID))
+        if (configPath.length() > 0)
         {
-            File file = new File(Loader.instance().getConfigDir(), configPath.trim());
-            if (file.exists())
+            TCLog.debug("Processing Mod %s config file %s...", modID, configPath);
+            
+            if (Loader.isModLoaded(modID))
             {
-                Configuration thirdPartyConfig = new Configuration(file);
-                String idrClassName = Loader.instance().getIndexedModList().get(modID).getMod().getClass().getName();
-                thirdPartyConfig.load();
-                getReplacementTagsForKeys(thirdPartyConfig, blockKeys, idrClassName, false);
-                getReplacementTagsForKeys(thirdPartyConfig, itemKeys, idrClassName, true);
+                File file = new File(Loader.instance().getConfigDir(), configPath.trim());
+                if (file.exists())
+                {
+                    Configuration thirdPartyConfig = new Configuration(file);
+                    String idrClassName = Loader.instance().getIndexedModList().get(modID).getMod().getClass().getName();
+                    thirdPartyConfig.load();
+                    getReplacementTagsForKeys(thirdPartyConfig, blockKeys, idrClassName, false);
+                    getReplacementTagsForKeys(thirdPartyConfig, itemKeys, idrClassName, true);
+                }
+                else
+                    TCLog.warning("Mod config file %s does not exist when processing Mod %s.", configPath, modID);
             }
             else
-                TCLog.warning("Mod config file %s does not exist when processing Mod %s.", configPath, modID);
+                TCLog.debug("Mod %s is not loaded.", modID);
         }
         else
-            TCLog.debug("Mod " + modID + " is not loaded.");
+            TCLog.debug("configPath property is blank for mod %s.", modID);
         
     }
     
