@@ -60,8 +60,6 @@ public class ModConfigRegistry
             imcModCfgs.put(tpmc.modID(), tpmc);
         else
             TCLog.warning("Mod \"%s\" sent multiple IMC messages. The first message will be used.", tpmc.modID());
-        
-        // TODO: add code to write IMC configs to the user config if the mod is not already configured there and a flag is set in config
     }
     
     protected void refreshUserTagMaps()
@@ -115,8 +113,8 @@ public class ModConfigRegistry
         defaultModCfgs = new TreeMap<String, ThirdPartyModConfig>();
         defaultModCfgs.put(Strings.VAN_TREES_ITEMS_CTGY, new ThirdPartyModConfig());
         
-        defaultModCfgs.put("AppliedEnergistics", new ThirdPartyModConfig("AppliedEnergistics", "AppliedEnergistics.cfg", "", "item:appeng.toolQuartzAxe",
-                "<item:appeng.toolQuartzAxe>", "", true).setOverrideIMC(false));
+        defaultModCfgs.put("AppliedEnergistics", new ThirdPartyModConfig("AppliedEnergistics", "AppliedEnergistics.cfg", "",
+                "item:appeng.toolQuartzAxe", "<item:appeng.toolQuartzAxe>", "", true).setOverrideIMC(false));
         
         defaultModCfgs.put("BiomesOPlenty", new ThirdPartyModConfig("BiomesOPlenty", "BiomesOPlenty.cfg",
                 "block:Bamboo ID; block:Colourized Leaves ID; block:Fruit Leaf Block ID; block:Leaf Block ID 1; block:Leaf Block ID 2; " +
@@ -285,6 +283,9 @@ public class ModConfigRegistry
                 .addConfigTreeDef("sugar_maple", new ConfigTreeDefinition("<block:log6>,2; <block:log6>,6; <block:log6>,10",
                         "<block:leaves>,0; <block:leaves>,8")
                         .setRequireLeafDecayCheck(false)));
+        
+        defaultModCfgs.put("GraviSuite", new ThirdPartyModConfig("GraviSuite", "GraviSuite.cfg", "", "items:advChainsawID",
+                "<items:advChainsawID>", "", true));
         
         defaultModCfgs.put("IC2", new ThirdPartyModConfig("IC2", "IC2.cfg", "block:blockRubWood; block:blockRubLeaves",
                 "item:itemToolBronzeAxe; item:itemToolChainsaw", "<item:itemToolBronzeAxe>; <item:itemToolChainsaw>",

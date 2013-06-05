@@ -179,7 +179,8 @@ public class ThirdPartyModConfig
             axeKeys = cc.get(Strings.AXE_ID_LIST).getString();
         if (cc.containsKey(Strings.SHEARS_ID_LIST))
             shearsKeys = cc.get(Strings.SHEARS_ID_LIST).getString();
-        shiftIndex = cc.get(Strings.SHIFT_INDEX).getBoolean(true);
+        if (cc.containsKey(Strings.ITEM_CFG_KEYS))
+            shiftIndex = cc.get(Strings.SHIFT_INDEX).getBoolean(false);
         if (cc.containsKey(Strings.OVERRIDE_IMC))
             overrideIMC = cc.get(Strings.OVERRIDE_IMC).getBoolean(TCSettings.userConfigOverridesIMC);
         
@@ -209,7 +210,8 @@ public class ThirdPartyModConfig
             config.get(category, Strings.AXE_ID_LIST, axeKeys);
         if (shearsKeys.length() > 0)
             config.get(category, Strings.SHEARS_ID_LIST, shearsKeys);
-        config.get(category, Strings.SHIFT_INDEX, shiftIndex);
+        if (itemKeys.length() > 0)
+            config.get(category, Strings.SHIFT_INDEX, shiftIndex);
         
         config.get(category, Strings.OVERRIDE_IMC, overrideIMC);
         
