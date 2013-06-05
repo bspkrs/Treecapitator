@@ -33,17 +33,20 @@ public class ConfigTreeDefinition extends TreeDefinition
     
     public ConfigTreeDefinition(String configLogs, String configLeaves)
     {
+        this();
         logKeys = configLogs;
         leafKeys = configLeaves;
     }
     
     public ConfigTreeDefinition(Configuration config, String category)
     {
+        this();
         readFromConfiguration(config, category);
     }
     
     public ConfigTreeDefinition(NBTTagCompound treeDefNBT)
     {
+        this();
         readFromNBT(treeDefNBT);
     }
     
@@ -54,9 +57,13 @@ public class ConfigTreeDefinition extends TreeDefinition
         
         if (treeDefNBT.hasKey(Strings.LOG_CFG_KEYS))
             logKeys = treeDefNBT.getString(Strings.LOG_CFG_KEYS);
+        else
+            logKeys = ListUtils.getListAsDelimitedString(logBlocks, "; ");
         
         if (treeDefNBT.hasKey(Strings.LEAF_CFG_KEYS))
             leafKeys = treeDefNBT.getString(Strings.LEAF_CFG_KEYS);
+        else
+            leafKeys = ListUtils.getListAsDelimitedString(leafBlocks, "; ");
         
         return this;
     }

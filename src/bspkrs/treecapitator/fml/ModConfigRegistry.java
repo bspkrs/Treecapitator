@@ -125,16 +125,12 @@ public class ModConfigRegistry
                 .setOverrideIMC(false)
                 .addConfigTreeDef(Strings.OAK, new ConfigTreeDefinition("", "<block:Leaf Block ID 1>,4; <block:Leaf Block ID 1>,7; " +
                         "<block:Leaf Block ID 1>,12; <block:Leaf Block ID 1>,15; <block:Fruit Leaf Block ID>; <block:Leaf Block ID 2>,0; " +
-                        "<block:Leaf Block ID 2>,8; <block:Leaf Block ID 2>,2; <block:Leaf Block ID 2>,10;")
+                        "<block:Leaf Block ID 2>,8; <block:Leaf Block ID 2>,2; <block:Leaf Block ID 2>,10; 18,2; 18,10")
                 //.setRequireLeafDecayCheck(false)
                 )
                 .addConfigTreeDef(Strings.BIRCH, new ConfigTreeDefinition("", "<block:Leaf Block ID 1>,0; <block:Leaf Block ID 1>,8")
                 //.setRequireLeafDecayCheck(false)
                 )
-                
-                .addConfigTreeDef("bamboo", new ConfigTreeDefinition("<block:Bamboo ID>",
-                        "<block:Leaf Block ID 1>,1; <block:Leaf Block ID 1>,9")
-                        .setRequireLeafDecayCheck(false))
                 
                 .addConfigTreeDef("acacia", new ConfigTreeDefinition("<block:Log Block ID 1>,0; <block:Log Block ID 1>,4; <block:Log Block ID 1>,8",
                         "<block:Colourized Leaves ID>,0; <block:Colourized Leaves ID>,8")
@@ -168,10 +164,9 @@ public class ModConfigRegistry
                 .addConfigTreeDef("willow", new ConfigTreeDefinition("<block:Log Block ID 3>,1; <block:Log Block ID 3>,5; <block:Log Block ID 3>,9",
                         "<block:Colourized Leaves ID>,4; <block:Colourized Leaves ID>,12")
                         .setRequireLeafDecayCheck(false))
-                .addConfigTreeDef("dead", new ConfigTreeDefinition(
-                        "<block:Log Block ID 3>,2; <block:Log Block ID 3>,6; <block:Log Block ID 3>,10", ""))
-                .addConfigTreeDef("big_flower", new ConfigTreeDefinition(
-                        "<block:Log Block ID 3>,3; <block:Log Block ID 3>,7; <block:Log Block ID 3>,11", "<block:Petal ID>"))
+                .addConfigTreeDef("dead", new ConfigTreeDefinition("<block:Log Block ID 3>,2; <block:Log Block ID 3>,6; <block:Log Block ID 3>,10", ""))
+                .addConfigTreeDef("big_flower", new ConfigTreeDefinition("<block:Log Block ID 3>,3; <block:Log Block ID 3>,7; <block:Log Block ID 3>,11",
+                        "<block:Petal ID>"))
                 
                 .addConfigTreeDef("pine", new ConfigTreeDefinition("<block:Log Block ID 4>,0; <block:Log Block ID 4>,4; <block:Log Block ID 4>,8",
                         "<block:Colourized Leaves ID>,5; <block:Colourized Leaves ID>,13")

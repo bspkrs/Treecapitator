@@ -153,8 +153,15 @@ public class TreeDefinition
         if (treeDefNBT.hasKey(Strings.BREAK_SPEED_MOD))
             breakSpeedModifier = treeDefNBT.getFloat(Strings.BREAK_SPEED_MOD);
         
-        logBlocks = ListUtils.getDelimitedStringAsBlockIDList(treeDefNBT.getString(Strings.LOGS), ";");
-        leafBlocks = ListUtils.getDelimitedStringAsBlockIDList(treeDefNBT.getString(Strings.LEAVES), ";");
+        if (treeDefNBT.hasKey(Strings.LOGS) && treeDefNBT.getString(Strings.LOGS).length() > 0)
+            logBlocks = ListUtils.getDelimitedStringAsBlockIDList(treeDefNBT.getString(Strings.LOGS), ";");
+        else
+            logBlocks = new ArrayList<BlockID>();
+        
+        if (treeDefNBT.hasKey(Strings.LEAVES) && treeDefNBT.getString(Strings.LEAVES).length() > 0)
+            leafBlocks = ListUtils.getDelimitedStringAsBlockIDList(treeDefNBT.getString(Strings.LEAVES), ";");
+        else
+            leafBlocks = new ArrayList<BlockID>();
         
         return this;
     }
@@ -209,7 +216,7 @@ public class TreeDefinition
     
     public TreeDefinition setMaxHorLeafBreakDist(int maxLeafBreakDist)
     {
-        this.maxHorLeafBreakDist = maxLeafBreakDist;
+        maxHorLeafBreakDist = maxLeafBreakDist;
         return this;
     }
     
