@@ -152,7 +152,7 @@ public class TreeCapitatorMod
     
     public void onBlockHarvested(World world, int x, int y, int z, Block block, int metadata, EntityPlayer entityPlayer)
     {
-        if (proxy.isEnabled())
+        if (proxy.isEnabled() && !world.isRemote)
         {
             BlockID blockID = new BlockID(block, metadata);
             
@@ -163,22 +163,27 @@ public class TreeCapitatorMod
                 {
                     TCLog.debug("BlockID " + blockID + " is a log.");
                     
-                    if (TreeCapitator.isBreakingPossible(world, entityPlayer))
+                    if (TreeCapitator.isBreakingEnabled(entityPlayer))
                     {
-                        TreeCapitator breaker;
-                        
-                        TreeDefinition treeDef = TreeRegistry.instance().get(blockID);
-                        
-                        if (treeDef != null)
+                        if (TreeCapitator.isBreakingPossible(world, entityPlayer, true))
                         {
-                            breaker = new TreeCapitator(entityPlayer, treeDef);
-                            breaker.onBlockHarvested(world, x, y, z, metadata, entityPlayer);
+                            TreeCapitator breaker;
+                            
+                            TreeDefinition treeDef = TreeRegistry.instance().get(blockID);
+                            
+                            if (treeDef != null)
+                            {
+                                breaker = new TreeCapitator(entityPlayer, treeDef);
+                                breaker.onBlockHarvested(world, x, y, z, metadata, entityPlayer);
+                            }
+                            else
+                                TCLog.severe("TreeRegistry reported block ID %s is a log, but TreeDefinition lookup failed! " +
+                                        "Please report this to bspkrs (include a copy of this log and your config).", blockID);
+                            
                         }
-                        else
-                            TCLog.severe("TreeRegistry reported block ID %s is a log, but TreeDefinition lookup failed! " +
-                                    "Please report this to bspkrs (include a copy of this log and your config).", blockID);
-                        
                     }
+                    else
+                        TCLog.debug("Chopping disabled due to player state or gamemode.");
                 }
                 TreeRegistry.instance().endTreeChopEventAt(blockPos);
             }

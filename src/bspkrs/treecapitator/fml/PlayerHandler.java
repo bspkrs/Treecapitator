@@ -1,6 +1,8 @@
 package bspkrs.treecapitator.fml;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.EnumMovingObjectType;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -10,6 +12,7 @@ import bspkrs.treecapitator.TreeCapitator;
 import bspkrs.treecapitator.TreeDefinition;
 import bspkrs.treecapitator.TreeRegistry;
 import bspkrs.util.BlockID;
+import bspkrs.util.CommonUtils;
 
 public class PlayerHandler
 {
@@ -25,13 +28,6 @@ public class PlayerHandler
                 int metadata = event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z);
                 
                 TreeCapitatorMod.proxy.debugOutputBlockID(block.blockID, metadata);
-                
-                //                BlockID blockID = new BlockID(block, metadata);
-                //                
-                //                if (TreeRegistry.instance().isRegistered(blockID))
-                //                {
-                //                    block.setHardness(TreeCapitator.getBlockHardness(event.entityPlayer));
-                //                }
             }
         }
     }
@@ -46,7 +42,15 @@ public class PlayerHandler
         {
             TreeDefinition treeDef = TreeRegistry.instance().get(blockID);
             if (treeDef != null)
-                event.newSpeed = event.originalSpeed * treeDef.breakSpeedModifier();
+            {
+                MovingObjectPosition thing = CommonUtils.getPlayerLookingSpot(event.entityPlayer, true);
+                if (thing != null && thing.typeOfHit == EnumMovingObjectType.TILE)
+                {
+                    int height = TreeCapitator.getTreeHeight(treeDef, event.entityPlayer.worldObj, thing.blockX, thing.blockY, thing.blockZ, event.metadata, event.entityPlayer);
+                    if (height > 0)
+                        event.newSpeed = event.originalSpeed / (height * 2);
+                }
+            }
             else
                 TCLog.severe("TreeRegistry reported block ID %s is a log, but TreeDefinition lookup failed! " +
                         "Please report this to bspkrs (include a copy of this log and your config).", blockID);

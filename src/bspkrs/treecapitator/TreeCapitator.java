@@ -21,15 +21,12 @@ public class TreeCapitator
 {
     // The player chopping
     public EntityPlayer          player;
-    public boolean               shouldFell;
     private Coord                startPos;
     // The axe of the player currently chopping
     private ItemStack            axe;
     private ItemStack            shears;
     private final TreeDefinition treeDef;
     private final List<BlockID>  masterLogList;
-    private final List<BlockID>  logList;
-    private final List<BlockID>  leafList;
     private final BlockID        vineID;
     private float                currentAxeDamage, currentShearsDamage = 0.0F;
     private int                  numLogsBroken;
@@ -40,11 +37,8 @@ public class TreeCapitator
     public TreeCapitator(EntityPlayer entityPlayer, TreeDefinition treeDef)
     {
         player = entityPlayer;
-        shouldFell = false;
         this.treeDef = treeDef;
         masterLogList = TreeRegistry.instance().masterLogList();
-        logList = treeDef.getLogList();
-        leafList = treeDef.getLeafList();
         vineID = new BlockID(Block.vine.blockID);
         logDamageMultiplier = TCSettings.damageMultiplier;
         leafDamageMultiplier = TCSettings.damageMultiplier;
@@ -52,30 +46,25 @@ public class TreeCapitator
         numLeavesSheared = 1;
     }
     
-    public static boolean isBreakingPossible(World world, EntityPlayer entityPlayer)
+    public static boolean isBreakingPossible(World world, EntityPlayer entityPlayer, boolean shouldLog)
     {
-        if (!isBreakingEnabled(entityPlayer))
-        {
-            TCLog.debug("Chopping disabled due to player state or gamemode.");
-            return false;
-        }
-        
         ItemStack axe = entityPlayer.getCurrentEquippedItem();
-        if (!world.isRemote)
-            if ((isAxeItemEquipped(entityPlayer) || !TCSettings.needItem))
+        if ((isAxeItemEquipped(entityPlayer) || !TCSettings.needItem))
+        {
+            if (!entityPlayer.capabilities.isCreativeMode && TCSettings.allowItemDamage && axe != null
+                    && (axe.isItemStackDamageable() && (axe.getMaxDamage() - axe.getItemDamage() <= TCSettings.damageMultiplier))
+                    && !TCSettings.allowMoreBlocksThanDamage)
             {
-                if (!entityPlayer.capabilities.isCreativeMode && TCSettings.allowItemDamage && axe != null
-                        && (axe.isItemStackDamageable() && (axe.getMaxDamage() - axe.getItemDamage() <= TCSettings.damageMultiplier))
-                        && !TCSettings.allowMoreBlocksThanDamage)
-                {
+                if (shouldLog)
                     TCLog.debug("Chopping disabled due to axe durability.");
-                    return false;
-                }
-                
-                return true;
+                return false;
             }
-            else
-                TCLog.debug("Player does not have an axe equipped.");
+            
+            return true;
+        }
+        else if (shouldLog)
+            TCLog.debug("Player does not have an axe equipped.");
+        
         return false;
     }
     
@@ -87,22 +76,19 @@ public class TreeCapitator
                 && !(player.capabilities.isCreativeMode && TCSettings.disableInCreative);
     }
     
-    /**
-     * Call this method in the log block's onBlockClicked(World world, int x, int y, int z, EntityPlayer entityPlayer) method
-     */
-    public void onBlockClicked(World world, int x, int y, int z, EntityPlayer entityPlayer)
+    public static int getTreeHeight(TreeDefinition tree, World world, int x, int y, int z, int md, EntityPlayer entityPlayer)
     {
-        shouldFell = false;
-        player = entityPlayer;
+        Coord startPos = new Coord(x, y, z);
         
-        if (!world.isRemote && (isAxeItemEquipped(player) || !TCSettings.needItem))
+        if (isBreakingPossible(world, entityPlayer, false))
         {
-            shouldFell = true;
-            
-            if (!player.capabilities.isCreativeMode && TCSettings.allowItemDamage && axe != null
-                    && axe.getItemDamage() == axe.getMaxDamage() && !TCSettings.allowMoreBlocksThanDamage)
-                shouldFell = false;
+            Coord topLog = getTopLog(tree.logBlocks, world, new Coord(x, y, z), false);
+            if (!TCSettings.allowSmartTreeDetection || tree.leafBlocks.size() == 0
+                    || hasXLeavesInDist(tree.leafBlocks, world, topLog, tree.maxLeafIDDist(), tree.minLeavesToID(), false))
+                return topLog.y - startPos.y + 1;
         }
+        
+        return 1;
     }
     
     public void onBlockHarvested(World world, int x, int y, int z, int md, EntityPlayer entityPlayer)
@@ -116,7 +102,8 @@ public class TreeCapitator
             if (isBreakingEnabled(entityPlayer))
             {
                 Coord topLog = getTopLog(world, new Coord(x, y, z));
-                if (!TCSettings.allowSmartTreeDetection || leafList.size() == 0 || hasXLeavesInDist(world, topLog, treeDef.maxLeafIDDist(), treeDef.minLeavesToID()))
+                if (!TCSettings.allowSmartTreeDetection || treeDef.leafBlocks.size() == 0
+                        || hasXLeavesInDist(world, topLog, treeDef.maxLeafIDDist(), treeDef.minLeavesToID()))
                 {
                     if (isAxeItemEquipped() || !TCSettings.needItem)
                     {
@@ -131,7 +118,7 @@ public class TreeCapitator
                         if (numLogsBroken > 1)
                             TCLog.debug("Number of logs broken: %d", numLogsBroken);
                         
-                        if (TCSettings.destroyLeaves && leafList.size() != 0)
+                        if (TCSettings.destroyLeaves && treeDef.leafBlocks.size() != 0)
                         {
                             TCLog.debug("Finding leaf blocks...");
                             List<Coord> leaves = new ArrayList<Coord>();
@@ -202,16 +189,25 @@ public class TreeCapitator
     
     private Coord getTopLog(World world, Coord pos)
     {
-        while (logList.contains(new BlockID(world, pos.x, pos.y + 1, pos.z)))
+        return getTopLog(treeDef.logBlocks, world, pos, true);
+    }
+    
+    private static Coord getTopLog(List<BlockID> logs, World world, Coord pos, boolean shouldLog)
+    {
+        while (logs.contains(new BlockID(world, pos.x, pos.y + 1, pos.z)))
             pos.y++;
         
-        TCLog.debug("Top Log: " + pos.x + ", " + pos.y + ", " + pos.z);
+        if (shouldLog)
+            TCLog.debug("Top Log: " + pos.x + ", " + pos.y + ", " + pos.z);
+        
         return pos;
     }
     
-    private boolean hasXLeavesInDist(World world, Coord pos, int range, int limit)
+    private static boolean hasXLeavesInDist(List<BlockID> leaves, World world, Coord pos, int range, int limit, boolean shouldLog)
     {
-        TCLog.debug("Attempting to identify tree...");
+        if (shouldLog)
+            TCLog.debug("Attempting to identify tree...");
+        
         int i = 0;
         for (int x = -range; x <= range; x++)
             /* lower bound kept at -1 */
@@ -221,46 +217,28 @@ public class TreeCapitator
                     {
                         BlockID blockID = new BlockID(world, pos.x + x, pos.y + y, pos.z + z);
                         if (blockID.id > 0)
-                            if (isLeafBlock(blockID))
+                            if (isLeafBlock(leaves, blockID))
                             {
-                                TCLog.debug("Found leaf block: %s", blockID);
+                                if (shouldLog)
+                                    TCLog.debug("Found leaf block: %s", blockID);
+                                
                                 i++;
                                 if (i >= limit)
                                     return true;
                             }
-                            else
+                            else if (shouldLog)
                                 TCLog.debug("Not a leaf block: %s", blockID);
                     }
         
-        TCLog.debug("Number of leaf blocks is less than the limit. Found: %s", i);
+        if (shouldLog)
+            TCLog.debug("Number of leaf blocks is less than the limit. Found: %s", i);
+        
         return false;
     }
     
-    public int leavesInDist(World world, Coord pos, int range)
+    private boolean hasXLeavesInDist(World world, Coord pos, int range, int limit)
     {
-        int i = 0;
-        for (int x = -range; x <= range; x++)
-            for (int y = -1; y <= range; y++)
-                for (int z = -range; z <= range; z++)
-                    if (x != 0 || y != 0 || z != 0)
-                    {
-                        BlockID blockID = new BlockID(world, pos.x + x, pos.y + y, pos.z + z);
-                        if (isLeafBlock(blockID))
-                        {
-                            TCLog.debug("Found leaf block: %s", blockID);
-                            i++;
-                        }
-                        else
-                            TCLog.debug("Not a leaf block: %s", blockID);
-                    }
-        
-        TCLog.debug("Leaves within " + range + " blocks of " + pos.x + ", " + pos.y + ", " + pos.z + " : " + i);
-        return i;
-    }
-    
-    public int leavesAround(World world, Coord pos)
-    {
-        return leavesInDist(world, pos, 1);
+        return hasXLeavesInDist(treeDef.leafBlocks, world, pos, range, limit, true);
     }
     
     /**
@@ -364,9 +342,14 @@ public class TreeCapitator
         return -1;
     }
     
+    public static boolean isLeafBlock(List<BlockID> leaves, BlockID blockID)
+    {
+        return leaves.contains(blockID) || leaves.contains(new BlockID(blockID.id, blockID.metadata & 7));
+    }
+    
     public boolean isLeafBlock(BlockID blockID)
     {
-        return leafList.contains(blockID) || leafList.contains(new BlockID(blockID.id, blockID.metadata & 7));
+        return isLeafBlock(treeDef.leafBlocks, blockID);
     }
     
     private void destroyBlocks(World world, List<Coord> list)
@@ -484,7 +467,7 @@ public class TreeCapitator
             for (x = -1; x <= 1; x++)
                 for (y = (treeDef.onlyDestroyUpwards() ? 0 : -1); y <= 1; y++)
                     for (z = -1; z <= 1; z++)
-                        if (logList.contains(new BlockID(world, currentLog.x + x, currentLog.y + y, currentLog.z + z)))
+                        if (treeDef.logBlocks.contains(new BlockID(world, currentLog.x + x, currentLog.y + y, currentLog.z + z)))
                         {
                             newPos = new Coord(currentLog.x + x, currentLog.y + y, currentLog.z + z);
                             
@@ -519,7 +502,7 @@ public class TreeCapitator
                 counter = 0;
                 for (x = -1; x <= 1; x++)
                     for (z = -1; z <= 1; z++)
-                        if (logList.contains(new BlockID(world, pos.x + x, pos.y + 1, pos.z + z)))
+                        if (treeDef.logBlocks.contains(new BlockID(world, pos.x + x, pos.y + 1, pos.z + z)))
                         {
                             if (!listAbove.contains(newPosition = new Coord(pos.x + x, pos.y + 1, pos.z + z)))
                                 listAbove.add(newPosition);
@@ -537,7 +520,7 @@ public class TreeCapitator
                 Coord pos = listAbove.get(index);
                 for (x = -1; x <= 1; x++)
                     for (z = -1; z <= 1; z++)
-                        if (logList.contains(new BlockID(world, pos.x + x, pos.y, pos.z + z)))
+                        if (treeDef.logBlocks.contains(new BlockID(world, pos.x + x, pos.y, pos.z + z)))
                             if (!listAbove.contains(newPosition = new Coord(pos.x + x, pos.y, pos.z + z)))
                                 listAbove.add(newPosition);
             }

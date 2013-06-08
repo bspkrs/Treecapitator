@@ -20,27 +20,17 @@ public class BlockTree extends BlockLog
     }
     
     /**
-     * Called when the block is clicked by a player. Args: x, y, z, entityPlayer
-     */
-    @Override
-    public void onBlockClicked(World world, int x, int y, int z, EntityPlayer entityPlayer)
-    {
-        breaker = new TreeCapitator(entityPlayer, TreeRegistry.instance().masterDefinition());
-        breaker.onBlockClicked(world, x, y, z, entityPlayer);
-    }
-    
-    /**
      * Called when the block is attempted to be harvested
      */
     @Override
     public void onBlockHarvested(World world, int x, int y, int z, int md, EntityPlayer entityPlayer)
     {
         Coord blockPos = new Coord(x, y, z);
-        if (TreeRegistry.instance().trackTreeChopEventAt(blockPos))
+        if (!world.isRemote && TreeRegistry.instance().trackTreeChopEventAt(blockPos))
         {
             TCLog.debug("BlockID " + blockID + " is a log.");
             
-            if (TreeCapitator.isBreakingPossible(world, entityPlayer))
+            if (TreeCapitator.isBreakingPossible(world, entityPlayer, true))
             {
                 
                 if (TCSettings.useStrictBlockPairing)
@@ -50,8 +40,8 @@ public class BlockTree extends BlockLog
                 
                 breaker.onBlockHarvested(world, x, y, z, md, entityPlayer);
             }
+            TreeRegistry.instance().endTreeChopEventAt(blockPos);
         }
-        TreeRegistry.instance().endTreeChopEventAt(blockPos);
     }
     
     /**
