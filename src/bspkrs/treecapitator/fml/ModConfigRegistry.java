@@ -129,6 +129,7 @@ public class ModConfigRegistry
                 .addConfigTreeDef(Strings.BIRCH, new ConfigTreeDefinition("", "<block:Leaf Block ID 1>,0; <block:Leaf Block ID 1>,8")
                 //.setRequireLeafDecayCheck(false)
                 )
+                .addConfigTreeDef(Strings.JUNGLE, new ConfigTreeDefinition("", "").setMaxLeafIDDist(3))
                 
                 .addConfigTreeDef("acacia", new ConfigTreeDefinition("<block:Log Block ID 1>,0; <block:Log Block ID 1>,4; <block:Log Block ID 1>,8",
                         "<block:Colourized Leaves ID>,0; <block:Colourized Leaves ID>,8")
@@ -173,7 +174,7 @@ public class ModConfigRegistry
                         "<block:Leaf Block ID 2>,4; <block:Leaf Block ID 2>,12")
                         .setRequireLeafDecayCheck(false))
                 .addConfigTreeDef("jacaranda", new ConfigTreeDefinition("<block:Log Block ID 4>,2; <block:Log Block ID 4>,6; <block:Log Block ID 4>,10",
-                        "<block:Leaf Block ID 1>,5; <block:Leaf Block ID 1>,13")
+                        "<block:Leaf Block ID 2>,5; <block:Leaf Block ID 2>,13")
                         .setRequireLeafDecayCheck(false))
                 );
         

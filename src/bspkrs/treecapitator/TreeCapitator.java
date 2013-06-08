@@ -210,7 +210,7 @@ public class TreeCapitator
         
         int i = 0;
         for (int x = -range; x <= range; x++)
-            /* lower bound kept at -1 */
+            // lower bound kept at -1 
             for (int y = -1; y <= range; y++)
                 for (int z = -range; z <= range; z++)
                     if (x != 0 || y != 0 || z != 0)
