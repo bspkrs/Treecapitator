@@ -99,7 +99,10 @@ public class Strings
     //public static final String COMMENT_SEPARATOR_2              = "      #--------------------------------------------------------------------------------------------------------#";
     public static final String logHardnessNormalDesc              = "[Global] The hardness of logs for when you are using items that won't chop down the trees.";
     public static final String logHardnessModifiedDesc            = "[Global] The hardness of logs for when you are using items that can chop down trees.";
-    public static final String breakSpeedModifierDesc             = "[Global, PerTree] When using an item that can chop trees, the break speed will by multiplied by this value.";
+    public static final String treeHeightDecidesBreakSpeedDesc    = "[Global] When true, the log break speed is equal to original break speed / (tree height * 2)\n" +
+                                                                          "When false, the original break speed is multiplied by the breakSpeedModifier value";
+    public static final String breakSpeedModifierDesc             = "[Global, PerTree] When using an item that can chop trees, the break speed will by multiplied by this value\n" +
+                                                                          "THIS OPTION IS IGNORED WHEN treeHeightDecidesBreakSpeed=true";
     public static final String disableInCreativeDesc              = "[Global] Flag to disable tree chopping in Creative mode";
     public static final String disableCreativeDropsDesc           = "[Global] Flag to disable drops in Creative mode";
     public static final String allowItemDamageDesc                = "[Global] Enable to cause item damage based on number of blocks destroyed";
@@ -126,7 +129,7 @@ public class Strings
                                                                           "WARNING: Disabling Smart Tree Detection will remove the only safeguard against\n" +
                                                                           "accidentally destroying a log structure.  Make sure you know what you're doing!";
     public static final String maxLeafIDDistDesc                  = "[Global, PerTree] If a tree's top log is not close enough to leaf blocks, the tree will not be chopped.\n" +
-                                                                          "Increasing this value will search further.  I would try to keep it below 3.";
+                                                                          "Increasing this value will search further.  I would try to keep it at or below 3.";
     public static final String maxLeafBreakDistDesc               = "[Global, PerTree] The maximum distance to instantly decay leaves from any log block that is removed by TreeCapitator.";
     public static final String minLeavesToIDDesc                  = "[Global, PerTree] The minimum number of leaves within maxLeafIDDist of the top log block required to identify a tree.";
     public static final String useStrictBlockPairingDesc          = "[Global] Set to true if you want only the log/leaf blocks listed with each log in a tree\n"

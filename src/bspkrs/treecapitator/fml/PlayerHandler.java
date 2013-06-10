@@ -43,13 +43,18 @@ public class PlayerHandler
             TreeDefinition treeDef = TreeRegistry.instance().get(blockID);
             if (treeDef != null)
             {
-                MovingObjectPosition thing = CommonUtils.getPlayerLookingSpot(event.entityPlayer, true);
-                if (thing != null && thing.typeOfHit == EnumMovingObjectType.TILE)
+                if (TCSettings.treeHeightDecidesBreakSpeed)
                 {
-                    int height = TreeCapitator.getTreeHeight(treeDef, event.entityPlayer.worldObj, thing.blockX, thing.blockY, thing.blockZ, event.metadata, event.entityPlayer);
-                    if (height > 0)
-                        event.newSpeed = event.originalSpeed / (height * 2);
+                    MovingObjectPosition thing = CommonUtils.getPlayerLookingSpot(event.entityPlayer, true);
+                    if (thing != null && thing.typeOfHit == EnumMovingObjectType.TILE)
+                    {
+                        int height = TreeCapitator.getTreeHeight(treeDef, event.entityPlayer.worldObj, thing.blockX, thing.blockY, thing.blockZ, event.metadata, event.entityPlayer);
+                        if (height > 1)
+                            event.newSpeed = event.originalSpeed / (height * 2);
+                    }
                 }
+                else
+                    event.newSpeed = event.originalSpeed * treeDef.breakSpeedModifier();
             }
             else
                 TCLog.severe("TreeRegistry reported block ID %s is a log, but TreeDefinition lookup failed! " +

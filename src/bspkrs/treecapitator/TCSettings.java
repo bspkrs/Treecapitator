@@ -25,9 +25,9 @@ public final class TCSettings
     public static boolean     disableCreativeDrops           = false;
     public static boolean     disableInCreative              = false;
     public static boolean     enableEnchantmentMode          = false;
-    public static int         enchantmentID                  = 111;
+    public static int         enchantmentID                  = 187;
     private static final int  enchantmentWeight              = 5;
-    public static int         increaseDamageEveryXBlocks     = 15;
+    public static int         increaseDamageEveryXBlocks     = 8;
     public static boolean     needItem                       = true;
     public static boolean     onlyDestroyUpwards             = true;
     public static boolean     requireItemInAxeListForEnchant = true;
@@ -50,6 +50,9 @@ public final class TCSettings
     public static String      idResolverModID                = "IDResolver";
     public static String      multiMineModID                 = "AS_MultiMine";
     public static boolean     userConfigOverridesIMC         = false;
+    
+    // Forge Only
+    public static boolean     treeHeightDecidesBreakSpeed    = true;
     
     // ML only
     public static float       logHardnessModified            = 4.0F;
@@ -119,6 +122,7 @@ public final class TCSettings
         allowItemDamage = ntc.getBoolean("allowItemDamage");
         allowMoreBlocksThanDamage = ntc.getBoolean("allowMoreBlocksThanDamage");
         allowSmartTreeDetection = ntc.getBoolean("allowSmartTreeDetection");
+        treeHeightDecidesBreakSpeed = ntc.getBoolean("treeHeightDecidesBreakSpeed");
         breakSpeedModifier = ntc.getFloat("breakSpeedModifier");
         damageIncreaseAmount = ntc.getFloat("damageIncreaseAmount");
         damageMultiplier = ntc.getFloat("damageMultiplier");
@@ -151,6 +155,7 @@ public final class TCSettings
         ntc.setBoolean("allowItemDamage", allowItemDamage);
         ntc.setBoolean("allowMoreBlocksThanDamage", allowMoreBlocksThanDamage);
         ntc.setBoolean("allowSmartTreeDetection", allowSmartTreeDetection);
+        ntc.setBoolean("treeHeightDecidesBreakSpeed", treeHeightDecidesBreakSpeed);
         ntc.setFloat("breakSpeedModifier", breakSpeedModifier);
         ntc.setFloat("damageIncreaseAmount", damageIncreaseAmount);
         ntc.setFloat("damageMultiplier", damageMultiplier);
@@ -194,8 +199,6 @@ public final class TCSettings
                 TCSettings.allowMoreBlocksThanDamage, Strings.allowMoreBlocksThanDamageDesc);
         TCSettings.allowSmartTreeDetection = config.getBoolean("allowSmartTreeDetection", Strings.GLOBALS_SETTINGS_CTGY,
                 TCSettings.allowSmartTreeDetection, Strings.allowSmartTreeDetectionDesc);
-        //        TCSettings.axeIDList = config.getString("axeIDList", Strings.GLOBALS_SETTINGS_CTGY,
-        //                TCSettings.axeIDList, Strings.axeIDListDesc);
         TCSettings.damageIncreaseAmount = config.getFloat("damageIncreaseAmount", Strings.GLOBALS_SETTINGS_CTGY,
                 TCSettings.damageIncreaseAmount, 0.1F, 100.0F, Strings.damageIncreaseAmountDesc);
         TCSettings.damageMultiplier = config.getFloat("damageMultiplier", Strings.GLOBALS_SETTINGS_CTGY,
@@ -218,8 +221,6 @@ public final class TCSettings
                 TCSettings.needItem, Strings.needItemDesc);
         TCSettings.requireItemInAxeListForEnchant = config.getBoolean("requireItemInAxeListForEnchant", Strings.GLOBALS_SETTINGS_CTGY,
                 TCSettings.requireItemInAxeListForEnchant, Strings.requireItemInAxeListForEnchantDesc);
-        //        TCSettings.shearIDList = config.getString("shearIDList", Strings.GLOBALS_SETTINGS_CTGY,
-        //                TCSettings.shearIDList, Strings.shearIDListDesc);
         TCSettings.shearLeaves = config.getBoolean("shearLeaves", Strings.GLOBALS_SETTINGS_CTGY,
                 TCSettings.shearLeaves, Strings.shearLeavesDesc);
         TCSettings.shearVines = config.getBoolean("shearVines", Strings.GLOBALS_SETTINGS_CTGY,
@@ -230,6 +231,8 @@ public final class TCSettings
                 TCSettings.useIncreasingItemDamage, Strings.useIncreasingItemDamageDesc);
         TCSettings.useStrictBlockPairing = config.getBoolean("useStrictBlockPairing", Strings.GLOBALS_SETTINGS_CTGY,
                 TCSettings.useStrictBlockPairing, Strings.useStrictBlockPairingDesc);
+        treeHeightDecidesBreakSpeed = config.getBoolean("treeHeightDecidesBreakSpeed", Strings.GLOBALS_SETTINGS_CTGY,
+                treeHeightDecidesBreakSpeed, Strings.treeHeightDecidesBreakSpeedDesc);
         config.addCustomCategoryComment(Strings.GLOBALS_SETTINGS_CTGY, Strings.GLOBALS_SETTINGS_CTGY_DESC);
         
         // Per-tree settings
