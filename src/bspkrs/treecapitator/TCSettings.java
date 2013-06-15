@@ -18,7 +18,6 @@ public final class TCSettings
     public static boolean     allowDebugOutput               = false;
     public static boolean     allowItemDamage                = true;
     public static boolean     allowMoreBlocksThanDamage      = false;
-    public static boolean     allowSmartTreeDetection        = true;
     public static float       damageIncreaseAmount           = 1.0F;
     public static float       damageMultiplier               = 1.0F;
     public static boolean     destroyLeaves                  = true;
@@ -29,7 +28,6 @@ public final class TCSettings
     private static final int  enchantmentWeight              = 5;
     public static int         increaseDamageEveryXBlocks     = 8;
     public static boolean     needItem                       = true;
-    public static boolean     onlyDestroyUpwards             = true;
     public static boolean     requireItemInAxeListForEnchant = true;
     public static boolean     shearLeaves                    = false;
     public static boolean     shearVines                     = false;
@@ -38,12 +36,14 @@ public final class TCSettings
     public static boolean     useStrictBlockPairing          = true;
     
     // Per-tree
+    public static boolean     allowSmartTreeDetection        = true;
     public static float       breakSpeedModifier             = 0.256F;
     public static int         maxHorLogBreakDist             = 16;
     public static int         maxHorLeafBreakDist            = 4;
     public static int         maxLeafIDDist                  = 1;
     public static int         maxVerLogBreakDist             = -1;
     public static int         minLeavesToID                  = 3;
+    public static boolean     onlyDestroyUpwards             = true;
     public static boolean     requireLeafDecayCheck          = true;
     
     // Mod config settings (Forge only)
@@ -197,8 +197,6 @@ public final class TCSettings
                 TCSettings.allowItemDamage, Strings.allowItemDamageDesc);
         TCSettings.allowMoreBlocksThanDamage = config.getBoolean("allowMoreBlocksThanDamage", Strings.GLOBALS_SETTINGS_CTGY,
                 TCSettings.allowMoreBlocksThanDamage, Strings.allowMoreBlocksThanDamageDesc);
-        TCSettings.allowSmartTreeDetection = config.getBoolean("allowSmartTreeDetection", Strings.GLOBALS_SETTINGS_CTGY,
-                TCSettings.allowSmartTreeDetection, Strings.allowSmartTreeDetectionDesc);
         TCSettings.damageIncreaseAmount = config.getFloat("damageIncreaseAmount", Strings.GLOBALS_SETTINGS_CTGY,
                 TCSettings.damageIncreaseAmount, 0.1F, 100.0F, Strings.damageIncreaseAmountDesc);
         TCSettings.damageMultiplier = config.getFloat("damageMultiplier", Strings.GLOBALS_SETTINGS_CTGY,
@@ -236,6 +234,8 @@ public final class TCSettings
         config.addCustomCategoryComment(Strings.GLOBALS_SETTINGS_CTGY, Strings.GLOBALS_SETTINGS_CTGY_DESC);
         
         // Per-tree settings
+        TCSettings.allowSmartTreeDetection = config.getBoolean("allowSmartTreeDetection", Strings.PER_TREE_DEFAULTS_CTGY,
+                TCSettings.allowSmartTreeDetection, Strings.allowSmartTreeDetectionDesc);
         TCSettings.breakSpeedModifier = config.getFloat("breakSpeedModifier", Strings.PER_TREE_DEFAULTS_CTGY,
                 TCSettings.breakSpeedModifier, 0.01F, 1F, Strings.breakSpeedModifierDesc);
         TCSettings.maxHorLeafBreakDist = config.getInt("maxHorLeafBreakDist", Strings.PER_TREE_DEFAULTS_CTGY,

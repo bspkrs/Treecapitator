@@ -80,6 +80,9 @@ public class ConfigTreeDefinition extends TreeDefinition
     public ConfigTreeDefinition readFromConfiguration(Configuration config, String category)
     {
         ConfigCategory cc = config.getCategory(category);
+        
+        if (cc.containsKey(Strings.ALLOW_SMART_TREE_DETECT))
+            onlyDestroyUpwards = cc.get(Strings.ALLOW_SMART_TREE_DETECT).getBoolean(TCSettings.allowSmartTreeDetection);
         if (cc.containsKey(Strings.ONLY_DESTROY_UPWARDS))
             onlyDestroyUpwards = cc.get(Strings.ONLY_DESTROY_UPWARDS).getBoolean(TCSettings.onlyDestroyUpwards);
         if (cc.containsKey(Strings.REQ_DECAY_CHECK))
@@ -106,6 +109,8 @@ public class ConfigTreeDefinition extends TreeDefinition
     
     public void writeToConfiguration(Configuration config, String category)
     {
+        if (allowSmartTreeDetection != TCSettings.allowSmartTreeDetection)
+            config.get(category, Strings.ALLOW_SMART_TREE_DETECT, TCSettings.allowSmartTreeDetection, Strings.OPTIONAL).set(allowSmartTreeDetection);
         if (onlyDestroyUpwards != TCSettings.onlyDestroyUpwards)
             config.get(category, Strings.ONLY_DESTROY_UPWARDS, TCSettings.onlyDestroyUpwards, Strings.OPTIONAL).set(onlyDestroyUpwards);
         if (requireLeafDecayCheck != TCSettings.requireLeafDecayCheck)
@@ -217,6 +222,13 @@ public class ConfigTreeDefinition extends TreeDefinition
     public String getConfigLeafList()
     {
         return leafKeys;
+    }
+    
+    @Override
+    public ConfigTreeDefinition setAllowSmartTreeDetection(boolean allowSmartTreeDetection)
+    {
+        this.allowSmartTreeDetection = allowSmartTreeDetection;
+        return this;
     }
     
     @Override

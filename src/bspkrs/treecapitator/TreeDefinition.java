@@ -12,6 +12,7 @@ public class TreeDefinition
 {
     protected List<BlockID> logBlocks;
     protected List<BlockID> leafBlocks;
+    protected boolean       allowSmartTreeDetection;
     protected boolean       onlyDestroyUpwards;
     protected boolean       requireLeafDecayCheck;
     // max horizontal distance that logs will be broken
@@ -27,6 +28,7 @@ public class TreeDefinition
         logBlocks = new ArrayList<BlockID>();
         leafBlocks = new ArrayList<BlockID>();
         
+        allowSmartTreeDetection = TCSettings.allowSmartTreeDetection;
         onlyDestroyUpwards = TCSettings.onlyDestroyUpwards;
         requireLeafDecayCheck = TCSettings.requireLeafDecayCheck;
         maxHorLogBreakDist = TCSettings.maxHorLogBreakDist;
@@ -116,6 +118,8 @@ public class TreeDefinition
     {
         append(toAdd);
         
+        if (toAdd.allowSmartTreeDetection != TCSettings.allowSmartTreeDetection)
+            allowSmartTreeDetection = toAdd.allowSmartTreeDetection;
         if (toAdd.onlyDestroyUpwards != TCSettings.onlyDestroyUpwards)
             onlyDestroyUpwards = toAdd.onlyDestroyUpwards;
         if (toAdd.requireLeafDecayCheck != TCSettings.requireLeafDecayCheck)
@@ -136,6 +140,8 @@ public class TreeDefinition
     
     public TreeDefinition readFromNBT(NBTTagCompound treeDefNBT)
     {
+        if (treeDefNBT.hasKey(Strings.ALLOW_SMART_TREE_DETECT))
+            allowSmartTreeDetection = treeDefNBT.getBoolean(Strings.ALLOW_SMART_TREE_DETECT);
         if (treeDefNBT.hasKey(Strings.ONLY_DESTROY_UPWARDS))
             onlyDestroyUpwards = treeDefNBT.getBoolean(Strings.ONLY_DESTROY_UPWARDS);
         if (treeDefNBT.hasKey(Strings.REQ_DECAY_CHECK))
@@ -168,6 +174,7 @@ public class TreeDefinition
     
     public void writeToNBT(NBTTagCompound treeDefNBT)
     {
+        treeDefNBT.setBoolean(Strings.ALLOW_SMART_TREE_DETECT, allowSmartTreeDetection);
         treeDefNBT.setBoolean(Strings.ONLY_DESTROY_UPWARDS, onlyDestroyUpwards);
         treeDefNBT.setBoolean(Strings.REQ_DECAY_CHECK, requireLeafDecayCheck);
         treeDefNBT.setInteger(Strings.MAX_H_LOG_DIST, maxHorLogBreakDist);
@@ -184,6 +191,12 @@ public class TreeDefinition
     /*
      * Field setters
      */
+    public TreeDefinition setAllowSmartTreeDetection(boolean allowSmartTreeDetection)
+    {
+        this.allowSmartTreeDetection = allowSmartTreeDetection;
+        return this;
+    }
+    
     public TreeDefinition setOnlyDestroyUpwards(boolean onlyDestroyUpwards)
     {
         this.onlyDestroyUpwards = onlyDestroyUpwards;
@@ -255,6 +268,11 @@ public class TreeDefinition
     /*
      * Field accessors
      */
+    public boolean allowSmartTreeDetection()
+    {
+        return allowSmartTreeDetection;
+    }
+    
     public boolean onlyDestroyUpwards()
     {
         return onlyDestroyUpwards;

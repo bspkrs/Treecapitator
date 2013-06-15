@@ -83,7 +83,7 @@ public class TreeCapitator
         if (isBreakingPossible(world, entityPlayer, false))
         {
             Coord topLog = getTopLog(tree.logBlocks, world, new Coord(x, y, z), false);
-            if (!TCSettings.allowSmartTreeDetection || tree.leafBlocks.size() == 0
+            if (!tree.allowSmartTreeDetection() || tree.leafBlocks.size() == 0
                     || hasXLeavesInDist(tree.leafBlocks, world, topLog, tree.maxLeafIDDist(), tree.minLeavesToID(), false))
                 return topLog.y - startPos.y + 1;
         }
@@ -102,7 +102,7 @@ public class TreeCapitator
             if (isBreakingEnabled(entityPlayer))
             {
                 Coord topLog = getTopLog(world, new Coord(x, y, z));
-                if (!TCSettings.allowSmartTreeDetection || treeDef.leafBlocks.size() == 0
+                if (!treeDef.allowSmartTreeDetection() || treeDef.leafBlocks.size() == 0
                         || hasXLeavesInDist(world, topLog, treeDef.maxLeafIDDist(), treeDef.minLeavesToID()))
                 {
                     if (isAxeItemEquipped() || !TCSettings.needItem)
@@ -598,21 +598,6 @@ public class TreeCapitator
                 }
             }
         }
-    }
-    
-    /**
-     * Removes leaf/vine blocks from the list if they still have a log block neighbor (ie- if they are part of another tree)
-     * 
-     * Deprecated in favor of just not adding those leaves to the list in the first place.
-     */
-    @Deprecated
-    public void removeLeavesWithLogsAround(World world, List<Coord> list)
-    {
-        for (int i = 0; i < list.size();)
-            if (hasLogClose(world, list.get(i), 1))
-                list.remove(i);
-            else
-                i++;
     }
     
     /**

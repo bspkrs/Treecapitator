@@ -5,7 +5,7 @@ import bspkrs.util.Const;
 
 public class Strings
 {
-    public static final String VERSION_NUMBER                     = Const.MCVERSION + ".r12";
+    public static final String VERSION_NUMBER                     = Const.MCVERSION + ".r13";
     
     public static final String OAK                                = "vanilla_oak";
     public static final String SPRUCE                             = "vanilla_spruce";
@@ -48,6 +48,7 @@ public class Strings
     public static final String LEAF_CTGY                          = "leaf_and_vine_settings";
     public static final String MISC_CTGY                          = "miscellaneous_settings";
     public static final String GENERAL                            = Configuration.CATEGORY_GENERAL;
+    public static final String ALLOW_SMART_TREE_DETECT            = "allowSmartTreeDetection";
     public static final String ONLY_DESTROY_UPWARDS               = "onlyDestroyUpwards";
     public static final String REQ_DECAY_CHECK                    = "requireLeafDecayCheck";
     public static final String MAX_H_LOG_DIST                     = "maxHorLogBreakDist";
