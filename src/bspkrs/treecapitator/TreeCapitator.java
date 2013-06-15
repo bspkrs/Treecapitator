@@ -250,7 +250,7 @@ public class TreeCapitator
         
         if (TCSettings.enableEnchantmentMode)
         {
-            if (item.isItemEnchanted())
+            if (item != null && item.isItemEnchanted())
                 for (int i = 0; i < item.getEnchantmentTagList().tagCount(); i++)
                 {
                     NBTTagCompound tag = (NBTTagCompound) item.getEnchantmentTagList().tagAt(i);
@@ -301,7 +301,7 @@ public class TreeCapitator
         
         if (TCSettings.enableEnchantmentMode)
         {
-            if (item.isItemEnchanted())
+            if (item != null && item.isItemEnchanted())
                 for (int i = 0; i < item.getEnchantmentTagList().tagCount(); i++)
                 {
                     NBTTagCompound tag = (NBTTagCompound) item.getEnchantmentTagList().tagAt(i);
