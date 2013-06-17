@@ -285,6 +285,13 @@ public class ModConfigRegistry
                         "<block:leaves>,0; <block:leaves>,8")
                         .setRequireLeafDecayCheck(false)));
         
+        defaultModCfgs.put("Gems_Plus", new ThirdPartyModConfig("GP", "GP.cfg", "", "item:AgateAxe; item:AmethystAxe; item:ChrysocollaAxe; " +
+                "item:CitrineAxe; item:EmeraldAxe; item:GarnetAxe; item:JadeAxe; item:JasperAxe; item:MalachiteAxe; item:OnyxAxe; item:PhoenixiteAxe; " +
+                "item:QuartzAxe; item:RubyAxe; item:SapphireAxe; item:SpinelAxe; item:SugiliteAxe; item:TopazAxe; item:TourmalineAxe",
+                "<item:AgateAxe>; <item:AmethystAxe>; <item:ChrysocollaAxe>; <item:CitrineAxe>; <item:EmeraldAxe>; <item:GarnetAxe>; <item:JadeAxe>; " +
+                        "<item:JasperAxe>; <item:MalachiteAxe>; <item:OnyxAxe>; <item:PhoenixiteAxe>; <item:QuartzAxe>; <item:RubyAxe>; <item:SapphireAxe>; " +
+                        "<item:SpinelAxe>; <item:SugiliteAxe>; <item:TopazAxe>; <item:TourmalineAxe>", "", true).setOverrideIMC(false));
+        
         defaultModCfgs.put("GraviSuite", new ThirdPartyModConfig("GraviSuite", "GraviSuite.cfg", "", "items:advChainsawID",
                 "<items:advChainsawID>", "", true));
         
