@@ -8,6 +8,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMultiTextureTile;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.src.ModLoader;
 import bspkrs.util.Configuration;
 import bspkrs.util.ListUtils;
 
@@ -112,6 +113,8 @@ public final class TCSettings
                 Enchantment.enchantmentsList[enchantmentID] = null;
             enchantmentID = id;
             treecapitating = new EnchantmentTreecapitating(enchantmentID, enchantmentWeight);
+            treecapitating.setName("treecapitating");
+            ModLoader.addLocalization("enchantment.treecapitating", "Treecapitating");
             if (isForge)
                 Enchantment.addToBookList(treecapitating);
         }
