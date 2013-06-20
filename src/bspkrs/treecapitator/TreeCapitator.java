@@ -82,7 +82,11 @@ public class TreeCapitator
         
         if (isBreakingPossible(world, entityPlayer, false))
         {
+            if (!tree.onlyDestroyUpwards())
+                startPos = getBottomLog(tree.logBlocks, world, startPos, false);
+            
             Coord topLog = getTopLog(tree.logBlocks, world, new Coord(x, y, z), false);
+            
             if (!tree.allowSmartTreeDetection() || tree.leafBlocks.size() == 0
                     || hasXLeavesInDist(tree.leafBlocks, world, topLog, tree.maxLeafIDDist(), tree.minLeavesToID(), false))
                 return topLog.y - startPos.y + 1;
@@ -199,6 +203,17 @@ public class TreeCapitator
         
         if (shouldLog)
             TCLog.debug("Top Log: " + pos.x + ", " + pos.y + ", " + pos.z);
+        
+        return pos;
+    }
+    
+    private static Coord getBottomLog(List<BlockID> logs, World world, Coord pos, boolean shouldLog)
+    {
+        while (logs.contains(new BlockID(world, pos.x, pos.y - 1, pos.z)))
+            pos.y--;
+        
+        if (shouldLog)
+            TCLog.debug("Bottom Log: " + pos.x + ", " + pos.y + ", " + pos.z);
         
         return pos;
     }
@@ -399,6 +414,7 @@ public class TreeCapitator
                             logDamageMultiplier += TCSettings.damageIncreaseAmount;
                     }
                 }
+                
                 if (world.blockHasTileEntity(pos.x, pos.y, pos.z))
                     world.removeBlockTileEntity(pos.x, pos.y, pos.z);
                 
