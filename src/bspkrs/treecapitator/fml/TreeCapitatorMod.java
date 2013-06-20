@@ -178,7 +178,7 @@ public class TreeCapitatorMod
                             }
                             else
                                 TCLog.severe("TreeRegistry reported block ID %s is a log, but TreeDefinition lookup failed! " +
-                                        "Please report this to bspkrs (include a copy of this log and your config).", blockID);
+                                        "Please report this to bspkrs (include a copy of this log file and your config).", blockID);
                             
                         }
                     }
