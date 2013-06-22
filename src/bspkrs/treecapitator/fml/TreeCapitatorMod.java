@@ -90,7 +90,7 @@ public class TreeCapitatorMod
             TCSettings.maxHorLogBreakDist = 16;
             TCSettings.allowSmartTreeDetection = true;
             TCSettings.useStrictBlockPairing = true;
-            // TCSettings.enableEnchantmentMode = true;
+            TCSettings.enableEnchantmentMode = true;
             if (file.exists())
                 file.delete();
         }

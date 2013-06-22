@@ -46,7 +46,7 @@ public class EnchantmentTreecapitating extends Enchantment
     @Override
     public boolean canApplyTogether(Enchantment enchantment)
     {
-        return super.canApplyTogether(enchantment) && enchantment.effectId != fortune.effectId;
+        return TCSettings.enableEnchantmentMode && super.canApplyTogether(enchantment) && enchantment.effectId != fortune.effectId;
     }
     
 }

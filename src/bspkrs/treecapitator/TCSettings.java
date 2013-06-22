@@ -107,7 +107,7 @@ public final class TCSettings
     
     public void handleEnchantmentID(int id)
     {
-        if (id >= 0 && id < 256)
+        if (id >= 0 && id < 256/* && enableEnchantmentMode*/)
         {
             if (Enchantment.enchantmentsList[enchantmentID] != null)
                 Enchantment.enchantmentsList[enchantmentID] = null;
@@ -115,8 +115,8 @@ public final class TCSettings
             treecapitating = new EnchantmentTreecapitating(enchantmentID, enchantmentWeight);
             treecapitating.setName("treecapitating");
             ModLoader.addLocalization("enchantment.treecapitating", "Treecapitating");
-            if (isForge)
-                Enchantment.addToBookList(treecapitating);
+            /*if (isForge)
+                Enchantment.addToBookList(treecapitating);*/
         }
     }
     
