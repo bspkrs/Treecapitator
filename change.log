@@ -1,0 +1,136 @@
+1.5.2.r02-r13 - 28-Jun-2013
+- Nearly complete rewrite.
+- Forge config is completely redone for clarity.
+- Some config elements can be set on a per-tree basis as well as global defaults.
+- The FML IMC (inter-mod communication) system is now utilized to allow other mods to provide their own tree/item configurations.  You can configure the priority of user (config file) vs. mod (IMC) configs for cases when a mod is configured both in the config file and by the mod itself via IMC.
+- Enchantment mode is now available (yes, it is optional).
+- The break speed of log blocks is determined by the height of the tree it belongs to. If you don't like it, set treeHeightDecidesBreakSpeed=false in your config.
+- Lots of bug fixes for both existing code and new features.
+1.5.2.r01 - 10-May-2013
+- udpated last 1.5.1 release to 1.5.2
+1.5.1.r01 - 23-Mar-2013
+- updated for 1.5.1
+1.5.0.r01 - 15-Mar-2013
+- updated for 1.5
+- resolved 1.5 update hiccups
+- hopefully fixed indestructible axes reporting that they are too damaged to chop
+- fixed issue with ModLoader version removing leaves from neighboring trees
+- added check to prevent duplicate log chopping due to how item damage is applied
+1.4.6.r07 - 20-Feb-2013
+- updated to support bspkrsCore
+- fixed onlyDestroyUpwards setting code
+- fixed support for configs generated in 1.4.6.r03 or earlier
+1.4.6.r06 - 05-Feb-2013
+- fixed client-side chat message
+1.4.6.r05 - 31-Jan-2013
+- caught ML version up with Forge settings-wise
+- finalized latest changes present in 1.4.6.r04
+- many new third party configs
+- added a few flags to config
+1.4.6.r03 - 10-Jan-2013
+- fixes crash when loading old config options
+- added damageMultiplier back in
+- added several new options around item damage
+- more flexible 3rd party config setup
+1.4.6.r01 - 23-Dec-2012
+- 1.4.6 update
+1.4.5.r05 - 23-Dec-2012
+- fixed issue where user config was not saved properly
+- added debug logging (defaults to on)
+- added new config section for third-party mod config settings
+- added default config entries for Forestry
+- added default third-party config setup
+1.4.5.r04 - 19-Dec-2012
+- added proper SMP solution with handshake
+- completely redid config
+- thoroughly tested for once!
+- added several mods to default config
+- added remote config download option
+- added strict log -> leaf relationship option
+- fixed timeout issue when allowUpdateCheck is false
+- added debug output option (shows block ID/Metadata when you click a block while crouching)
+1.4.5.r03 - 30-Nov-2012
+- fixed issue with block hardness
+1.4.5.r02 - 23-Nov-2012
+- removed client class references from main mod
+- implemented SidedProxies
+- retrofitted to 1.3.2.r09 and 1.4.2.r04
+1.4.5.r01 - 21-Nov-2012
+- updated for 1.4.5
+- Forge version is now a CoreMod
+- added config element for log block config (Forge only)
+1.4.4.r01 (EBXL) - 18-Nov-2012
+- updated to 1.4.4
+1.4.4.r01 - 13-Nov-2012
+- updated for 1.4.4
+1.4.2.r03 - 02-Nov-2012
+- fixed Forge only issue with shears damage
+- fixed ML tick registration issue
+1.4.2.r02ML/FML - 29-Oct-2012
+- Initial ML release for 1.4.2
+- fixed issue with shears breaking
+- properly apply damage to shears (fixes issue with IC2 tools)
+1.4.2.r01 FML - 26-Oct-2012
+- update to 1.4.2
+1.3.2.r02 EBXL 16-Oct-2012
+- fixed issue with log item names being blank
+1.3.2.r08 ML/MLMP/FML - 15-Oct-2012
+- small changes to pseudo-API code
+1.3.2.r01 IC2 + EBXL
+- initial addon release
+1.3.2.r07 ML/MLMP/FML - 13-Oct-2012
+- refactoring to make mod log block addons possible (pseudo-API)
+- changed the way that axes receive damage so that mod items like IC2's chainsaw will work properly
+- fixed defect where creative mode would either always work or never work
+- changed code for log hardness to be correct
+1.3.2.r06 ML/MLMP/FML - 05-Oct-2012
+- fixed minor defect affecting trees with only 1 log surrounded by leaf blocks
+1.3.2.r05 ML/FML - 04-Oct-2012
+- compatibility update for changes in CommonUtils
+1.3.2.r04 ML/MLMP/FML - 01-Oct-2012
+- fixed issue with leaves remaining when the initial block broken is one level below them
+1.3.2.r03 ML/MLMP/FML - 30-Sep-2012
+- added code to apply item damage per log block broken (optional)
+- added switch to reverse functionality for chopping while sneaking
+- added option for maximum log breaking distance
+1.3.2.r02 ML/MLMP/FML - 17-Sep-2012
+- compatibility update
+1.3.2.r01 ML/MLMP/FML - 12-Sep-2012
+- massive refactoring of code to make future updates much easier
+- initial Forge/FML release for 1.3.2
+- added allowUpdateCheck option
+- unified version number
+1.3.2.k - 04-Sep-2012
+- added option to disable downward chopping
+- added option to disable creative mode drops
+- changed default value of disableInCreative to false
+- added option to allow leaves to be sheared when shears are in the hotbar
+- added option to allow vines to be sheared when the leaf shearing option is enabled
+- mostly fixed jungle tree leaf issues thanks to Lunatrius
+1.3.2.j - 19-Aug-2012
+- updated client for 1.3.2
+- updated MLMP Server for 1.3.2 (1.3.2.d)
+1.3.1.i - 07-Aug-2012
+- updated client for 1.3.1
+- updated MLMP Server for 1.3.1 (1.3.1.c)
+1.2.5.h - 27-Jun-2012
+- added config option disableInCreative
+- added code to check for updates
+1.2.5.b FML + MLMP - 27-Jun-2012
+- fixed creative mode null pointer exception
+- added config option disableInCreative
+- added code to check for updates
+1.2.5.g - 26-Jun-2012
+- fixed Creative mode null pointer exception
+1.2.5.f - 19-Jun-2012
+- removed destroyed block console logging
+- added config option needItem to control whether an item from the ID list is required to chop down a tree
+- destroyLeaves is now enabled by default
+1.2.5.a (Forge) - 19-Jun-2012
+- initial release
+1.2.4.e - 31-Mar-2012
+- actually fixes SMP glitchiness when chopping trees (tested)
+1.2.4.d - 27-Mar-2012
+- adds the ability to chop logs normally while sneaking
+1.2.4.c - 26-Mar-2012
+- first attempt at fixing SMP glitchiness
