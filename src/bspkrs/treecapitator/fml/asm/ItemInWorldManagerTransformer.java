@@ -30,9 +30,8 @@ import org.objectweb.asm.tree.VarInsnNode;
 
 import bspkrs.treecapitator.TCLog;
 import bspkrs.treecapitator.fml.TreeCapitatorMod;
-import cpw.mods.fml.relauncher.IClassTransformer;
 
-public class ItemInWorldManagerTransformer implements IClassTransformer
+public class ItemInWorldManagerTransformer implements net.minecraft.launchwrapper.IClassTransformer
 {
     /* Obfuscated Names for ItemInWorldManager Transformation */
     
@@ -49,11 +48,11 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
          */
         obfStrings = new HashMap<String, String>();
         
-        /* 1.5.1/1.5.2 mappings */
+        /* 1.6.1 mappings */
         /* net.minecraft.src.ItemInWorldManager */
-        obfStrings.put("className", "jd");
+        obfStrings.put("className", "jt");
         /* net/minecraft/src/ItemInWorldManager */
-        obfStrings.put("javaClassName", "jd");
+        obfStrings.put("javaClassName", "jt");
         /* removeBlock */
         obfStrings.put("targetMethodName", "d");
         /* theWorld */
@@ -61,17 +60,41 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
         /* thisPlayerMP */
         obfStrings.put("entityPlayerFieldName", "b");
         /* net/minecraft/src/World */
-        obfStrings.put("worldJavaClassName", "aab");
+        obfStrings.put("worldJavaClassName", "abr");
         /* net/minecraft/src/World.getBlockMetadata() */
         obfStrings.put("getBlockMetadataMethodName", "h");
         /* net/minecraft/src/Block */
-        obfStrings.put("blockJavaClassName", "apa");
+        obfStrings.put("blockJavaClassName", "aqs");
         /* net/minecraft/src/Block.blocksList[] */
-        obfStrings.put("blocksListFieldName", "r");
+        obfStrings.put("blocksListFieldName", "s");
         /* net/minecraft/src/EntityPlayer */
-        obfStrings.put("entityPlayerJavaClassName", "sq");
+        obfStrings.put("entityPlayerJavaClassName", "ua");
         /* net/minecraft/src/EntityPlayerMP */
-        obfStrings.put("entityPlayerMPJavaClassName", "jc");
+        obfStrings.put("entityPlayerMPJavaClassName", "js");
+        
+        /* 1.5.1/1.5.2 mappings */
+        //        /* net.minecraft.src.ItemInWorldManager */
+        //        obfStrings.put("className", "jd");
+        //        /* net/minecraft/src/ItemInWorldManager */
+        //        obfStrings.put("javaClassName", "jd");
+        //        /* removeBlock */
+        //        obfStrings.put("targetMethodName", "d");
+        //        /* theWorld */
+        //        obfStrings.put("worldFieldName", "a");
+        //        /* thisPlayerMP */
+        //        obfStrings.put("entityPlayerFieldName", "b");
+        //        /* net/minecraft/src/World */
+        //        obfStrings.put("worldJavaClassName", "aab");
+        //        /* net/minecraft/src/World.getBlockMetadata() */
+        //        obfStrings.put("getBlockMetadataMethodName", "h");
+        //        /* net/minecraft/src/Block */
+        //        obfStrings.put("blockJavaClassName", "apa");
+        //        /* net/minecraft/src/Block.blocksList[] */
+        //        obfStrings.put("blocksListFieldName", "r");
+        //        /* net/minecraft/src/EntityPlayer */
+        //        obfStrings.put("entityPlayerJavaClassName", "sq");
+        //        /* net/minecraft/src/EntityPlayerMP */
+        //        obfStrings.put("entityPlayerMPJavaClassName", "jc");
         
         /* 1.5.0 mappings */
         //        /* net.minecraft.src.ItemInWorldManager */
@@ -197,7 +220,7 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
          * create a HashMap to store the MCP names of classes, methods, and fields used in the transformation
          */
         mcpStrings = new HashMap<String, String>();
-        // Forge 7.7.0.582 1.5.0 mappings
+        // 1.5.0/1.5.1/1.5.2/1.6.1 mappings
         // Forge 6.6.0.497 1.4.5/1.4.6/1.4.7 mappings
         mcpStrings.put("className", "net.minecraft.item.ItemInWorldManager");
         mcpStrings.put("javaClassName", "net/minecraft/item/ItemInWorldManager");
@@ -251,6 +274,7 @@ public class ItemInWorldManagerTransformer implements IClassTransformer
         classReader.accept(classNode, 0);
         
         // find method to inject into
+        @SuppressWarnings("unchecked")
         Iterator<MethodNode> methods = classNode.methods.iterator();
         while (methods.hasNext())
         {

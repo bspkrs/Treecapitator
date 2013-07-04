@@ -24,13 +24,9 @@ import bspkrs.util.Coord;
 import bspkrs.util.ModVersionChecker;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.IMCCallback;
-import cpw.mods.fml.common.Mod.Init;
+import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.Metadata;
-import cpw.mods.fml.common.Mod.PostInit;
-import cpw.mods.fml.common.Mod.PreInit;
-import cpw.mods.fml.common.Mod.ServerStarted;
 import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -72,7 +68,7 @@ public class TreeCapitatorMod
         new bspkrsCoreProxy();
     }
     
-    @PreInit
+    @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
         TCSettings.preInit(true);
@@ -90,7 +86,7 @@ public class TreeCapitatorMod
             TCSettings.maxHorLogBreakDist = 16;
             TCSettings.allowSmartTreeDetection = true;
             TCSettings.useStrictBlockPairing = true;
-            TCSettings.enableEnchantmentMode = true;
+            //TCSettings.enableEnchantmentMode = true;
             if (file.exists())
                 file.delete();
         }
@@ -107,7 +103,7 @@ public class TreeCapitatorMod
         
     }
     
-    @Init
+    @EventHandler
     public void init(FMLInitializationEvent event)
     {
         MinecraftForge.EVENT_BUS.register(new PlayerHandler());
@@ -115,7 +111,7 @@ public class TreeCapitatorMod
         
     }
     
-    @IMCCallback
+    @EventHandler
     public void processIMCMessages(IMCEvent event)
     {
         for (IMCMessage msg : event.getMessages().asList())
@@ -128,7 +124,7 @@ public class TreeCapitatorMod
                 TCLog.warning("Mod %s send an IMC message, but it is not an NBT object message. The message will be ignored.", msg.getSender());
     }
     
-    @PostInit
+    @EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
         ModConfigRegistry.instance().applyPrioritizedModConfigs();
@@ -143,7 +139,7 @@ public class TreeCapitatorMod
         }
     }
     
-    @ServerStarted
+    @EventHandler
     public void serverStarted(FMLServerStartedEvent event)
     {
         // Make sure the NBT manager is initialized while we can still be sure of the values in our local objects
