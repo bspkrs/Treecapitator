@@ -1,5 +1,8 @@
 package bspkrs.treecapitator.fml;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumMovingObjectType;
@@ -14,9 +17,6 @@ import bspkrs.treecapitator.TreeDefinition;
 import bspkrs.treecapitator.TreeRegistry;
 import bspkrs.util.BlockID;
 import bspkrs.util.CommonUtils;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class PlayerHandler
 {
@@ -60,9 +60,11 @@ public class PlayerHandler
                     MovingObjectPosition thing = CommonUtils.getPlayerLookingSpot(player, true);
                     if (thing != null && thing.typeOfHit == EnumMovingObjectType.TILE)
                     {
-                        if ((playerSneakingMapping.containsKey(player.getEntityName()) && (playerSneakingMapping.get(player.getEntityName()) == player.isSneaking())) || !playerSneakingMapping.containsKey(player.getEntityName()))
+                        if ((playerSneakingMapping.containsKey(player.getEntityName()) && (playerSneakingMapping.get(player.getEntityName()) == player.isSneaking()))
+                                || !playerSneakingMapping.containsKey(player.getEntityName()))
                         {
-                            if (TreeCapitator.isBreakingEnabled(player)) {
+                            if (TreeCapitator.isBreakingEnabled(player))
+                            {
                                 int height = TreeCapitator.getTreeHeight(treeDef, player.worldObj, thing.blockX, thing.blockY, thing.blockZ, event.metadata, player);
                                 if (height > 1)
                                     event.newSpeed = event.originalSpeed / (height * 2);
