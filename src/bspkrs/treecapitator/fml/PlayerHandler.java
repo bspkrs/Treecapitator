@@ -20,26 +20,26 @@ import bspkrs.util.CommonUtils;
 
 public class PlayerHandler
 {
-    private Map<String, Boolean> playerSneakingMapping = new HashMap<String, Boolean>();
+    private Map<String, Boolean> playerSneakingMap = new HashMap<String, Boolean>();
     
     @ForgeSubscribe
     public void onBlockClicked(PlayerInteractEvent event)
     {
         if (event.action.equals(PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) && TreeCapitatorMod.proxy.isEnabled())
         {
-            if (TCSettings.allowDebugOutput && event.entityPlayer.isSneaking())
+            Block block = Block.blocksList[event.entityPlayer.worldObj.getBlockId(event.x, event.y, event.z)];
+            if (block != null)
             {
-                Block block = Block.blocksList[event.entityPlayer.worldObj.getBlockId(event.x, event.y, event.z)];
+                int metadata = event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z);
                 
-                if (block != null)
+                if (TCSettings.allowDebugOutput && event.entityPlayer.isSneaking() && block != null)
                 {
-                    int metadata = event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z);
-                    
                     TreeCapitatorMod.proxy.debugOutputBlockID(block.blockID, metadata);
                 }
+                
+                playerSneakingMap.put(event.entityPlayer.getEntityName(), event.entityPlayer.isSneaking());
             }
             
-            playerSneakingMapping.put(event.entityPlayer.getEntityName(), event.entityPlayer.isSneaking());
         }
     }
     
@@ -60,8 +60,8 @@ public class PlayerHandler
                     MovingObjectPosition thing = CommonUtils.getPlayerLookingSpot(player, true);
                     if (thing != null && thing.typeOfHit == EnumMovingObjectType.TILE)
                     {
-                        if ((playerSneakingMapping.containsKey(player.getEntityName()) && (playerSneakingMapping.get(player.getEntityName()) == player.isSneaking()))
-                                || !playerSneakingMapping.containsKey(player.getEntityName()))
+                        if ((playerSneakingMap.containsKey(player.getEntityName()) && (playerSneakingMap.get(player.getEntityName()) == player.isSneaking()))
+                                || !playerSneakingMap.containsKey(player.getEntityName()))
                         {
                             if (TreeCapitator.isBreakingEnabled(player))
                             {
@@ -71,7 +71,7 @@ public class PlayerHandler
                             }
                         }
                         else
-                            event.newSpeed = 0.001f;
+                            event.newSpeed = 0.0001f;
                     }
                 }
                 else
