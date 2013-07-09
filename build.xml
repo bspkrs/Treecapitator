@@ -104,8 +104,8 @@
             <fileset dir="${mcp.bin}" includes="bspkrs/treecapitator/**/*.class"/>
             <fileset dir="${dev.resources}">
 				<exclude name="mcmod.template"/>
-				<exclude name="coremods"/>
-				<exclude name="coremods/*"/>
+				<exclude name="mods"/>
+				<exclude name="mods/*"/>
 			</fileset>
             <mappedresources>
                 <concat>
