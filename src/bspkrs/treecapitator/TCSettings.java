@@ -107,7 +107,7 @@ public final class TCSettings
     
     public void handleEnchantmentID(int id)
     {
-        if (id >= 0 && id < 256/* && enableEnchantmentMode*/)
+        if (id >= 0 && id < 256 && enableEnchantmentMode)
         {
             if (Enchantment.enchantmentsList[enchantmentID] != null)
                 Enchantment.enchantmentsList[enchantmentID] = null;
