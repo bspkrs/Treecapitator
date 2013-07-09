@@ -70,7 +70,7 @@ public class mod_TreeCapitator extends BaseMod
     public static int         enchantmentID              = TCSettings.enchantmentID;
     
     private ModVersionChecker versionChecker;
-    private final String      versionURL                 = "http://bspk.rs/Minecraft/" + Const.MCVERSION + "/treeCapitator.version";
+    private final String      versionURL                 = Const.VERSION_URL + "/Minecraft/" + Const.MCVERSION + "/treeCapitator.version";
     private final String      mcfTopic                   = "http://www.minecraftforum.net/topic/1009577-";
     private boolean           isForgeDetected;
     

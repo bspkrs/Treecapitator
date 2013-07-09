@@ -17,6 +17,7 @@ import bspkrs.treecapitator.TreeCapitator;
 import bspkrs.treecapitator.TreeDefinition;
 import bspkrs.treecapitator.TreeRegistry;
 import bspkrs.util.BlockID;
+import bspkrs.util.CommonUtils;
 import bspkrs.util.Configuration;
 import bspkrs.util.Const;
 import bspkrs.util.Coord;
@@ -46,7 +47,7 @@ import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 public class TreeCapitatorMod
 {
     public static ModVersionChecker versionChecker;
-    private final String            versionURL      = "http://bspk.rs/Minecraft/" + Const.MCVERSION + "/treeCapitatorForge.version";
+    private final String            versionURL      = Const.VERSION_URL + "/Minecraft/" + Const.MCVERSION + "/treeCapitatorForge.version";
     private final String            mcfTopic        = "http://www.minecraftforum.net/topic/1009577-";
     
     public static boolean           isCoreModLoaded = false;
@@ -75,20 +76,20 @@ public class TreeCapitatorMod
         
         File file = event.getSuggestedConfigurationFile();
         
-        //        if (!CommonUtils.isObfuscatedEnv())
-        //        {
-        //            // debug settings for deobfuscated execution
-        //            TCLog.info("*** Deobfuscated environment detected... using debug settings ***");
-        //            TCSettings.allowDebugLogging = true;
-        //            TCSettings.onlyDestroyUpwards = true;
-        //            TCSettings.sneakAction = "disable";
-        //            TCSettings.maxHorLogBreakDist = 16;
-        //            TCSettings.allowSmartTreeDetection = true;
-        //            TCSettings.useStrictBlockPairing = true;
-        //            //TCSettings.enableEnchantmentMode = true;
-        //            if (file.exists())
-        //                file.delete();
-        //        }
+        if (!CommonUtils.isObfuscatedEnv())
+        {
+            //            // debug settings for deobfuscated execution
+            //            TCLog.info("*** Deobfuscated environment detected... using debug settings ***");
+            //            TCSettings.allowDebugLogging = true;
+            //            TCSettings.onlyDestroyUpwards = true;
+            //            TCSettings.sneakAction = "disable";
+            //            TCSettings.maxHorLogBreakDist = 16;
+            //            TCSettings.allowSmartTreeDetection = true;
+            //            TCSettings.useStrictBlockPairing = true;
+            //            //TCSettings.enableEnchantmentMode = true;
+            //            if (file.exists())
+            //                file.delete();
+        }
         
         TreeRegistry.instance();
         IDResolverMappingList.instance();
