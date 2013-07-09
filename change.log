@@ -1,3 +1,6 @@
+1.6.1.r02 - 09-Jul-2013
+- fixed ModLoader block texture issue
+- sneaking to chop a single log will use normal break speed again (thanks Lunatrius!)
 1.6.1.r01 - 05-Jul-2013
 - 1.6.1 update
 1.5.2.r02-r13 - 28-Jun-2013
