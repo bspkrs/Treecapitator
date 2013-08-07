@@ -5,7 +5,7 @@ import bspkrs.util.Const;
 
 public class Strings
 {
-    public static final String VERSION_NUMBER                     = Const.MCVERSION + ".r01";
+    public static final String VERSION_NUMBER                     = Const.MCVERSION + ".r02";
     
     public static final String OAK                                = "vanilla_oak";
     public static final String SPRUCE                             = "vanilla_spruce";
@@ -102,6 +102,11 @@ public class Strings
     public static final String logHardnessModifiedDesc            = "[Global] The hardness of logs for when you are using items that can chop down trees.";
     public static final String treeHeightDecidesBreakSpeedDesc    = "[Global] When true, the log break speed is equal to original break speed / (tree height * 2)\n" +
                                                                           "When false, the original break speed is multiplied by the breakSpeedModifier value";
+    public static final String allowOreDictionaryLookupDesc       = "[Global] When true, TreeCapitator will scan the Forge Ore Dictionary for blocks with an ore name matching\n" +
+                                                                          "one of the strings in oreDictionaryLogStrings and generate a generic tree definition for them on the fly. \n" +
+                                                                          "When false oreDictionaryLogStrings and oreDictionaryLeafStrings will be ignored.";
+    public static final String oreDictionaryLogStringsDesc        = "The list of log type values to check for in the Forge Ore Dictionary. Entries are comma (,) separated.";
+    public static final String oreDictionaryLeafStringsDesc       = "The list of leaf type values to check for in the Forge Ore Dictionary. Entries are comma (,) separated.";
     public static final String breakSpeedModifierDesc             = "[Global, PerTree] When using an item that can chop trees, the break speed will by multiplied by this value\n" +
                                                                           "THIS OPTION IS IGNORED WHEN treeHeightDecidesBreakSpeed=true";
     public static final String disableInCreativeDesc              = "[Global] Flag to disable tree chopping in Creative mode";

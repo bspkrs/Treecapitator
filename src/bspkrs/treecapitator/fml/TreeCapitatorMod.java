@@ -129,6 +129,8 @@ public class TreeCapitatorMod
     {
         ModConfigRegistry.instance().applyPrioritizedModConfigs();
         
+        OreDictionaryHandler.instance().generateAndRegisterOreDictionaryTreeDefinitions();
+        
         // Multi-Mine stuff
         if (Loader.isModLoaded(TCSettings.multiMineModID))
         {
