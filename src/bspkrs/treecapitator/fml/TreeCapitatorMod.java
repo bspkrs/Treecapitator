@@ -78,7 +78,7 @@ public class TreeCapitatorMod
         
         if (!CommonUtils.isObfuscatedEnv())
         {
-            //            // debug settings for deobfuscated execution
+            // debug settings for deobfuscated execution
             //            TCLog.info("*** Deobfuscated environment detected... using debug settings ***");
             //            TCSettings.allowDebugLogging = true;
             //            TCSettings.onlyDestroyUpwards = true;
@@ -86,7 +86,7 @@ public class TreeCapitatorMod
             //            TCSettings.maxHorLogBreakDist = 16;
             //            TCSettings.allowSmartTreeDetection = true;
             //            TCSettings.useStrictBlockPairing = true;
-            //            //TCSettings.enableEnchantmentMode = true;
+            //            TCSettings.enableEnchantmentMode = true;
             //            if (file.exists())
             //                file.delete();
         }

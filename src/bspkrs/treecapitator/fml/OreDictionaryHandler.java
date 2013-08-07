@@ -1,6 +1,6 @@
 package bspkrs.treecapitator.fml;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.item.Item;
@@ -36,8 +36,7 @@ public class OreDictionaryHandler
                 TCLog.info("Scanning Ore Dictionary for unregistered tree blocks...");
                 
                 // Get leaves first so they can be added to all generic trees
-                
-                List<BlockID> leafList = new ArrayList<BlockID>();
+                List<BlockID> leafList = new LinkedList<BlockID>();
                 
                 for (String oreName : TCSettings.oreDictionaryLeafStrings.split(","))
                 {
@@ -52,6 +51,7 @@ public class OreDictionaryHandler
                     }
                 }
                 
+                // register a tree definition for each ore type searched on
                 for (String oreName : TCSettings.oreDictionaryLogStrings.split(","))
                 {
                     if (!oreName.trim().isEmpty())
@@ -77,7 +77,7 @@ public class OreDictionaryHandler
                             for (BlockID blockID : TreeRegistry.instance().masterDefinition().getLeafList())
                                 genericTree.addLeafID(blockID);
                             
-                            TCLog.info("Registering generic Ore Dictionary tree %s...", oreName.trim());
+                            TCLog.debug("Registering generic Ore Dictionary tree %s...", oreName.trim());
                             TreeRegistry.instance().registerTree(oreName.trim(), genericTree);
                         }
                     }

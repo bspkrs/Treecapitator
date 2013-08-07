@@ -59,7 +59,7 @@ public class Strings
     public static final String BREAK_SPEED_MOD                    = "breakSpeedModifier";
     public static final String THIRD_PARTY_MOD_CONFIG             = "ThirdPartyModConfig";
     
-    public static final String COREMOD_WARNING                    = "TreeCapitator CoreMod code has not been injected. Ensure the downloaded .jar file is in the coremods folder and not mods.";
+    public static final String COREMOD_WARNING                    = "TreeCapitator CoreMod code has not been injected. Most likely you are trying to run from Eclipse and forgot to put the dummy jar in the mcp/jars/mods folder.";
     
     //public static final String COMMENT_SEPARATOR                = "#--------------------------------------------------------------------------------------------------------#";
     //public static final String COMMENT_SEPARATOR_2              = "      #--------------------------------------------------------------------------------------------------------#";
