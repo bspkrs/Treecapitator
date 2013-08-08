@@ -13,18 +13,18 @@ This repo contains source files for ModLoader and Forge (dependant on bspkrsCore
 
 #### How to install and use the source code ####
 
-1. Download the latest recommended MinecraftForge src distribution.
+1. Download the latest recommended [MinecraftForge](http://files.minecraftforge.net) src distribution.
 2. Extract the Forge src zip file and run install.bat/.sh in the forge folder.
-3. Clone this git repo to whatever location you like.
+3. Clone this git repo and the [bspkrsCore repo](https://github.com/bspkrs/bspkrsCore) to whatever locations you like.
 4. Use the eclipse folder in your Forge/MCP setup as your Eclipse workspace.
-5. Under the Minecraft project, add the "src" folder in the git repo as a linked folder (rename if necessary) and add it as a source folder.
+5. Under the Minecraft project, add the "src" folder from both git repos as linked folders (rename as necessary) and set them as source folders.
 6. Copy TreeCapitator_dummy.jar from resources/mods to the mcp/jars/mods folder.
 
 #### How to build from the source code ####
 
-1. Download and install Apache Ant on your system. Make sure it is available on the path environment variable.
+1. Download and install [Apache Ant](http://ant.apache.org) on your system. Make sure it is available on the path environment variable.
 2. In the Treecapitator repo folder, make a copy of build.properties_example and name it build.properties.
-3. Edit the values in build.properties to contain valid paths on your system for the 3 properties. Details can be found in build.properties_example.
+3. Edit the values in build.properties to contain valid paths on your system for each property. Details can be found in build.properties_example.
 4. From a console window run "ant" from the Treecapitator repo folder. The build will create its output in the bin folder.
 5. Install the resulting mod archive by copying it to the mods folder on the client or server. The Forge version of the mod is universal and works on both the client and the server.
 
