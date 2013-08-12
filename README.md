@@ -15,7 +15,7 @@ This repo contains source files for ModLoader and Forge (dependant on bspkrsCore
 
 1. Download the latest recommended [MinecraftForge](http://files.minecraftforge.net) src distribution.
 2. Extract the Forge src zip file and run install.bat/.sh in the forge folder.
-3. Clone this git repo and the [bspkrsCore repo](https://github.com/bspkrs/bspkrsCore) to whatever locations you like.
+3. Clone this git repo and the [bspkrsCore repo](https://github.com/bspkrs/bspkrsCore) (https://github.com/bspkrs/bspkrsCore.git) to whatever locations you like.
 4. Use the eclipse folder in your Forge/MCP setup as your Eclipse workspace.
 5. Under the Minecraft project, add the "src" folder from both git repos as linked folders (rename as necessary) and set them as source folders.
 6. Copy TreeCapitator_dummy.jar from resources/mods to the mcp/jars/mods folder.

@@ -9,7 +9,7 @@ import bspkrs.util.Coord;
 
 public class BlockTree extends BlockLog
 {
-    private TreeCapitator breaker;
+    private Treecapitator breaker;
     
     public BlockTree(int i)
     {
@@ -31,13 +31,13 @@ public class BlockTree extends BlockLog
         {
             TCLog.debug("BlockID " + blockID + " is a log.");
             
-            if (TreeCapitator.isBreakingPossible(world, entityPlayer, true))
+            if (Treecapitator.isBreakingPossible(world, entityPlayer, true))
             {
                 
                 if (TCSettings.useStrictBlockPairing)
-                    breaker = new TreeCapitator(entityPlayer, TreeRegistry.instance().get(new BlockID(Block.wood.blockID, md)));
+                    breaker = new Treecapitator(entityPlayer, TreeRegistry.instance().get(new BlockID(Block.wood.blockID, md)));
                 else
-                    breaker = new TreeCapitator(entityPlayer, TreeRegistry.instance().masterDefinition());
+                    breaker = new Treecapitator(entityPlayer, TreeRegistry.instance().masterDefinition());
                 
                 breaker.onBlockHarvested(world, x, y, z, md, entityPlayer);
             }

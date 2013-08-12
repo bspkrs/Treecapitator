@@ -12,7 +12,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import bspkrs.treecapitator.TCLog;
 import bspkrs.treecapitator.TCSettings;
-import bspkrs.treecapitator.TreeCapitator;
+import bspkrs.treecapitator.Treecapitator;
 import bspkrs.treecapitator.TreeDefinition;
 import bspkrs.treecapitator.TreeRegistry;
 import bspkrs.util.BlockID;
@@ -50,7 +50,7 @@ public class PlayerHandler
         EntityPlayer player = event.entityPlayer;
         
         if (TreeCapitatorMod.proxy.isEnabled() && TreeRegistry.instance().isRegistered(blockID) &&
-                TreeCapitator.isAxeItemEquipped(player))
+                Treecapitator.isAxeItemEquipped(player))
         {
             TreeDefinition treeDef = TreeRegistry.instance().get(blockID);
             if (treeDef != null)
@@ -63,9 +63,9 @@ public class PlayerHandler
                         if ((playerSneakingMap.containsKey(player.getEntityName()) && (playerSneakingMap.get(player.getEntityName()) == player.isSneaking()))
                                 || !playerSneakingMap.containsKey(player.getEntityName()))
                         {
-                            if (TreeCapitator.isBreakingEnabled(player))
+                            if (Treecapitator.isBreakingEnabled(player))
                             {
-                                int height = TreeCapitator.getTreeHeight(treeDef, player.worldObj, thing.blockX, thing.blockY, thing.blockZ, event.metadata, player);
+                                int height = Treecapitator.getTreeHeight(treeDef, player.worldObj, thing.blockX, thing.blockY, thing.blockZ, event.metadata, player);
                                 if (height > 1)
                                     event.newSpeed = event.originalSpeed / (height * 2);
                             }
