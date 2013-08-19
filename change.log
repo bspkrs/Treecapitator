@@ -1,3 +1,6 @@
+1.6.2.r03 - 19-Aug-2013
+- Added new property to jar manifest
+- Fixed TreeRegistry being instantiated too early and messing up break speed settings
 1.6.2.r02 - 07-Aug-2013
 - Added new feature to scan the Forge Ore Dictionary for tree-related blocks that are not registered.
 1.6.2.r01 - 10-Jul-2013

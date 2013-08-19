@@ -99,8 +99,6 @@ public final class TCSettings
             
             TreeRegistry.instance().registerVanillaTreeDefs();
         }
-        else
-        {}
     }
     
     private TCSettings()
