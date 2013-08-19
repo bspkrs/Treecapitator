@@ -13,9 +13,9 @@ import bspkrs.treecapitator.RegistryNBTManager;
 import bspkrs.treecapitator.Strings;
 import bspkrs.treecapitator.TCLog;
 import bspkrs.treecapitator.TCSettings;
-import bspkrs.treecapitator.Treecapitator;
 import bspkrs.treecapitator.TreeDefinition;
 import bspkrs.treecapitator.TreeRegistry;
+import bspkrs.treecapitator.Treecapitator;
 import bspkrs.util.BlockID;
 import bspkrs.util.CommonUtils;
 import bspkrs.util.Configuration;
@@ -91,7 +91,6 @@ public class TreeCapitatorMod
             //                file.delete();
         }
         
-        TreeRegistry.instance();
         IDResolverMappingList.instance();
         TCConfigHandler.setInstance(file);
         
