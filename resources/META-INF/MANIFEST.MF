@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
 FMLCorePlugin: bspkrs.treecapitator.fml.asm.TreeCapitatorCorePlugin
+FMLCorePluginContainsFMLMod: bspkrs.treecapitator.fml.TreeCapitatorMod
 Created-By: 1.7.0 (Oracle Corporation)
 
