@@ -7,6 +7,7 @@ This repo contains source files for ModLoader and Forge (dependant on bspkrsCore
  - [Official Minecraft Forum Thread](http://www.minecraftforum.net/topic/1009577-)
  - [ModLoader Downloads](http://bspk.rs/MC/TreeCapitator_ML/index.html)
  - [Forge Downloads](http://bspk.rs/MC/TreeCapitator_Forge/index.html)
+ - [Treecapitator Wiki](https://github.com/bspkrs/Treecapitator/wiki)
  - [Issue Tracking System](https://github.com/bspkrs/Treecapitator/issues)
  
 * * *
