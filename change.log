@@ -1,3 +1,5 @@
+1.6.2.r04 - 24-Aug-2013
+- fixed obscure NPE
 1.6.2.r03 - 19-Aug-2013
 - Added new property to jar manifest
 - Fixed TreeRegistry being instantiated too early and messing up break speed settings

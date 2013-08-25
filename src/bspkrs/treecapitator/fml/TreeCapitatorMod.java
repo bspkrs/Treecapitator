@@ -176,18 +176,22 @@ public class TreeCapitatorMod
                     }
                     else
                         TCLog.debug("Chopping disabled due to player state or gamemode.");
+                    
+                    TreeRegistry.instance().endTreeChopEventAt(blockPos);
                 }
                 else
                     TCLog.debug("Previous chopping event detected for block @%s", blockPos.toString());
                 
-                TreeRegistry.instance().endTreeChopEventAt(blockPos);
             }
         }
     }
     
     public static boolean isItemInWorldManagerReplaced(EntityPlayerMP player)
     {
-        return !player.theItemInWorldManager.getClass().getSimpleName().equals(ItemInWorldManager.class.getSimpleName());
+        if (player != null)
+            return !player.theItemInWorldManager.getClass().getSimpleName().equals(ItemInWorldManager.class.getSimpleName());
+        else
+            return false;
     }
     
     public RegistryNBTManager nbtManager()
