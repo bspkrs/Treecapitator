@@ -311,6 +311,11 @@ public class ModConfigRegistry
                         "<item:OsmiumPaxel>", "", true)
                 .setOverrideIMC(false));
         
+        defaultModCfgs.put("meteors", new ThirdPartyModConfig("meteors", "meteors.cfg", "",
+                "item:Frezarite Axe ID; item:Meteor Axe ID;",
+                "<item:Frezarite Axe ID>; <item:Meteor Axe ID>", "", true)
+                .setOverrideIMC(false));
+        
         defaultModCfgs.put("MineFactoryReloaded", new ThirdPartyModConfig("MineFactoryReloaded", "powercrystals/minefactoryreloaded/common.cfg",
                 "block:ID.RubberWood; block:ID.RubberLeaves; block:ID.RubberSapling")
                 .setOverrideIMC(false)
