@@ -13,6 +13,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import bspkrs.util.BlockID;
 import bspkrs.util.Coord;
+import bspkrs.util.ListUtils;
 
 public class TreeRegistry
 {
@@ -20,6 +21,7 @@ public class TreeRegistry
     private Map<BlockID, String>              logToStringMap;
     private TreeDefinition                    masterDefinition;
     private Map<String, ConfigTreeDefinition> vanTrees;
+    private List<BlockID>                     blacklist;
     private List<Coord>                       blocksBeingChopped;
     
     private static TreeRegistry               instance;
@@ -45,6 +47,7 @@ public class TreeRegistry
         treeDefs = new HashMap<String, TreeDefinition>();
         logToStringMap = new HashMap<BlockID, String>();
         masterDefinition = new TreeDefinition();
+        blacklist = new ArrayList<BlockID>();
         blocksBeingChopped = new ArrayList<Coord>();
     }
     
@@ -247,7 +250,10 @@ public class TreeRegistry
      */
     public boolean isRegistered(BlockID log)
     {
-        return masterDefinition.isLogBlock(log);
+        if (!blacklist.contains(log))
+            return masterDefinition.isLogBlock(log);
+        else
+            return false;
     }
     
     public TreeDefinition get(String key)
@@ -301,6 +307,17 @@ public class TreeRegistry
         return new TreeMap<String, ConfigTreeDefinition>(vanTrees);
     }
     
+    public List<BlockID> blacklist()
+    {
+        return new ArrayList<BlockID>(blacklist);
+    }
+    
+    // This must be done after all trees are registered to avoid screwing up the registration process
+    public void readBlacklistFromDelimitedString(String dList)
+    {
+        blacklist = ListUtils.getDelimitedStringAsBlockIDList(dList, ";");
+    }
+    
     protected void readFromNBT(NBTTagCompound ntc)
     {
         // treeDefs;
@@ -324,6 +341,9 @@ public class TreeRegistry
         
         // masterDefinition;
         masterDefinition = new TreeDefinition(ntc.getCompoundTag(Strings.MASTER_DEF));
+        
+        // blacklist
+        blacklist = ListUtils.getDelimitedStringAsBlockIDList(ntc.getString(Strings.BLACKLIST), ";");
     }
     
     public void writeToNBT(NBTTagCompound ntc)
@@ -354,5 +374,8 @@ public class TreeRegistry
         NBTTagCompound md = new NBTTagCompound();
         masterDefinition.writeToNBT(md);
         ntc.setTag(Strings.MASTER_DEF, md);
+        
+        // blacklist
+        ntc.setString(Strings.BLACKLIST, ListUtils.getListAsDelimitedString(blacklist, ";"));
     }
 }
