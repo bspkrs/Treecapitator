@@ -13,6 +13,7 @@ import bspkrs.treecapitator.RegistryNBTManager;
 import bspkrs.treecapitator.Strings;
 import bspkrs.treecapitator.TCLog;
 import bspkrs.treecapitator.TCSettings;
+import bspkrs.treecapitator.ToolRegistry;
 import bspkrs.treecapitator.TreeDefinition;
 import bspkrs.treecapitator.TreeRegistry;
 import bspkrs.treecapitator.Treecapitator;
@@ -34,7 +35,6 @@ import cpw.mods.fml.common.event.FMLInterModComms.IMCEvent;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 
@@ -126,6 +126,9 @@ public class TreeCapitatorMod
     @EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
+        // As opposed to the block blacklist, the item blacklist is read before registering tools 
+        // to prevent them from being registered in the first place.
+        ToolRegistry.instance().readBlacklistFromDelimitedString(TCSettings.itemIDBlacklist);
         ModConfigRegistry.instance().applyPrioritizedModConfigs();
         
         OreDictionaryHandler.instance().generateAndRegisterOreDictionaryTreeDefinitions();
@@ -138,11 +141,11 @@ public class TreeCapitatorMod
             TCConfigHandler.instance().config.get(Strings.TREE_MOD_CFG_CTGY, Strings.MM_EXCL_LIST, "", Strings.MM_EXCL_LIST_DESC).set(s);
             TCConfigHandler.instance().config.save();
         }
-    }
-    
-    @EventHandler
-    public void serverStarted(FMLServerStartedEvent event)
-    {
+        
+        // This must be done after all trees are registered to avoid screwing up the registration process
+        // TODO: refactor TreeRegistry registration code to prevent blacklisted blocks from being registered
+        TreeRegistry.instance().readBlacklistFromDelimitedString(TCSettings.blockIDBlacklist);
+        
         // Make sure the NBT manager is initialized while we can still be sure of the values in our local objects
         nbtManager();
     }
