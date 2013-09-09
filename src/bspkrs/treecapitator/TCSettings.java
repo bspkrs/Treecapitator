@@ -57,6 +57,8 @@ public final class TCSettings
     public static boolean     allowOreDictionaryLookup       = true;
     public static String      oreDictionaryLogStrings        = "logWood,";
     public static String      oreDictionaryLeafStrings       = "treeLeaves,";
+    public static String      blockIDBlacklist               = "";
+    public static String      itemIDBlacklist                = "";
     
     // ML only
     public static float       logHardnessModified            = 4.0F;
@@ -247,6 +249,10 @@ public final class TCSettings
                 oreDictionaryLogStrings, Strings.oreDictionaryLogStringsDesc);
         oreDictionaryLeafStrings = config.getString("oreDictionaryLeafStrings", Strings.GLOBALS_SETTINGS_CTGY,
                 oreDictionaryLeafStrings, Strings.oreDictionaryLeafStringsDesc);
+        blockIDBlacklist = config.getString("blockIDBlacklist", Strings.GLOBALS_SETTINGS_CTGY,
+                blockIDBlacklist, Strings.blockIDBlacklistDesc);
+        itemIDBlacklist = config.getString("itemIDBlacklist", Strings.GLOBALS_SETTINGS_CTGY,
+                itemIDBlacklist, Strings.itemIDBlacklistDesc);
         config.addCustomCategoryComment(Strings.GLOBALS_SETTINGS_CTGY, Strings.GLOBALS_SETTINGS_CTGY_DESC);
         
         // Per-tree settings
