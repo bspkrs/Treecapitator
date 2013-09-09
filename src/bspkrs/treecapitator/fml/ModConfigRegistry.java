@@ -312,7 +312,7 @@ public class ModConfigRegistry
                 .setOverrideIMC(false));
         
         defaultModCfgs.put("meteors", new ThirdPartyModConfig("meteors", "meteors.cfg", "",
-                "item:Frezarite Axe ID; item:Meteor Axe ID;",
+                "item:Frezarite Axe ID; item:Meteor Axe ID",
                 "<item:Frezarite Axe ID>; <item:Meteor Axe ID>", "", true)
                 .setOverrideIMC(false));
         
@@ -657,17 +657,4 @@ public class ModConfigRegistry
             FMLInterModComms.sendMessage("TreeCapitator", "ThirdPartyModConfig", tpModCfg);
         }
     }
-    /*static
-    {
-        // This one can go, me thinks... looks like he's hung up the wrench
-        HashMap<String, String> zapapples = new HashMap<String, String>();
-        zapapples.put(Strings.MOD_ID, "ZapApples");
-        zapapples.put(Strings.CONFIG_PATH, "ZapApples.cfg");
-        zapapples.put(Strings.BLOCK_CFG_KEYS, "block:zapAppleLogID; block:zapAppleLeavesID; block:zapAppleFlowersID");
-        
-        HashMap<String, String> zapapple = new HashMap<String, String>();
-        zapapple.put(Strings.LOGS, "<block:zapAppleLogID>");
-        zapapple.put(Strings.LEAVES, "<block:zapAppleLeavesID>; <block:zapAppleFlowersID>");
-        
-    }*/
 }
