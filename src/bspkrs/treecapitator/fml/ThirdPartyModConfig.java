@@ -20,6 +20,7 @@ import bspkrs.util.ConfigCategory;
 import bspkrs.util.Configuration;
 import bspkrs.util.ItemID;
 import bspkrs.util.ListUtils;
+import bspkrs.util.Property;
 import cpw.mods.fml.common.Loader;
 
 public class ThirdPartyModConfig
@@ -180,7 +181,12 @@ public class ThirdPartyModConfig
         if (cc.containsKey(Strings.SHEARS_ID_LIST))
             shearsKeys = cc.get(Strings.SHEARS_ID_LIST).getString();
         if (cc.containsKey(Strings.ITEM_CFG_KEYS))
-            shiftIndex = cc.get(Strings.SHIFT_INDEX).getBoolean(false);
+        {
+            if (!cc.containsKey(Strings.SHIFT_INDEX))
+                cc.put(Strings.SHIFT_INDEX, new Property(Strings.SHIFT_INDEX, String.valueOf(true), Property.Type.BOOLEAN));
+            
+            shiftIndex = cc.get(Strings.SHIFT_INDEX).getBoolean(true);
+        }
         if (cc.containsKey(Strings.OVERRIDE_IMC))
             overrideIMC = cc.get(Strings.OVERRIDE_IMC).getBoolean(TCSettings.userConfigOverridesIMC);
         
