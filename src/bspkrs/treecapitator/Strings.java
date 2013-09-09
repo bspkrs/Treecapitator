@@ -5,7 +5,7 @@ import bspkrs.util.Const;
 
 public class Strings
 {
-    public static final String VERSION_NUMBER                     = Const.MCVERSION + ".r04";
+    public static final String VERSION_NUMBER                     = Const.MCVERSION + ".r05";
     
     public static final String OAK                                = "vanilla_oak";
     public static final String SPRUCE                             = "vanilla_spruce";
@@ -20,6 +20,7 @@ public class Strings
     public static final String TREE_DEFS                          = "treeDefs";
     public static final String TREE_NAME                          = "treeName";
     public static final String MASTER_DEF                         = "masterDefinition";
+    public static final String BLACKLIST                          = "blacklist";
     public static final String LOG_STR_MAP                        = "logToStringMap";
     public static final String LOG_CFG_KEYS                       = "logConfigKeys";
     public static final String LEAVES                             = "leaves";
@@ -105,8 +106,14 @@ public class Strings
     public static final String allowOreDictionaryLookupDesc       = "[Global] When true, TreeCapitator will scan the Forge Ore Dictionary for blocks with an ore name matching\n" +
                                                                           "one of the strings in oreDictionaryLogStrings and generate a generic tree definition for them on the fly. \n" +
                                                                           "When false oreDictionaryLogStrings and oreDictionaryLeafStrings will be ignored.";
-    public static final String oreDictionaryLogStringsDesc        = "The list of log type values to check for in the Forge Ore Dictionary. Entries are comma (,) separated.";
-    public static final String oreDictionaryLeafStringsDesc       = "The list of leaf type values to check for in the Forge Ore Dictionary. Entries are comma (,) separated.";
+    public static final String oreDictionaryLogStringsDesc        = "[Global] The list of log type values to check for in the Forge Ore Dictionary. Entries are comma (,) separated.";
+    public static final String oreDictionaryLeafStringsDesc       = "[Global] The list of leaf type values to check for in the Forge Ore Dictionary. Entries are comma (,) separated.";
+    public static final String blockIDBlacklistDesc               = "[Global] Add block IDs to this list if you want to keep them from being registered as logs. This list will override\n" +
+                                                                          "the local user configuration, inter-mod communication (IMC) configuration, and the Ore Dictionary scanning feature.\n" +
+                                                                          "Use ',' to split block ID from metadata and ';' to split entries.";
+    public static final String itemIDBlacklistDesc                = "[Global] Add item IDs to this list if you want to keep them from being registered as axes. This list will override\n" +
+                                                                          "the local user configuration and inter-mod communication (IMC) configuration.\n" +
+                                                                          "Use ',' to split item ID from metadata and ';' to split entries.";
     public static final String breakSpeedModifierDesc             = "[Global, PerTree] When using an item that can chop trees, the break speed will by multiplied by this value\n" +
                                                                           "THIS OPTION IS IGNORED WHEN treeHeightDecidesBreakSpeed=true";
     public static final String disableInCreativeDesc              = "[Global] Flag to disable tree chopping in Creative mode";
