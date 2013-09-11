@@ -104,6 +104,7 @@
             <fileset dir="${mcp.bin}" includes="bspkrs/treecapitator/**/*.class"/>
             <fileset dir="${dev.resources}">
 				<exclude name="mcmod.template"/>
+				<exclude name="template.pack.mcmeta"/>
 				<exclude name="mods"/>
 				<exclude name="mods/*"/>
 			</fileset>
