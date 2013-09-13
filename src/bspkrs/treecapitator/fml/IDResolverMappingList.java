@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Properties;
 
-import sharose.mods.idresolver.IDResolverBasic;
 import bspkrs.treecapitator.TCLog;
 import bspkrs.treecapitator.TCSettings;
 import cpw.mods.fml.common.Loader;
@@ -34,6 +33,7 @@ public class IDResolverMappingList implements List
         init();
     }
     
+    @SuppressWarnings("unchecked")
     private void init()
     {
         /*
@@ -47,7 +47,8 @@ public class IDResolverMappingList implements List
             
             try
             {
-                idrKnownIDs = ObfuscationReflectionHelper.getPrivateValue(IDResolverBasic.class, null, "knownIDs");
+                Class clazz = Class.forName("sharose.mods.idresolver.IDResolverMasic");
+                idrKnownIDs = ObfuscationReflectionHelper.getPrivateValue(clazz, null, "knownIDs");
             }
             catch (Throwable e)
             {
