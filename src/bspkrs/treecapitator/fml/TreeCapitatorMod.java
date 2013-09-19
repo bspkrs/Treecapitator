@@ -40,7 +40,7 @@ import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 
 @Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge " + Strings.VERSION_NUMBER,
         dependencies = "required-after:mod_bspkrsCore", useMetadata = true)
-@NetworkMod(clientSideRequired = true, serverSideRequired = false,
+@NetworkMod(clientSideRequired = false, serverSideRequired = false,
         clientPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = TreeCapitatorClient.class),
         serverPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = TreeCapitatorServer.class),
         connectionHandler = ConnectionHandler.class)
