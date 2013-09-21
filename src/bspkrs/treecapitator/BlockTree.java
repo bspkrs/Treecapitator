@@ -17,7 +17,7 @@ public class BlockTree extends BlockLog
         setHardness(TCSettings.logHardnessNormal);
         setStepSound(Block.soundWoodFootstep);
         setUnlocalizedName("log");
-        func_111022_d("log");
+        setTextureName("log");
     }
     
     /**

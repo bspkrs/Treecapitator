@@ -1,3 +1,5 @@
+1.6.4.r01 - 20-Sep-2013
+- 1.6.4 update
 1.6.2.r05 - 09-Sep-2013
 - added blockIDBlacklist and itemIDBlacklist config settings to allow easy overriding of mod config settings
 - fixed NPEs caused by missing mod config properties
