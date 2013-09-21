@@ -48,7 +48,7 @@ public class IDResolverMappingList implements List
             try
             {
                 Class clazz = Class.forName("sharose.mods.idresolver.IDResolverMasic");
-                idrKnownIDs = ObfuscationReflectionHelper.getPrivateValue(clazz, null, "knownIDs");
+                idrKnownIDs = (Properties) ObfuscationReflectionHelper.getPrivateValue(clazz, null, "knownIDs");
             }
             catch (Throwable e)
             {
