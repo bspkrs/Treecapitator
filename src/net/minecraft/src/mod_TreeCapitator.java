@@ -1,7 +1,6 @@
 package net.minecraft.src;
 
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.common.ForgeVersion;
 import bspkrs.treecapitator.Strings;
 import bspkrs.treecapitator.TCLog;
 import bspkrs.treecapitator.TCSettings;
@@ -10,6 +9,7 @@ import bspkrs.treecapitator.fml.TreeCapitatorMod;
 import bspkrs.util.BSProp;
 import bspkrs.util.BSPropRegistry;
 import bspkrs.util.Const;
+import bspkrs.util.ForgeUtils;
 import bspkrs.util.ItemID;
 import bspkrs.util.ListUtils;
 import bspkrs.util.ModVersionChecker;
@@ -100,16 +100,10 @@ public class mod_TreeCapitator extends BaseMod
     @Override
     public void load()
     {
-        try
-        {
-            ForgeVersion.getVersion();
-            isForgeDetected = true;
+        isForgeDetected = ForgeUtils.isForgeEnv();
+        
+        if (isForgeDetected)
             TCLog.severe("Minecraft Forge has been detected! You should not be using the ModLoader version of %s!", getName());
-        }
-        catch (Throwable e)
-        {
-            isForgeDetected = false;
-        }
         
         try
         {
