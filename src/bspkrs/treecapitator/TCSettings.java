@@ -3,10 +3,7 @@ package bspkrs.treecapitator;
 import java.util.logging.Level;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLog;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemMultiTextureTile;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.src.ModLoader;
 import bspkrs.util.Configuration;
@@ -80,27 +77,6 @@ public final class TCSettings
             new TCSettings();
         
         return instance;
-    }
-    
-    public static void preInit()
-    {
-        preInit(false);
-    }
-    
-    public static void preInit(boolean isForgeVersion)
-    {
-        isForge = isForgeVersion;
-        
-        if (!isForge)
-        {
-            Block.blocksList[Block.wood.blockID] = null;
-            wood = new BlockTree(Block.wood.blockID);
-            Block.blocksList[wood.blockID] = wood;
-            Item.itemsList[wood.blockID] = null;
-            Item.itemsList[wood.blockID] = (new ItemMultiTextureTile(wood.blockID - 256, wood, BlockLog.woodType)).setUnlocalizedName("log");
-            
-            TreeRegistry.instance().registerVanillaTreeDefs();
-        }
     }
     
     private TCSettings()

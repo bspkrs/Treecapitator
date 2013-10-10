@@ -71,7 +71,6 @@ public class TreeCapitatorMod
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-        TCSettings.preInit(true);
         metadata = event.getModMetadata();
         
         File file = event.getSuggestedConfigurationFile();
