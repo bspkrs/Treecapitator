@@ -8,7 +8,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemInWorldManager;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import bspkrs.fml.util.bspkrsCoreProxy;
+import bspkrs.bspkrscore.fml.bspkrsCoreMod;
 import bspkrs.treecapitator.RegistryNBTManager;
 import bspkrs.treecapitator.Strings;
 import bspkrs.treecapitator.TCLog;
@@ -39,7 +39,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 
 @Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge " + Strings.VERSION_NUMBER,
-        dependencies = "required-after:mod_bspkrsCore", useMetadata = true)
+        dependencies = "required-after:bspkrsCore", useMetadata = true)
 @NetworkMod(clientSideRequired = false, serverSideRequired = false,
         clientPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = TreeCapitatorClient.class),
         serverPacketHandlerSpec = @SidedPacketHandler(channels = { "TreeCapitator" }, packetHandler = TreeCapitatorServer.class),
@@ -62,11 +62,6 @@ public class TreeCapitatorMod
     
     @Instance(value = "TreeCapitator")
     public static TreeCapitatorMod  instance;
-    
-    public TreeCapitatorMod()
-    {
-        new bspkrsCoreProxy();
-    }
     
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
@@ -93,10 +88,10 @@ public class TreeCapitatorMod
         IDResolverMappingList.instance();
         TCConfigHandler.setInstance(file);
         
-        if (bspkrsCoreProxy.instance.allowUpdateCheck)
+        if (bspkrsCoreMod.instance.allowUpdateCheck)
         {
             versionChecker = new ModVersionChecker(metadata.name, metadata.version, versionURL, mcfTopic);
-            versionChecker.checkVersionWithLoggingBySubStringAsFloat(metadata.version.length() - 2, metadata.version.length());
+            versionChecker.checkVersionWithLogging();
         }
         
     }

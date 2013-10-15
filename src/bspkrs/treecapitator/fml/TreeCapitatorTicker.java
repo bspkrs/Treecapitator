@@ -4,7 +4,7 @@ import java.util.EnumSet;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
-import bspkrs.fml.util.bspkrsCoreProxy;
+import bspkrs.bspkrscore.fml.bspkrsCoreMod;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
@@ -57,8 +57,8 @@ public class TreeCapitatorTicker implements ITickHandler
         
         if (mcClient != null && mcClient.thePlayer != null)
         {
-            if (bspkrsCoreProxy.instance.allowUpdateCheck && TreeCapitatorMod.versionChecker != null)
-                if (!TreeCapitatorMod.versionChecker.isCurrentVersionBySubStringAsFloatNewer(TreeCapitatorMod.metadata.version.length() - 2, TreeCapitatorMod.metadata.version.length()))
+            if (bspkrsCoreMod.instance.allowUpdateCheck && TreeCapitatorMod.versionChecker != null)
+                if (!TreeCapitatorMod.versionChecker.isCurrentVersion())
                     for (String msg : TreeCapitatorMod.versionChecker.getInGameMessage())
                         mcClient.thePlayer.addChatMessage(msg);
             
