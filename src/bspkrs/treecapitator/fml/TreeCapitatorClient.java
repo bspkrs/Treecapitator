@@ -7,9 +7,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import bspkrs.fml.util.ForgePacketHelper;
-import bspkrs.treecapitator.Strings;
-import bspkrs.treecapitator.TCLog;
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
@@ -42,7 +39,7 @@ public class TreeCapitatorClient implements IPacketHandler
     public void setServerDetected()
     {
         serverDetected = true;
-        
+        /*
         if (!TreeCapitatorMod.isCoreModLoaded && FMLClientHandler.instance().getClient().isSingleplayer())
         {
             FMLClientHandler.instance().getClient().thePlayer.addChatMessage(Strings.COREMOD_WARNING);
@@ -50,7 +47,7 @@ public class TreeCapitatorClient implements IPacketHandler
         }
         
         if (serverDetected)
-            TCLog.info("TreeCapitator server detected; client-side features enabled.");
+            TCLog.info("TreeCapitator server detected; client-side features enabled.");*/
     }
     
     public void onServerConfigReceived(NBTTagCompound nbtTCSettings, NBTTagCompound nbtTreeRegistry, NBTTagCompound nbtToolRegistry)

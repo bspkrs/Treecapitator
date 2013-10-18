@@ -496,6 +496,9 @@ public class Treecapitator
         }
         while (++index < list.size());
         
+        if (list.contains(pos))
+            list.remove(pos);
+        
         return list;
     }
     
