@@ -3,10 +3,10 @@ package bspkrs.treecapitator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.minecraft.src.ModLoader;
 import bspkrs.util.CommonUtils;
 import bspkrs.util.Configuration;
 import bspkrs.util.Property;
+import cpw.mods.fml.common.FMLLog;
 
 public enum TCLog
 {
@@ -28,7 +28,7 @@ public enum TCLog
             return;
         
         logger = Logger.getLogger("TreeCapitator");
-        logger.setParent(ModLoader.getLogger());
+        logger.setParent(FMLLog.getLogger());
     }
     
     public static void info(String format, Object... args)
