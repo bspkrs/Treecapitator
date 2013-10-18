@@ -5,9 +5,9 @@ import java.util.logging.Level;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.src.ModLoader;
 import bspkrs.util.Configuration;
 import bspkrs.util.ListUtils;
+import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public final class TCSettings
 {
@@ -67,8 +67,6 @@ public final class TCSettings
     public static Block       wood;
     public static Enchantment treecapitating;
     
-    public static boolean     isForge                        = false;
-    
     private static TCSettings instance;
     
     public static TCSettings instance()
@@ -93,7 +91,7 @@ public final class TCSettings
             enchantmentID = id;
             treecapitating = new EnchantmentTreecapitating(enchantmentID, enchantmentWeight);
             treecapitating.setName("treecapitating");
-            ModLoader.addLocalization("enchantment.treecapitating", "Treecapitating");
+            LanguageRegistry.instance().addStringLocalization("enchantment.treecapitating", "Treecapitating");
             /*if (isForge)
                 Enchantment.addToBookList(treecapitating);*/
         }
