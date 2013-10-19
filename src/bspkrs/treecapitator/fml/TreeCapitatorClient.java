@@ -39,15 +39,6 @@ public class TreeCapitatorClient implements IPacketHandler
     public void setServerDetected()
     {
         serverDetected = true;
-        /*
-        if (!TreeCapitatorMod.isCoreModLoaded && FMLClientHandler.instance().getClient().isSingleplayer())
-        {
-            FMLClientHandler.instance().getClient().thePlayer.addChatMessage(Strings.COREMOD_WARNING);
-            serverDetected = false;
-        }
-        
-        if (serverDetected)
-            TCLog.info("TreeCapitator server detected; client-side features enabled.");*/
     }
     
     public void onServerConfigReceived(NBTTagCompound nbtTCSettings, NBTTagCompound nbtTreeRegistry, NBTTagCompound nbtToolRegistry)
