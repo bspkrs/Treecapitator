@@ -99,7 +99,7 @@ public class TreeCapitatorMod
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
-        MinecraftForge.EVENT_BUS.register(new PlayerHandler());
+        MinecraftForge.EVENT_BUS.register(new ForgeEventHandler());
         proxy.onLoad();
         
     }
