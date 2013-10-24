@@ -72,7 +72,7 @@ public class ForgeEventHandler
                         }
                         else
                         {
-                            event.newSpeed = 0.000000001f;
+                            event.newSpeed = 0.0000000001f;
                         }
                     }
                 }
