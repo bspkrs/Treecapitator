@@ -6,7 +6,6 @@ import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.nbt.NBTTagCompound;
 import bspkrs.util.Configuration;
-import bspkrs.util.ListUtils;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public final class TCSettings
@@ -60,8 +59,8 @@ public final class TCSettings
     // ML only
     public static float       logHardnessModified            = 4.0F;
     public static float       logHardnessNormal              = 2.0F;
-    public static String      axeIDList                      = ListUtils.getListAsDelimitedString(ToolRegistry.instance().vanillaAxeList(), "; ");
-    public static String      shearIDList                    = ListUtils.getListAsDelimitedString(ToolRegistry.instance().vanillaShearsList(), "; ");
+    public static String      axeIDList                      = TCUtils.getSetAsDelimitedString(ToolRegistry.instance().vanillaAxeList(), "; ");
+    public static String      shearIDList                    = TCUtils.getSetAsDelimitedString(ToolRegistry.instance().vanillaShearsList(), "; ");
     
     // static object references
     public static Block       wood;

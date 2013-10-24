@@ -1,8 +1,6 @@
 package bspkrs.treecapitator;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import net.minecraft.item.Item;
@@ -66,9 +64,9 @@ public class ToolRegistry
         vanShearsList.add(new ItemID(Item.shears));
     }
     
-    public List<BlockID> blacklist()
+    public Set<BlockID> blacklist()
     {
-        return new ArrayList<BlockID>(blacklist);
+        return new HashSet<BlockID>(blacklist);
     }
     
     // This must be done after all trees are registered to avoid screwing up the registration process
@@ -103,24 +101,24 @@ public class ToolRegistry
             shearsList.add(shears);
     }
     
-    public List<ItemID> axeList()
+    public Set<ItemID> axeList()
     {
-        return new ArrayList<ItemID>(axeList);
+        return new HashSet<ItemID>(axeList);
     }
     
-    public List<ItemID> shearsList()
+    public Set<ItemID> shearsList()
     {
-        return new ArrayList<ItemID>(shearsList);
+        return new HashSet<ItemID>(shearsList);
     }
     
-    public List<ItemID> vanillaAxeList()
+    public Set<ItemID> vanillaAxeList()
     {
-        return new ArrayList<ItemID>(vanAxeList);
+        return new HashSet<ItemID>(vanAxeList);
     }
     
-    public List<ItemID> vanillaShearsList()
+    public Set<ItemID> vanillaShearsList()
     {
-        return new ArrayList<ItemID>(vanShearsList);
+        return new HashSet<ItemID>(vanShearsList);
     }
     
     public boolean isAxe(ItemID itemID)

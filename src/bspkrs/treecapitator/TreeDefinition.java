@@ -1,8 +1,7 @@
 package bspkrs.treecapitator;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
 import bspkrs.util.BlockID;
@@ -39,7 +38,7 @@ public class TreeDefinition
         breakSpeedModifier = TCSettings.breakSpeedModifier;
     }
     
-    public TreeDefinition(List<BlockID> logs, List<BlockID> leaves)
+    public TreeDefinition(Set<BlockID> logs, Set<BlockID> leaves)
     {
         this();
         logBlocks.addAll(logs);
@@ -250,9 +249,9 @@ public class TreeDefinition
      * 
      * @return
      */
-    public List<BlockID> getLogList()
+    public Set<BlockID> getLogList()
     {
-        return new ArrayList<BlockID>(logBlocks);
+        return new HashSet<BlockID>(logBlocks);
     }
     
     /**
@@ -260,9 +259,9 @@ public class TreeDefinition
      * 
      * @return
      */
-    public List<BlockID> getLeafList()
+    public Set<BlockID> getLeafList()
     {
-        return new ArrayList<BlockID>(leafBlocks);
+        return new HashSet<BlockID>(leafBlocks);
     }
     
     /*

@@ -1,16 +1,15 @@
 package bspkrs.treecapitator;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
 import bspkrs.util.BlockID;
 import bspkrs.util.ConfigCategory;
 import bspkrs.util.Configuration;
 import bspkrs.util.HashCodeUtil;
-import bspkrs.util.ListUtils;
 
 public class ConfigTreeDefinition extends TreeDefinition
 {
@@ -24,7 +23,7 @@ public class ConfigTreeDefinition extends TreeDefinition
         leafKeys = TCUtils.getSetAsDelimitedString(leafBlocks, "; ");
     }
     
-    public ConfigTreeDefinition(List<BlockID> logs, List<BlockID> leaves)
+    public ConfigTreeDefinition(Set<BlockID> logs, Set<BlockID> leaves)
     {
         super(logs, leaves);
         logKeys = TCUtils.getSetAsDelimitedString(logBlocks, "; ");
@@ -58,12 +57,12 @@ public class ConfigTreeDefinition extends TreeDefinition
         if (treeDefNBT.hasKey(Strings.LOG_CFG_KEYS))
             logKeys = treeDefNBT.getString(Strings.LOG_CFG_KEYS);
         else
-            logKeys = ListUtils.getListAsDelimitedString((List<?>) logBlocks, "; ");
+            logKeys = TCUtils.getSetAsDelimitedString(logBlocks, "; ");
         
         if (treeDefNBT.hasKey(Strings.LEAF_CFG_KEYS))
             leafKeys = treeDefNBT.getString(Strings.LEAF_CFG_KEYS);
         else
-            leafKeys = ListUtils.getListAsDelimitedString((List<?>) leafBlocks, "; ");
+            leafKeys = TCUtils.getSetAsDelimitedString(leafBlocks, "; ");
         
         return this;
     }

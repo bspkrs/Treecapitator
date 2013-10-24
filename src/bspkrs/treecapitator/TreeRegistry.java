@@ -1,11 +1,12 @@
 package bspkrs.treecapitator;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,7 +14,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import bspkrs.util.BlockID;
 import bspkrs.util.Coord;
-import bspkrs.util.ListUtils;
 
 public class TreeRegistry
 {
@@ -21,8 +21,8 @@ public class TreeRegistry
     private Map<BlockID, String>              logToStringMap;
     private TreeDefinition                    masterDefinition;
     private Map<String, ConfigTreeDefinition> vanTrees;
-    private List<BlockID>                     blacklist;
-    private List<Coord>                       blocksBeingChopped;
+    private Set<BlockID>                      blacklist;
+    private Set<Coord>                        blocksBeingChopped;
     
     private static TreeRegistry               instance;
     
@@ -47,8 +47,8 @@ public class TreeRegistry
         treeDefs = new HashMap<String, TreeDefinition>();
         logToStringMap = new HashMap<BlockID, String>();
         masterDefinition = new TreeDefinition();
-        blacklist = new ArrayList<BlockID>();
-        blocksBeingChopped = new ArrayList<Coord>();
+        blacklist = new HashSet<BlockID>();
+        blocksBeingChopped = new HashSet<Coord>();
     }
     
     protected void initVanillaTreeDefs()
@@ -212,7 +212,7 @@ public class TreeRegistry
     public String getMultiMineExclusionString()
     {
         String r = "";
-        List<Integer> processed = new ArrayList<Integer>();
+        Set<Integer> processed = new HashSet<Integer>();
         
         for (BlockID log : masterDefinition.logBlocks)
         {
@@ -292,12 +292,12 @@ public class TreeRegistry
             return null;
     }
     
-    public List<BlockID> masterLogList()
+    public Set<BlockID> masterLogList()
     {
         return masterDefinition.getLogList();
     }
     
-    public List<BlockID> masterLeafList()
+    public Set<BlockID> masterLeafList()
     {
         return masterDefinition.getLeafList();
     }
@@ -307,15 +307,15 @@ public class TreeRegistry
         return new TreeMap<String, ConfigTreeDefinition>(vanTrees);
     }
     
-    public List<BlockID> blacklist()
+    public Set<BlockID> blacklist()
     {
-        return new ArrayList<BlockID>(blacklist);
+        return new HashSet<BlockID>(blacklist);
     }
     
     // This must be done after all trees are registered to avoid screwing up the registration process
     public void readBlacklistFromDelimitedString(String dList)
     {
-        blacklist = ListUtils.getDelimitedStringAsBlockIDList(dList, ";");
+        blacklist = TCUtils.getDelimitedStringAsBlockIDHashSet(dList, ";");
     }
     
     protected void readFromNBT(NBTTagCompound ntc)
@@ -343,7 +343,7 @@ public class TreeRegistry
         masterDefinition = new TreeDefinition(ntc.getCompoundTag(Strings.MASTER_DEF));
         
         // blacklist
-        blacklist = ListUtils.getDelimitedStringAsBlockIDList(ntc.getString(Strings.BLACKLIST), ";");
+        blacklist = TCUtils.getDelimitedStringAsBlockIDHashSet(ntc.getString(Strings.BLACKLIST), ";");
     }
     
     public void writeToNBT(NBTTagCompound ntc)
@@ -376,6 +376,6 @@ public class TreeRegistry
         ntc.setTag(Strings.MASTER_DEF, md);
         
         // blacklist
-        ntc.setString(Strings.BLACKLIST, ListUtils.getListAsDelimitedString(blacklist, ";"));
+        ntc.setString(Strings.BLACKLIST, TCUtils.getSetAsDelimitedString(blacklist, ";"));
     }
 }

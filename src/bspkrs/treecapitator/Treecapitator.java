@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
@@ -28,7 +29,7 @@ public class Treecapitator
     private ItemStack            axe;
     private ItemStack            shears;
     private final TreeDefinition treeDef;
-    private final List<BlockID>  masterLogList;
+    private final Set<BlockID>   masterLogList;
     private final BlockID        vineID;
     private float                currentAxeDamage, currentShearsDamage = 0.0F;
     private int                  numLogsBroken;

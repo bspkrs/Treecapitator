@@ -1,7 +1,7 @@
 package bspkrs.treecapitator.fml;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -82,7 +82,7 @@ public class ModConfigRegistry
     
     protected void applyPrioritizedModConfigs()
     {
-        List<ThirdPartyModConfig> finalList = new ArrayList<ThirdPartyModConfig>();
+        List<ThirdPartyModConfig> finalList = new LinkedList<ThirdPartyModConfig>();
         
         TCLog.info("Prioritizing User and IMC mod configs...");
         for (Entry<String, ThirdPartyModConfig> e : imcModCfgs.entrySet())
