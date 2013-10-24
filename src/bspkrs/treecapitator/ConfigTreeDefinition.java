@@ -1,6 +1,6 @@
 package bspkrs.treecapitator;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -20,15 +20,15 @@ public class ConfigTreeDefinition extends TreeDefinition
     public ConfigTreeDefinition()
     {
         super();
-        logKeys = ListUtils.getListAsDelimitedString(logBlocks, "; ");
-        leafKeys = ListUtils.getListAsDelimitedString(leafBlocks, "; ");
+        logKeys = TCUtils.getSetAsDelimitedString(logBlocks, "; ");
+        leafKeys = TCUtils.getSetAsDelimitedString(leafBlocks, "; ");
     }
     
     public ConfigTreeDefinition(List<BlockID> logs, List<BlockID> leaves)
     {
         super(logs, leaves);
-        logKeys = ListUtils.getListAsDelimitedString(logBlocks, "; ");
-        leafKeys = ListUtils.getListAsDelimitedString(leafBlocks, "; ");
+        logKeys = TCUtils.getSetAsDelimitedString(logBlocks, "; ");
+        leafKeys = TCUtils.getSetAsDelimitedString(leafBlocks, "; ");
     }
     
     public ConfigTreeDefinition(String configLogs, String configLeaves)
@@ -58,12 +58,12 @@ public class ConfigTreeDefinition extends TreeDefinition
         if (treeDefNBT.hasKey(Strings.LOG_CFG_KEYS))
             logKeys = treeDefNBT.getString(Strings.LOG_CFG_KEYS);
         else
-            logKeys = ListUtils.getListAsDelimitedString(logBlocks, "; ");
+            logKeys = ListUtils.getListAsDelimitedString((List<?>) logBlocks, "; ");
         
         if (treeDefNBT.hasKey(Strings.LEAF_CFG_KEYS))
             leafKeys = treeDefNBT.getString(Strings.LEAF_CFG_KEYS);
         else
-            leafKeys = ListUtils.getListAsDelimitedString(leafBlocks, "; ");
+            leafKeys = ListUtils.getListAsDelimitedString((List<?>) leafBlocks, "; ");
         
         return this;
     }
@@ -134,8 +134,8 @@ public class ConfigTreeDefinition extends TreeDefinition
     
     public TreeDefinition getTagsReplacedTreeDef(Map<String, String> tagMap)
     {
-        logBlocks = new ArrayList<BlockID>();
-        leafBlocks = new ArrayList<BlockID>();
+        logBlocks = new HashSet<BlockID>();
+        leafBlocks = new HashSet<BlockID>();
         
         String rLogs = logKeys;
         String rLeaves = leafKeys;
@@ -167,7 +167,7 @@ public class ConfigTreeDefinition extends TreeDefinition
     public ConfigTreeDefinition addLogID(BlockID blockID)
     {
         ConfigTreeDefinition r = (ConfigTreeDefinition) super.addLogID(blockID);
-        logKeys = ListUtils.getListAsDelimitedString(r.logBlocks, "; ");
+        logKeys = TCUtils.getSetAsDelimitedString(r.logBlocks, "; ");
         
         return r;
     }
@@ -176,7 +176,7 @@ public class ConfigTreeDefinition extends TreeDefinition
     public ConfigTreeDefinition addLeafID(BlockID blockID)
     {
         ConfigTreeDefinition r = (ConfigTreeDefinition) super.addLeafID(blockID);
-        leafKeys = ListUtils.getListAsDelimitedString(r.leafBlocks, "; ");
+        leafKeys = TCUtils.getSetAsDelimitedString(r.leafBlocks, "; ");
         
         return r;
     }

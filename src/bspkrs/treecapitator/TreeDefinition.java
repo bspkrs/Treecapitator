@@ -1,32 +1,32 @@
 package bspkrs.treecapitator;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 import bspkrs.util.BlockID;
 import bspkrs.util.HashCodeUtil;
-import bspkrs.util.ListUtils;
 
 public class TreeDefinition
 {
-    protected List<BlockID> logBlocks;
-    protected List<BlockID> leafBlocks;
-    protected boolean       allowSmartTreeDetection;
-    protected boolean       onlyDestroyUpwards;
-    protected boolean       requireLeafDecayCheck;
+    protected HashSet<BlockID> logBlocks;
+    protected HashSet<BlockID> leafBlocks;
+    protected boolean          allowSmartTreeDetection;
+    protected boolean          onlyDestroyUpwards;
+    protected boolean          requireLeafDecayCheck;
     // max horizontal distance that logs will be broken
-    protected int           maxHorLogBreakDist;
-    protected int           maxVerLogBreakDist;
-    protected int           maxLeafIDDist;
-    protected int           maxHorLeafBreakDist;
-    protected int           minLeavesToID;
-    protected float         breakSpeedModifier;
+    protected int              maxHorLogBreakDist;
+    protected int              maxVerLogBreakDist;
+    protected int              maxLeafIDDist;
+    protected int              maxHorLeafBreakDist;
+    protected int              minLeavesToID;
+    protected float            breakSpeedModifier;
     
     public TreeDefinition()
     {
-        logBlocks = new ArrayList<BlockID>();
-        leafBlocks = new ArrayList<BlockID>();
+        logBlocks = new HashSet<BlockID>();
+        leafBlocks = new HashSet<BlockID>();
         
         allowSmartTreeDetection = TCSettings.allowSmartTreeDetection;
         onlyDestroyUpwards = TCSettings.onlyDestroyUpwards;
@@ -160,14 +160,14 @@ public class TreeDefinition
             breakSpeedModifier = treeDefNBT.getFloat(Strings.BREAK_SPEED_MOD);
         
         if (treeDefNBT.hasKey(Strings.LOGS) && treeDefNBT.getString(Strings.LOGS).length() > 0)
-            logBlocks = ListUtils.getDelimitedStringAsBlockIDList(treeDefNBT.getString(Strings.LOGS), ";");
+            logBlocks = (HashSet<BlockID>) TCUtils.getDelimitedStringAsBlockIDHashSet(treeDefNBT.getString(Strings.LOGS), ";");
         else
-            logBlocks = new ArrayList<BlockID>();
+            logBlocks = new HashSet<BlockID>();
         
         if (treeDefNBT.hasKey(Strings.LEAVES) && treeDefNBT.getString(Strings.LEAVES).length() > 0)
-            leafBlocks = ListUtils.getDelimitedStringAsBlockIDList(treeDefNBT.getString(Strings.LEAVES), ";");
+            leafBlocks = (HashSet<BlockID>) TCUtils.getDelimitedStringAsBlockIDHashSet(treeDefNBT.getString(Strings.LEAVES), ";");
         else
-            leafBlocks = new ArrayList<BlockID>();
+            leafBlocks = new HashSet<BlockID>();
         
         return this;
     }
@@ -184,8 +184,8 @@ public class TreeDefinition
         treeDefNBT.setInteger(Strings.MIN_LEAF_ID, minLeavesToID);
         treeDefNBT.setFloat(Strings.BREAK_SPEED_MOD, breakSpeedModifier);
         
-        treeDefNBT.setString(Strings.LOGS, ListUtils.getListAsDelimitedString(logBlocks, ";"));
-        treeDefNBT.setString(Strings.LEAVES, ListUtils.getListAsDelimitedString(leafBlocks, ";"));
+        treeDefNBT.setString(Strings.LOGS, TCUtils.getSetAsDelimitedString(logBlocks, ";"));
+        treeDefNBT.setString(Strings.LEAVES, TCUtils.getSetAsDelimitedString(leafBlocks, ";"));
     }
     
     /*
