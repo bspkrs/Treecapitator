@@ -5,7 +5,7 @@ import bspkrs.util.Const;
 
 public class Strings
 {
-    public static final String VERSION_NUMBER                     = Const.MCVERSION + ".r04";
+    public static final String VERSION_NUMBER                     = Const.MCVERSION + ".r05";
     
     public static final String OAK                                = "vanilla_oak";
     public static final String SPRUCE                             = "vanilla_spruce";
@@ -123,6 +123,9 @@ public class Strings
                                                                           "remaining to cover the number of blocks.";
     public static final String damageMultiplierDesc               = "[Global] Axes and shears will take damage this many times for each log broken. Remaining damage is \n" +
                                                                           "rounded and applied to tools when a tree is finished.";
+    public static final String useAdvancedTopLogLogicDesc         = "[Global, PerTree] Set to false to use the older \"top log\" algorithm for finding the top log of a tree.\n" +
+                                                                          "The old algorithm searches only the vertical column of blocks above the log you are chopping,\n" +
+                                                                          "the newer algorithm is able to branch out to find the true top log of a tree.";
     public static final String useIncreasingItemDamageDesc        = "[Global] Set to true to have the per-block item damage amount increase after every \n" +
                                                                           "increaseDamageEveryXBlocks blocks are broken.";
     public static final String increaseDamageEveryXBlocksDesc     = "[Global] When useIncreasingItemDamage=true the damage applied per block broken will increase each time \n" +
