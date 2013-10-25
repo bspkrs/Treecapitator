@@ -67,7 +67,7 @@ public class TreeRegistry
                 .addLogID(new BlockID(17, 11)).addLogID(new BlockID(17, 15))
                 .addLeafID(new BlockID(18, 3)).addLeafID(new BlockID(18, 11))
                 .addLeafID(new BlockID(18, 0)).addLeafID(new BlockID(18, 8))
-                .setMaxHorLeafBreakDist(6).setRequireLeafDecayCheck(false));
+                .setMaxHorLeafBreakDist(6).setRequireLeafDecayCheck(false).setUseAdvancedTopLogLogic(true));
         vanTrees.put(Strings.MUSH_BROWN, new ConfigTreeDefinition().addLogID(new BlockID(99, 10)).addLogID(new BlockID(99, 15))
                 .addLeafID(new BlockID(99, 1)).addLeafID(new BlockID(99, 2))
                 .addLeafID(new BlockID(99, 3)).addLeafID(new BlockID(99, 4))

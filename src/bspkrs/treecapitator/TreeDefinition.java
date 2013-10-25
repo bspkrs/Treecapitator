@@ -21,6 +21,7 @@ public class TreeDefinition
     protected int              maxHorLeafBreakDist;
     protected int              minLeavesToID;
     protected float            breakSpeedModifier;
+    protected boolean          useAdvancedTopLogLogic;
     
     public TreeDefinition()
     {
@@ -36,6 +37,7 @@ public class TreeDefinition
         maxHorLeafBreakDist = TCSettings.maxHorLeafBreakDist;
         minLeavesToID = TCSettings.minLeavesToID;
         breakSpeedModifier = TCSettings.breakSpeedModifier;
+        useAdvancedTopLogLogic = TCSettings.useAdvancedTopLogLogic;
     }
     
     public TreeDefinition(Set<BlockID> logs, Set<BlockID> leaves)
@@ -133,6 +135,8 @@ public class TreeDefinition
             minLeavesToID = toAdd.minLeavesToID;
         if (toAdd.breakSpeedModifier != TCSettings.breakSpeedModifier)
             breakSpeedModifier = toAdd.breakSpeedModifier;
+        if (toAdd.useAdvancedTopLogLogic != TCSettings.useAdvancedTopLogLogic)
+            useAdvancedTopLogLogic = toAdd.useAdvancedTopLogLogic;
         
         return this;
     }
@@ -157,6 +161,8 @@ public class TreeDefinition
             minLeavesToID = treeDefNBT.getInteger(Strings.MIN_LEAF_ID);
         if (treeDefNBT.hasKey(Strings.BREAK_SPEED_MOD))
             breakSpeedModifier = treeDefNBT.getFloat(Strings.BREAK_SPEED_MOD);
+        if (treeDefNBT.hasKey("useAdvancedTopLogLogic"))
+            useAdvancedTopLogLogic = treeDefNBT.getBoolean("useAdvancedTopLogLogic");
         
         if (treeDefNBT.hasKey(Strings.LOGS) && treeDefNBT.getString(Strings.LOGS).length() > 0)
             logBlocks = (HashSet<BlockID>) TCUtils.getDelimitedStringAsBlockIDHashSet(treeDefNBT.getString(Strings.LOGS), ";");
@@ -182,6 +188,7 @@ public class TreeDefinition
         treeDefNBT.setInteger(Strings.MAX_LEAF_ID_DIST, maxLeafIDDist);
         treeDefNBT.setInteger(Strings.MIN_LEAF_ID, minLeavesToID);
         treeDefNBT.setFloat(Strings.BREAK_SPEED_MOD, breakSpeedModifier);
+        treeDefNBT.setBoolean("useAdvancedTopLogLogic", useAdvancedTopLogLogic);
         
         treeDefNBT.setString(Strings.LOGS, TCUtils.getSetAsDelimitedString(logBlocks, ";"));
         treeDefNBT.setString(Strings.LEAVES, TCUtils.getSetAsDelimitedString(leafBlocks, ";"));
@@ -241,6 +248,12 @@ public class TreeDefinition
     public TreeDefinition setBreakSpeedModifier(float breakSpeedModifier)
     {
         this.breakSpeedModifier = breakSpeedModifier;
+        return this;
+    }
+    
+    public TreeDefinition setUseAdvancedTopLogLogic(boolean useAdvancedTopLogLogic)
+    {
+        this.useAdvancedTopLogLogic = useAdvancedTopLogLogic;
         return this;
     }
     
@@ -310,5 +323,10 @@ public class TreeDefinition
     public float breakSpeedModifier()
     {
         return breakSpeedModifier;
+    }
+    
+    public boolean useAdvancedTopLogLogic()
+    {
+        return useAdvancedTopLogLogic;
     }
 }

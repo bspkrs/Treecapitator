@@ -42,6 +42,7 @@ public final class TCSettings
     public static int         minLeavesToID                  = 3;
     public static boolean     onlyDestroyUpwards             = true;
     public static boolean     requireLeafDecayCheck          = true;
+    public static boolean     useAdvancedTopLogLogic         = true;
     
     // Mod config settings (Forge only)
     public static String      idResolverModID                = "IDResolver";
@@ -128,6 +129,7 @@ public final class TCSettings
         shearLeaves = ntc.getBoolean("shearLeaves");
         shearVines = ntc.getBoolean("shearVines");
         sneakAction = ntc.getString("sneakAction");
+        useAdvancedTopLogLogic = ntc.getBoolean("useAdvancedTopLogLogic");
         useIncreasingItemDamage = ntc.getBoolean("useIncreasingItemDamage");
         useStrictBlockPairing = ntc.getBoolean("useStrictBlockPairing");
     }
@@ -162,6 +164,7 @@ public final class TCSettings
         ntc.setBoolean("shearLeaves", shearLeaves);
         ntc.setBoolean("shearVines", shearVines);
         ntc.setString("sneakAction", sneakAction);
+        ntc.setBoolean("useAdvancedTopLogLogic", useAdvancedTopLogLogic);
         ntc.setBoolean("useIncreasingItemDamage", useIncreasingItemDamage);
         ntc.setBoolean("useStrictBlockPairing", useStrictBlockPairing);
     }
@@ -247,6 +250,8 @@ public final class TCSettings
                 onlyDestroyUpwards, Strings.onlyDestroyUpwardsDesc);
         requireLeafDecayCheck = config.getBoolean("requireLeafDecayCheck", Strings.PER_TREE_DEFAULTS_CTGY,
                 requireLeafDecayCheck, Strings.requireLeafDecayCheckDesc);
+        useAdvancedTopLogLogic = config.getBoolean("useAdvancedTopLogLogic", Strings.PER_TREE_DEFAULTS_CTGY,
+                useAdvancedTopLogLogic, Strings.useAdvancedTopLogLogicDesc);
         config.addCustomCategoryComment(Strings.PER_TREE_DEFAULTS_CTGY, Strings.PER_TREE_DEFAULTS_CTGY_DESC);
         
         // Log configs if we are in debug logging mode

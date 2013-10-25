@@ -98,6 +98,8 @@ public class ConfigTreeDefinition extends TreeDefinition
             minLeavesToID = cc.get(Strings.MIN_LEAF_ID).getInt();
         if (cc.containsKey(Strings.BREAK_SPEED_MOD))
             breakSpeedModifier = (float) cc.get(Strings.BREAK_SPEED_MOD).getDouble(TCSettings.breakSpeedModifier);
+        if (cc.containsKey("useAdvancedTopLogLogic"))
+            useAdvancedTopLogLogic = cc.get("useAdvancedTopLogLogic").getBoolean(TCSettings.useAdvancedTopLogLogic);
         
         logKeys = cc.get(Strings.LOG_CFG_KEYS).getString();
         if (cc.containsKey(Strings.LEAF_CFG_KEYS))
@@ -126,6 +128,8 @@ public class ConfigTreeDefinition extends TreeDefinition
             config.get(category, Strings.MIN_LEAF_ID, TCSettings.minLeavesToID, Strings.OPTIONAL).set(minLeavesToID);
         if (breakSpeedModifier != TCSettings.breakSpeedModifier)
             config.get(category, Strings.BREAK_SPEED_MOD, TCSettings.breakSpeedModifier, Strings.OPTIONAL).set(breakSpeedModifier);
+        if (useAdvancedTopLogLogic != TCSettings.useAdvancedTopLogLogic)
+            config.get(category, "useAdvancedTopLogLogic", TCSettings.useAdvancedTopLogLogic, Strings.OPTIONAL).set(useAdvancedTopLogLogic);
         
         config.get(category, Strings.LOG_CFG_KEYS, logKeys);
         config.get(category, Strings.LEAF_CFG_KEYS, leafKeys);
@@ -226,63 +230,60 @@ public class ConfigTreeDefinition extends TreeDefinition
     @Override
     public ConfigTreeDefinition setAllowSmartTreeDetection(boolean allowSmartTreeDetection)
     {
-        this.allowSmartTreeDetection = allowSmartTreeDetection;
-        return this;
+        return (ConfigTreeDefinition) super.setAllowSmartTreeDetection(allowSmartTreeDetection);
     }
     
     @Override
     public ConfigTreeDefinition setOnlyDestroyUpwards(boolean onlyDestroyUpwards)
     {
-        this.onlyDestroyUpwards = onlyDestroyUpwards;
-        return this;
+        return (ConfigTreeDefinition) super.setOnlyDestroyUpwards(onlyDestroyUpwards);
     }
     
     @Override
     public ConfigTreeDefinition setRequireLeafDecayCheck(boolean requireLeafDecayCheck)
     {
-        this.requireLeafDecayCheck = requireLeafDecayCheck;
-        return this;
+        return (ConfigTreeDefinition) super.setRequireLeafDecayCheck(requireLeafDecayCheck);
     }
     
     @Override
     public ConfigTreeDefinition setMaxHorLogBreakDist(int maxHorLogBreakDist)
     {
-        this.maxHorLogBreakDist = maxHorLogBreakDist;
-        return this;
+        return (ConfigTreeDefinition) super.setMaxHorLogBreakDist(maxHorLogBreakDist);
     }
     
     @Override
     public ConfigTreeDefinition setMaxVerLogBreakDist(int maxVerLogBreakDist)
     {
-        this.maxVerLogBreakDist = maxVerLogBreakDist;
-        return this;
+        return (ConfigTreeDefinition) super.setMaxVerLogBreakDist(maxVerLogBreakDist);
     }
     
     @Override
     public ConfigTreeDefinition setMaxLeafIDDist(int maxLeafIDDist)
     {
-        this.maxLeafIDDist = maxLeafIDDist;
-        return this;
+        return (ConfigTreeDefinition) super.setMaxLeafIDDist(maxLeafIDDist);
     }
     
     @Override
     public ConfigTreeDefinition setMaxHorLeafBreakDist(int maxHorLeafBreakDist)
     {
-        this.maxHorLeafBreakDist = maxHorLeafBreakDist;
-        return this;
+        return (ConfigTreeDefinition) super.setMaxHorLeafBreakDist(maxHorLeafBreakDist);
     }
     
     @Override
     public ConfigTreeDefinition setMinLeavesToID(int minLeavesToID)
     {
-        this.minLeavesToID = minLeavesToID;
-        return this;
+        return (ConfigTreeDefinition) super.setMinLeavesToID(minLeavesToID);
     }
     
     @Override
     public ConfigTreeDefinition setBreakSpeedModifier(float breakSpeedModifier)
     {
-        this.breakSpeedModifier = breakSpeedModifier;
-        return this;
+        return (ConfigTreeDefinition) super.setBreakSpeedModifier(breakSpeedModifier);
+    }
+    
+    @Override
+    public ConfigTreeDefinition setUseAdvancedTopLogLogic(boolean useAdvancedTopLogLogic)
+    {
+        return (ConfigTreeDefinition) super.setUseAdvancedTopLogLogic(useAdvancedTopLogLogic);
     }
 }

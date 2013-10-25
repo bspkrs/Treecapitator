@@ -86,9 +86,13 @@ public class Treecapitator
         if (isBreakingPossible(world, entityPlayer, false))
         {
             if (!tree.onlyDestroyUpwards())
-                startPos = getBottomLog(tree.logBlocks, world, startPos, false);
+                if (tree.useAdvancedTopLogLogic())
+                    startPos = getBottomLog(tree.logBlocks, world, startPos, false);
+                else
+                    startPos = getBottomLogAtPos(tree.logBlocks, world, startPos, false);
             
-            Coord topLog = getTopLog(tree.logBlocks, world, new Coord(x, y, z), false);
+            Coord topLog = tree.useAdvancedTopLogLogic() ? getTopLog(tree.logBlocks, world, new Coord(x, y, z), false)
+                    : getTopLogAtPos(tree.logBlocks, world, new Coord(x, y, z), false);
             
             if (!tree.allowSmartTreeDetection() || tree.leafBlocks.size() == 0
                     || hasXLeavesInDist(tree.leafBlocks, world, topLog, tree.maxLeafIDDist(), tree.minLeavesToID(), false))
@@ -196,7 +200,10 @@ public class Treecapitator
     
     private Coord getTopLog(World world, Coord pos)
     {
-        return getTopLog(treeDef.logBlocks, world, pos, true);
+        if (treeDef.useAdvancedTopLogLogic())
+            return getTopLog(treeDef.logBlocks, world, pos, true);
+        else
+            return getTopLogAtPos(treeDef.logBlocks, world, pos, true);
     }
     
     private static Coord getTopLog(HashSet<BlockID> logBlocks, World world, Coord pos, boolean shouldLog)
@@ -205,7 +212,7 @@ public class Treecapitator
         HashSet<Coord> processed = new HashSet<Coord>();
         Coord topLog = pos.clone();
         
-        topLogs.add(getTopLogAtPos(logBlocks, world, topLog));
+        topLogs.add(getTopLogAtPos(logBlocks, world, topLog, false));
         
         while (topLogs.size() > 0)
         {
@@ -217,14 +224,15 @@ public class Treecapitator
                 topLog = nextLog;
             
             int currentSize = topLogs.size();
+            Coord newPos;
             
             for (int x = -1; x <= 1; x++)
                 for (int z = -1; z <= 1; z++)
                     if ((x != 0 || z != 0) && logBlocks.contains(new BlockID(world, nextLog.x + x, nextLog.y + 1, nextLog.z + z)))
                     {
-                        Coord newPos = new Coord(nextLog.x + x, nextLog.y + 1, nextLog.z + z);
+                        newPos = new Coord(nextLog.x + x, nextLog.y + 1, nextLog.z + z);
                         if (!topLogs.contains(newPos) && !processed.contains(newPos))
-                            topLogs.add(getTopLogAtPos(logBlocks, world, newPos));
+                            topLogs.add(getTopLogAtPos(logBlocks, world, newPos, false));
                     }
             
             // check if we found anything
@@ -234,9 +242,9 @@ public class Treecapitator
                     for (int z = -1; z <= 1; z++)
                         if ((x != 0 || z != 0) && logBlocks.contains(new BlockID(world, nextLog.x + x, nextLog.y, nextLog.z + z)))
                         {
-                            Coord newPos = new Coord(nextLog.x + x, nextLog.y, nextLog.z + z);
+                            newPos = new Coord(nextLog.x + x, nextLog.y, nextLog.z + z);
                             if (!topLogs.contains(newPos) && !processed.contains(newPos))
-                                topLogs.add(getTopLogAtPos(logBlocks, world, newPos));
+                                topLogs.add(getTopLogAtPos(logBlocks, world, newPos, false));
                         }
                 
             }
@@ -248,15 +256,68 @@ public class Treecapitator
         return topLog;
     }
     
-    private static Coord getTopLogAtPos(HashSet<BlockID> logBlocks, World world, Coord pos)
+    private static Coord getTopLogAtPos(HashSet<BlockID> logBlocks, World world, Coord pos, boolean shouldLog)
     {
         while (logBlocks.contains(new BlockID(world, pos.x, pos.y + 1, pos.z)))
             pos.y++;
+        
+        if (shouldLog)
+            TCLog.debug("Top Log: " + pos.x + ", " + pos.y + ", " + pos.z);
         
         return pos.clone();
     }
     
     private static Coord getBottomLog(HashSet<BlockID> logBlocks, World world, Coord pos, boolean shouldLog)
+    {
+        LinkedList<Coord> bottomLogs = new LinkedList<Coord>();
+        HashSet<Coord> processed = new HashSet<Coord>();
+        Coord bottomLog = pos.clone();
+        
+        bottomLogs.add(getBottomLogAtPos(logBlocks, world, bottomLog, false));
+        
+        while (bottomLogs.size() > 0)
+        {
+            Coord nextLog = bottomLogs.pollFirst();
+            processed.add(nextLog);
+            
+            // if the new pos is lower than what we've seen so far, save it as the new bottom log
+            if (nextLog.y < bottomLog.y)
+                bottomLog = nextLog;
+            
+            int currentSize = bottomLogs.size();
+            Coord newPos;
+            
+            for (int x = -1; x <= 1; x++)
+                for (int z = -1; z <= 1; z++)
+                    if ((x != 0 || z != 0) && logBlocks.contains(new BlockID(world, nextLog.x + x, nextLog.y - 1, nextLog.z + z)))
+                    {
+                        newPos = new Coord(nextLog.x + x, nextLog.y - 1, nextLog.z + z);
+                        if (!bottomLogs.contains(newPos) && !processed.contains(newPos))
+                            bottomLogs.add(getBottomLogAtPos(logBlocks, world, newPos, false));
+                    }
+            
+            // check if we found anything before adding adjacent coords
+            if (bottomLogs.size() == currentSize)
+            {
+                for (int x = -1; x <= 1; x++)
+                    for (int z = -1; z <= 1; z++)
+                        if ((x != 0 || z != 0) && logBlocks.contains(new BlockID(world, nextLog.x + x, nextLog.y, nextLog.z + z)))
+                        {
+                            newPos = new Coord(nextLog.x + x, nextLog.y, nextLog.z + z);
+                            if (!bottomLogs.contains(newPos) && !processed.contains(newPos))
+                                bottomLogs.add(getBottomLogAtPos(logBlocks, world, newPos, false));
+                        }
+                
+            }
+        }
+        
+        if (shouldLog)
+            TCLog.debug("Bottom Log: " + pos.x + ", " + pos.y + ", " + pos.z);
+        
+        return bottomLog;
+    }
+    
+    private static Coord getBottomLogAtPos(HashSet<BlockID> logBlocks, World world, Coord pos, boolean shouldLog)
     {
         while (logBlocks.contains(new BlockID(world, pos.x, pos.y - 1, pos.z)))
             pos.y--;
