@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
@@ -29,7 +28,7 @@ public class Treecapitator
     private ItemStack            axe;
     private ItemStack            shears;
     private final TreeDefinition treeDef;
-    private final Set<BlockID>   masterLogList;
+    private final List<BlockID>  masterLogList;
     private final BlockID        vineID;
     private float                currentAxeDamage, currentShearsDamage = 0.0F;
     private int                  numLogsBroken;
@@ -206,7 +205,7 @@ public class Treecapitator
             return getTopLogAtPos(treeDef.logBlocks, world, pos, true);
     }
     
-    private static Coord getTopLog(HashSet<BlockID> logBlocks, World world, Coord pos, boolean shouldLog)
+    private static Coord getTopLog(List<BlockID> logBlocks, World world, Coord pos, boolean shouldLog)
     {
         LinkedList<Coord> topLogs = new LinkedList<Coord>();
         HashSet<Coord> processed = new HashSet<Coord>();
@@ -256,7 +255,7 @@ public class Treecapitator
         return topLog;
     }
     
-    private static Coord getTopLogAtPos(HashSet<BlockID> logBlocks, World world, Coord pos, boolean shouldLog)
+    private static Coord getTopLogAtPos(List<BlockID> logBlocks, World world, Coord pos, boolean shouldLog)
     {
         while (logBlocks.contains(new BlockID(world, pos.x, pos.y + 1, pos.z)))
             pos.y++;
@@ -267,7 +266,7 @@ public class Treecapitator
         return pos.clone();
     }
     
-    private static Coord getBottomLog(HashSet<BlockID> logBlocks, World world, Coord pos, boolean shouldLog)
+    private static Coord getBottomLog(List<BlockID> logBlocks, World world, Coord pos, boolean shouldLog)
     {
         LinkedList<Coord> bottomLogs = new LinkedList<Coord>();
         HashSet<Coord> processed = new HashSet<Coord>();
@@ -317,7 +316,7 @@ public class Treecapitator
         return bottomLog;
     }
     
-    private static Coord getBottomLogAtPos(HashSet<BlockID> logBlocks, World world, Coord pos, boolean shouldLog)
+    private static Coord getBottomLogAtPos(List<BlockID> logBlocks, World world, Coord pos, boolean shouldLog)
     {
         while (logBlocks.contains(new BlockID(world, pos.x, pos.y - 1, pos.z)))
             pos.y--;
@@ -328,7 +327,7 @@ public class Treecapitator
         return pos;
     }
     
-    private static boolean hasXLeavesInDist(HashSet<BlockID> leafBlocks, World world, Coord pos, int range, int limit, boolean shouldLog)
+    private static boolean hasXLeavesInDist(List<BlockID> leafBlocks, World world, Coord pos, int range, int limit, boolean shouldLog)
     {
         if (shouldLog)
             TCLog.debug("Attempting to identify tree...");
@@ -467,7 +466,7 @@ public class Treecapitator
         return -1;
     }
     
-    public static boolean isLeafBlock(HashSet<BlockID> leafBlocks, BlockID blockID)
+    public static boolean isLeafBlock(List<BlockID> leafBlocks, BlockID blockID)
     {
         return leafBlocks.contains(blockID) || leafBlocks.contains(new BlockID(blockID.id, blockID.metadata & 7));
     }
