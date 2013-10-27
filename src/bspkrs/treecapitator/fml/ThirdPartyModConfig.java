@@ -12,7 +12,6 @@ import bspkrs.treecapitator.ConfigTreeDefinition;
 import bspkrs.treecapitator.Strings;
 import bspkrs.treecapitator.TCLog;
 import bspkrs.treecapitator.TCSettings;
-import bspkrs.treecapitator.TCUtils;
 import bspkrs.treecapitator.ToolRegistry;
 import bspkrs.treecapitator.TreeDefinition;
 import bspkrs.treecapitator.TreeRegistry;
@@ -55,8 +54,8 @@ public class ThirdPartyModConfig
         
         if (init)
         {
-            axeKeys = TCUtils.getSetAsDelimitedString(ToolRegistry.instance().vanillaAxeList(), "; ");
-            shearsKeys = TCUtils.getSetAsDelimitedString(ToolRegistry.instance().vanillaShearsList(), "; ");
+            axeKeys = ListUtils.getListAsDelimitedString(ToolRegistry.instance().vanillaAxeList(), "; ");
+            shearsKeys = ListUtils.getListAsDelimitedString(ToolRegistry.instance().vanillaShearsList(), "; ");
             configTreesMap = TreeRegistry.instance().vanillaTrees();
             refreshTreeDefinitionsFromConfig();
         }
