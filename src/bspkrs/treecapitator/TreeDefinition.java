@@ -41,6 +41,12 @@ public class TreeDefinition
         useAdvancedTopLogLogic = TCSettings.useAdvancedTopLogLogic;
     }
     
+    @Override
+    public String toString()
+    {
+        return "Logs: " + ListUtils.getListAsDelimitedString(logBlocks, "; ") + "  Leaves: " + ListUtils.getListAsDelimitedString(leafBlocks, "; ");
+    }
+    
     public TreeDefinition(List<BlockID> logs, List<BlockID> leaves)
     {
         this();

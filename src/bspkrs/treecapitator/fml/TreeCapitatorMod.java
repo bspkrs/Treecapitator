@@ -4,8 +4,6 @@ import java.io.File;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemInWorldManager;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import bspkrs.bspkrscore.fml.bspkrsCoreMod;
@@ -86,6 +84,11 @@ public class TreeCapitatorMod
         
         IDResolverMappingList.instance();
         TCConfigHandler.setInstance(file);
+        
+        if (!CommonUtils.isObfuscatedEnv())
+        {
+            TCSettings.allowDebugLogging = true;
+        }
         
         if (bspkrsCoreMod.instance.allowUpdateCheck)
         {
@@ -180,14 +183,6 @@ public class TreeCapitatorMod
                 
             }
         }
-    }
-    
-    public static boolean isItemInWorldManagerReplaced(EntityPlayerMP player)
-    {
-        if (player != null)
-            return !player.theItemInWorldManager.getClass().getSimpleName().equals(ItemInWorldManager.class.getSimpleName());
-        else
-            return false;
     }
     
     public RegistryNBTManager nbtManager()

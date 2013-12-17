@@ -126,6 +126,7 @@ public class TreeRegistry
                 TCLog.debug("Tree Definition \"%s\" is new.  Proceeding to insert new key.", newKey);
                 // insert newTD
                 treeDefs.put(newKey, newTD);
+                TCLog.debug("    New key %s added with values: %s", newKey, newTD.toString());
                 // update logToStringMap
                 logToStringMap.putAll(toAdd);
             }
@@ -145,6 +146,7 @@ public class TreeRegistry
                     
                     // insert newTD
                     treeDefs.put(newKey, newTD);
+                    TCLog.debug("    New key %s added with values: %s", newKey, newTD.toString());
                     
                     // update logToStringMap for all logs in the new definition
                     for (BlockID blockID : newTD.getLogList())
@@ -154,6 +156,7 @@ public class TreeRegistry
                 { // A tree is defined for that key; append the new definition to the existing tree
                     TCLog.debug("\"%s\" is already registered.  The new definition will be appended to the existing entry.", newKey);
                     treeDefs.get(newKey).appendWithSettings(newTD);
+                    TCLog.debug("    Key %s appended with values: %s", newKey, newTD.toString());
                     logToStringMap.putAll(toAdd);
                 }
             }
@@ -165,6 +168,7 @@ public class TreeRegistry
                     String existingTree = sharedLogTrees.remove(0);
                     // append the new def to the existing tree
                     treeDefs.get(existingTree).appendWithSettings(newTD);
+                    TCLog.debug("    Blank key tree appended with values: %s", newTD.toString());
                     
                     // update logToStringMap
                     for (BlockID log : newTD.getLogList())
