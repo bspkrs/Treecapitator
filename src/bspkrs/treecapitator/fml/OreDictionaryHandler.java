@@ -55,7 +55,7 @@ public class OreDictionaryHandler
                     if (block != null)
                     {
                         BlockID blockID = new BlockID(block);
-                        if (!leafList.contains(blockID) && block.isLeaves(world, 0, 0, 0))
+                        if (!leafList.contains(blockID) && isLeaves(world, block))
                             leafList.add(blockID);
                     }
                 
@@ -111,7 +111,7 @@ public class OreDictionaryHandler
                     if (block != null)
                     {
                         BlockID blockID = new BlockID(block);
-                        if (!TreeRegistry.instance().isRegistered(blockID) && block.isWood(world, 0, 0, 0))
+                        if (!TreeRegistry.instance().isRegistered(blockID) && isWood(world, block))
                             genericTree.addLogID(blockID);
                     }
                 
@@ -131,6 +131,30 @@ public class OreDictionaryHandler
             }
             else
                 TCLog.info("Skipping Ore Dictionary processing.");
+        }
+    }
+    
+    private boolean isWood(World world, Block block)
+    {
+        try
+        {
+            return block.isWood(world, 0, 0, 0);
+        }
+        catch (Throwable e)
+        {
+            return false;
+        }
+    }
+    
+    private boolean isLeaves(World world, Block block)
+    {
+        try
+        {
+            return block.isLeaves(world, 0, 0, 0);
+        }
+        catch (Throwable e)
+        {
+            return false;
         }
     }
     
