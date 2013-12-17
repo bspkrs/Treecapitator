@@ -6,8 +6,6 @@ import java.io.DataInputStream;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import bspkrs.fml.util.ForgePacketHelper;
-import bspkrs.treecapitator.Strings;
-import bspkrs.treecapitator.TCLog;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
@@ -32,9 +30,6 @@ public class TreeCapitatorServer implements IPacketHandler
     public void onPlayerLoggedIn(Player player)
     {
         PacketDispatcher.sendPacketToPlayer(ForgePacketHelper.createPacket("TreeCapitator", 1, TreeCapitatorMod.instance.nbtManager().getPacketArray()), player);
-        
-        if (!TreeCapitatorMod.isCoreModLoaded)
-            TCLog.severe(Strings.COREMOD_WARNING);
     }
     
     @Override

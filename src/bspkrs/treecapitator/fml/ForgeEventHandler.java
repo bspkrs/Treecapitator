@@ -10,6 +10,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import bspkrs.treecapitator.TCLog;
 import bspkrs.treecapitator.TCSettings;
 import bspkrs.treecapitator.TreeDefinition;
@@ -39,7 +40,6 @@ public class ForgeEventHandler
                 
                 playerSneakingMap.put(event.entityPlayer.getEntityName(), event.entityPlayer.isSneaking());
             }
-            
         }
     }
     
@@ -82,7 +82,12 @@ public class ForgeEventHandler
             else
                 TCLog.severe("TreeRegistry reported block ID %s is a log, but TreeDefinition lookup failed! " +
                         "Please report this to bspkrs (include a copy of this log file and your config).", blockID);
-            
         }
+    }
+    
+    @ForgeSubscribe
+    public void onBlockHarvested(BreakEvent event)
+    {
+        TreeCapitatorMod.instance.onBlockHarvested(event.world, event.x, event.y, event.z, event.block, event.blockMetadata, event.getPlayer());
     }
 }

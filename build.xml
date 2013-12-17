@@ -14,7 +14,7 @@
         <property name="mcp.home" location="${dir.mcp}"/>
         <property name="dev.core.home" location="${dir.core.project}"/>
         <property name="release.home" location="${dir.release}"/>
-        <property name="release.jar" value="[${version.minecraft}]${mod.id}.Forge.${version}.Universal.jar"/>
+        <property name="release.zip" value="[${version.minecraft}]${mod.id}.Forge.${version}.Universal.zip"/>
 
         <!-- setup python -->
         <property name="python.win" location="${mcp.home}/runtime/bin/python/python_mcp"/>
@@ -99,14 +99,12 @@
 
     <target name="build-Forge-jar">
         <!-- build the jar -->
-        <jar manifest="${dev.resources}/META-INF/MANIFEST.MF" destfile="${release.home}/${release.jar}">
+        <zip destfile="${release.home}/${release.zip}">
             <fileset dir="${mcp.bin}" includes="bspkrs/treecapitator/**/*.class"/>
             <fileset dir="${dev.resources}">
 				<exclude name="mcmod.template"/>
-				<exclude name="template.pack.mcmeta"/>
-				<exclude name="mods"/>
-				<exclude name="mods/*"/>
 			</fileset>
+            <fileset dir="${mcp.home}/.." includes="forgeversion.properties"/>
             <mappedresources>
                 <concat>
                     <fileset dir="${dev.resources}" includes="mcmod.template"/>
@@ -133,7 +131,7 @@
                 </concat>
                 <mergemapper to="mcmod.info"/>
             </mappedresources>
-        </jar>
+        </zip>
     </target>
 
     <target name="build" depends="init">

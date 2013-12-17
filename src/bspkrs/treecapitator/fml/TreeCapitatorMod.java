@@ -47,10 +47,9 @@ import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 public class TreeCapitatorMod
 {
     public static ModVersionChecker versionChecker;
-    private final String            versionURL      = Const.VERSION_URL + "/Minecraft/" + Const.MCVERSION + "/treeCapitatorForge.version";
-    private final String            mcfTopic        = "http://www.minecraftforum.net/topic/1009577-";
+    private final String            versionURL = Const.VERSION_URL + "/Minecraft/" + Const.MCVERSION + "/treeCapitatorForge.version";
+    private final String            mcfTopic   = "http://www.minecraftforum.net/topic/1009577-";
     
-    public static boolean           isCoreModLoaded = false;
     private RegistryNBTManager      nbtManager;
     public Configuration            config;
     
