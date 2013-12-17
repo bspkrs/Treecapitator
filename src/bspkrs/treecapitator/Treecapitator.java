@@ -181,22 +181,6 @@ public class Treecapitator
             TCLog.debug("World is remote, skipping TreeCapitator.onBlockHarvested().");
     }
     
-    /**
-     * Returns the block hardness based on whether the player is holding an axe-type item or not
-     */
-    public float getBlockHardness()
-    {
-        return this.isAxeItemEquipped() ? TCSettings.logHardnessModified : TCSettings.logHardnessNormal;
-    }
-    
-    /**
-     * Returns the block hardness based on whether the player is holding an axe-type item or not
-     */
-    public static float getBlockHardness(EntityPlayer entityPlayer)
-    {
-        return isAxeItemEquipped(entityPlayer) ? TCSettings.logHardnessModified : TCSettings.logHardnessNormal;
-    }
-    
     private Coord getTopLog(World world, Coord pos)
     {
         if (treeDef.useAdvancedTopLogLogic())
