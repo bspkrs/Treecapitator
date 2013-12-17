@@ -5,7 +5,7 @@ import bspkrs.util.Const;
 
 public class Strings
 {
-    public static final String VERSION_NUMBER                     = Const.MCVERSION + ".r06";
+    public static final String VERSION_NUMBER                     = Const.MCVERSION + ".r07";
     
     public static final String OAK                                = "vanilla_oak";
     public static final String SPRUCE                             = "vanilla_spruce";
@@ -101,8 +101,10 @@ public class Strings
     //public static final String COMMENT_SEPARATOR_2              = "      #--------------------------------------------------------------------------------------------------------#";
     public static final String logHardnessNormalDesc              = "[Global] The hardness of logs for when you are using items that won't chop down the trees.";
     public static final String logHardnessModifiedDesc            = "[Global] The hardness of logs for when you are using items that can chop down trees.";
-    public static final String treeHeightDecidesBreakSpeedDesc    = "[Global] When true, the log break speed is equal to original break speed / (tree height * 2)\n" +
+    public static final String treeHeightDecidesBreakSpeedDesc    = "[Global] When true, the log break speed is equal to original break speed / (tree height * <treeHeightModifier>)\n" +
                                                                           "When false, the original break speed is multiplied by the breakSpeedModifier value";
+    
+    public static final String treeHeightModifierDesc             = "[Global] See description for treeHeightDecidesBreakSpeed";
     public static final String allowOreDictionaryLookupDesc       = "[Global] When true, TreeCapitator will scan the Forge Ore Dictionary for blocks with an ore name matching\n" +
                                                                           "one of the strings in oreDictionaryLogStrings and generate a generic tree definition for them on the fly. \n" +
                                                                           "When false oreDictionaryLogStrings and oreDictionaryLeafStrings will be ignored.";
@@ -215,5 +217,4 @@ public class Strings
                                                                           "values in this category to suit your preferences.\n\n" +
                                                                           "WARNING: This config category must not be removed! If this category is renamed or removed TreeCapitator \n" +
                                                                           "will assume your config file is new and reload the default user mod config settings!";
-    
 }

@@ -6,7 +6,6 @@ import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.nbt.NBTTagCompound;
 import bspkrs.util.Configuration;
-import bspkrs.util.ListUtils;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public final class TCSettings
@@ -52,17 +51,12 @@ public final class TCSettings
     
     // Forge Only
     public static boolean     treeHeightDecidesBreakSpeed    = true;
+    public static float       treeHeightModifier             = 2.0F;
     public static boolean     allowOreDictionaryLookup       = true;
     public static String      oreDictionaryLogStrings        = "logWood,";
     public static String      oreDictionaryLeafStrings       = "treeLeaves,";
     public static String      blockIDBlacklist               = "";
     public static String      itemIDBlacklist                = "";
-    
-    // ML only
-    public static float       logHardnessModified            = 4.0F;
-    public static float       logHardnessNormal              = 2.0F;
-    public static String      axeIDList                      = ListUtils.getListAsDelimitedString(ToolRegistry.instance().vanillaAxeList(), "; ");
-    public static String      shearIDList                    = ListUtils.getListAsDelimitedString(ToolRegistry.instance().vanillaShearsList(), "; ");
     
     // static object references
     public static Block       wood;
@@ -104,6 +98,7 @@ public final class TCSettings
         allowMoreBlocksThanDamage = ntc.getBoolean("allowMoreBlocksThanDamage");
         allowSmartTreeDetection = ntc.getBoolean("allowSmartTreeDetection");
         treeHeightDecidesBreakSpeed = ntc.getBoolean("treeHeightDecidesBreakSpeed");
+        treeHeightModifier = ntc.getFloat("treeHeightModifier");
         breakSpeedModifier = ntc.getFloat("breakSpeedModifier");
         damageIncreaseAmount = ntc.getFloat("damageIncreaseAmount");
         damageMultiplier = ntc.getFloat("damageMultiplier");
@@ -142,6 +137,7 @@ public final class TCSettings
         ntc.setBoolean("allowOreDictionaryLookup", allowOreDictionaryLookup);
         ntc.setBoolean("allowSmartTreeDetection", allowSmartTreeDetection);
         ntc.setBoolean("treeHeightDecidesBreakSpeed", treeHeightDecidesBreakSpeed);
+        ntc.setFloat("treeHeightModifier", treeHeightModifier);
         ntc.setFloat("breakSpeedModifier", breakSpeedModifier);
         ntc.setFloat("damageIncreaseAmount", damageIncreaseAmount);
         ntc.setFloat("damageMultiplier", damageMultiplier);
@@ -220,6 +216,8 @@ public final class TCSettings
                 useStrictBlockPairing, Strings.useStrictBlockPairingDesc);
         treeHeightDecidesBreakSpeed = config.getBoolean("treeHeightDecidesBreakSpeed", Strings.GLOBALS_SETTINGS_CTGY,
                 treeHeightDecidesBreakSpeed, Strings.treeHeightDecidesBreakSpeedDesc);
+        treeHeightModifier = config.getFloat("treeHeightModifier", Strings.GLOBALS_SETTINGS_CTGY,
+                treeHeightModifier, 0.25F, 10.0F, Strings.treeHeightModifierDesc);
         allowOreDictionaryLookup = config.getBoolean("allowOreDictionaryLookup", Strings.GLOBALS_SETTINGS_CTGY,
                 allowOreDictionaryLookup, Strings.allowOreDictionaryLookupDesc);
         oreDictionaryLogStrings = config.getString("oreDictionaryLogStrings", Strings.GLOBALS_SETTINGS_CTGY,

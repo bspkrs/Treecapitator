@@ -67,7 +67,7 @@ public class ForgeEventHandler
                             {
                                 int height = Treecapitator.getTreeHeight(treeDef, player.worldObj, thing.blockX, thing.blockY, thing.blockZ, event.metadata, player);
                                 if (height > 1)
-                                    event.newSpeed = event.originalSpeed / (height * 2);
+                                    event.newSpeed = event.originalSpeed / (height * TCSettings.treeHeightModifier);
                             }
                         }
                         else
