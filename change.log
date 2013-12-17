@@ -1,3 +1,7 @@
+1.6.4.r07 - 17-Dec-2013
+- removed coremod code in favor of new Forge BreakEvent
+- added config setting treeHeightModifier to customize the treeHeightDecidesBreakSpeed handling
+- added code to scan the entire block list for unregistered tree blocks (part of the Ore Dictionary scan)
 1.6.4.r06 - 27-Oct-2013
 - reverted some optimization changes to fix mod tree issues
 1.6.4.r05 - 25-Oct-2013
