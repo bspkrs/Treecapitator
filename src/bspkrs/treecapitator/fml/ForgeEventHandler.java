@@ -88,6 +88,7 @@ public class ForgeEventHandler
     @ForgeSubscribe
     public void onBlockHarvested(BreakEvent event)
     {
-        TreeCapitatorMod.instance.onBlockHarvested(event.world, event.x, event.y, event.z, event.block, event.blockMetadata, event.getPlayer());
+        if (event.block != null && event.world != null && event.getPlayer() != null)
+            TreeCapitatorMod.instance.onBlockHarvested(event.world, event.x, event.y, event.z, event.block, event.blockMetadata, event.getPlayer());
     }
 }
