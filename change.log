@@ -1,3 +1,6 @@
+1.6.4.r09 - 19-Dec-2013
+- fixed NPE when using MultiMine (should also prevent other potential NPEs at same location)
+- added automatic MultiMine compatibility
 1.6.4.r08 - 18-Dec-2013
 - removed Block.blockList[] code due to crashes
 1.6.4.r07 - 17-Dec-2013
