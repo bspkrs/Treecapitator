@@ -15,6 +15,7 @@ import bspkrs.treecapitator.ToolRegistry;
 import bspkrs.treecapitator.TreeDefinition;
 import bspkrs.treecapitator.TreeRegistry;
 import bspkrs.treecapitator.Treecapitator;
+import bspkrs.treecapitator.fml.compat.MultiMineCompat;
 import bspkrs.util.BlockID;
 import bspkrs.util.CommonUtils;
 import bspkrs.util.Configuration;
@@ -132,10 +133,8 @@ public class TreeCapitatorMod
         // Multi-Mine stuff
         if (Loader.isModLoaded(TCSettings.multiMineModID))
         {
-            String s = TreeRegistry.instance().getMultiMineExclusionString();
-            TCLog.info("For Multi-Mine compatibility you should put this list in the S:\"Excluded Block IDs\" config setting in AS_MultiMine.cfg: \"%s\"", s);
-            TCConfigHandler.instance().config.get(Strings.TREE_MOD_CFG_CTGY, Strings.MM_EXCL_LIST, "", Strings.MM_EXCL_LIST_DESC).set(s);
-            TCConfigHandler.instance().config.save();
+            TCLog.info("Initializing MultiMine compatibility...");
+            new MultiMineCompat(TreeRegistry.instance().getMultiMineExclusionString());
         }
         
         // This must be done after all trees are registered to avoid screwing up the registration process
