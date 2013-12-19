@@ -97,8 +97,7 @@
         </exec>
     </target>
 
-    <target name="build-Forge-jar">
-        <!-- build the jar -->
+    <target name="build-Forge-zip">
         <zip destfile="${release.home}/${release.zip}">
             <fileset dir="${mcp.bin}" includes="bspkrs/treecapitator/**/*.class"/>
             <fileset dir="${dev.resources}">
@@ -140,7 +139,7 @@
         <antcall target="merge-source"/>
         <antcall target="recompile"/>
         <antcall target="reobfuscate"/>
-        <antcall target="build-Forge-jar"/>
+        <antcall target="build-Forge-zip"/>
 
         <antcall target="clean"/>
     </target>
