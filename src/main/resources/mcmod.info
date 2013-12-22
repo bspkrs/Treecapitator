@@ -1,0 +1,21 @@
+{
+  "modinfoversion": 2,
+  "modlist": [{
+    "modid": "TreeCapitator",
+    "name": "Treecapitator",
+    "description": "Allows you to chop down entire trees by breaking a single log.",
+    "version": "${mod_version}",
+    "mcversion": "${minecraft_version}",
+    "url": "http://www.minecraftforum.net/topic/1009577-/",
+    "updateUrl": "",
+    "authors": [ "DaftPVF", "bspkrs", "Lunatrius" ],
+    "credits": "Original by DaftPVF, currently maintained by bspkrs; additional credit to Lunatrius, AtomicStryker, ScottKillen, MisterFiber",
+    "logoFile": "",
+    "screenshots": [],
+    "parent": "",
+    "requiredMods": [ "bspkrsCore" ],
+    "dependencies": [ "bspkrsCore" ],
+    "dependants": [],
+    "useDependencyInformation": "true"
+  }]
+}
