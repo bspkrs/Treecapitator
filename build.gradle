@@ -1,0 +1,90 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "ForgeFS"
+            url = "http://files.minecraftforge.net/maven"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.0-SNAPSHOT'
+    }
+}
+
+apply plugin: "forge"
+
+// define the properties file
+ext.configFile = file "build.properties"
+
+configFile.withReader {
+    // read config.  it shall from now on be referenced as simply config or as project.config
+    def prop = new Properties()
+    prop.load(it)
+    project.ext.config = new ConfigSlurper().parse prop
+}
+
+repositories {
+    ivy {
+        name 'Forge FS legacy'
+        artifactPattern "https://dl.dropboxusercontent.com/u/20748481/MC/[module]/deobf/[module]-deobf-[revision].[ext]"
+    }
+}
+
+dependencies {
+    compile name: 'bspkrsCore', version: "${config.minecraft_version}-${config.bscore_version}", ext: 'jar'
+}
+
+group = "treecapitator"
+version = config.mod_version
+archivesBaseName = "TreeCapitator"
+
+minecraft {
+    version = config.minecraft_version + "-" + config.forge_version // grab latest forge
+    assetDir = "run/assets"
+}
+
+// add some stuff to the version
+version = "${config.minecraft_version}-${config.mod_version}.${System.getenv().BUILD_NUMBER}"
+
+processResources {
+    // replace stuff in the files we want.
+    from(sourceSets.main.resources.srcDirs) {
+        include '**/*.info'
+        include '**/*.properties'
+
+        // replaces
+        expand ([
+            'mod_version': project.config.mod_version,
+            'minecraft_version': project.config.minecraft_version,
+            'build_number': project.config.build_number,
+        ])
+    }
+
+    // copy everything else, thats we didnt do before
+    from(sourceSets.main.resources.srcDirs) {
+        exclude '**/*.info'
+        exclude '**/*.properties'
+    }
+}
+
+// change the name of my obfuscated jar
+jar {
+    appendix = 'universal'
+}
+
+// add a source jar
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    appendix = 'src'
+}
+
+// because the normal output has been made to be obfuscated
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    appendix = 'deobf'
+}
+
+artifacts {
+    archives sourceJar
+    archives deobfJar
+}
