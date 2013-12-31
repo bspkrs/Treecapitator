@@ -116,68 +116,6 @@ public class ModConfigRegistry
         defaultModCfgs.put("AppliedEnergistics", new ThirdPartyModConfig("AppliedEnergistics", "AppliedEnergistics.cfg", "",
                 "item:appeng.toolQuartzAxe", "<item:appeng.toolQuartzAxe>", "", true).setOverrideIMC(false));
         
-        defaultModCfgs.put("BiomesOPlenty", new ThirdPartyModConfig("BiomesOPlenty", "BiomesOPlenty.cfg",
-                "block:Bamboo ID; block:Colourized Leaves ID; block:Fruit Leaf Block ID; block:Leaf Block ID 1; block:Leaf Block ID 2; " +
-                        "block:Log Block ID 1; block:Log Block ID 2; block:Log Block ID 3; block:Log Block ID 4; block:Petal ID",
-                "item:Muddy Axe ID; item:Amethyst Axe ID", "<item:Muddy Axe ID>; <item:Amethyst Axe ID>", "", true)
-                .setOverrideIMC(false)
-                .addConfigTreeDef(Strings.OAK, new ConfigTreeDefinition("", "<block:Leaf Block ID 1>,4; <block:Leaf Block ID 1>,7; " +
-                        "<block:Leaf Block ID 1>,12; <block:Leaf Block ID 1>,15; <block:Fruit Leaf Block ID>; <block:Leaf Block ID 2>,0; " +
-                        "<block:Leaf Block ID 2>,8; <block:Leaf Block ID 2>,2; <block:Leaf Block ID 2>,10; 18,2; 18,10")
-                //.setRequireLeafDecayCheck(false)
-                )
-                .addConfigTreeDef(Strings.BIRCH, new ConfigTreeDefinition("", "<block:Leaf Block ID 1>,0; <block:Leaf Block ID 1>,8")
-                //.setRequireLeafDecayCheck(false)
-                )
-                .addConfigTreeDef(Strings.JUNGLE, new ConfigTreeDefinition("", "").setMaxLeafIDDist(3))
-                
-                .addConfigTreeDef("acacia", new ConfigTreeDefinition("<block:Log Block ID 1>,0; <block:Log Block ID 1>,4; <block:Log Block ID 1>,8",
-                        "<block:Colourized Leaves ID>,0; <block:Colourized Leaves ID>,8")
-                        .setRequireLeafDecayCheck(false))
-                .addConfigTreeDef("cherry", new ConfigTreeDefinition("<block:Log Block ID 1>,1; <block:Log Block ID 1>,5; <block:Log Block ID 1>,9",
-                        "<block:Leaf Block ID 2>,1; <block:Leaf Block ID 2>,3; <block:Leaf Block ID 2>,9; <block:Leaf Block ID 2>,11")
-                        .setRequireLeafDecayCheck(false))
-                .addConfigTreeDef("darkwood", new ConfigTreeDefinition("<block:Log Block ID 1>,2; <block:Log Block ID 1>,6; <block:Log Block ID 1>,10",
-                        "<block:Leaf Block ID 1>,3; <block:Leaf Block ID 1>,11")
-                        .setRequireLeafDecayCheck(false))
-                .addConfigTreeDef("fir", new ConfigTreeDefinition("<block:Log Block ID 1>,3; <block:Log Block ID 1>,7; <block:Log Block ID 1>,11",
-                        "<block:Leaf Block ID 1>,5; <block:Leaf Block ID 1>,13")
-                        .setRequireLeafDecayCheck(false))
-                
-                .addConfigTreeDef("holy", new ConfigTreeDefinition("<block:Log Block ID 2>,0; <block:Log Block ID 2>,4; <block:Log Block ID 2>,8",
-                        "<block:Leaf Block ID 1>,6; <block:Leaf Block ID 1>,14")
-                        .setRequireLeafDecayCheck(false))
-                .addConfigTreeDef("magic", new ConfigTreeDefinition("<block:Log Block ID 2>,1; <block:Log Block ID 2>,5; <block:Log Block ID 2>,9",
-                        "<block:Leaf Block ID 1>,2; <block:Leaf Block ID 1>,10")
-                        .setRequireLeafDecayCheck(false))
-                .addConfigTreeDef("mangrove", new ConfigTreeDefinition("<block:Log Block ID 2>,2; <block:Log Block ID 2>,6; <block:Log Block ID 2>,10",
-                        "<block:Colourized Leaves ID>,1; <block:Colourized Leaves ID>,9")
-                        .setRequireLeafDecayCheck(false))
-                .addConfigTreeDef("palm", new ConfigTreeDefinition("<block:Log Block ID 2>,3; <block:Log Block ID 2>,7; <block:Log Block ID 2>,11",
-                        "<block:Colourized Leaves ID>,2; <block:Colourized Leaves ID>,10")
-                        .setRequireLeafDecayCheck(false))
-                
-                .addConfigTreeDef("redwood", new ConfigTreeDefinition("<block:Log Block ID 3>,0; <block:Log Block ID 3>,4; <block:Log Block ID 3>,8",
-                        "<block:Colourized Leaves ID>,3; <block:Colourized Leaves ID>,11")
-                        .setRequireLeafDecayCheck(false))
-                .addConfigTreeDef("willow", new ConfigTreeDefinition("<block:Log Block ID 3>,1; <block:Log Block ID 3>,5; <block:Log Block ID 3>,9",
-                        "<block:Colourized Leaves ID>,4; <block:Colourized Leaves ID>,12")
-                        .setRequireLeafDecayCheck(false))
-                .addConfigTreeDef("dead", new ConfigTreeDefinition("<block:Log Block ID 3>,2; <block:Log Block ID 3>,6; <block:Log Block ID 3>,10", ""))
-                .addConfigTreeDef("big_flower", new ConfigTreeDefinition("<block:Log Block ID 3>,3; <block:Log Block ID 3>,7; <block:Log Block ID 3>,11",
-                        "<block:Petal ID>"))
-                
-                .addConfigTreeDef("pine", new ConfigTreeDefinition("<block:Log Block ID 4>,0; <block:Log Block ID 4>,4; <block:Log Block ID 4>,8",
-                        "<block:Colourized Leaves ID>,5; <block:Colourized Leaves ID>,13")
-                        .setRequireLeafDecayCheck(false))
-                .addConfigTreeDef("hellbark", new ConfigTreeDefinition("<block:Log Block ID 4>,1; <block:Log Block ID 4>,5; <block:Log Block ID 4>,9",
-                        "<block:Leaf Block ID 2>,4; <block:Leaf Block ID 2>,12")
-                        .setRequireLeafDecayCheck(false))
-                .addConfigTreeDef("jacaranda", new ConfigTreeDefinition("<block:Log Block ID 4>,2; <block:Log Block ID 4>,6; <block:Log Block ID 4>,10",
-                        "<block:Leaf Block ID 2>,5; <block:Leaf Block ID 2>,13")
-                        .setRequireLeafDecayCheck(false))
-                );
-        
         defaultModCfgs.put("DivineRPG", new ThirdPartyModConfig("DivineRPG", "DivineRPG.cfg", "block:eucalyptus",
                 "item:Bedrock Axe; item:Crystal Axe; item:Realmite Axe; item:azuriteaxe; item:corruptedaxe; item:denseaxe; item:divineaxe; " +
                         "item:donatoraxe; item:energyaxe; item:mythrilaxe; item:plasmaaxe; item:serenityaxe; item:twilightaxe",
@@ -186,25 +124,6 @@ public class ModConfigRegistry
                         "<item:twilightaxe>", "", true)
                 .setOverrideIMC(false)
                 .addConfigTreeDef("eucalyptus", new ConfigTreeDefinition("<block:eucalyptus>", "18"))); // still not sure on this
-        
-        defaultModCfgs.put("ExtrabiomesXL", new ThirdPartyModConfig("ExtrabiomesXL", "extrabiomes/extrabiomes.cfg",
-                "block:customlog.id; block:quarterlog0.id; block:quarterlog1.id; block:quarterlog2.id; block:quarterlog3.id; " +
-                        "block:autumnleaves.id; block:greenleaves.id")
-                .setOverrideIMC(false)
-                .addConfigTreeDef(Strings.OAK,
-                        new ConfigTreeDefinition("<block:quarterlog0.id>,2; <block:quarterlog1.id>,2; <block:quarterlog2.id>,2; <block:quarterlog3.id>,2;",
-                                "<block:autumnleaves.id>"))
-                .addConfigTreeDef(Strings.SPRUCE,
-                        new ConfigTreeDefinition("", "<block:autumnleaves.id>"))
-                .addConfigTreeDef("redwood",
-                        new ConfigTreeDefinition("<block:quarterlog0.id>,0; <block:quarterlog1.id>,0; <block:quarterlog2.id>,0; " +
-                                "<block:quarterlog3.id>,0", "<block:greenleaves.id>,1; <block:greenleaves.id>,9")
-                                .setMaxHorLeafBreakDist(10).setRequireLeafDecayCheck(false))
-                .addConfigTreeDef("fir",
-                        new ConfigTreeDefinition("<block:customlog.id>,0; <block:quarterlog0.id>,1; <block:quarterlog1.id>,1; " +
-                                "<block:quarterlog2.id>,1; <block:quarterlog3.id>,1", "<block:greenleaves.id>,0; <block:greenleaves.id>,8")
-                                .setMaxHorLeafBreakDist(10).setRequireLeafDecayCheck(false))
-                .addConfigTreeDef("acacia", new ConfigTreeDefinition("<block:customlog.id>,1", "<block:greenleaves.id>,2")));
         
         defaultModCfgs.put("Forestry", new ThirdPartyModConfig("Forestry", "forestry/base.conf", "block:log1; block:log2; block:log3; " +
                 "block:log4; block:log5; block:log6; block:log7; block:leaves")
