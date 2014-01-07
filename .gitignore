@@ -1,3 +1,8 @@
 /.settings/
 /bin/
 /release/
+/build/
+/.gradle/
+/run/
+.project
+.classpath
