@@ -29,18 +29,20 @@ configFile.withReader {
 
 repositories {
     ivy {
-        name 'Forge FS legacy'
-        artifactPattern "https://dl.dropboxusercontent.com/u/20748481/MC/[module]/deobf/[module]-deobf-[revision].[ext]"
+        url "https://dl.dropboxusercontent.com/u/20748481/MC"
+        layout "pattern", {
+            artifact "[module]/deobf/%5B${config.minecraft_version}%5D[module]-deobf-[revision].[ext]"
+        }
     }
 }
 
 dependencies {
-    compile name: 'bspkrsCore', version: "${config.minecraft_version}-${config.bscore_version}", ext: 'jar'
+    compile name: 'bspkrsCore', version: "${config.bscore_version}(${config.minecraft_version})", ext: 'jar'
 }
 
-group = "treecapitator"
+group = config.group_name
 version = config.mod_version
-archivesBaseName = "TreeCapitator"
+archivesBaseName = "[${config.minecraft_version}]${config.mod_id}"
 
 minecraft {
     version = config.minecraft_version + "-" + config.forge_version // grab latest forge
@@ -48,7 +50,7 @@ minecraft {
 }
 
 // add some stuff to the version
-version = "${config.minecraft_version}-${config.mod_version}.${System.getenv().BUILD_NUMBER}"
+version = "${config.minecraft_version}.${config.mod_version}"
 
 processResources {
     // replace stuff in the files we want.
@@ -58,7 +60,7 @@ processResources {
 
         // replaces
         expand ([
-            'mod_version': project.config.mod_version,
+            'mod_version': version,
             'minecraft_version': project.config.minecraft_version,
             'build_number': project.config.build_number,
         ])
