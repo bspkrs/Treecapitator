@@ -1,51 +1,42 @@
 package bspkrs.treecapitator.fml;
 
-import java.util.EnumSet;
-
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.ChatComponentText;
 import bspkrs.bspkrscore.fml.bspkrsCoreMod;
-import bspkrs.fml.util.TickerBase;
+import bspkrs.helpers.entity.player.EntityPlayerHelper;
 import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.TickType;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class TreeCapitatorTicker extends TickerBase
+public class TreeCapitatorTicker
 {
     private Minecraft mcClient;
     
-    public TreeCapitatorTicker(EnumSet<TickType> tickTypes)
+    public TreeCapitatorTicker()
     {
-        super(tickTypes);
         mcClient = FMLClientHandler.instance().getClient();
+        FMLCommonHandler.instance().bus().register(this);
     }
     
-    @Override
-    public boolean onTick(TickType tick, boolean isStart)
+    @SubscribeEvent
+    public void onTick(ClientTickEvent event)
     {
-        if (isStart)
-        {
-            return true;
-        }
+        if (event.phase.equals(Phase.START))
+            return;
         
         if (mcClient != null && mcClient.thePlayer != null)
         {
             if (bspkrsCoreMod.instance.allowUpdateCheck && TreeCapitatorMod.versionChecker != null)
                 if (!TreeCapitatorMod.versionChecker.isCurrentVersion())
                     for (String msg : TreeCapitatorMod.versionChecker.getInGameMessage())
-                        mcClient.thePlayer.addChatMessage(msg);
+                        EntityPlayerHelper.addChatMessage(mcClient.thePlayer, new ChatComponentText(msg));
             
-            return false;
+            FMLCommonHandler.instance().bus().unregister(this);
         }
-        
-        return true;
     }
-    
-    @Override
-    public String getLabel()
-    {
-        return "TreeCapitatorTicker";
-    }
-    
 }

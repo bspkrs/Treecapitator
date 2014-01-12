@@ -1,11 +1,9 @@
 package bspkrs.treecapitator;
 
-import java.util.logging.Level;
-
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.nbt.NBTTagCompound;
-import bspkrs.util.Configuration;
+import bspkrs.util.BSConfiguration;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public final class TCSettings
@@ -171,7 +169,7 @@ public final class TCSettings
      * 
      * @param config
      */
-    public void syncConfiguration(Configuration config)
+    public void syncConfiguration(BSConfiguration config)
     {
         // Global settings
         allowDebugLogging = config.getBoolean("allowDebugLogging", Strings.GLOBALS_SETTINGS_CTGY,
@@ -254,14 +252,10 @@ public final class TCSettings
         config.addCustomCategoryComment(Strings.PER_TREE_DEFAULTS_CTGY, Strings.PER_TREE_DEFAULTS_CTGY_DESC);
         
         // Log configs if we are in debug logging mode
-        Level level = TCLog.INSTANCE.getLogger().getLevel();
         if (allowDebugLogging)
-            TCLog.INSTANCE.getLogger().setLevel(Level.CONFIG);
-        
-        TCLog.configs(config, Strings.GLOBALS_SETTINGS_CTGY);
-        TCLog.configs(config, Strings.PER_TREE_DEFAULTS_CTGY);
-        
-        if (allowDebugLogging)
-            TCLog.INSTANCE.getLogger().setLevel(level);
+        {
+            TCLog.configs(config, Strings.GLOBALS_SETTINGS_CTGY);
+            TCLog.configs(config, Strings.PER_TREE_DEFAULTS_CTGY);
+        }
     }
 }

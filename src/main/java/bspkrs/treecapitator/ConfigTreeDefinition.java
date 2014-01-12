@@ -6,9 +6,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.config.ConfigCategory;
+import net.minecraftforge.common.config.Configuration;
 import bspkrs.util.BlockID;
-import bspkrs.util.ConfigCategory;
-import bspkrs.util.Configuration;
+import bspkrs.util.CommonUtils;
 import bspkrs.util.HashCodeUtil;
 import bspkrs.util.ListUtils;
 
@@ -152,15 +153,27 @@ public class ConfigTreeDefinition extends TreeDefinition
         
         for (String log : rLogs.split(";"))
         {
-            BlockID blockID = new BlockID(log, ",", 0);
-            if (blockID.id > 0)
+            String[] parts = log.split(",");
+            int md = -1;
+            
+            if (parts.length > 1)
+                md = CommonUtils.parseInt(parts[1], -1);
+            
+            BlockID blockID = new BlockID(parts[0], md);
+            if (blockID.isValid())
                 super.addLogID(blockID);
         }
         
         for (String leaf : rLeaves.split(";"))
         {
-            BlockID blockID = new BlockID(leaf, ",", 0);
-            if (blockID.id > 0)
+            String[] parts = leaf.split(",");
+            int md = -1;
+            
+            if (parts.length > 1)
+                md = CommonUtils.parseInt(parts[1], -1);
+            
+            BlockID blockID = new BlockID(parts[0], md);
+            if (blockID.isValid())
                 super.addLeafID(blockID);
         }
         

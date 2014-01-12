@@ -5,9 +5,7 @@ import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
@@ -18,12 +16,13 @@ import bspkrs.treecapitator.TreeRegistry;
 import bspkrs.treecapitator.Treecapitator;
 import bspkrs.util.BlockID;
 import bspkrs.util.CommonUtils;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ForgeEventHandler
 {
     private Map<String, Boolean> playerSneakingMap = new HashMap<String, Boolean>();
     
-    @ForgeSubscribe
+    @SubscribeEvent
     public void onBlockClicked(PlayerInteractEvent event)
     {
         if (event.action.equals(PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) && TreeCapitatorMod.proxy.isEnabled())
@@ -43,7 +42,7 @@ public class ForgeEventHandler
         }
     }
     
-    @ForgeSubscribe
+    @SubscribeEvent
     public void getPlayerBreakSpeed(BreakSpeed event)
     {
         BlockID blockID = new BlockID(event.block.blockID, event.metadata);
@@ -85,7 +84,7 @@ public class ForgeEventHandler
         }
     }
     
-    @ForgeSubscribe
+    @SubscribeEvent
     public void onBlockHarvested(BreakEvent event)
     {
         if (event.block != null && event.world != null && event.getPlayer() != null)

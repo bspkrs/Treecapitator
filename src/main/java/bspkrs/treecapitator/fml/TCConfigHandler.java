@@ -4,8 +4,8 @@ import java.io.File;
 
 import bspkrs.treecapitator.TCLog;
 import bspkrs.treecapitator.TCSettings;
+import bspkrs.util.BSConfiguration;
 import bspkrs.util.CommonUtils;
-import bspkrs.util.Configuration;
 
 public class TCConfigHandler
 {
@@ -30,12 +30,12 @@ public class TCConfigHandler
         instance = this;
     }
     
-    protected Configuration config;
+    protected BSConfiguration config;
     
     private TCConfigHandler(File file)
     {
         this();
-        config = new Configuration(file);
+        config = new BSConfiguration(file);
         config.load();
         
         TCLog.info("Loading configuration file %s", file.getAbsolutePath().replace(CommonUtils.getMinecraftDir(), "./"));

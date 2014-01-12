@@ -9,12 +9,17 @@ import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import bspkrs.helpers.block.BlockHelper;
+import bspkrs.helpers.item.ItemHelper;
+import bspkrs.helpers.nbt.NBTTagListHelper;
+import bspkrs.helpers.world.WorldHelper;
 import bspkrs.util.BlockID;
 import bspkrs.util.CommonUtils;
 import bspkrs.util.Coord;
@@ -41,7 +46,7 @@ public class Treecapitator
         player = entityPlayer;
         this.treeDef = treeDef;
         masterLogList = TreeRegistry.instance().masterLogList();
-        vineID = new BlockID(Block.vine.blockID);
+        vineID = new BlockID(Blocks.vine);
         logDamageMultiplier = TCSettings.damageMultiplier;
         leafDamageMultiplier = TCSettings.damageMultiplier;
         numLogsBroken = 1;
@@ -154,7 +159,7 @@ public class Treecapitator
                             currentAxeDamage = Math.round(currentAxeDamage);
                             
                             for (int i = 0; i < MathHelper.floor_double(currentAxeDamage); i++)
-                                axe.getItem().onBlockDestroyed(axe, world, 17, x, y, z, player);
+                                ItemHelper.onBlockDestroyed(axe, world, treeDef.logBlocks.get(0).getBlock(), x, y, z, player);
                         }
                         
                         if (currentShearsDamage > 0.0F && shears != null)
@@ -162,10 +167,10 @@ public class Treecapitator
                             currentShearsDamage = Math.round(currentShearsDamage);
                             
                             for (int i = 0; i < Math.floor(currentShearsDamage); i++)
-                                if (shears.itemID == Item.shears.itemID)
+                                if (shears.getItem().equals(Items.shears))
                                     shears.damageItem(1, player);
                                 else
-                                    shears.getItem().onBlockDestroyed(shears, world, 18, x, y, z, player);
+                                    ItemHelper.onBlockDestroyed(shears, world, treeDef.leafBlocks.get(0).getBlock(), x, y, z, player);
                         }
                     }
                     else
@@ -324,7 +329,7 @@ public class Treecapitator
                     if (x != 0 || y != 0 || z != 0)
                     {
                         BlockID blockID = new BlockID(world, pos.x + x, pos.y + y, pos.z + z);
-                        if (blockID.id > 0)
+                        if (blockID.isValid())
                             if (isLeafBlock(leafBlocks, blockID))
                             {
                                 if (shouldLog)
@@ -361,7 +366,7 @@ public class Treecapitator
             if (item != null && item.isItemEnchanted())
                 for (int i = 0; i < item.getEnchantmentTagList().tagCount(); i++)
                 {
-                    NBTTagCompound tag = (NBTTagCompound) item.getEnchantmentTagList().tagAt(i);
+                    NBTTagCompound tag = NBTTagListHelper.getCompoundTagAt(item.getEnchantmentTagList(), i);
                     if (tag.getShort("id") == TCSettings.treecapitating.effectId)
                     {
                         axe = item;
@@ -392,7 +397,7 @@ public class Treecapitator
             if (list != null)
                 for (int i = 0; i < list.tagCount(); i++)
                 {
-                    NBTTagCompound tag = (NBTTagCompound) list.tagAt(i);
+                    NBTTagCompound tag = NBTTagListHelper.getCompoundTagAt(list, i);
                     if (tag.getShort("id") == Enchantment.fortune.effectId)
                         return tag.getShort("lvl");
                 }
@@ -412,7 +417,7 @@ public class Treecapitator
             if (item != null && item.isItemEnchanted())
                 for (int i = 0; i < item.getEnchantmentTagList().tagCount(); i++)
                 {
-                    NBTTagCompound tag = (NBTTagCompound) item.getEnchantmentTagList().tagAt(i);
+                    NBTTagCompound tag = NBTTagListHelper.getCompoundTagAt(item.getEnchantmentTagList(), i);
                     if (tag.getShort("id") == TCSettings.treecapitating.effectId)
                         return true;
                 }
@@ -470,21 +475,20 @@ public class Treecapitator
         while (list.size() > 0)
         {
             Coord pos = list.remove(0);
-            int id = world.getBlockId(pos.x, pos.y, pos.z);
-            if (id != 0)
+            Block block = WorldHelper.getBlock(world, pos.x, pos.y, pos.z);
+            if (block.isAir(world, pos.x, pos.y, pos.z))
             {
-                Block block = Block.blocksList[id];
                 int metadata = world.getBlockMetadata(pos.x, pos.y, pos.z);
                 
                 if ((((vineID.equals(new BlockID(block, metadata)) && TCSettings.shearVines)
                         || (isLeafBlock(new BlockID(block, metadata)) && TCSettings.shearLeaves)) && canShear)
                         && !(player.capabilities.isCreativeMode && TCSettings.disableCreativeDrops))
                 {
-                    world.spawnEntityInWorld(new EntityItem(world, pos.x, pos.y, pos.z, new ItemStack(id, 1, block.damageDropped(metadata))));
+                    world.spawnEntityInWorld(new EntityItem(world, pos.x, pos.y, pos.z, new ItemStack(block, 1, BlockHelper.damageDropped(block, metadata))));
                     
                     if (TCSettings.allowItemDamage && !player.capabilities.isCreativeMode && shears != null && shears.stackSize > 0)
                     {
-                        canShear = damageShearsAndContinue(world, id, pos.x, pos.y, pos.z);
+                        canShear = damageShearsAndContinue(world, block, pos.x, pos.y, pos.z);
                         numLeavesSheared++;
                         
                         if (canShear && TCSettings.useIncreasingItemDamage && numLeavesSheared % TCSettings.increaseDamageEveryXBlocks == 0)
@@ -493,12 +497,12 @@ public class Treecapitator
                 }
                 else if (!(player.capabilities.isCreativeMode && TCSettings.disableCreativeDrops))
                 {
-                    block.dropBlockAsItem(world, pos.x, pos.y, pos.z, metadata, getFortuneLevel(axe));
+                    BlockHelper.dropBlockAsItem(block, world, pos.x, pos.y, pos.z, metadata, getFortuneLevel(axe));
                     
                     if (TCSettings.allowItemDamage && !player.capabilities.isCreativeMode && axe != null && axe.stackSize > 0
                             && !vineID.equals(new BlockID(block, metadata)) && !isLeafBlock(new BlockID(block, metadata)) && !pos.equals(startPos))
                     {
-                        if (!damageAxeAndContinue(world, id, startPos.x, startPos.y, startPos.z))
+                        if (!damageAxeAndContinue(world, block, startPos.x, startPos.y, startPos.z))
                             list.clear();
                         
                         numLogsBroken++;
@@ -508,10 +512,10 @@ public class Treecapitator
                     }
                 }
                 
-                if (world.blockHasTileEntity(pos.x, pos.y, pos.z))
-                    world.removeBlockTileEntity(pos.x, pos.y, pos.z);
+                if (WorldHelper.getBlockTileEntity(world, pos.x, pos.y, pos.z) != null)
+                    WorldHelper.removeBlockTileEntity(world, pos.x, pos.y, pos.z);
                 
-                world.setBlock(pos.x, pos.y, pos.z, 0, 0, 3);
+                WorldHelper.setBlockToAir(world, pos.x, pos.y, pos.z);
             }
         }
     }
@@ -519,14 +523,14 @@ public class Treecapitator
     /**
      * Damages the axe-type item and returns true if we should continue destroying logs
      */
-    private boolean damageAxeAndContinue(World world, int id, int x, int y, int z)
+    private boolean damageAxeAndContinue(World world, Block block, int x, int y, int z)
     {
         if (axe != null)
         {
             currentAxeDamage += logDamageMultiplier;
             
             for (int i = 0; i < (int) Math.floor(currentAxeDamage); i++)
-                axe.getItem().onBlockDestroyed(axe, world, id, x, y, z, player);
+                ItemHelper.onBlockDestroyed(axe, world, block, x, y, z, player);
             
             currentAxeDamage -= Math.floor(currentAxeDamage);
             
@@ -539,7 +543,7 @@ public class Treecapitator
     /**
      * Damages the shear-type item and returns true if we should continue shearing leaves/vines
      */
-    private boolean damageShearsAndContinue(World world, int id, int x, int y, int z)
+    private boolean damageShearsAndContinue(World world, Block block, int x, int y, int z)
     {
         if (shears != null)
         {
@@ -548,10 +552,10 @@ public class Treecapitator
             
             for (int i = 0; i < Math.floor(currentShearsDamage); i++)
                 // Shakes fist at Forge!
-                if (shears.itemID == Item.shears.itemID)
+                if (shears.getItem().equals(Items.shears))
                     shears.damageItem(1, player);
                 else
-                    shears.getItem().onBlockDestroyed(shears, world, id, x, y, z, player);
+                    ItemHelper.onBlockDestroyed(shears, world, block, x, y, z, player);
             
             currentShearsDamage -= Math.floor(currentShearsDamage);
             
@@ -665,9 +669,9 @@ public class Treecapitator
             for (int y = -range; y <= range; y++)
                 for (int z = -range; z <= range; z++)
                 {
-                    int blockID = world.getBlockId(x + pos.x, y + pos.y, z + pos.z);
+                    Block block = WorldHelper.getBlock(world, x + pos.x, y + pos.y, z + pos.z);
                     int md = world.getBlockMetadata(x + pos.x, y + pos.y, z + pos.z);
-                    if (isLeafBlock(new BlockID(blockID, md)) || vineID.equals(new BlockID(blockID)))
+                    if (isLeafBlock(new BlockID(block, md)) || vineID.equals(new BlockID(block)))
                     {
                         int metadata = world.getBlockMetadata(x + pos.x, y + pos.y, z + pos.z);
                         if (!treeDef.requireLeafDecayCheck() || ((metadata & 8) != 0 && (metadata & 4) == 0))
@@ -691,14 +695,14 @@ public class Treecapitator
             for (int y = -i; y <= i; y++)
                 for (int z = -i; z <= i; z++)
                 {
-                    Coord neighbor = new Coord(x + pos.x, y + pos.y, z + pos.z);
-                    int neighborID = world.getBlockId(neighbor.x, neighbor.y, neighbor.z);
+                    Coord neighborPos = new Coord(x + pos.x, y + pos.y, z + pos.z);
+                    Block neighborBlock = WorldHelper.getBlock(world, neighborPos.x, neighborPos.y, neighborPos.z);
                     /*
                      * Use TreeCapitator.logIDList here so that we find ANY type of log block, not just the type for this tree
                      */
-                    if ((x != 0 || y != 0 || z != 0) && neighborID != 0 &&
-                            masterLogList.contains(new BlockID(world, neighbor.x, neighbor.y, neighbor.z))
-                            && !neighbor.equals(startPos))
+                    if ((x != 0 || y != 0 || z != 0) && !neighborPos.isAirBlock(world) &&
+                            masterLogList.contains(new BlockID(world, neighborPos.x, neighborPos.y, neighborPos.z))
+                            && !neighborPos.equals(startPos))
                         return true;
                 }
         

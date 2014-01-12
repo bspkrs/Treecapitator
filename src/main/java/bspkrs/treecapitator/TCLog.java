@@ -1,12 +1,13 @@
 package bspkrs.treecapitator;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
+
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import bspkrs.util.CommonUtils;
-import bspkrs.util.Configuration;
-import bspkrs.util.Property;
-import cpw.mods.fml.common.FMLLog;
 
 public enum TCLog
 {
@@ -27,8 +28,7 @@ public enum TCLog
         if (logger != null)
             return;
         
-        logger = Logger.getLogger("TreeCapitator");
-        logger.setParent(FMLLog.getLogger());
+        logger = LogManager.getLogger("Treecapitator");
     }
     
     public static void info(String format, Object... args)
@@ -43,27 +43,27 @@ public enum TCLog
     
     public static void severe(String format, Object... args)
     {
-        INSTANCE.log(Level.SEVERE, format, args);
+        INSTANCE.log(Level.ERROR, format, args);
     }
     
     public static void warning(String format, Object... args)
     {
-        INSTANCE.log(Level.WARNING, format, args);
+        INSTANCE.log(Level.WARN, format, args);
     }
     
     public static void config(String format, Object... args)
     {
         if (TCSettings.allowDebugLogging)
-            INSTANCE.log(Level.CONFIG, format, args);
+            INSTANCE.log(Level.INFO, format, args);
     }
     
     public static void config(Property prop)
     {
         if (TCSettings.allowDebugLogging)
             if (prop.isList())
-                INSTANCE.log(Level.CONFIG, "%s: %s", prop.getName(), CommonUtils.stringArrayToString(prop.getStringList(), "; "));
+                INSTANCE.log(Level.INFO, "%s: %s", prop.getName(), CommonUtils.stringArrayToString(prop.getStringList(), "; "));
             else
-                INSTANCE.log(Level.CONFIG, "%s: %s", prop.getName(), prop.getString());
+                INSTANCE.log(Level.INFO, "%s: %s", prop.getName(), prop.getString());
     }
     
     public static void configs(Configuration config, String category)

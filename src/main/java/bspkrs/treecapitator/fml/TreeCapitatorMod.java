@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import sun.jdbc.odbc.ee.ConnectionHandler;
 import bspkrs.bspkrscore.fml.bspkrsCoreMod;
 import bspkrs.treecapitator.RegistryNBTManager;
 import bspkrs.treecapitator.Strings;
@@ -16,9 +17,9 @@ import bspkrs.treecapitator.TreeDefinition;
 import bspkrs.treecapitator.TreeRegistry;
 import bspkrs.treecapitator.Treecapitator;
 import bspkrs.treecapitator.fml.compat.MultiMineCompat;
+import bspkrs.util.BSConfiguration;
 import bspkrs.util.BlockID;
 import bspkrs.util.CommonUtils;
-import bspkrs.util.Configuration;
 import bspkrs.util.Const;
 import bspkrs.util.Coord;
 import bspkrs.util.ModVersionChecker;
@@ -34,8 +35,6 @@ import cpw.mods.fml.common.event.FMLInterModComms.IMCEvent;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkMod;
-import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 
 @Mod(name = "TreeCapitator", modid = "TreeCapitator", version = "Forge " + Strings.VERSION_NUMBER,
         dependencies = "required-after:bspkrsCore", useMetadata = true)
@@ -50,7 +49,7 @@ public class TreeCapitatorMod
     private final String            mcfTopic   = "http://www.minecraftforum.net/topic/1009577-";
     
     private RegistryNBTManager      nbtManager;
-    public Configuration            config;
+    public BSConfiguration          config;
     
     @Metadata(value = "TreeCapitator")
     public static ModMetadata       metadata;

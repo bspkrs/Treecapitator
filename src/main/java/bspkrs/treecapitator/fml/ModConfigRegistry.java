@@ -9,12 +9,12 @@ import java.util.TreeMap;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.config.ConfigCategory;
 import bspkrs.treecapitator.ConfigTreeDefinition;
 import bspkrs.treecapitator.Strings;
 import bspkrs.treecapitator.TCLog;
 import bspkrs.treecapitator.TCSettings;
-import bspkrs.util.ConfigCategory;
-import bspkrs.util.Configuration;
+import bspkrs.util.BSConfiguration;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLInterModComms;
 
@@ -322,7 +322,7 @@ public class ModConfigRegistry
     /*
      * Gets/Sets user configs from the config object
      */
-    public void syncConfiguration(Configuration config)
+    public void syncConfiguration(BSConfiguration config)
     {
         /*
          * Get / Set 3rd Party Mod configs

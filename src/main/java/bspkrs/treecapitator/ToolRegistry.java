@@ -3,10 +3,10 @@ package bspkrs.treecapitator;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import bspkrs.util.BlockID;
 import bspkrs.util.ItemID;
 import bspkrs.util.ListUtils;
 
@@ -56,18 +56,18 @@ public class ToolRegistry
     protected void initVanillaItemLists()
     {
         initVanillaLists();
-        vanAxeList.add(new ItemID(Item.axeWood));
-        vanAxeList.add(new ItemID(Item.axeStone));
-        vanAxeList.add(new ItemID(Item.axeIron));
-        vanAxeList.add(new ItemID(Item.axeGold));
-        vanAxeList.add(new ItemID(Item.axeDiamond));
+        vanAxeList.add(new ItemID(Items.wooden_axe));
+        vanAxeList.add(new ItemID(Items.stone_axe));
+        vanAxeList.add(new ItemID(Items.iron_axe));
+        vanAxeList.add(new ItemID(Items.golden_axe));
+        vanAxeList.add(new ItemID(Items.diamond_axe));
         
-        vanShearsList.add(new ItemID(Item.shears));
+        vanShearsList.add(new ItemID(Items.shears));
     }
     
-    public List<BlockID> blacklist()
+    public List<ItemID> blacklist()
     {
-        return new ArrayList<BlockID>(blacklist);
+        return new ArrayList<ItemID>(blacklist);
     }
     
     // This must be done after all trees are registered to avoid screwing up the registration process

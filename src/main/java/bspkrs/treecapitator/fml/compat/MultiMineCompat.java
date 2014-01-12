@@ -27,7 +27,7 @@ public class MultiMineCompat
             }
             catch (Throwable e)
             {
-                TCLog.severe("An error occurred while attempting to setup MultiMine compatibility.");
+                TCLog.severe("An error occurred while attempting to initialize MultiMine compatibility.");
                 e.printStackTrace();
             }
         }

@@ -8,6 +8,10 @@ import java.util.TreeMap;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.config.ConfigCategory;
+import net.minecraftforge.common.config.Property;
+import bspkrs.helpers.nbt.NBTTagCompoundHelper;
+import bspkrs.helpers.nbt.NBTTagListHelper;
 import bspkrs.treecapitator.ConfigTreeDefinition;
 import bspkrs.treecapitator.Strings;
 import bspkrs.treecapitator.TCLog;
@@ -15,12 +19,10 @@ import bspkrs.treecapitator.TCSettings;
 import bspkrs.treecapitator.ToolRegistry;
 import bspkrs.treecapitator.TreeDefinition;
 import bspkrs.treecapitator.TreeRegistry;
+import bspkrs.util.BSConfiguration;
 import bspkrs.util.CommonUtils;
-import bspkrs.util.ConfigCategory;
-import bspkrs.util.Configuration;
 import bspkrs.util.ItemID;
 import bspkrs.util.ListUtils;
-import bspkrs.util.Property;
 import cpw.mods.fml.common.Loader;
 
 public class ThirdPartyModConfig
@@ -97,7 +99,7 @@ public class ThirdPartyModConfig
         this(modID, configPath, "", itemKeys, axeKeys, shearsKeys, shiftIndex);
     }
     
-    public ThirdPartyModConfig(Configuration config, String category)
+    public ThirdPartyModConfig(BSConfiguration config, String category)
     {
         this(false);
         readFromConfiguration(config, category);
@@ -127,11 +129,11 @@ public class ThirdPartyModConfig
         
         configTreesMap = new TreeMap<String, ConfigTreeDefinition>();
         
-        NBTTagList treeList = tpModCfg.getTagList(Strings.TREES);
+        NBTTagList treeList = NBTTagCompoundHelper.getTagList(tpModCfg, Strings.TREES, (byte) 10);
         
         for (int i = 0; i < treeList.tagCount(); i++)
         {
-            NBTTagCompound tree = (NBTTagCompound) treeList.tagAt(i);
+            NBTTagCompound tree = NBTTagListHelper.getCompoundTagAt(treeList, i);
             this.addConfigTreeDef(tree.getString(Strings.TREE_NAME), new ConfigTreeDefinition(tree));
         }
         
@@ -140,7 +142,6 @@ public class ThirdPartyModConfig
     
     public void writeToNBT(NBTTagCompound tpModCfg)
     {
-        tpModCfg.setName(modID);
         tpModCfg.setString(Strings.MOD_ID, modID);
         if (configPath.length() > 0)
             tpModCfg.setString(Strings.CONFIG_PATH, configPath);
@@ -166,7 +167,7 @@ public class ThirdPartyModConfig
         tpModCfg.setTag(Strings.TREES, treeList);
     }
     
-    public ThirdPartyModConfig readFromConfiguration(Configuration config, String category)
+    public ThirdPartyModConfig readFromConfiguration(BSConfiguration config, String category)
     {
         ConfigCategory cc = config.getCategory(category);
         modID = cc.get(Strings.MOD_ID).getString();
@@ -196,14 +197,14 @@ public class ThirdPartyModConfig
         {
             if (ctgy.indexOf(category + ".") != -1)
             {
-                addConfigTreeDef(config.getCategory(ctgy).getName(), new ConfigTreeDefinition(config, ctgy));
+                addConfigTreeDef(config.getCategory(ctgy).getQualifiedName(), new ConfigTreeDefinition(config, ctgy));
             }
         }
         
         return this;
     }
     
-    public void writeToConfiguration(Configuration config, String category)
+    public void writeToConfiguration(BSConfiguration config, String category)
     {
         config.get(category, Strings.MOD_ID, modID);
         if (configPath.length() > 0)
@@ -266,11 +267,11 @@ public class ThirdPartyModConfig
         }
         
         for (ItemID axe : ListUtils.getDelimitedStringAsItemIDList(axeList, ";"))
-            if (axe.id > 0)
+            if (!axe.id.equals(""))
                 ToolRegistry.instance().registerAxe(axe);
         
         for (ItemID shears : ListUtils.getDelimitedStringAsItemIDList(shearsList, ";"))
-            if (shears.id > 0)
+            if (!shears.id.equals(""))
                 ToolRegistry.instance().registerShears(shears);
         
         return this;
@@ -330,7 +331,7 @@ public class ThirdPartyModConfig
                 File file = new File(Loader.instance().getConfigDir(), configPath.trim());
                 if (file.exists())
                 {
-                    Configuration thirdPartyConfig = new Configuration(file);
+                    BSConfiguration thirdPartyConfig = new BSConfiguration(file);
                     String idrClassName = Loader.instance().getIndexedModList().get(modID).getMod().getClass().getName();
                     thirdPartyConfig.load();
                     getReplacementTagsForKeys(thirdPartyConfig, blockKeys, idrClassName, false);
@@ -347,7 +348,7 @@ public class ThirdPartyModConfig
         
     }
     
-    private void getReplacementTagsForKeys(Configuration thirdPartyConfig, String keys, String idrClassName, boolean isItemList)
+    private void getReplacementTagsForKeys(BSConfiguration thirdPartyConfig, String keys, String idrClassName, boolean isItemList)
     {
         if (keys.length() > 0)
             for (String configID : keys.trim().split(";"))
