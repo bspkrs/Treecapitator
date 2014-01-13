@@ -1,4 +1,4 @@
-package bspkrs.treecapitator.fml;
+package bspkrs.treecapitator.forge;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -7,10 +7,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-import bspkrs.treecapitator.TCLog;
-import bspkrs.treecapitator.TCSettings;
-import bspkrs.treecapitator.TreeDefinition;
-import bspkrs.treecapitator.TreeRegistry;
+import bspkrs.helpers.item.ItemHelper;
+import bspkrs.treecapitator.config.TCSettings;
+import bspkrs.treecapitator.registry.TreeDefinition;
+import bspkrs.treecapitator.registry.TreeRegistry;
+import bspkrs.treecapitator.util.TCLog;
 import bspkrs.util.BlockID;
 
 public class OreDictionaryHandler
@@ -45,7 +46,7 @@ public class OreDictionaryHandler
                         for (ItemStack itemStack : OreDictionary.getOres(oreName.trim()))
                         {
                             Item item = itemStack.getItem();
-                            BlockID blockID = new BlockID(((ItemBlock) item).getBlockID());
+                            BlockID blockID = new BlockID(ItemHelper.getUniqueID(item));
                             if (item instanceof ItemBlock && !leafList.contains(blockID))
                                 leafList.add(blockID);
                         }
@@ -64,7 +65,7 @@ public class OreDictionaryHandler
                             Item item = itemStack.getItem();
                             if (item instanceof ItemBlock)
                             {
-                                BlockID blockID = new BlockID(((ItemBlock) item).getBlockID());
+                                BlockID blockID = new BlockID(ItemHelper.getUniqueID(item));
                                 if (!TreeRegistry.instance().isRegistered(blockID))
                                     genericTree.addLogID(blockID);
                             }

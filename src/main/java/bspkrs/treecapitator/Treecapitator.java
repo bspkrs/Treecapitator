@@ -20,6 +20,11 @@ import bspkrs.helpers.block.BlockHelper;
 import bspkrs.helpers.item.ItemHelper;
 import bspkrs.helpers.nbt.NBTTagListHelper;
 import bspkrs.helpers.world.WorldHelper;
+import bspkrs.treecapitator.config.TCSettings;
+import bspkrs.treecapitator.registry.ToolRegistry;
+import bspkrs.treecapitator.registry.TreeDefinition;
+import bspkrs.treecapitator.registry.TreeRegistry;
+import bspkrs.treecapitator.util.TCLog;
 import bspkrs.util.BlockID;
 import bspkrs.util.CommonUtils;
 import bspkrs.util.Coord;
@@ -91,15 +96,15 @@ public class Treecapitator
         {
             if (!tree.onlyDestroyUpwards())
                 if (tree.useAdvancedTopLogLogic())
-                    startPos = getBottomLog(tree.logBlocks, world, startPos, false);
+                    startPos = getBottomLog(tree.getLogList(), world, startPos, false);
                 else
-                    startPos = getBottomLogAtPos(tree.logBlocks, world, startPos, false);
+                    startPos = getBottomLogAtPos(tree.getLogList(), world, startPos, false);
             
-            Coord topLog = tree.useAdvancedTopLogLogic() ? getTopLog(tree.logBlocks, world, new Coord(x, y, z), false)
-                    : getTopLogAtPos(tree.logBlocks, world, new Coord(x, y, z), false);
+            Coord topLog = tree.useAdvancedTopLogLogic() ? getTopLog(tree.getLogList(), world, new Coord(x, y, z), false)
+                    : getTopLogAtPos(tree.getLogList(), world, new Coord(x, y, z), false);
             
-            if (!tree.allowSmartTreeDetection() || tree.leafBlocks.size() == 0
-                    || hasXLeavesInDist(tree.leafBlocks, world, topLog, tree.maxLeafIDDist(), tree.minLeavesToID(), false))
+            if (!tree.allowSmartTreeDetection() || tree.getLeafList().size() == 0
+                    || hasXLeavesInDist(tree.getLeafList(), world, topLog, tree.maxLeafIDDist(), tree.minLeavesToID(), false))
                 return topLog.y - startPos.y + 1;
         }
         
@@ -117,7 +122,7 @@ public class Treecapitator
             if (isBreakingEnabled(entityPlayer))
             {
                 Coord topLog = getTopLog(world, new Coord(x, y, z));
-                if (!treeDef.allowSmartTreeDetection() || treeDef.leafBlocks.size() == 0
+                if (!treeDef.allowSmartTreeDetection() || treeDef.getLeafList().size() == 0
                         || hasXLeavesInDist(world, topLog, treeDef.maxLeafIDDist(), treeDef.minLeavesToID()))
                 {
                     if (isAxeItemEquipped() || !TCSettings.needItem)
@@ -133,7 +138,7 @@ public class Treecapitator
                         if (numLogsBroken > 1)
                             TCLog.debug("Number of logs broken: %d", numLogsBroken);
                         
-                        if (TCSettings.destroyLeaves && treeDef.leafBlocks.size() != 0)
+                        if (TCSettings.destroyLeaves && treeDef.getLeafList().size() != 0)
                         {
                             TCLog.debug("Finding leaf blocks...");
                             List<Coord> leaves = new ArrayList<Coord>();
@@ -159,7 +164,7 @@ public class Treecapitator
                             currentAxeDamage = Math.round(currentAxeDamage);
                             
                             for (int i = 0; i < MathHelper.floor_double(currentAxeDamage); i++)
-                                ItemHelper.onBlockDestroyed(axe, world, treeDef.logBlocks.get(0).getBlock(), x, y, z, player);
+                                ItemHelper.onBlockDestroyed(axe, world, treeDef.getLogList().get(0).getBlock(), x, y, z, player);
                         }
                         
                         if (currentShearsDamage > 0.0F && shears != null)
@@ -170,7 +175,7 @@ public class Treecapitator
                                 if (shears.getItem().equals(Items.shears))
                                     shears.damageItem(1, player);
                                 else
-                                    ItemHelper.onBlockDestroyed(shears, world, treeDef.leafBlocks.get(0).getBlock(), x, y, z, player);
+                                    ItemHelper.onBlockDestroyed(shears, world, treeDef.getLeafList().get(0).getBlock(), x, y, z, player);
                         }
                     }
                     else
@@ -189,9 +194,9 @@ public class Treecapitator
     private Coord getTopLog(World world, Coord pos)
     {
         if (treeDef.useAdvancedTopLogLogic())
-            return getTopLog(treeDef.logBlocks, world, pos, true);
+            return getTopLog(treeDef.getLogList(), world, pos, true);
         else
-            return getTopLogAtPos(treeDef.logBlocks, world, pos, true);
+            return getTopLogAtPos(treeDef.getLogList(), world, pos, true);
     }
     
     private static Coord getTopLog(List<BlockID> logBlocks, World world, Coord pos, boolean shouldLog)
@@ -351,7 +356,7 @@ public class Treecapitator
     
     private boolean hasXLeavesInDist(World world, Coord pos, int range, int limit)
     {
-        return hasXLeavesInDist(treeDef.leafBlocks, world, pos, range, limit, true);
+        return hasXLeavesInDist(treeDef.getLeafList(), world, pos, range, limit, true);
     }
     
     /**
@@ -462,7 +467,7 @@ public class Treecapitator
     
     public boolean isLeafBlock(BlockID blockID)
     {
-        return isLeafBlock(treeDef.leafBlocks, blockID);
+        return isLeafBlock(treeDef.getLeafList(), blockID);
     }
     
     private void destroyBlocks(World world, LinkedList<Coord> list)
@@ -476,7 +481,7 @@ public class Treecapitator
         {
             Coord pos = list.remove(0);
             Block block = WorldHelper.getBlock(world, pos.x, pos.y, pos.z);
-            if (block.isAir(world, pos.x, pos.y, pos.z))
+            if (!block.isAir(world, pos.x, pos.y, pos.z))
             {
                 int metadata = world.getBlockMetadata(pos.x, pos.y, pos.z);
                 
@@ -580,7 +585,7 @@ public class Treecapitator
             for (x = -1; x <= 1; x++)
                 for (y = (treeDef.onlyDestroyUpwards() ? 0 : -1); y <= 1; y++)
                     for (z = -1; z <= 1; z++)
-                        if (treeDef.logBlocks.contains(new BlockID(world, currentLog.x + x, currentLog.y + y, currentLog.z + z)))
+                        if (treeDef.getLogList().contains(new BlockID(world, currentLog.x + x, currentLog.y + y, currentLog.z + z)))
                         {
                             newPos = new Coord(currentLog.x + x, currentLog.y + y, currentLog.z + z);
                             
@@ -618,7 +623,7 @@ public class Treecapitator
                 counter = 0;
                 for (x = -1; x <= 1; x++)
                     for (z = -1; z <= 1; z++)
-                        if (treeDef.logBlocks.contains(new BlockID(world, pos.x + x, pos.y + 1, pos.z + z)))
+                        if (treeDef.getLogList().contains(new BlockID(world, pos.x + x, pos.y + 1, pos.z + z)))
                         {
                             if (!listAbove.contains(newPosition = new Coord(pos.x + x, pos.y + 1, pos.z + z)))
                                 listAbove.add(newPosition);
@@ -636,7 +641,7 @@ public class Treecapitator
                 Coord pos = listAbove.get(index);
                 for (x = -1; x <= 1; x++)
                     for (z = -1; z <= 1; z++)
-                        if (treeDef.logBlocks.contains(new BlockID(world, pos.x + x, pos.y, pos.z + z)))
+                        if (treeDef.getLogList().contains(new BlockID(world, pos.x + x, pos.y, pos.z + z)))
                             if (!listAbove.contains(newPosition = new Coord(pos.x + x, pos.y, pos.z + z)))
                                 listAbove.add(newPosition);
             }

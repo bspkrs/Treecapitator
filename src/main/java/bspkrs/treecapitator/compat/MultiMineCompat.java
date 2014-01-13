@@ -1,9 +1,9 @@
-package bspkrs.treecapitator.fml.compat;
+package bspkrs.treecapitator.compat;
 
 import java.lang.reflect.Method;
 
-import bspkrs.treecapitator.TCLog;
-import bspkrs.treecapitator.TCSettings;
+import bspkrs.treecapitator.config.TCSettings;
+import bspkrs.treecapitator.util.TCLog;
 import cpw.mods.fml.common.Loader;
 
 public class MultiMineCompat

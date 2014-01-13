@@ -1,4 +1,4 @@
-package bspkrs.treecapitator;
+package bspkrs.treecapitator.util;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -1,6 +1,7 @@
-package bspkrs.treecapitator;
+package bspkrs.treecapitator.registry;
 
 import net.minecraft.nbt.NBTTagCompound;
+import bspkrs.treecapitator.config.TCSettings;
 
 public class RegistryNBTManager
 {
@@ -87,8 +88,8 @@ public class RegistryNBTManager
         ToolRegistry.instance().readFromNBT(remoteToolRegistry);
     }
     
-    public Object[] getPacketArray()
+    public NBTTagCompound[] getPacketArray()
     {
-        return new Object[] { localTCSettings, localTreeRegistry, localToolRegistry };
+        return new NBTTagCompound[] { localTCSettings, localTreeRegistry, localToolRegistry };
     }
 }

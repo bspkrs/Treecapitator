@@ -3,10 +3,12 @@ package bspkrs.treecapitator;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.item.ItemStack;
+import bspkrs.treecapitator.config.TCSettings;
+import bspkrs.treecapitator.registry.ToolRegistry;
 
 public class EnchantmentTreecapitating extends Enchantment
 {
-    protected EnchantmentTreecapitating(int par1, int par2)
+    public EnchantmentTreecapitating(int par1, int par2)
     {
         super(par1, par2, EnumEnchantmentType.digger);
     }

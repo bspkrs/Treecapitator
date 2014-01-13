@@ -1,9 +1,13 @@
-package bspkrs.treecapitator;
+package bspkrs.treecapitator.registry;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.config.ConfigCategory;
+import net.minecraftforge.common.config.Configuration;
+import bspkrs.treecapitator.config.TCSettings;
+import bspkrs.treecapitator.util.TCConst;
 import bspkrs.util.BlockID;
 import bspkrs.util.HashCodeUtil;
 import bspkrs.util.ListUtils;
@@ -58,6 +62,12 @@ public class TreeDefinition
     {
         this();
         this.readFromNBT(tree);
+    }
+    
+    public TreeDefinition(Configuration config, String category)
+    {
+        this();
+        readFromConfiguration(config, category);
     }
     
     @Override
@@ -150,34 +160,34 @@ public class TreeDefinition
     
     public TreeDefinition readFromNBT(NBTTagCompound treeDefNBT)
     {
-        if (treeDefNBT.hasKey(Strings.ALLOW_SMART_TREE_DETECT))
-            allowSmartTreeDetection = treeDefNBT.getBoolean(Strings.ALLOW_SMART_TREE_DETECT);
-        if (treeDefNBT.hasKey(Strings.ONLY_DESTROY_UPWARDS))
-            onlyDestroyUpwards = treeDefNBT.getBoolean(Strings.ONLY_DESTROY_UPWARDS);
-        if (treeDefNBT.hasKey(Strings.REQ_DECAY_CHECK))
-            requireLeafDecayCheck = treeDefNBT.getBoolean(Strings.REQ_DECAY_CHECK);
-        if (treeDefNBT.hasKey(Strings.MAX_H_LOG_DIST))
-            maxHorLogBreakDist = treeDefNBT.getInteger(Strings.MAX_H_LOG_DIST);
-        if (treeDefNBT.hasKey(Strings.MAX_V_LOG_DIST))
-            maxVerLogBreakDist = treeDefNBT.getInteger(Strings.MAX_V_LOG_DIST);
-        if (treeDefNBT.hasKey(Strings.MAX_H_LEAF_DIST))
-            maxHorLeafBreakDist = treeDefNBT.getInteger(Strings.MAX_H_LEAF_DIST);
-        if (treeDefNBT.hasKey(Strings.MAX_LEAF_ID_DIST))
-            maxLeafIDDist = treeDefNBT.getInteger(Strings.MAX_LEAF_ID_DIST);
-        if (treeDefNBT.hasKey(Strings.MIN_LEAF_ID))
-            minLeavesToID = treeDefNBT.getInteger(Strings.MIN_LEAF_ID);
-        if (treeDefNBT.hasKey(Strings.BREAK_SPEED_MOD))
-            breakSpeedModifier = treeDefNBT.getFloat(Strings.BREAK_SPEED_MOD);
+        if (treeDefNBT.hasKey(TCConst.ALLOW_SMART_TREE_DETECT))
+            allowSmartTreeDetection = treeDefNBT.getBoolean(TCConst.ALLOW_SMART_TREE_DETECT);
+        if (treeDefNBT.hasKey(TCConst.ONLY_DESTROY_UPWARDS))
+            onlyDestroyUpwards = treeDefNBT.getBoolean(TCConst.ONLY_DESTROY_UPWARDS);
+        if (treeDefNBT.hasKey(TCConst.REQ_DECAY_CHECK))
+            requireLeafDecayCheck = treeDefNBT.getBoolean(TCConst.REQ_DECAY_CHECK);
+        if (treeDefNBT.hasKey(TCConst.MAX_H_LOG_DIST))
+            maxHorLogBreakDist = treeDefNBT.getInteger(TCConst.MAX_H_LOG_DIST);
+        if (treeDefNBT.hasKey(TCConst.MAX_V_LOG_DIST))
+            maxVerLogBreakDist = treeDefNBT.getInteger(TCConst.MAX_V_LOG_DIST);
+        if (treeDefNBT.hasKey(TCConst.MAX_H_LEAF_DIST))
+            maxHorLeafBreakDist = treeDefNBT.getInteger(TCConst.MAX_H_LEAF_DIST);
+        if (treeDefNBT.hasKey(TCConst.MAX_LEAF_ID_DIST))
+            maxLeafIDDist = treeDefNBT.getInteger(TCConst.MAX_LEAF_ID_DIST);
+        if (treeDefNBT.hasKey(TCConst.MIN_LEAF_ID))
+            minLeavesToID = treeDefNBT.getInteger(TCConst.MIN_LEAF_ID);
+        if (treeDefNBT.hasKey(TCConst.BREAK_SPEED_MOD))
+            breakSpeedModifier = treeDefNBT.getFloat(TCConst.BREAK_SPEED_MOD);
         if (treeDefNBT.hasKey("useAdvancedTopLogLogic"))
             useAdvancedTopLogLogic = treeDefNBT.getBoolean("useAdvancedTopLogLogic");
         
-        if (treeDefNBT.hasKey(Strings.LOGS) && treeDefNBT.getString(Strings.LOGS).length() > 0)
-            logBlocks = ListUtils.getDelimitedStringAsBlockIDList(treeDefNBT.getString(Strings.LOGS), ";");
+        if (treeDefNBT.hasKey(TCConst.LOGS) && treeDefNBT.getString(TCConst.LOGS).length() > 0)
+            logBlocks = ListUtils.getDelimitedStringAsBlockIDList(treeDefNBT.getString(TCConst.LOGS), ";");
         else
             logBlocks = new ArrayList<BlockID>();
         
-        if (treeDefNBT.hasKey(Strings.LEAVES) && treeDefNBT.getString(Strings.LEAVES).length() > 0)
-            leafBlocks = ListUtils.getDelimitedStringAsBlockIDList(treeDefNBT.getString(Strings.LEAVES), ";");
+        if (treeDefNBT.hasKey(TCConst.LEAVES) && treeDefNBT.getString(TCConst.LEAVES).length() > 0)
+            leafBlocks = ListUtils.getDelimitedStringAsBlockIDList(treeDefNBT.getString(TCConst.LEAVES), ";");
         else
             leafBlocks = new ArrayList<BlockID>();
         
@@ -186,19 +196,78 @@ public class TreeDefinition
     
     public void writeToNBT(NBTTagCompound treeDefNBT)
     {
-        treeDefNBT.setBoolean(Strings.ALLOW_SMART_TREE_DETECT, allowSmartTreeDetection);
-        treeDefNBT.setBoolean(Strings.ONLY_DESTROY_UPWARDS, onlyDestroyUpwards);
-        treeDefNBT.setBoolean(Strings.REQ_DECAY_CHECK, requireLeafDecayCheck);
-        treeDefNBT.setInteger(Strings.MAX_H_LOG_DIST, maxHorLogBreakDist);
-        treeDefNBT.setInteger(Strings.MAX_V_LOG_DIST, maxVerLogBreakDist);
-        treeDefNBT.setInteger(Strings.MAX_H_LEAF_DIST, maxHorLeafBreakDist);
-        treeDefNBT.setInteger(Strings.MAX_LEAF_ID_DIST, maxLeafIDDist);
-        treeDefNBT.setInteger(Strings.MIN_LEAF_ID, minLeavesToID);
-        treeDefNBT.setFloat(Strings.BREAK_SPEED_MOD, breakSpeedModifier);
+        treeDefNBT.setBoolean(TCConst.ALLOW_SMART_TREE_DETECT, allowSmartTreeDetection);
+        treeDefNBT.setBoolean(TCConst.ONLY_DESTROY_UPWARDS, onlyDestroyUpwards);
+        treeDefNBT.setBoolean(TCConst.REQ_DECAY_CHECK, requireLeafDecayCheck);
+        treeDefNBT.setInteger(TCConst.MAX_H_LOG_DIST, maxHorLogBreakDist);
+        treeDefNBT.setInteger(TCConst.MAX_V_LOG_DIST, maxVerLogBreakDist);
+        treeDefNBT.setInteger(TCConst.MAX_H_LEAF_DIST, maxHorLeafBreakDist);
+        treeDefNBT.setInteger(TCConst.MAX_LEAF_ID_DIST, maxLeafIDDist);
+        treeDefNBT.setInteger(TCConst.MIN_LEAF_ID, minLeavesToID);
+        treeDefNBT.setFloat(TCConst.BREAK_SPEED_MOD, breakSpeedModifier);
         treeDefNBT.setBoolean("useAdvancedTopLogLogic", useAdvancedTopLogLogic);
         
-        treeDefNBT.setString(Strings.LOGS, ListUtils.getListAsDelimitedString(logBlocks, ";"));
-        treeDefNBT.setString(Strings.LEAVES, ListUtils.getListAsDelimitedString(leafBlocks, ";"));
+        treeDefNBT.setString(TCConst.LOGS, ListUtils.getListAsDelimitedString(logBlocks, ";"));
+        treeDefNBT.setString(TCConst.LEAVES, ListUtils.getListAsDelimitedString(leafBlocks, ";"));
+    }
+    
+    public TreeDefinition readFromConfiguration(Configuration config, String category)
+    {
+        ConfigCategory cc = config.getCategory(category);
+        
+        if (cc.containsKey(TCConst.ALLOW_SMART_TREE_DETECT))
+            onlyDestroyUpwards = cc.get(TCConst.ALLOW_SMART_TREE_DETECT).getBoolean(TCSettings.allowSmartTreeDetection);
+        if (cc.containsKey(TCConst.ONLY_DESTROY_UPWARDS))
+            onlyDestroyUpwards = cc.get(TCConst.ONLY_DESTROY_UPWARDS).getBoolean(TCSettings.onlyDestroyUpwards);
+        if (cc.containsKey(TCConst.REQ_DECAY_CHECK))
+            requireLeafDecayCheck = cc.get(TCConst.REQ_DECAY_CHECK).getBoolean(TCSettings.requireLeafDecayCheck);
+        if (cc.containsKey(TCConst.MAX_H_LOG_DIST))
+            maxHorLogBreakDist = cc.get(TCConst.MAX_H_LOG_DIST).getInt(TCSettings.maxHorLogBreakDist);
+        if (cc.containsKey(TCConst.MAX_V_LOG_DIST))
+            maxVerLogBreakDist = cc.get(TCConst.MAX_V_LOG_DIST).getInt(TCSettings.maxVerLogBreakDist);
+        if (cc.containsKey(TCConst.MAX_H_LEAF_DIST))
+            maxHorLeafBreakDist = cc.get(TCConst.MAX_H_LEAF_DIST).getInt(TCSettings.maxHorLeafBreakDist);
+        if (cc.containsKey(TCConst.MAX_LEAF_ID_DIST))
+            maxLeafIDDist = cc.get(TCConst.MAX_LEAF_ID_DIST).getInt(TCSettings.maxLeafIDDist);
+        if (cc.containsKey(TCConst.MIN_LEAF_ID))
+            minLeavesToID = cc.get(TCConst.MIN_LEAF_ID).getInt();
+        if (cc.containsKey(TCConst.BREAK_SPEED_MOD))
+            breakSpeedModifier = (float) cc.get(TCConst.BREAK_SPEED_MOD).getDouble(TCSettings.breakSpeedModifier);
+        if (cc.containsKey("useAdvancedTopLogLogic"))
+            useAdvancedTopLogLogic = cc.get("useAdvancedTopLogLogic").getBoolean(TCSettings.useAdvancedTopLogLogic);
+        
+        logBlocks = ListUtils.getDelimitedStringAsBlockIDList(cc.get(TCConst.LOGS).getString(), ";");
+        if (cc.containsKey(TCConst.LEAVES))
+            leafBlocks = ListUtils.getDelimitedStringAsBlockIDList(cc.get(TCConst.LEAVES).getString(), ";");
+        
+        return this;
+    }
+    
+    public void writeToConfiguration(Configuration config, String category)
+    {
+        if (allowSmartTreeDetection != TCSettings.allowSmartTreeDetection)
+            config.get(category, TCConst.ALLOW_SMART_TREE_DETECT, TCSettings.allowSmartTreeDetection, TCConst.OPTIONAL).set(allowSmartTreeDetection);
+        if (onlyDestroyUpwards != TCSettings.onlyDestroyUpwards)
+            config.get(category, TCConst.ONLY_DESTROY_UPWARDS, TCSettings.onlyDestroyUpwards, TCConst.OPTIONAL).set(onlyDestroyUpwards);
+        if (requireLeafDecayCheck != TCSettings.requireLeafDecayCheck)
+            config.get(category, TCConst.REQ_DECAY_CHECK, TCSettings.requireLeafDecayCheck, TCConst.OPTIONAL).set(requireLeafDecayCheck);
+        if (maxHorLogBreakDist != TCSettings.maxHorLogBreakDist)
+            config.get(category, TCConst.MAX_H_LOG_DIST, TCSettings.maxHorLogBreakDist, TCConst.OPTIONAL).set(maxHorLogBreakDist);
+        if (maxVerLogBreakDist != TCSettings.maxVerLogBreakDist)
+            config.get(category, TCConst.MAX_V_LOG_DIST, TCSettings.maxVerLogBreakDist, TCConst.OPTIONAL).set(maxVerLogBreakDist);
+        if (maxHorLeafBreakDist != TCSettings.maxHorLeafBreakDist)
+            config.get(category, TCConst.MAX_H_LEAF_DIST, TCSettings.maxHorLeafBreakDist, TCConst.OPTIONAL).set(maxHorLeafBreakDist);
+        if (maxLeafIDDist != TCSettings.maxLeafIDDist)
+            config.get(category, TCConst.MAX_LEAF_ID_DIST, TCSettings.maxLeafIDDist, TCConst.OPTIONAL).set(maxLeafIDDist);
+        if (minLeavesToID != TCSettings.minLeavesToID)
+            config.get(category, TCConst.MIN_LEAF_ID, TCSettings.minLeavesToID, TCConst.OPTIONAL).set(minLeavesToID);
+        if (breakSpeedModifier != TCSettings.breakSpeedModifier)
+            config.get(category, TCConst.BREAK_SPEED_MOD, TCSettings.breakSpeedModifier, TCConst.OPTIONAL).set(breakSpeedModifier);
+        if (useAdvancedTopLogLogic != TCSettings.useAdvancedTopLogLogic)
+            config.get(category, "useAdvancedTopLogLogic", TCSettings.useAdvancedTopLogLogic, TCConst.OPTIONAL).set(useAdvancedTopLogLogic);
+        
+        config.get(category, TCConst.LOGS, ListUtils.getListAsDelimitedString(logBlocks, ";"));
+        config.get(category, TCConst.LEAVES, ListUtils.getListAsDelimitedString(leafBlocks, ";"));
     }
     
     /*
@@ -271,7 +340,7 @@ public class TreeDefinition
      */
     public List<BlockID> getLogList()
     {
-        return new ArrayList<BlockID>(logBlocks);
+        return logBlocks;
     }
     
     /**
@@ -281,7 +350,7 @@ public class TreeDefinition
      */
     public List<BlockID> getLeafList()
     {
-        return new ArrayList<BlockID>(leafBlocks);
+        return leafBlocks;
     }
     
     /*
