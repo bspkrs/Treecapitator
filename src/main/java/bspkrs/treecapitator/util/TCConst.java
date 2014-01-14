@@ -12,6 +12,10 @@ public class TCConst
     public static final String SPRUCE                             = "vanilla_spruce";
     public static final String BIRCH                              = "vanilla_birch";
     public static final String JUNGLE                             = "vanilla_jungle";
+    public static final String ACACIA                             = "vanilla_acacia";
+    public static final String DARK_OAK                           = "vanilla_dark_oak";
+    public static final String FUTURE_TREE_1                      = "vanilla_future_tree_1";
+    public static final String FUTURE_TREE_2                      = "vanilla_future_tree_2";
     public static final String MUSH_BROWN                         = "vanilla_huge_brown_mushroom";
     public static final String MUSH_RED                           = "vanilla_huge_red_mushroom";
     public static final String VAN_TREES_ITEMS_CTGY               = "1_vanilla_trees_and_items";

@@ -76,6 +76,20 @@ public class TreeRegistry
                 .addLeafID(new BlockID(Blocks.leaves, 3)).addLeafID(new BlockID(Blocks.leaves, 11))
                 .addLeafID(new BlockID(Blocks.leaves, 0)).addLeafID(new BlockID(Blocks.leaves, 8))
                 .setMaxHorLeafBreakDist(6).setRequireLeafDecayCheck(false).setUseAdvancedTopLogLogic(true));
+        vanTrees.put(TCConst.ACACIA, new TreeDefinition().addLogID(new BlockID(Blocks.log2, 0)).addLogID(new BlockID(Blocks.log2, 4))
+                .addLogID(new BlockID(Blocks.log2, 8)).addLogID(new BlockID(Blocks.log2, 12))
+                .addLeafID(new BlockID(Blocks.leaves2, 0)).addLeafID(new BlockID(Blocks.leaves2, 8))
+                .setUseAdvancedTopLogLogic(true));
+        vanTrees.put(TCConst.DARK_OAK, new TreeDefinition().addLogID(new BlockID(Blocks.log2, 1)).addLogID(new BlockID(Blocks.log2, 5))
+                .addLogID(new BlockID(Blocks.log2, 9)).addLogID(new BlockID(Blocks.log2, 13))
+                .addLeafID(new BlockID(Blocks.leaves2, 1)).addLeafID(new BlockID(Blocks.leaves2, 9))
+                .setUseAdvancedTopLogLogic(true));
+        vanTrees.put(TCConst.FUTURE_TREE_1, new TreeDefinition().addLogID(new BlockID(Blocks.log2, 2)).addLogID(new BlockID(Blocks.log2, 6))
+                .addLogID(new BlockID(Blocks.log2, 10)).addLogID(new BlockID(Blocks.log2, 14))
+                .addLeafID(new BlockID(Blocks.leaves2, 2)).addLeafID(new BlockID(Blocks.leaves2, 10)));
+        vanTrees.put(TCConst.FUTURE_TREE_2, new TreeDefinition().addLogID(new BlockID(Blocks.log2, 3)).addLogID(new BlockID(Blocks.log2, 7))
+                .addLogID(new BlockID(Blocks.log2, 11)).addLogID(new BlockID(Blocks.log2, 15))
+                .addLeafID(new BlockID(Blocks.leaves2, 3)).addLeafID(new BlockID(Blocks.leaves2, 11)));
         vanTrees.put(TCConst.MUSH_BROWN, new TreeDefinition().addLogID(new BlockID(Blocks.brown_mushroom_block, 10)).addLogID(new BlockID(Blocks.brown_mushroom_block, 15))
                 .addLeafID(new BlockID(Blocks.brown_mushroom_block, 1)).addLeafID(new BlockID(Blocks.brown_mushroom_block, 2))
                 .addLeafID(new BlockID(Blocks.brown_mushroom_block, 3)).addLeafID(new BlockID(Blocks.brown_mushroom_block, 4))
