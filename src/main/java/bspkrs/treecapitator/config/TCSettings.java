@@ -1,6 +1,5 @@
 package bspkrs.treecapitator.config;
 
-import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.nbt.NBTTagCompound;
 import bspkrs.treecapitator.EnchantmentTreecapitating;
@@ -60,7 +59,6 @@ public final class TCSettings
     public static String      itemIDBlacklist                = "";
     
     // static object references
-    public static Block       wood;
     public static Enchantment treecapitating;
     
     private static TCSettings instance;
