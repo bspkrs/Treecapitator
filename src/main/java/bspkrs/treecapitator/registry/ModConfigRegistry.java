@@ -304,8 +304,6 @@ public class ModConfigRegistry
         /*
          * Get / Set 3rd Party Mod configs
          */
-        TCSettings.idResolverModID = config.getString("idResolverModID", TCConst.TREE_MOD_CFG_CTGY,
-                TCSettings.idResolverModID, TCConst.idResolverModIDDesc);
         TCSettings.multiMineModID = config.getString("multiMineID", TCConst.TREE_MOD_CFG_CTGY,
                 TCSettings.multiMineModID, TCConst.multiMineIDDesc);
         TCSettings.userConfigOverridesIMC = config.getBoolean("userConfigOverridesIMC", TCConst.TREE_MOD_CFG_CTGY,

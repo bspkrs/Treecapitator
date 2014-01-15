@@ -10,6 +10,7 @@ import bspkrs.util.CommonUtils;
 public class TCConfigHandler
 {
     private static TCConfigHandler instance;
+    public BSConfiguration         config;
     
     public static TCConfigHandler instance()
     {
@@ -29,8 +30,6 @@ public class TCConfigHandler
     {
         instance = this;
     }
-    
-    protected BSConfiguration config;
     
     private TCConfigHandler(File file)
     {

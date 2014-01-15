@@ -86,8 +86,6 @@ public final class TCSettings
             treecapitating = new EnchantmentTreecapitating(enchantmentID, enchantmentWeight);
             treecapitating.setName("treecapitating");
             LanguageRegistry.instance().addStringLocalization("enchantment.treecapitating", "Treecapitating");
-            /*if (isForge)
-                Enchantment.addToBookList(treecapitating);*/
         }
     }
     
@@ -172,91 +170,96 @@ public final class TCSettings
      */
     public void syncConfiguration(BSConfiguration config)
     {
-        // Global settings
-        allowDebugLogging = config.getBoolean("allowDebugLogging", TCConst.GLOBALS_SETTINGS_CTGY,
+        // Misc settings
+        allowDebugLogging = config.getBoolean("allowDebugLogging", TCConst.MISC_CTGY,
                 allowDebugLogging, TCConst.allowDebugLoggingDesc);
-        allowDebugOutput = config.getBoolean("allowDebugOutput", TCConst.GLOBALS_SETTINGS_CTGY,
+        allowDebugOutput = config.getBoolean("allowDebugOutput", TCConst.MISC_CTGY,
                 allowDebugOutput, TCConst.allowDebugOutputDesc);
-        allowItemDamage = config.getBoolean("allowItemDamage", TCConst.GLOBALS_SETTINGS_CTGY,
-                allowItemDamage, TCConst.allowItemDamageDesc);
-        allowMoreBlocksThanDamage = config.getBoolean("allowMoreBlocksThanDamage", TCConst.GLOBALS_SETTINGS_CTGY,
-                allowMoreBlocksThanDamage, TCConst.allowMoreBlocksThanDamageDesc);
-        damageIncreaseAmount = config.getFloat("damageIncreaseAmount", TCConst.GLOBALS_SETTINGS_CTGY,
-                damageIncreaseAmount, 0.1F, 100.0F, TCConst.damageIncreaseAmountDesc);
-        damageMultiplier = config.getFloat("damageMultiplier", TCConst.GLOBALS_SETTINGS_CTGY,
-                damageMultiplier, 0.1F, 50.0F, TCConst.damageMultiplierDesc);
-        destroyLeaves = config.getBoolean("destroyLeaves", TCConst.GLOBALS_SETTINGS_CTGY,
-                destroyLeaves, TCConst.destroyLeavesDesc);
-        disableCreativeDrops = config.getBoolean("disableCreativeDrops", TCConst.GLOBALS_SETTINGS_CTGY,
+        disableCreativeDrops = config.getBoolean("disableCreativeDrops", TCConst.MISC_CTGY,
                 disableCreativeDrops, TCConst.disableCreativeDropsDesc);
-        disableInCreative = config.getBoolean("disableInCreative", TCConst.GLOBALS_SETTINGS_CTGY,
+        disableInCreative = config.getBoolean("disableInCreative", TCConst.MISC_CTGY,
                 disableInCreative, TCConst.disableInCreativeDesc);
-        enableEnchantmentMode = config.getBoolean("enableEnchantmentMode", TCConst.GLOBALS_SETTINGS_CTGY,
-                enableEnchantmentMode, TCConst.enableEnchantmentModeDesc);
-        
-        handleEnchantmentID(config.getInt("enchantmentID", TCConst.GLOBALS_SETTINGS_CTGY,
-                enchantmentID, 0, Enchantment.enchantmentsList.length - 1, TCConst.enchantmentIDDesc));
-        
-        increaseDamageEveryXBlocks = config.getInt("increaseDamageEveryXBlocks", TCConst.GLOBALS_SETTINGS_CTGY,
-                increaseDamageEveryXBlocks, 1, 500, TCConst.increaseDamageEveryXBlocksDesc);
-        needItem = config.getBoolean("needItem", TCConst.GLOBALS_SETTINGS_CTGY,
-                needItem, TCConst.needItemDesc);
-        requireItemInAxeListForEnchant = config.getBoolean("requireItemInAxeListForEnchant", TCConst.GLOBALS_SETTINGS_CTGY,
-                requireItemInAxeListForEnchant, TCConst.requireItemInAxeListForEnchantDesc);
-        shearLeaves = config.getBoolean("shearLeaves", TCConst.GLOBALS_SETTINGS_CTGY,
-                shearLeaves, TCConst.shearLeavesDesc);
-        shearVines = config.getBoolean("shearVines", TCConst.GLOBALS_SETTINGS_CTGY,
-                shearVines, TCConst.shearVinesDesc);
-        sneakAction = config.getString("sneakAction", TCConst.GLOBALS_SETTINGS_CTGY,
-                sneakAction, TCConst.sneakActionDesc);
-        useIncreasingItemDamage = config.getBoolean("useIncreasingItemDamage", TCConst.GLOBALS_SETTINGS_CTGY,
-                useIncreasingItemDamage, TCConst.useIncreasingItemDamageDesc);
-        useStrictBlockPairing = config.getBoolean("useStrictBlockPairing", TCConst.GLOBALS_SETTINGS_CTGY,
-                useStrictBlockPairing, TCConst.useStrictBlockPairingDesc);
-        treeHeightDecidesBreakSpeed = config.getBoolean("treeHeightDecidesBreakSpeed", TCConst.GLOBALS_SETTINGS_CTGY,
-                treeHeightDecidesBreakSpeed, TCConst.treeHeightDecidesBreakSpeedDesc);
-        treeHeightModifier = config.getFloat("treeHeightModifier", TCConst.GLOBALS_SETTINGS_CTGY,
-                treeHeightModifier, 0.25F, 10.0F, TCConst.treeHeightModifierDesc);
-        allowOreDictionaryLookup = config.getBoolean("allowOreDictionaryLookup", TCConst.GLOBALS_SETTINGS_CTGY,
+        allowOreDictionaryLookup = config.getBoolean("allowOreDictionaryLookup", TCConst.MISC_CTGY,
                 allowOreDictionaryLookup, TCConst.allowOreDictionaryLookupDesc);
-        oreDictionaryLogStrings = config.getString("oreDictionaryLogStrings", TCConst.GLOBALS_SETTINGS_CTGY,
+        oreDictionaryLogStrings = config.getString("oreDictionaryLogStrings", TCConst.MISC_CTGY,
                 oreDictionaryLogStrings, TCConst.oreDictionaryLogStringsDesc);
-        oreDictionaryLeafStrings = config.getString("oreDictionaryLeafStrings", TCConst.GLOBALS_SETTINGS_CTGY,
+        oreDictionaryLeafStrings = config.getString("oreDictionaryLeafStrings", TCConst.MISC_CTGY,
                 oreDictionaryLeafStrings, TCConst.oreDictionaryLeafStringsDesc);
-        blockIDBlacklist = config.getString("blockIDBlacklist", TCConst.GLOBALS_SETTINGS_CTGY,
+        blockIDBlacklist = config.getString("blockIDBlacklist", TCConst.MISC_CTGY,
                 blockIDBlacklist, TCConst.blockIDBlacklistDesc);
-        itemIDBlacklist = config.getString("itemIDBlacklist", TCConst.GLOBALS_SETTINGS_CTGY,
+        itemIDBlacklist = config.getString("itemIDBlacklist", TCConst.MISC_CTGY,
                 itemIDBlacklist, TCConst.itemIDBlacklistDesc);
-        config.addCustomCategoryComment(TCConst.GLOBALS_SETTINGS_CTGY, TCConst.GLOBALS_SETTINGS_CTGY_DESC);
+        sneakAction = config.getString("sneakAction", TCConst.MISC_CTGY,
+                sneakAction, TCConst.sneakActionDesc);
         
-        // Per-tree settings
-        allowSmartTreeDetection = config.getBoolean("allowSmartTreeDetection", TCConst.PER_TREE_DEFAULTS_CTGY,
-                allowSmartTreeDetection, TCConst.allowSmartTreeDetectionDesc);
-        breakSpeedModifier = config.getFloat("breakSpeedModifier", TCConst.PER_TREE_DEFAULTS_CTGY,
+        // Break Speed settings
+        breakSpeedModifier = config.getFloat("breakSpeedModifier", TCConst.BREAK_SPEED_CTGY,
                 breakSpeedModifier, 0.01F, 1F, TCConst.breakSpeedModifierDesc);
-        maxHorLeafBreakDist = config.getInt("maxHorLeafBreakDist", TCConst.PER_TREE_DEFAULTS_CTGY,
-                maxHorLeafBreakDist, -1, 100, TCConst.maxHorLeafBreakDistDesc);
-        maxHorLogBreakDist = config.getInt("maxHorLogBreakDist", TCConst.PER_TREE_DEFAULTS_CTGY,
-                maxHorLogBreakDist, -1, 100, TCConst.maxHorLogBreakDistDesc);
-        maxVerLogBreakDist = config.getInt("maxVerLogBreakDist", TCConst.PER_TREE_DEFAULTS_CTGY,
-                maxVerLogBreakDist, -1, 255, TCConst.maxVerLogBreakDistDesc);
-        maxLeafIDDist = config.getInt("maxLeafIDDist", TCConst.PER_TREE_DEFAULTS_CTGY,
-                maxLeafIDDist, 1, 8, TCConst.maxLeafIDDistDesc);
-        minLeavesToID = config.getInt("minLeavesToID", TCConst.PER_TREE_DEFAULTS_CTGY,
-                minLeavesToID, 0, 8, TCConst.minLeavesToIDDesc);
-        onlyDestroyUpwards = config.getBoolean("onlyDestroyUpwards", TCConst.PER_TREE_DEFAULTS_CTGY,
-                onlyDestroyUpwards, TCConst.onlyDestroyUpwardsDesc);
-        requireLeafDecayCheck = config.getBoolean("requireLeafDecayCheck", TCConst.PER_TREE_DEFAULTS_CTGY,
-                requireLeafDecayCheck, TCConst.requireLeafDecayCheckDesc);
-        useAdvancedTopLogLogic = config.getBoolean("useAdvancedTopLogLogic", TCConst.PER_TREE_DEFAULTS_CTGY,
+        treeHeightDecidesBreakSpeed = config.getBoolean("treeHeightDecidesBreakSpeed", TCConst.BREAK_SPEED_CTGY,
+                treeHeightDecidesBreakSpeed, TCConst.treeHeightDecidesBreakSpeedDesc);
+        treeHeightModifier = config.getFloat("treeHeightModifier", TCConst.BREAK_SPEED_CTGY,
+                treeHeightModifier, 0.25F, 10.0F, TCConst.treeHeightModifierDesc);
+        
+        // Item settings
+        needItem = config.getBoolean("needItem", TCConst.ITEM_CTGY,
+                needItem, TCConst.needItemDesc);
+        allowItemDamage = config.getBoolean("allowItemDamage", TCConst.ITEM_CTGY,
+                allowItemDamage, TCConst.allowItemDamageDesc);
+        allowMoreBlocksThanDamage = config.getBoolean("allowMoreBlocksThanDamage", TCConst.ITEM_CTGY,
+                allowMoreBlocksThanDamage, TCConst.allowMoreBlocksThanDamageDesc);
+        increaseDamageEveryXBlocks = config.getInt("increaseDamageEveryXBlocks", TCConst.ITEM_CTGY,
+                increaseDamageEveryXBlocks, 1, 500, TCConst.increaseDamageEveryXBlocksDesc);
+        useIncreasingItemDamage = config.getBoolean("useIncreasingItemDamage", TCConst.ITEM_CTGY,
+                useIncreasingItemDamage, TCConst.useIncreasingItemDamageDesc);
+        damageIncreaseAmount = config.getFloat("damageIncreaseAmount", TCConst.ITEM_CTGY,
+                damageIncreaseAmount, 0.1F, 100.0F, TCConst.damageIncreaseAmountDesc);
+        damageMultiplier = config.getFloat("damageMultiplier", TCConst.ITEM_CTGY,
+                damageMultiplier, 0.1F, 50.0F, TCConst.damageMultiplierDesc);
+        
+        // Tree Chop Behavior settings
+        allowSmartTreeDetection = config.getBoolean("allowSmartTreeDetection", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
+                allowSmartTreeDetection, TCConst.allowSmartTreeDetectionDesc);
+        useAdvancedTopLogLogic = config.getBoolean("useAdvancedTopLogLogic", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
                 useAdvancedTopLogLogic, TCConst.useAdvancedTopLogLogicDesc);
-        config.addCustomCategoryComment(TCConst.PER_TREE_DEFAULTS_CTGY, TCConst.PER_TREE_DEFAULTS_CTGY_DESC);
+        useStrictBlockPairing = config.getBoolean("useStrictBlockPairing", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
+                useStrictBlockPairing, TCConst.useStrictBlockPairingDesc);
+        destroyLeaves = config.getBoolean("destroyLeaves", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
+                destroyLeaves, TCConst.destroyLeavesDesc);
+        shearLeaves = config.getBoolean("shearLeaves", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
+                shearLeaves, TCConst.shearLeavesDesc);
+        shearVines = config.getBoolean("shearVines", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
+                shearVines, TCConst.shearVinesDesc);
+        maxHorLeafBreakDist = config.getInt("maxHorLeafBreakDist", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
+                maxHorLeafBreakDist, -1, 100, TCConst.maxHorLeafBreakDistDesc);
+        maxHorLogBreakDist = config.getInt("maxHorLogBreakDist", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
+                maxHorLogBreakDist, -1, 100, TCConst.maxHorLogBreakDistDesc);
+        maxVerLogBreakDist = config.getInt("maxVerLogBreakDist", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
+                maxVerLogBreakDist, -1, 255, TCConst.maxVerLogBreakDistDesc);
+        maxLeafIDDist = config.getInt("maxLeafIDDist", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
+                maxLeafIDDist, 1, 8, TCConst.maxLeafIDDistDesc);
+        minLeavesToID = config.getInt("minLeavesToID", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
+                minLeavesToID, 0, 8, TCConst.minLeavesToIDDesc);
+        onlyDestroyUpwards = config.getBoolean("onlyDestroyUpwards", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
+                onlyDestroyUpwards, TCConst.onlyDestroyUpwardsDesc);
+        requireLeafDecayCheck = config.getBoolean("requireLeafDecayCheck", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
+                requireLeafDecayCheck, TCConst.requireLeafDecayCheckDesc);
+        
+        // Enchantment Mode settings
+        enableEnchantmentMode = config.getBoolean("enableEnchantmentMode", TCConst.ENCHANTMENT_MODE_CTGY,
+                enableEnchantmentMode, TCConst.enableEnchantmentModeDesc);
+        handleEnchantmentID(config.getInt("enchantmentID", TCConst.ENCHANTMENT_MODE_CTGY,
+                enchantmentID, 0, Enchantment.enchantmentsList.length - 1, TCConst.enchantmentIDDesc));
+        requireItemInAxeListForEnchant = config.getBoolean("requireItemInAxeListForEnchant", TCConst.ENCHANTMENT_MODE_CTGY,
+                requireItemInAxeListForEnchant, TCConst.requireItemInAxeListForEnchantDesc);
         
         // Log configs if we are in debug logging mode
         if (allowDebugLogging)
         {
-            TCLog.configs(config, TCConst.GLOBALS_SETTINGS_CTGY);
-            TCLog.configs(config, TCConst.PER_TREE_DEFAULTS_CTGY);
+            TCLog.configs(config, TCConst.MISC_CTGY);
+            TCLog.configs(config, TCConst.BREAK_SPEED_CTGY);
+            TCLog.configs(config, TCConst.ITEM_CTGY);
+            TCLog.configs(config, TCConst.TREE_CHOP_BEHAVIOR_CTGY);
+            TCLog.configs(config, TCConst.ENCHANTMENT_MODE_CTGY);
         }
     }
 }
