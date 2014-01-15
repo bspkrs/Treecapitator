@@ -7,7 +7,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import bspkrs.bspkrscore.fml.bspkrsCoreMod;
-import bspkrs.treecapitator.compat.IDResolverMappingList;
 import bspkrs.treecapitator.compat.MultiMineCompat;
 import bspkrs.treecapitator.config.TCConfigHandler;
 import bspkrs.treecapitator.config.TCSettings;
@@ -81,7 +80,6 @@ public class TreecapitatorMod
             //                file.delete();
         }
         
-        IDResolverMappingList.instance();
         TCConfigHandler.setInstance(file);
         
         if (!CommonUtils.isObfuscatedEnv())
@@ -123,6 +121,7 @@ public class TreecapitatorMod
     {
         // As opposed to the block blacklist, the item blacklist is read before registering tools 
         // to prevent them from being registered in the first place.
+        TreeRegistry.instance().readBlacklistFromDelimitedString(TCSettings.blockIDBlacklist);
         ToolRegistry.instance().readBlacklistFromDelimitedString(TCSettings.itemIDBlacklist);
         ModConfigRegistry.instance().applyPrioritizedModConfigs();
         
@@ -134,10 +133,6 @@ public class TreecapitatorMod
             TCLog.info("Initializing MultiMine compatibility...");
             new MultiMineCompat(TreeRegistry.instance().getMultiMineExclusionString());
         }
-        
-        // This must be done after all trees are registered to avoid screwing up the registration process
-        // TODO: refactor TreeRegistry registration code to prevent blacklisted blocks from being registered
-        TreeRegistry.instance().readBlacklistFromDelimitedString(TCSettings.blockIDBlacklist);
         
         // Make sure the NBT manager is initialized while we can still be sure of the values in our local objects
         nbtManager();

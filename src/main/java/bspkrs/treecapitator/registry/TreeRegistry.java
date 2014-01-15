@@ -131,7 +131,7 @@ public class TreeRegistry
             
             // Check each log to see if an existing definition already uses it
             for (BlockID blockID : newTD.getLogList())
-                if (!isRegistered(blockID))
+                if (!isRegistered(blockID) && !blacklist.contains(blockID))
                 {
                     // build the toAdd map of new log keys
                     toAdd.put(blockID, newKey);
@@ -338,7 +338,6 @@ public class TreeRegistry
         return new ArrayList<BlockID>(blacklist);
     }
     
-    // This must be done after all trees are registered to avoid screwing up the registration process
     public void readBlacklistFromDelimitedString(String dList)
     {
         blacklist = ListUtils.getDelimitedStringAsBlockIDList(dList, ";");
