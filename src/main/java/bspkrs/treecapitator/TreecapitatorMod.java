@@ -10,7 +10,6 @@ import bspkrs.bspkrscore.fml.bspkrsCoreMod;
 import bspkrs.treecapitator.compat.MultiMineCompat;
 import bspkrs.treecapitator.config.TCConfigHandler;
 import bspkrs.treecapitator.config.TCSettings;
-import bspkrs.treecapitator.config.UniqueNameListGenerator;
 import bspkrs.treecapitator.forge.ForgeEventHandler;
 import bspkrs.treecapitator.forge.OreDictionaryHandler;
 import bspkrs.treecapitator.registry.ModConfigRegistry;
@@ -127,8 +126,6 @@ public class TreecapitatorMod
         ModConfigRegistry.instance().applyPrioritizedModConfigs();
         
         OreDictionaryHandler.instance().generateAndRegisterOreDictionaryTreeDefinitions();
-        
-        UniqueNameListGenerator.instance().run();
         
         // Multi-Mine stuff
         if (Loader.isModLoaded(TCSettings.multiMineModID))

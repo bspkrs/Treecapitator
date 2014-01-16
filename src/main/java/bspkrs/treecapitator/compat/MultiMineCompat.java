@@ -23,7 +23,7 @@ public class MultiMineCompat
                 setExcludedBlocksString.invoke(mmInstanceObject, exclusionList);
                 
                 isInitialized = true;
-                TCLog.info("MultiMine compatibility completed successfully.");
+                TCLog.info("MultiMine compatibility initialized successfully.");
             }
             catch (Throwable e)
             {
