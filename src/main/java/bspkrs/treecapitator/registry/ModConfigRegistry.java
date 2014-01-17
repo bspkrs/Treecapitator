@@ -10,6 +10,7 @@ import java.util.TreeMap;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.config.ConfigCategory;
+import bspkrs.treecapitator.config.TCConfigHandler;
 import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.util.TCConst;
 import bspkrs.treecapitator.util.TCLog;
@@ -56,7 +57,7 @@ public class ModConfigRegistry
     {
         TCLog.debug("Registering IMC mod config %s", tpmc.modID());
         if (!imcModCfgs.containsKey(tpmc.modID()))
-            imcModCfgs.put(tpmc.modID(), tpmc);
+            imcModCfgs.put(tpmc.modID(), tpmc.setOverrideIMC(false));
         else
             TCLog.warning("Mod \"%s\" sent multiple IMC messages. The first message will be used.", tpmc.modID());
     }
@@ -71,6 +72,7 @@ public class ModConfigRegistry
             {
                 finalList.add(e.getValue());
                 TCLog.debug("IMC mod config loaded for %s.", e.getValue().modID());
+                writeIMCConfigToConfigFile(e.getValue());
             }
         
         for (Entry<String, ThirdPartyModConfig> e : userModCfgs.entrySet())
@@ -308,6 +310,8 @@ public class ModConfigRegistry
                 TCSettings.multiMineModID, TCConst.multiMineIDDesc);
         TCSettings.userConfigOverridesIMC = config.getBoolean("userConfigOverridesIMC", TCConst.TREE_MOD_CFG_CTGY,
                 TCSettings.userConfigOverridesIMC, TCConst.userConfigOverridesIMCDesc);
+        TCSettings.saveIMCConfigsToFile = config.getBoolean("saveIMCConfigsToFile", TCConst.TREE_MOD_CFG_CTGY,
+                TCSettings.saveIMCConfigsToFile, TCConst.saveIMCConfigsToFileDesc);
         
         TCLog.configs(config, TCConst.TREE_MOD_CFG_CTGY);
         
@@ -336,6 +340,34 @@ public class ModConfigRegistry
                 TCLog.debug("Loading file config for mod %s (config category %s)...", cc.get(TCConst.MOD_ID).getString(), ctgy);
                 registerUserModConfig(new ThirdPartyModConfig(config, ctgy));
             }
+        }
+    }
+    
+    public void writeIMCConfigToConfigFile(ThirdPartyModConfig imctpmc)
+    {
+        if (TCSettings.saveIMCConfigsToFile)
+        {
+            // THIS CODE ASSUMES THAT TCConfigHandler.instance().config HAS BEEN LOADED!
+            BSConfiguration config = TCConfigHandler.instance().config;
+            String imcCtgy = "";
+            
+            for (String ctgy : config.getCategoryNames())
+            {
+                ConfigCategory cc = config.getCategory(ctgy);
+                if (ctgy.indexOf(TCConst.TREE_MOD_CFG_CTGY + ".") != -1 && cc.containsKey(TCConst.MOD_ID) && imctpmc.modID().equals(cc.get(TCConst.MOD_ID).getString()))
+                {
+                    imcCtgy = ctgy;
+                    break;
+                }
+            }
+            
+            if (imcCtgy.isEmpty())
+                imcCtgy = TCConst.TREE_MOD_CFG_CTGY + "." + imctpmc.modID();
+            else if (config.hasCategory(imcCtgy))
+                config.removeCategory(config.getCategory(imcCtgy));
+            
+            imctpmc.writeToConfiguration(config, imcCtgy);
+            config.save();
         }
     }
     

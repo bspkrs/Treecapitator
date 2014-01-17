@@ -45,9 +45,9 @@ public final class TCSettings
     public static boolean     useAdvancedTopLogLogic         = true;
     
     // Mod config settings (Forge only)
-    public static String      idResolverModID                = "IDResolver";
     public static String      multiMineModID                 = "AS_MultiMine";
     public static boolean     userConfigOverridesIMC         = false;
+    public static boolean     saveIMCConfigsToFile           = true;
     
     // Forge Only
     public static boolean     treeHeightDecidesBreakSpeed    = true;

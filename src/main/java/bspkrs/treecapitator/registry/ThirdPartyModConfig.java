@@ -59,7 +59,7 @@ public class ThirdPartyModConfig
         this(true);
     }
     
-    public ThirdPartyModConfig(String modID, String configPath, String blockKeys, String itemKeys, String axeKeys, String shearsKeys, boolean shiftIndex)
+    public ThirdPartyModConfig(String modID, String configPath, String axeKeys, String shearsKeys)
     {
         this.modID = modID;
         this.axeKeys = axeKeys;
@@ -70,14 +70,9 @@ public class ThirdPartyModConfig
         treesMap = new TreeMap<String, TreeDefinition>();
     }
     
-    public ThirdPartyModConfig(String modID, String configPath, String blockKeys)
+    public ThirdPartyModConfig(String modID, String configPath)
     {
-        this(modID, configPath, blockKeys, "", "", "", true);
-    }
-    
-    public ThirdPartyModConfig(String modID, String configPath, String itemKeys, String axeKeys, String shearsKeys, boolean shiftIndex)
-    {
-        this(modID, configPath, "", itemKeys, axeKeys, shearsKeys, shiftIndex);
+        this(modID, configPath, "", "");
     }
     
     public ThirdPartyModConfig(BSConfiguration config, String category)
@@ -141,8 +136,8 @@ public class ThirdPartyModConfig
             axeKeys = cc.get(TCConst.AXE_ID_LIST).getString();
         if (cc.containsKey(TCConst.SHEARS_ID_LIST))
             shearsKeys = cc.get(TCConst.SHEARS_ID_LIST).getString();
-        if (cc.containsKey(TCConst.OVERRIDE_IMC))
-            overrideIMC = cc.get(TCConst.OVERRIDE_IMC).getBoolean(TCSettings.userConfigOverridesIMC);
+        
+        overrideIMC = config.getBoolean(TCConst.OVERRIDE_IMC, category, TCSettings.userConfigOverridesIMC, TCConst.overrideIMCDesc);
         
         configTreesMap = new TreeMap<String, TreeDefinition>();
         
@@ -165,7 +160,7 @@ public class ThirdPartyModConfig
         if (shearsKeys.length() > 0)
             config.get(category, TCConst.SHEARS_ID_LIST, shearsKeys);
         
-        config.get(category, TCConst.OVERRIDE_IMC, overrideIMC);
+        config.getBoolean(TCConst.OVERRIDE_IMC, category, overrideIMC, TCConst.overrideIMCDesc);
         
         for (Entry<String, TreeDefinition> e : configTreesMap.entrySet())
             e.getValue().writeToConfiguration(config, category + "." + e.getKey());

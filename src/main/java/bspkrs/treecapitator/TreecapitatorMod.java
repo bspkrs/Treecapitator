@@ -100,7 +100,6 @@ public class TreecapitatorMod
     {
         MinecraftForge.EVENT_BUS.register(new ForgeEventHandler());
         proxy.init(event);
-        
     }
     
     @EventHandler
@@ -119,8 +118,6 @@ public class TreecapitatorMod
     @EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
-        // As opposed to the block blacklist, the item blacklist is read before registering tools 
-        // to prevent them from being registered in the first place.
         TreeRegistry.instance().readBlacklistFromDelimitedString(TCSettings.blockIDBlacklist);
         ToolRegistry.instance().readBlacklistFromDelimitedString(TCSettings.itemIDBlacklist);
         ModConfigRegistry.instance().applyPrioritizedModConfigs();

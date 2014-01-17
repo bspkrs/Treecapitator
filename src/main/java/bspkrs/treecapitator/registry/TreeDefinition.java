@@ -236,9 +236,9 @@ public class TreeDefinition
         if (cc.containsKey("useAdvancedTopLogLogic"))
             useAdvancedTopLogLogic = cc.get("useAdvancedTopLogLogic").getBoolean(TCSettings.useAdvancedTopLogLogic);
         
-        logBlocks = ListUtils.getDelimitedStringAsBlockIDList(cc.get(TCConst.LOGS).getString(), ";");
+        logBlocks = ListUtils.getDelimitedStringAsBlockIDList(cc.get(TCConst.LOGS).getString(), "; ");
         if (cc.containsKey(TCConst.LEAVES))
-            leafBlocks = ListUtils.getDelimitedStringAsBlockIDList(cc.get(TCConst.LEAVES).getString(), ";");
+            leafBlocks = ListUtils.getDelimitedStringAsBlockIDList(cc.get(TCConst.LEAVES).getString(), "; ");
         
         return this;
     }
@@ -266,8 +266,8 @@ public class TreeDefinition
         if (useAdvancedTopLogLogic != TCSettings.useAdvancedTopLogLogic)
             config.get(category, "useAdvancedTopLogLogic", TCSettings.useAdvancedTopLogLogic, TCConst.OPTIONAL).set(useAdvancedTopLogLogic);
         
-        config.get(category, TCConst.LOGS, ListUtils.getListAsDelimitedString(logBlocks, ";"));
-        config.get(category, TCConst.LEAVES, ListUtils.getListAsDelimitedString(leafBlocks, ";"));
+        config.get(category, TCConst.LOGS, ListUtils.getListAsDelimitedString(logBlocks, "; "));
+        config.get(category, TCConst.LEAVES, ListUtils.getListAsDelimitedString(leafBlocks, "; "));
     }
     
     /*
