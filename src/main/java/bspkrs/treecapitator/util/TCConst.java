@@ -32,14 +32,9 @@ public class TCConst
     public static final String LOG_STR_MAP                        = "logToStringMap";
     public static final String LEAVES                             = "leaves";
     public static final String MOD_ID                             = "modID";
-    public static final String CONFIG_PATH                        = "configPath";
-    public static final String BLOCK_CFG_KEYS                     = "blockConfigKeys";
-    public static final String ITEM_CFG_KEYS                      = "itemConfigKeys";
     public static final String AXE_ID_LIST                        = "axeIDList";
     public static final String SHEARS_ID_LIST                     = "shearsIDList";
-    public static final String SHIFT_INDEX                        = "useShiftedItemID";
     public static final String OVERRIDE_IMC                       = "overrideIMC";
-    public static final String IDR_MOD_ID                         = "idResolverModID";
     public static final String MM_EXCL_LIST                       = "Excluded Block IDs";
     public static final String MM_EXCL_LIST_DESC                  = "For Multi-Mine compatibility you should put this list in the S:\"Excluded Block IDs\" config setting in AS_MultiMine.cfg";
     public static final String TREE_MOD_CFG_CTGY                  = "tree_and_mod_configs";
@@ -70,6 +65,10 @@ public class TCConst
     public static final String multiMineIDDesc                    = "The mod ID value for Multi-Mine.";
     public static final String userConfigOverridesIMCDesc         = "This setting controls the default behavior when a mod is both configured manually (in the config file) and \n" +
                                                                           "by the mod itself via IMC (inter-mod communication).";
+    public static final String overrideIMCDesc                    = "This setting controls whether or not the mod config section it appears in will override an IMC message sent by that mod.";
+    public static final String saveIMCConfigsToFileDesc           = "This setting controls whether or not IMC config messages sent by other mods will be saved to the local\n" +
+                                                                          "config file when they are processed by Treecapitator. The message will only be saved if your local config\n" +
+                                                                          "for a given mod is not set to override the IMC message.";
     public static final String enableEnchantmentModeDesc          = "[Global] Toggle for whether or not to use the Treecapitating enchantment as opposed to requiring an item \n" +
                                                                           "to be in the axeIDList to chop a tree.";
     public static final String enchantmentIDDesc                  = "[Global] The internal ID for the Treecapitating enchantment. Change this if the default ID is conflicting \n" +
@@ -101,12 +100,14 @@ public class TCConst
                                                                           "When false oreDictionaryLogStrings and oreDictionaryLeafStrings will be ignored.";
     public static final String oreDictionaryLogStringsDesc        = "[Global] The list of log type values to check for in the Forge Ore Dictionary. Entries are comma (,) separated.";
     public static final String oreDictionaryLeafStringsDesc       = "[Global] The list of leaf type values to check for in the Forge Ore Dictionary. Entries are comma (,) separated.";
-    public static final String blockIDBlacklistDesc               = "[Global] Add block IDs to this list if you want to keep them from being registered as logs. This list will override\n" +
+    public static final String blockIDBlacklistDesc               = "[Global] Add unique block names to this list if you want to keep them from being registered as logs. This list will override\n" +
                                                                           "the local user configuration, inter-mod communication (IMC) configuration, and the Ore Dictionary scanning feature.\n" +
-                                                                          "Use ',' to split block ID from metadata and ';' to split entries.";
-    public static final String itemIDBlacklistDesc                = "[Global] Add item IDs to this list if you want to keep them from being registered as axes. This list will override\n" +
+                                                                          "Use ',' to split block name from metadata and ';' to split entries.\n" +
+                                                                          "Refer to the UniqueNames.txt file in the config folder for a list of values.";
+    public static final String itemIDBlacklistDesc                = "[Global] Add unique item names to this list if you want to keep them from being registered as axes. This list will override\n" +
                                                                           "the local user configuration and inter-mod communication (IMC) configuration.\n" +
-                                                                          "Use ',' to split item ID from metadata and ';' to split entries.";
+                                                                          "Use ',' to split item name from metadata and ';' to split entries.\n" +
+                                                                          "Refer to the UniqueNames.txt file in the config folder for a list of values.";
     public static final String breakSpeedModifierDesc             = "[Global, PerTree] When using an item that can chop trees, the break speed will by multiplied by this value\n" +
                                                                           "THIS OPTION IS IGNORED WHEN treeHeightDecidesBreakSpeed=true";
     public static final String disableInCreativeDesc              = "[Global] Flag to disable tree chopping in Creative mode";
@@ -153,33 +154,20 @@ public class TCConst
     //public static final String COMMENT_SEPARATOR                = "#--------------------------------------------------------------------------------------------------------#";
     //public static final String COMMENT_SEPARATOR_2              = "      #--------------------------------------------------------------------------------------------------------#";
     public static final String TREE_MOD_CFG_CTGY_DESC             = "This category is where all your settings live that are related to 3rd party mods.\n" +
-                                                                          "NOTE: Using item or block number IDs WILL NOT WORK.\n\n" +
+                                                                          "NOTE: Using item or block number IDs WILL NOT WORK. Refer to the UniqueNames.txt file in the config folder for a list of values.\n\n" +
                                                                           "How to add new mods: \n\n" +
-                                                                          "Keep in mind that you can also include settings marked with [PerTree] on a per-tree basis to override the global values.\n\n" +
+                                                                          "Keep in mind that you can also include settings marked with [PerTree] on a per-tree basis to override the global default values.\n\n" +
                                                                           "Format:\n" +
                                                                           "    <section_name> { (typically same as modID)\n" +
                                                                           "        S:modID=<modID> (this can be found on the Mods screen in game or in mcmod.info)\n" +
-                                                                          "        S:axeIDList=minecraft:wooden_axe; minecraft:stone_axe\n" +
-                                                                          "        S:shearsIDList=<unique item identifier>\n" +
+                                                                          "        S:axeIDList=<unique_item_identifier>,<optional metadata>; minecraft:wooden_axe; minecraft:stone_axe\n" +
+                                                                          "        S:shearsIDList=<unique_item_identifier>,<optional metadata>\n" +
                                                                           "        B:overrideIMC=<optional, defaults to false) whether or not a mod's user config (this file) should override a mod's IMC config (IMC allows mods to send messages to each other for compatibility)\n\n" +
                                                                           "        <tree_name> { (the tree name is just for organization and clarity)\n" +
                                                                           "            # logs/leaves: list of unique block name values. \",\" separates name and metadata, \";\" separates block entries\n" +
-                                                                          "            S:logs=<<block config category>:<property name>>; <block:customLogBlockID>,0; 17,0\n" +
-                                                                          "            S:leaves=<<block config category>:<property name>>; <block:customLeafBlockID>,0; 18\n" +
+                                                                          "            S:logs=<unique block identifier>,<optional metadata>; <unique_block_identifier>,0; minecraft:log,0\n" +
+                                                                          "            S:leaves=<unique block identifier>,<optional metadata>; <unique_block_identifier>,0; minecraft:leaves,0\n" +
                                                                           "            [optionally add per-tree settings here]\n\n" +
-                                                                          "        }\n" +
-                                                                          "    }\n\n" +
-                                                                          "Example:\n" +
-                                                                          "    ic2 {\n" +
-                                                                          "        S:modID=IC2\n" +
-                                                                          "        S:configPath=IC2.cfg\n" +
-                                                                          "        S:blockConfigKeys=\n" +
-                                                                          "        S:itemConfigKeys=\n" +
-                                                                          "        S:axeIDList=30199; 30233\n" +
-                                                                          "        S:shearsIDList=30233\n\n" +
-                                                                          "        rubber {\n" +
-                                                                          "            S:logs=243\n" +
-                                                                          "            S:leaves=242\n" +
                                                                           "        }\n" +
                                                                           "    }";
     public static final String VAN_TREES_ITEMS_CTGY_DESC          = "This special category is the home of the vanilla tree block and item configurations. You can change the \n" +
