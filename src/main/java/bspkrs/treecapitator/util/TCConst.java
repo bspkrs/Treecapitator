@@ -35,12 +35,8 @@ public class TCConst
     public static final String AXE_ID_LIST                        = "axeIDList";
     public static final String SHEARS_ID_LIST                     = "shearsIDList";
     public static final String OVERRIDE_IMC                       = "overrideIMC";
-    public static final String MM_EXCL_LIST                       = "Excluded Block IDs";
-    public static final String MM_EXCL_LIST_DESC                  = "For Multi-Mine compatibility you should put this list in the S:\"Excluded Block IDs\" config setting in AS_MultiMine.cfg";
     public static final String TREE_MOD_CFG_CTGY                  = "tree_and_mod_configs";
     public static final String SETTINGS_CTGY                      = "general_settings";
-    public static final String GLOBAL                             = "Global";
-    public static final String PER_TREE                           = "PerTree";
     public static final String BREAK_SPEED_CTGY                   = TCConst.SETTINGS_CTGY + "." + "break_speed_settings";
     public static final String ENCHANTMENT_MODE_CTGY              = TCConst.SETTINGS_CTGY + "." + "enchantment_mode_settings";
     public static final String ITEM_CTGY                          = TCConst.SETTINGS_CTGY + "." + "item_settings";
