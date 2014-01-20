@@ -1,3 +1,7 @@
+1.7.2.r01 - 19-Jan-2014
+- updated for 1.7.2
+- new config format
+- added option to save IMC messages to local config
 1.6.4.r09 - 19-Dec-2013
 - fixed NPE when using MultiMine (should also prevent other potential NPEs at same location)
 - added automatic MultiMine compatibility
