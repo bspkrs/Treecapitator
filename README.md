@@ -6,8 +6,8 @@ This repo contains source files for Forge (dependant on bspkrsCore).
 ## Links of Interest
  - [Official Minecraft Forum Thread](http://www.minecraftforum.net/topic/1009577-)
  - [Old ModLoader Downloads](http://bspk.rs/MC/TreeCapitator_ML/index.html)
- - [Forge Player Downloads](http://bspk.rs/MC/Treecapitator_Forge/index.html) - for Minecraft players to use
- - [Developer Downloads](http://bspk.rs/MC/Treecapitator_Forge/deobf/index.html) - for developers to use in an IDE such as Eclipse
+ - [Forge Player Downloads](http://bspk.rs/MC/TreeCapitator_Forge/index.html) - for Minecraft players to use
+ - [Developer Downloads](http://bspk.rs/MC/TreeCapitator_Forge/deobf/index.html) - for developers to use in an IDE such as Eclipse
  - [Treecapitator Wiki](https://github.com/bspkrs/Treecapitator/wiki)
  - [Issue Tracking System](https://github.com/bspkrs/Treecapitator/issues)
  - [Contributing](#contributing) - for those that want to help out  
