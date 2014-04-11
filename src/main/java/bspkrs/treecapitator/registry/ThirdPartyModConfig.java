@@ -7,16 +7,16 @@ import java.util.TreeMap;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.config.ConfigCategory;
 import bspkrs.helpers.nbt.NBTTagCompoundHelper;
 import bspkrs.helpers.nbt.NBTTagListHelper;
 import bspkrs.treecapitator.TreecapitatorMod;
 import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.util.TCConst;
 import bspkrs.treecapitator.util.TCLog;
-import bspkrs.util.BSConfiguration;
 import bspkrs.util.ItemID;
 import bspkrs.util.ListUtils;
+import bspkrs.util.config.ConfigCategory;
+import bspkrs.util.config.Configuration;
 
 public class ThirdPartyModConfig
 {
@@ -75,7 +75,7 @@ public class ThirdPartyModConfig
         this(modID, configPath, "", "");
     }
     
-    public ThirdPartyModConfig(BSConfiguration config, String category)
+    public ThirdPartyModConfig(Configuration config, String category)
     {
         this(false);
         readFromConfiguration(config, category);
@@ -128,7 +128,7 @@ public class ThirdPartyModConfig
         tpModCfg.setTag(TCConst.TREES, treeList);
     }
     
-    public ThirdPartyModConfig readFromConfiguration(BSConfiguration config, String category)
+    public ThirdPartyModConfig readFromConfiguration(Configuration config, String category)
     {
         ConfigCategory cc = config.getCategory(category);
         modID = cc.get(TCConst.MOD_ID).getString();
@@ -152,7 +152,7 @@ public class ThirdPartyModConfig
         return this;
     }
     
-    public void writeToConfiguration(BSConfiguration config, String category)
+    public void writeToConfiguration(Configuration config, String category)
     {
         config.get(category, TCConst.MOD_ID, modID);
         if (axeKeys.length() > 0)

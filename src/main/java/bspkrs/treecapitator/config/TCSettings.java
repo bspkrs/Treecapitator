@@ -5,7 +5,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import bspkrs.treecapitator.EnchantmentTreecapitating;
 import bspkrs.treecapitator.util.TCConst;
 import bspkrs.treecapitator.util.TCLog;
-import bspkrs.util.BSConfiguration;
+import bspkrs.util.config.Configuration;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public final class TCSettings
@@ -168,7 +168,7 @@ public final class TCSettings
      * 
      * @param config
      */
-    public void syncConfiguration(BSConfiguration config)
+    public void syncConfiguration(Configuration config)
     {
         // Misc settings
         allowDebugLogging = config.getBoolean("allowDebugLogging", TCConst.MISC_CTGY,

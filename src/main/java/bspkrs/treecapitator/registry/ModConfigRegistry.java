@@ -9,12 +9,12 @@ import java.util.TreeMap;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.config.ConfigCategory;
 import bspkrs.treecapitator.config.TCConfigHandler;
 import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.util.TCConst;
 import bspkrs.treecapitator.util.TCLog;
-import bspkrs.util.BSConfiguration;
+import bspkrs.util.config.ConfigCategory;
+import bspkrs.util.config.Configuration;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLInterModComms;
 
@@ -301,7 +301,7 @@ public class ModConfigRegistry
     /*
      * Gets/Sets user configs from the config object
      */
-    public void syncConfiguration(BSConfiguration config)
+    public void syncConfiguration(Configuration config)
     {
         /*
          * Get / Set 3rd Party Mod configs
@@ -348,7 +348,7 @@ public class ModConfigRegistry
         if (TCSettings.saveIMCConfigsToFile)
         {
             // THIS CODE ASSUMES THAT TCConfigHandler.instance().config HAS BEEN LOADED!
-            BSConfiguration config = TCConfigHandler.instance().config;
+            Configuration config = TCConfigHandler.instance().config;
             String imcCtgy = "";
             
             for (String ctgy : config.getCategoryNames())

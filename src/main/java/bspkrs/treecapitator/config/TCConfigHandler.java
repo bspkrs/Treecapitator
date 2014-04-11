@@ -4,13 +4,13 @@ import java.io.File;
 
 import bspkrs.treecapitator.registry.ModConfigRegistry;
 import bspkrs.treecapitator.util.TCLog;
-import bspkrs.util.BSConfiguration;
 import bspkrs.util.CommonUtils;
+import bspkrs.util.config.Configuration;
 
 public class TCConfigHandler
 {
     private static TCConfigHandler instance;
-    public BSConfiguration         config;
+    public Configuration           config;
     
     public static TCConfigHandler instance()
     {
@@ -34,7 +34,7 @@ public class TCConfigHandler
     private TCConfigHandler(File file)
     {
         this();
-        config = new BSConfiguration(file);
+        config = new Configuration(file);
         config.load();
         
         TCLog.info("Loading configuration file %s", file.getAbsolutePath().replace(CommonUtils.getMinecraftDir(), "./"));

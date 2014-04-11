@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.config.ConfigCategory;
-import net.minecraftforge.common.config.Configuration;
 import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.util.TCConst;
 import bspkrs.util.BlockID;
 import bspkrs.util.HashCodeUtil;
 import bspkrs.util.ListUtils;
+import bspkrs.util.config.ConfigCategory;
+import bspkrs.util.config.Configuration;
 
 public class TreeDefinition
 {

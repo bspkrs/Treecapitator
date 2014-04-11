@@ -5,7 +5,7 @@ import bspkrs.util.Const;
 public class TCConst
 {
     public static final String TCMODID                            = "TreeCapitator";
-    public static final String VERSION_NUMBER                     = Const.MCVERSION + ".r01";
+    public static final String VERSION_NUMBER                     = Const.MCVERSION + ".r02";
     
     public static final String OAK                                = "vanilla_oak";
     public static final String SPRUCE                             = "vanilla_spruce";
