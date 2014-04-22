@@ -11,6 +11,7 @@ import bspkrs.util.HashCodeUtil;
 import bspkrs.util.ListUtils;
 import bspkrs.util.config.ConfigCategory;
 import bspkrs.util.config.Configuration;
+import bspkrs.util.config.Property;
 
 public class TreeDefinition
 {
@@ -245,29 +246,72 @@ public class TreeDefinition
     
     public void writeToConfiguration(Configuration config, String category)
     {
+        Property temp;
         if (allowSmartTreeDetection != TCSettings.allowSmartTreeDetection)
-            config.get(category, TCConst.ALLOW_SMART_TREE_DETECT, TCSettings.allowSmartTreeDetection, TCConst.OPTIONAL).set(allowSmartTreeDetection);
+        {
+            temp = config.get(category, TCConst.ALLOW_SMART_TREE_DETECT, TCSettings.allowSmartTreeDetection, TCConst.OPTIONAL);
+            temp.set(allowSmartTreeDetection);
+            temp.setLanguageKey("bspkrs.tc.configgui." + TCConst.ALLOW_SMART_TREE_DETECT);
+        }
         if (onlyDestroyUpwards != TCSettings.onlyDestroyUpwards)
-            config.get(category, TCConst.ONLY_DESTROY_UPWARDS, TCSettings.onlyDestroyUpwards, TCConst.OPTIONAL).set(onlyDestroyUpwards);
+        {
+            temp = config.get(category, TCConst.ONLY_DESTROY_UPWARDS, TCSettings.onlyDestroyUpwards, TCConst.OPTIONAL);
+            temp.set(onlyDestroyUpwards);
+            temp.setLanguageKey("bspkrs.tc.configgui." + TCConst.ONLY_DESTROY_UPWARDS);
+        }
         if (requireLeafDecayCheck != TCSettings.requireLeafDecayCheck)
-            config.get(category, TCConst.REQ_DECAY_CHECK, TCSettings.requireLeafDecayCheck, TCConst.OPTIONAL).set(requireLeafDecayCheck);
+        {
+            temp = config.get(category, TCConst.REQ_DECAY_CHECK, TCSettings.requireLeafDecayCheck, TCConst.OPTIONAL);
+            temp.set(requireLeafDecayCheck);
+            temp.setLanguageKey("bspkrs.tc.configgui." + TCConst.REQ_DECAY_CHECK);
+        }
         if (maxHorLogBreakDist != TCSettings.maxHorLogBreakDist)
-            config.get(category, TCConst.MAX_H_LOG_DIST, TCSettings.maxHorLogBreakDist, TCConst.OPTIONAL).set(maxHorLogBreakDist);
+        {
+            temp = config.get(category, TCConst.MAX_H_LOG_DIST, TCSettings.maxHorLogBreakDist, TCConst.OPTIONAL);
+            temp.set(maxHorLogBreakDist);
+            temp.setLanguageKey("bspkrs.tc.configgui." + TCConst.MAX_H_LOG_DIST);
+        }
         if (maxVerLogBreakDist != TCSettings.maxVerLogBreakDist)
-            config.get(category, TCConst.MAX_V_LOG_DIST, TCSettings.maxVerLogBreakDist, TCConst.OPTIONAL).set(maxVerLogBreakDist);
+        {
+            temp = config.get(category, TCConst.MAX_V_LOG_DIST, TCSettings.maxVerLogBreakDist, TCConst.OPTIONAL);
+            temp.set(maxVerLogBreakDist);
+            temp.setLanguageKey("bspkrs.tc.configgui." + TCConst.MAX_V_LOG_DIST);
+        }
         if (maxHorLeafBreakDist != TCSettings.maxHorLeafBreakDist)
-            config.get(category, TCConst.MAX_H_LEAF_DIST, TCSettings.maxHorLeafBreakDist, TCConst.OPTIONAL).set(maxHorLeafBreakDist);
+        {
+            temp = config.get(category, TCConst.MAX_H_LEAF_DIST, TCSettings.maxHorLeafBreakDist, TCConst.OPTIONAL);
+            temp.set(maxHorLeafBreakDist);
+            temp.setLanguageKey("bspkrs.tc.configgui." + TCConst.MAX_H_LEAF_DIST);
+        }
         if (maxLeafIDDist != TCSettings.maxLeafIDDist)
-            config.get(category, TCConst.MAX_LEAF_ID_DIST, TCSettings.maxLeafIDDist, TCConst.OPTIONAL).set(maxLeafIDDist);
+        {
+            temp = config.get(category, TCConst.MAX_LEAF_ID_DIST, TCSettings.maxLeafIDDist, TCConst.OPTIONAL);
+            temp.set(maxLeafIDDist);
+            temp.setLanguageKey("bspkrs.tc.configgui." + TCConst.MAX_LEAF_ID_DIST);
+        }
         if (minLeavesToID != TCSettings.minLeavesToID)
-            config.get(category, TCConst.MIN_LEAF_ID, TCSettings.minLeavesToID, TCConst.OPTIONAL).set(minLeavesToID);
+        {
+            temp = config.get(category, TCConst.MIN_LEAF_ID, TCSettings.minLeavesToID, TCConst.OPTIONAL);
+            temp.set(minLeavesToID);
+            temp.setLanguageKey("bspkrs.tc.configgui." + TCConst.MIN_LEAF_ID);
+        }
         if (breakSpeedModifier != TCSettings.breakSpeedModifier)
-            config.get(category, TCConst.BREAK_SPEED_MOD, TCSettings.breakSpeedModifier, TCConst.OPTIONAL).set(breakSpeedModifier);
+        {
+            temp = config.get(category, TCConst.BREAK_SPEED_MOD, TCSettings.breakSpeedModifier, TCConst.OPTIONAL);
+            temp.set(breakSpeedModifier);
+            temp.setLanguageKey("bspkrs.tc.configgui." + TCConst.BREAK_SPEED_MOD);
+        }
         if (useAdvancedTopLogLogic != TCSettings.useAdvancedTopLogLogic)
-            config.get(category, "useAdvancedTopLogLogic", TCSettings.useAdvancedTopLogLogic, TCConst.OPTIONAL).set(useAdvancedTopLogLogic);
+        {
+            temp = config.get(category, "useAdvancedTopLogLogic", TCSettings.useAdvancedTopLogLogic, TCConst.OPTIONAL);
+            temp.set(useAdvancedTopLogLogic);
+            temp.setLanguageKey("bspkrs.tc.configgui.useAdvancedTopLogLogic");
+        }
         
-        config.get(category, TCConst.LOGS, ListUtils.getListAsDelimitedString(logBlocks, "; "));
-        config.get(category, TCConst.LEAVES, ListUtils.getListAsDelimitedString(leafBlocks, "; "));
+        temp = config.get(category, TCConst.LOGS, ListUtils.getListAsDelimitedString(logBlocks, "; "));
+        temp.setLanguageKey("bspkrs.tc.configgui." + TCConst.LOGS);
+        temp = config.get(category, TCConst.LEAVES, ListUtils.getListAsDelimitedString(leafBlocks, "; "));
+        temp.setLanguageKey("bspkrs.tc.configgui." + TCConst.LEAVES);
     }
     
     /*

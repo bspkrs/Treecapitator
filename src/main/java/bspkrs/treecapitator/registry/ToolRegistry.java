@@ -7,6 +7,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.util.TCConst;
 import bspkrs.util.ItemID;
 import bspkrs.util.ListUtils;
@@ -45,7 +46,7 @@ public class ToolRegistry
     {
         axeList = new ArrayList<ItemID>();
         shearsList = new ArrayList<ItemID>();
-        blacklist = new ArrayList<ItemID>();
+        readBlacklistFromDelimitedString(TCSettings.itemIDBlacklist);
     }
     
     protected void initVanillaLists()

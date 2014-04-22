@@ -10,7 +10,8 @@ import bspkrs.util.config.Configuration;
 public class TCConfigHandler
 {
     private static TCConfigHandler instance;
-    public Configuration           config;
+    private Configuration          config;
+    private boolean                applyPrioritizedModConfigs = false;
     
     public static TCConfigHandler instance()
     {
@@ -35,11 +36,29 @@ public class TCConfigHandler
     {
         this();
         config = new Configuration(file);
+        TCLog.info("Loading configuration file %s", file.getAbsolutePath().replace(CommonUtils.getMinecraftDir(), "./"));
+        syncConfig();
+    }
+    
+    public Configuration getConfig()
+    {
+        return config;
+    }
+    
+    public void setApplyPrioritizedModConfigs(boolean bol)
+    {
+        this.applyPrioritizedModConfigs = bol;
+    }
+    
+    public void syncConfig()
+    {
         config.load();
         
-        TCLog.info("Loading configuration file %s", file.getAbsolutePath().replace(CommonUtils.getMinecraftDir(), "./"));
         TCSettings.instance().syncConfiguration(config);
         ModConfigRegistry.instance().syncConfiguration(config);
+        
+        if (this.applyPrioritizedModConfigs)
+            ModConfigRegistry.instance().applyPrioritizedModConfigs();
         
         config.save();
     }

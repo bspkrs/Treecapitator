@@ -11,11 +11,9 @@ import bspkrs.treecapitator.compat.MultiMineCompat;
 import bspkrs.treecapitator.config.TCConfigHandler;
 import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.forge.ForgeEventHandler;
-import bspkrs.treecapitator.forge.OreDictionaryHandler;
 import bspkrs.treecapitator.registry.ModConfigRegistry;
 import bspkrs.treecapitator.registry.RegistryNBTManager;
 import bspkrs.treecapitator.registry.ThirdPartyModConfig;
-import bspkrs.treecapitator.registry.ToolRegistry;
 import bspkrs.treecapitator.registry.TreeDefinition;
 import bspkrs.treecapitator.registry.TreeRegistry;
 import bspkrs.treecapitator.util.TCConst;
@@ -39,7 +37,8 @@ import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(name = TCConst.TCMODID, modid = TCConst.TCMODID, version = TCConst.VERSION_NUMBER, dependencies = "required-after:bspkrsCore", useMetadata = true)
+@Mod(name = TCConst.TCMODID, modid = TCConst.TCMODID, version = TCConst.VERSION_NUMBER, dependencies = "required-after:bspkrsCore", useMetadata = true,
+        guiFactory = "bspkrs.treecapitator.fml.gui.ModGuiFactoryHandler")
 public class TreecapitatorMod
 {
     public static ModVersionChecker versionChecker;
@@ -118,11 +117,7 @@ public class TreecapitatorMod
     @EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
-        TreeRegistry.instance().readBlacklistFromDelimitedString(TCSettings.blockIDBlacklist);
-        ToolRegistry.instance().readBlacklistFromDelimitedString(TCSettings.itemIDBlacklist);
         ModConfigRegistry.instance().applyPrioritizedModConfigs();
-        
-        OreDictionaryHandler.instance().generateAndRegisterOreDictionaryTreeDefinitions();
         
         // Multi-Mine stuff
         if (Loader.isModLoaded(TCSettings.multiMineModID))

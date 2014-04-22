@@ -55,8 +55,8 @@ public class TreeRegistry
         treeDefs = new HashMap<String, TreeDefinition>();
         logToStringMap = new HashMap<BlockID, String>();
         masterDefinition = new TreeDefinition();
-        blacklist = new ArrayList<BlockID>();
         blocksBeingChopped = new HashSet<Coord>();
+        readBlacklistFromDelimitedString(TCSettings.blockIDBlacklist);
     }
     
     protected void initVanillaTreeDefs()

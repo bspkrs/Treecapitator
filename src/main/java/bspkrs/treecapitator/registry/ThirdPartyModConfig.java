@@ -17,6 +17,7 @@ import bspkrs.util.ItemID;
 import bspkrs.util.ListUtils;
 import bspkrs.util.config.ConfigCategory;
 import bspkrs.util.config.Configuration;
+import bspkrs.util.config.Property;
 
 public class ThirdPartyModConfig
 {
@@ -154,16 +155,27 @@ public class ThirdPartyModConfig
     
     public void writeToConfiguration(Configuration config, String category)
     {
-        config.get(category, TCConst.MOD_ID, modID);
+        Property temp;
+        temp = config.get(category, TCConst.MOD_ID, modID);
+        temp.setLanguageKey("bspkrs.tc.configgui." + TCConst.MOD_ID);
         if (axeKeys.length() > 0)
-            config.get(category, TCConst.AXE_ID_LIST, axeKeys);
+        {
+            temp = config.get(category, TCConst.AXE_ID_LIST, axeKeys);
+            temp.setLanguageKey("bspkrs.tc.configgui." + TCConst.AXE_ID_LIST);
+        }
         if (shearsKeys.length() > 0)
-            config.get(category, TCConst.SHEARS_ID_LIST, shearsKeys);
+        {
+            temp = config.get(category, TCConst.SHEARS_ID_LIST, shearsKeys);
+            temp.setLanguageKey("bspkrs.tc.configgui." + TCConst.SHEARS_ID_LIST);
+        }
         
-        config.getBoolean(TCConst.OVERRIDE_IMC, category, overrideIMC, TCConst.overrideIMCDesc);
+        config.getBoolean(TCConst.OVERRIDE_IMC, category, overrideIMC, TCConst.overrideIMCDesc, "bspkrs.tc.configgui." + TCConst.OVERRIDE_IMC);
         
         for (Entry<String, TreeDefinition> e : configTreesMap.entrySet())
-            e.getValue().writeToConfiguration(config, category + "." + e.getKey());
+            if (!e.getKey().startsWith(category))
+                e.getValue().writeToConfiguration(config, category + "." + e.getKey());
+            else
+                e.getValue().writeToConfiguration(config, e.getKey());
     }
     
     public ThirdPartyModConfig addConfigTreeDef(String key, TreeDefinition tree)
@@ -171,7 +183,10 @@ public class ThirdPartyModConfig
         if (!configTreesMap.containsKey(key))
             configTreesMap.put(key, tree);
         else
+        {
             TCLog.warning("Mod %s attempted to add two tree configs with the same name: %s", modID, key);
+            configTreesMap.get(key).append(tree);
+        }
         
         return this;
     }
@@ -181,7 +196,10 @@ public class ThirdPartyModConfig
         if (!treesMap.containsKey(key))
             treesMap.put(key, tree);
         else
+        {
             TCLog.warning("Mod %s attempted to add two tree definitions with the same id: %s", modID, key);
+            treesMap.get(key).append(tree);
+        }
         
         return this;
     }

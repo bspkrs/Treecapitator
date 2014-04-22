@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import bspkrs.treecapitator.config.TCConfigHandler;
 import bspkrs.treecapitator.config.TCSettings;
+import bspkrs.treecapitator.forge.OreDictionaryHandler;
 import bspkrs.treecapitator.util.TCConst;
 import bspkrs.treecapitator.util.TCLog;
 import bspkrs.util.config.ConfigCategory;
@@ -62,6 +63,11 @@ public class ModConfigRegistry
             TCLog.warning("Mod \"%s\" sent multiple IMC messages. The first message will be used.", tpmc.modID());
     }
     
+    public void appendTreeToModConfig(String modID, String treeName, TreeDefinition treeDef)
+    {
+        userModCfgs.get(modID).addTreeDef(treeName, treeDef);
+    }
+    
     public void applyPrioritizedModConfigs()
     {
         List<ThirdPartyModConfig> finalList = new LinkedList<ThirdPartyModConfig>();
@@ -72,7 +78,8 @@ public class ModConfigRegistry
             {
                 finalList.add(e.getValue());
                 TCLog.debug("IMC mod config loaded for %s.", e.getValue().modID());
-                writeIMCConfigToConfigFile(e.getValue());
+                if (TCSettings.saveIMCConfigsToFile)
+                    writeIMCConfigToConfigFile(e.getValue());
             }
         
         for (Entry<String, ThirdPartyModConfig> e : userModCfgs.entrySet())
@@ -83,8 +90,15 @@ public class ModConfigRegistry
             }
         
         TCLog.info("Registering items and trees...");
+        TreeRegistry.instance().initMapsAndLists();
+        ToolRegistry.instance().initLists();
         for (ThirdPartyModConfig cfg : finalList)
             cfg.registerTools().registerTrees();
+        
+        OreDictionaryHandler.instance().generateAndRegisterOreDictionaryTreeDefinitions();
+        writeIMCConfigToConfigFile(userModCfgs.get(TCConst.TCMODID));
+        
+        TCConfigHandler.instance().setApplyPrioritizedModConfigs(true);
     }
     
     protected void initDefaultModConfigs()
@@ -303,19 +317,21 @@ public class ModConfigRegistry
      */
     public void syncConfiguration(Configuration config)
     {
+        userModCfgs = new HashMap<String, ThirdPartyModConfig>();
         /*
          * Get / Set 3rd Party Mod configs
          */
         TCSettings.multiMineModID = config.getString("multiMineID", TCConst.TREE_MOD_CFG_CTGY,
-                TCSettings.multiMineModID, TCConst.multiMineIDDesc);
+                TCSettings.multiMineModIDDefault, TCConst.multiMineIDDesc, "bspkrs.tc.configgui.multiMineID");
         TCSettings.userConfigOverridesIMC = config.getBoolean("userConfigOverridesIMC", TCConst.TREE_MOD_CFG_CTGY,
-                TCSettings.userConfigOverridesIMC, TCConst.userConfigOverridesIMCDesc);
+                TCSettings.userConfigOverridesIMCDefault, TCConst.userConfigOverridesIMCDesc, "bspkrs.tc.configgui.userConfigOverridesIMC");
         TCSettings.saveIMCConfigsToFile = config.getBoolean("saveIMCConfigsToFile", TCConst.TREE_MOD_CFG_CTGY,
-                TCSettings.saveIMCConfigsToFile, TCConst.saveIMCConfigsToFileDesc);
+                TCSettings.saveIMCConfigsToFileDefault, TCConst.saveIMCConfigsToFileDesc, "bspkrs.tc.configgui.saveIMCConfigsToFile");
         
         TCLog.configs(config, TCConst.TREE_MOD_CFG_CTGY);
         
         config.addCustomCategoryComment(TCConst.TREE_MOD_CFG_CTGY, TCConst.TREE_MOD_CFG_CTGY_DESC);
+        config.addCustomCategoryLanguageKey(TCConst.TREE_MOD_CFG_CTGY, "bspkrs.tc.configgui.ctgy." + TCConst.TREE_MOD_CFG_CTGY);
         
         if (!config.hasCategory(TCConst.TREE_MOD_CFG_CTGY + "." + TCConst.VAN_TREES_ITEMS_CTGY))
         {
@@ -330,6 +346,8 @@ public class ModConfigRegistry
             TCLog.info("Proceeding to load tree/mod configs from file.");
         
         config.addCustomCategoryComment(TCConst.TREE_MOD_CFG_CTGY + "." + TCConst.VAN_TREES_ITEMS_CTGY, TCConst.VAN_TREES_ITEMS_CTGY_DESC);
+        config.addCustomCategoryLanguageKey(TCConst.TREE_MOD_CFG_CTGY + "." + TCConst.VAN_TREES_ITEMS_CTGY,
+                "bspkrs.tc.configgui.ctgy." + TCConst.TREE_MOD_CFG_CTGY + "." + TCConst.VAN_TREES_ITEMS_CTGY);
         
         // Load all configs found in the file to ModConfigRegistry
         for (String ctgy : config.getCategoryNames())
@@ -345,30 +363,32 @@ public class ModConfigRegistry
     
     public void writeIMCConfigToConfigFile(ThirdPartyModConfig imctpmc)
     {
-        if (TCSettings.saveIMCConfigsToFile)
+        // THIS CODE ASSUMES THAT TCConfigHandler.instance().config HAS BEEN LOADED!
+        Configuration config = TCConfigHandler.instance().getConfig();
+        String imcCtgy = "";
+        
+        for (String ctgy : config.getCategoryNames())
         {
-            // THIS CODE ASSUMES THAT TCConfigHandler.instance().config HAS BEEN LOADED!
-            Configuration config = TCConfigHandler.instance().config;
-            String imcCtgy = "";
-            
-            for (String ctgy : config.getCategoryNames())
+            ConfigCategory cc = config.getCategory(ctgy);
+            if (ctgy.indexOf(TCConst.TREE_MOD_CFG_CTGY + ".") != -1 && cc.containsKey(TCConst.MOD_ID) && imctpmc.modID().equals(cc.get(TCConst.MOD_ID).getString()))
             {
-                ConfigCategory cc = config.getCategory(ctgy);
-                if (ctgy.indexOf(TCConst.TREE_MOD_CFG_CTGY + ".") != -1 && cc.containsKey(TCConst.MOD_ID) && imctpmc.modID().equals(cc.get(TCConst.MOD_ID).getString()))
-                {
-                    imcCtgy = ctgy;
-                    break;
-                }
+                imcCtgy = ctgy;
+                break;
             }
-            
-            if (imcCtgy.isEmpty())
-                imcCtgy = TCConst.TREE_MOD_CFG_CTGY + "." + imctpmc.modID();
-            else if (config.hasCategory(imcCtgy))
-                config.removeCategory(config.getCategory(imcCtgy));
-            
-            imctpmc.writeToConfiguration(config, imcCtgy);
-            config.save();
         }
+        
+        if (imcCtgy.isEmpty())
+            imcCtgy = TCConst.TREE_MOD_CFG_CTGY + "." + imctpmc.modID();
+        else if (config.hasCategory(imcCtgy))
+            config.removeCategory(config.getCategory(imcCtgy));
+        
+        imctpmc.writeToConfiguration(config, imcCtgy);
+        
+        config.addCustomCategoryComment(TCConst.TREE_MOD_CFG_CTGY + "." + TCConst.VAN_TREES_ITEMS_CTGY, TCConst.VAN_TREES_ITEMS_CTGY_DESC);
+        config.addCustomCategoryLanguageKey(TCConst.TREE_MOD_CFG_CTGY + "." + TCConst.VAN_TREES_ITEMS_CTGY,
+                "bspkrs.tc.configgui.ctgy." + TCConst.TREE_MOD_CFG_CTGY + "." + TCConst.VAN_TREES_ITEMS_CTGY);
+        
+        config.save();
     }
     
     protected void imcSendMessageBoP()
