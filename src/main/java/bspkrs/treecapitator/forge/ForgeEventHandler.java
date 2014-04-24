@@ -4,22 +4,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.block.Block;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import bspkrs.helpers.block.BlockHelper;
 import bspkrs.helpers.entity.player.EntityPlayerHelper;
 import bspkrs.helpers.world.WorldHelper;
-import bspkrs.treecapitator.TreecapitatorMod;
 import bspkrs.treecapitator.Treecapitator;
+import bspkrs.treecapitator.TreecapitatorMod;
 import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.registry.TreeDefinition;
 import bspkrs.treecapitator.registry.TreeRegistry;
 import bspkrs.treecapitator.util.TCLog;
 import bspkrs.util.BlockID;
-import bspkrs.util.CommonUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ForgeEventHandler
@@ -29,9 +26,9 @@ public class ForgeEventHandler
     @SubscribeEvent
     public void onBlockClicked(PlayerInteractEvent event)
     {
-        if (event.action.equals(PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) && TreecapitatorMod.proxy.isEnabled())
+        if (TreecapitatorMod.proxy.isEnabled() && event.action.equals(PlayerInteractEvent.Action.LEFT_CLICK_BLOCK))
         {
-            if (WorldHelper.isAirBlock(event.entityPlayer.worldObj, event.x, event.y, event.z))
+            if (!WorldHelper.isAirBlock(event.entityPlayer.worldObj, event.x, event.y, event.z))
             {
                 Block block = WorldHelper.getBlock(event.entityPlayer.worldObj, event.x, event.y, event.z);
                 int metadata = event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z);
@@ -52,34 +49,30 @@ public class ForgeEventHandler
         BlockID blockID = new BlockID(event.block, event.metadata);
         
         if (TreecapitatorMod.proxy.isEnabled() && TreeRegistry.instance().isRegistered(blockID) &&
-                Treecapitator.isAxeItemEquipped(event.entityPlayer))
+                (Treecapitator.isAxeItemEquipped(event.entityPlayer) || !TCSettings.needItem))
         {
             TreeDefinition treeDef = TreeRegistry.instance().get(blockID);
             if (treeDef != null)
             {
                 if (TCSettings.treeHeightDecidesBreakSpeed)
                 {
-                    MovingObjectPosition thing = CommonUtils.getPlayerLookingSpot(event.entityPlayer, true);
-                    if (thing != null && thing.typeOfHit == MovingObjectType.BLOCK)
+                    if ((playerSneakingMap.containsKey(EntityPlayerHelper.getGameProfile(event.entityPlayer))
+                            && (playerSneakingMap.get(EntityPlayerHelper.getGameProfile(event.entityPlayer)) == event.entityPlayer.isSneaking()))
+                            || !playerSneakingMap.containsKey(EntityPlayerHelper.getGameProfile(event.entityPlayer)))
                     {
-                        if ((playerSneakingMap.containsKey(EntityPlayerHelper.getGameProfile(event.entityPlayer))
-                                && (playerSneakingMap.get(EntityPlayerHelper.getGameProfile(event.entityPlayer)) == event.entityPlayer.isSneaking()))
-                                || !playerSneakingMap.containsKey(EntityPlayerHelper.getGameProfile(event.entityPlayer)))
+                        if (Treecapitator.isBreakingEnabled(event.entityPlayer))
                         {
-                            if (Treecapitator.isBreakingEnabled(event.entityPlayer))
-                            {
-                                int height = Treecapitator.getTreeHeight(treeDef, event.entityPlayer.worldObj, thing.blockX, thing.blockY, thing.blockZ, event.metadata, event.entityPlayer);
-                                if (height > 1)
-                                    event.newSpeed = event.originalSpeed / (height * TCSettings.treeHeightModifier);
-                            }
-                        }
-                        else
-                        {
-                            event.newSpeed = 0.0000000001f;
+                            int height = Treecapitator.getTreeHeight(treeDef, event.entityPlayer.worldObj, event.x, event.y, event.z, event.metadata, event.entityPlayer);
+                            if (height > 1)
+                                event.newSpeed = event.originalSpeed / (height * TCSettings.treeHeightModifier);
                         }
                     }
+                    else
+                    {
+                        event.newSpeed = 0.0000000001f;
+                    }
                 }
-                else
+                else if (Treecapitator.isBreakingEnabled(event.entityPlayer))
                     event.newSpeed = event.originalSpeed * treeDef.breakSpeedModifier();
             }
             else
