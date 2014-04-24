@@ -2,6 +2,7 @@ package bspkrs.treecapitator;
 
 import net.minecraft.util.ChatComponentText;
 import bspkrs.helpers.entity.player.EntityPlayerHelper;
+import bspkrs.treecapitator.config.TCSettings;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -22,7 +23,7 @@ public class ClientProxy extends CommonProxy
     @Override
     public boolean isEnabled()
     {
-        return serverDetected;
+        return serverDetected && TCSettings.enabled;
     }
     
     @Override

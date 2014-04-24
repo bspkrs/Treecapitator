@@ -6,14 +6,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.stats.StatList;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import bspkrs.helpers.block.BlockHelper;
@@ -32,7 +32,8 @@ import bspkrs.util.Coord;
 public class Treecapitator
 {
     // The player chopping
-    public EntityPlayer          player;
+    private World                world;
+    private EntityPlayer         player;
     private Coord                startPos;
     // The axe of the player currently chopping
     private ItemStack            axe;
@@ -45,6 +46,8 @@ public class Treecapitator
     private int                  numLeavesSheared;
     private float                logDamageMultiplier;
     private float                leafDamageMultiplier;
+    private List<ItemStack>      drops;
+    private Coord                dropPos;
     
     public Treecapitator(EntityPlayer entityPlayer, TreeDefinition treeDef)
     {
@@ -116,8 +119,11 @@ public class Treecapitator
         if (!world.isRemote)
         {
             TCLog.debug("In TreeCapitator.onBlockHarvested() " + x + ", " + y + ", " + z);
+            this.world = world;
             player = entityPlayer;
             startPos = new Coord(x, y, z);
+            dropPos = startPos.clone();
+            drops = new ArrayList<ItemStack>();
             
             if (isBreakingEnabled(entityPlayer))
             {
@@ -158,7 +164,7 @@ public class Treecapitator
                         
                         /*
                          * Apply remaining damage if it rounds to a non-zero value
-                        q   */
+                         */
                         if (currentAxeDamage > 0.0F && axe != null)
                         {
                             currentAxeDamage = Math.round(currentAxeDamage);
@@ -177,6 +183,10 @@ public class Treecapitator
                                 else
                                     ItemHelper.onBlockDestroyed(shears, world, treeDef.getLeafList().get(0).getBlock(), x, y, z, player);
                         }
+                        
+                        if (TCSettings.stackDrops)
+                            while (drops.size() > 0)
+                                world.spawnEntityInWorld(new EntityItem(world, dropPos.x, dropPos.y, dropPos.z, drops.remove(0)));
                     }
                     else
                         TCLog.debug("Axe item is not equipped.");
@@ -394,22 +404,6 @@ public class Treecapitator
         }
     }
     
-    private int getFortuneLevel(ItemStack itemStack)
-    {
-        if (itemStack != null)
-        {
-            NBTTagList list = itemStack.getEnchantmentTagList();
-            if (list != null)
-                for (int i = 0; i < list.tagCount(); i++)
-                {
-                    NBTTagCompound tag = NBTTagListHelper.getCompoundTagAt(list, i);
-                    if (tag.getShort("id") == Enchantment.fortune.effectId)
-                        return tag.getShort("lvl");
-                }
-        }
-        return 0;
-    }
-    
     /**
      * Defines whether or not a player can break the block with current tool
      */
@@ -489,7 +483,14 @@ public class Treecapitator
                         || (isLeafBlock(new BlockID(block, metadata)) && TCSettings.shearLeaves)) && canShear)
                         && !(player.capabilities.isCreativeMode && TCSettings.disableCreativeDrops))
                 {
-                    world.spawnEntityInWorld(new EntityItem(world, pos.x, pos.y, pos.z, new ItemStack(block, 1, BlockHelper.damageDropped(block, metadata))));
+                    if (TCSettings.stackDrops)
+                        addDrop(block, metadata, pos);
+                    else if (TCSettings.itemsDropInPlace)
+                        world.spawnEntityInWorld(new EntityItem(world, pos.x, pos.y, pos.z,
+                                new ItemStack(block, 1, BlockHelper.damageDropped(block, metadata))));
+                    else
+                        world.spawnEntityInWorld(new EntityItem(world, startPos.x, startPos.y, startPos.z,
+                                new ItemStack(block, 1, BlockHelper.damageDropped(block, metadata))));
                     
                     if (TCSettings.allowItemDamage && !player.capabilities.isCreativeMode && shears != null && shears.stackSize > 0)
                     {
@@ -502,7 +503,12 @@ public class Treecapitator
                 }
                 else if (!(player.capabilities.isCreativeMode && TCSettings.disableCreativeDrops))
                 {
-                    BlockHelper.dropBlockAsItem(block, world, pos.x, pos.y, pos.z, metadata, getFortuneLevel(axe));
+                    if (TCSettings.stackDrops)
+                        addDrop(block, metadata, pos);
+                    else if (TCSettings.itemsDropInPlace)
+                        BlockHelper.dropBlockAsItem(block, world, pos.x, pos.y, pos.z, metadata, EnchantmentHelper.getFortuneModifier(player));
+                    else
+                        BlockHelper.dropBlockAsItem(block, world, startPos.x, startPos.y, startPos.z, metadata, EnchantmentHelper.getFortuneModifier(player));
                     
                     if (TCSettings.allowItemDamage && !player.capabilities.isCreativeMode && axe != null && axe.stackSize > 0
                             && !vineID.equals(new BlockID(block, metadata)) && !isLeafBlock(new BlockID(block, metadata)) && !pos.equals(startPos))
@@ -521,6 +527,73 @@ public class Treecapitator
                     WorldHelper.removeBlockTileEntity(world, pos.x, pos.y, pos.z);
                 
                 WorldHelper.setBlockToAir(world, pos.x, pos.y, pos.z);
+                
+                // Can't believe it took this long to realize this wasn't being done...
+                player.addStat(StatList.mineBlockStatArray[Block.getIdFromBlock(block)], 1);
+                player.addExhaustion(0.025F);
+            }
+        }
+    }
+    
+    private void addDrop(Block block, int metadata, Coord pos)
+    {
+        List<ItemStack> stacks = null;
+        
+        dropPos = TCSettings.itemsDropInPlace ? pos.clone() : startPos.clone();
+        
+        if ((block.canSilkHarvest(world, player, pos.x, pos.y, pos.z, metadata) && EnchantmentHelper.getSilkTouchModifier(player))
+                || ((((vineID.equals(new BlockID(block, metadata)) && TCSettings.shearVines)
+                || (isLeafBlock(new BlockID(block, metadata)) && TCSettings.shearLeaves)) && hasShearsInHotbar(player))
+                && !(player.capabilities.isCreativeMode && TCSettings.disableCreativeDrops)))
+        {
+            stacks = new ArrayList<ItemStack>();
+            stacks.add(new ItemStack(block, 1, metadata));
+        }
+        else
+        {
+            stacks = block.getDrops(world, pos.x, pos.y, pos.z, metadata, EnchantmentHelper.getFortuneModifier(player));
+            // for dropXp (not needed for Treecapitator
+            //block.dropBlockAsItemWithChance(world, dropPos.x, dropPos.y, dropPos.z, metadata, -1.0F, fortune);
+        }
+        
+        if (stacks == null)
+            return;
+        for (ItemStack drop : stacks)
+        {
+            if (drop == null)
+                continue;
+            
+            int index = -1;
+            for (int i = 0; i < drops.size(); i++)
+            {
+                if (drops.get(i).isItemEqual(drop))
+                {
+                    index = i;
+                    break;
+                }
+            }
+            
+            if (index == -1)
+            {
+                drops.add(drop);
+                index = drops.indexOf(drop);
+            }
+            else
+            {
+                int quantity = drop.stackSize;
+                drop = drops.get(index);
+                drop.stackSize += quantity;
+            }
+            
+            if (drop.stackSize >= drop.getMaxStackSize())
+            {
+                int i = drop.stackSize - drop.getMaxStackSize();
+                drop.stackSize = drop.getMaxStackSize();
+                world.spawnEntityInWorld(new EntityItem(world, dropPos.x, dropPos.y, dropPos.z, drop));
+                if (i > 0)
+                    drop.stackSize = i;
+                else
+                    drops.remove(index);
             }
         }
     }

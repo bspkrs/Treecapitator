@@ -28,6 +28,8 @@ public final class TCSettings
     public static boolean        disableCreativeDrops                  = disableCreativeDropsDefault;
     private final static boolean disableInCreativeDefault              = false;
     public static boolean        disableInCreative                     = disableInCreativeDefault;
+    private final static boolean enabledDefault                        = true;
+    public static boolean        enabled                               = enabledDefault;
     private final static boolean enableEnchantmentModeDefault          = false;
     public static boolean        enableEnchantmentMode                 = enableEnchantmentModeDefault;
     private final static int     enchantmentIDDefault                  = 187;
@@ -45,6 +47,10 @@ public final class TCSettings
     public static boolean        shearVines                            = shearVinesDefault;
     private final static String  sneakActionDefault                    = "disable";
     public static String         sneakAction                           = sneakActionDefault;
+    private final static boolean stackDropsDefault                     = false;
+    public static boolean        stackDrops                            = stackDropsDefault;
+    private final static boolean itemsDropInPlaceDefault               = true;
+    public static boolean        itemsDropInPlace                      = itemsDropInPlaceDefault;
     private final static boolean useIncreasingItemDamageDefault        = false;
     public static boolean        useIncreasingItemDamage               = useIncreasingItemDamageDefault;
     private final static boolean useStrictBlockPairingDefault          = true;
@@ -128,6 +134,7 @@ public final class TCSettings
     
     public void readFromNBT(NBTTagCompound ntc)
     {
+        enabled = ntc.getBoolean("enabled");
         allowItemDamage = ntc.getBoolean("allowItemDamage");
         allowMoreBlocksThanDamage = ntc.getBoolean("allowMoreBlocksThanDamage");
         allowSmartTreeDetection = ntc.getBoolean("allowSmartTreeDetection");
@@ -159,6 +166,8 @@ public final class TCSettings
         shearLeaves = ntc.getBoolean("shearLeaves");
         shearVines = ntc.getBoolean("shearVines");
         sneakAction = ntc.getString("sneakAction");
+        stackDrops = ntc.getBoolean("stackDrops");
+        itemsDropInPlace = ntc.getBoolean("itemsDropInPlace");
         useAdvancedTopLogLogic = ntc.getBoolean("useAdvancedTopLogLogic");
         useIncreasingItemDamage = ntc.getBoolean("useIncreasingItemDamage");
         useStrictBlockPairing = ntc.getBoolean("useStrictBlockPairing");
@@ -166,6 +175,7 @@ public final class TCSettings
     
     public void writeToNBT(NBTTagCompound ntc)
     {
+        ntc.setBoolean("enabled", enabled);
         ntc.setBoolean("allowItemDamage", allowItemDamage);
         ntc.setBoolean("allowMoreBlocksThanDamage", allowMoreBlocksThanDamage);
         ntc.setBoolean("allowOreDictionaryLookup", allowOreDictionaryLookup);
@@ -195,6 +205,8 @@ public final class TCSettings
         ntc.setBoolean("shearLeaves", shearLeaves);
         ntc.setBoolean("shearVines", shearVines);
         ntc.setString("sneakAction", sneakAction);
+        ntc.setBoolean("stackDrops", stackDrops);
+        ntc.setBoolean("itemsDropInPlace", itemsDropInPlace);
         ntc.setBoolean("useAdvancedTopLogLogic", useAdvancedTopLogLogic);
         ntc.setBoolean("useIncreasingItemDamage", useIncreasingItemDamage);
         ntc.setBoolean("useStrictBlockPairing", useStrictBlockPairing);
@@ -207,6 +219,9 @@ public final class TCSettings
      */
     public void syncConfiguration(Configuration config)
     {
+        // Since I moved that setting...
+        config.moveProperty(TCConst.MISC_CTGY, "sneakAction", TCConst.TREE_CHOP_BEHAVIOR_CTGY);
+        
         // Misc settings
         allowDebugLogging = config.getBoolean("allowDebugLogging", TCConst.MISC_CTGY,
                 allowDebugLoggingDefault, TCConst.allowDebugLoggingDesc, "bspkrs.tc.configgui.allowDebugLogging");
@@ -226,8 +241,6 @@ public final class TCSettings
                 blockIDBlacklistDefault, TCConst.blockIDBlacklistDesc, "bspkrs.tc.configgui.blockIDBlacklist");
         itemIDBlacklist = config.getString("itemIDBlacklist", TCConst.MISC_CTGY,
                 itemIDBlacklistDefault, TCConst.itemIDBlacklistDesc, "bspkrs.tc.configgui.itemIDBlacklist");
-        sneakAction = config.getString("sneakAction", TCConst.MISC_CTGY,
-                sneakActionDefault, TCConst.sneakActionDesc, new String[] { "enable", "disable", "none" }, "bspkrs.tc.configgui.sneakAction");
         config.addCustomCategoryLanguageKey(TCConst.MISC_CTGY, "bspkrs.tc.configgui.ctgy." + TCConst.MISC_CTGY);
         
         // Break Speed settings
@@ -283,6 +296,12 @@ public final class TCSettings
                 onlyDestroyUpwardsDefault, TCConst.onlyDestroyUpwardsDesc, "bspkrs.tc.configgui.onlyDestroyUpwards");
         requireLeafDecayCheck = config.getBoolean("requireLeafDecayCheck", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
                 requireLeafDecayCheckDefault, TCConst.requireLeafDecayCheckDesc, "bspkrs.tc.configgui.requireLeafDecayCheck");
+        sneakAction = config.getString("sneakAction", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
+                sneakActionDefault, TCConst.sneakActionDesc, new String[] { "enable", "disable", "none" }, "bspkrs.tc.configgui.sneakAction");
+        stackDrops = config.getBoolean("stackDrops", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
+                stackDropsDefault, TCConst.stackDropsDesc, "bspkrs.tc.configgui.stackDrops");
+        itemsDropInPlace = config.getBoolean("itemsDropInPlace", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
+                itemsDropInPlaceDefault, TCConst.itemsDropInPlaceDesc, "bspkrs.tc.configgui.itemsDropInPlace");
         config.addCustomCategoryLanguageKey(TCConst.TREE_CHOP_BEHAVIOR_CTGY, "bspkrs.tc.configgui.ctgy." + TCConst.TREE_CHOP_BEHAVIOR_CTGY);
         
         // Enchantment Mode settings
@@ -294,6 +313,8 @@ public final class TCSettings
                 requireItemInAxeListForEnchantDefault, TCConst.requireItemInAxeListForEnchantDesc, "bspkrs.tc.configgui.requireItemInAxeListForEnchant");
         config.addCustomCategoryLanguageKey(TCConst.ENCHANTMENT_MODE_CTGY, "bspkrs.tc.configgui.ctgy." + TCConst.ENCHANTMENT_MODE_CTGY);
         
+        enabled = config.getBoolean("enabled", TCConst.SETTINGS_CTGY,
+                enabledDefault, TCConst.enabledDesc, "bspkrs.tc.configgui.enabled");
         config.addCustomCategoryLanguageKey(TCConst.SETTINGS_CTGY, "bspkrs.tc.configgui.ctgy." + TCConst.SETTINGS_CTGY);
         
         // Log configs if we are in debug logging mode

@@ -55,6 +55,7 @@ public class TCConst
     
     //public static final String COMMENT_SEPARATOR                = "#--------------------------------------------------------------------------------------------------------#";
     //public static final String COMMENT_SEPARATOR_2              = "      #--------------------------------------------------------------------------------------------------------#";
+    public static final String enabledDesc                        = "[Global] Set to true to enable Treecapitator, false to disable.";
     public static final String maxHorLeafBreakDistDesc            = "[Global, PerTree] The maximum horizontal distance that the leaf breaking effect will travel from the tree (use -1 for no limit).";
     public static final String maxHorLogBreakDistDesc             = "[Global, PerTree] The maximum horizontal distance that the log breaking effect will travel (use -1 for no limit).";
     public static final String maxVerLogBreakDistDesc             = "[Global, PerTree] The maximum vertical distance that the log breaking effect will travel (use -1 for no limit).";
@@ -125,6 +126,8 @@ public class TCConst
     public static final String sneakActionDesc                    = "[Global] Set sneakAction = \"disable\" to disable tree chopping while sneaking,\n" +
                                                                           "set sneakAction = \"enable\" to only enable tree chopping while sneaking,\n" +
                                                                           "set sneakAction = \"none\" to have tree chopping enabled regardless of sneaking.";
+    public static final String stackDropsDesc                     = "[Global] Set to true to enable the stacking of dropped items, false to disable.";
+    public static final String itemsDropInPlaceDesc               = "[Global] Set to true to have items drop in place, false to have them drop at the player's position.";
     //public static final String COMMENT_SEPARATOR                = "#--------------------------------------------------------------------------------------------------------#";
     //public static final String COMMENT_SEPARATOR_2              = "      #--------------------------------------------------------------------------------------------------------#";
     public static final String allowSmartTreeDetectionDesc        = "[Global, PerTree] Set to false to disable TreeCapitator Smart Tree Detection.\n" +

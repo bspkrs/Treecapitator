@@ -2,6 +2,7 @@ package bspkrs.treecapitator;
 
 import java.util.EnumMap;
 
+import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.network.ConfigPacketHandler;
 import bspkrs.treecapitator.network.LoginPacketHandler;
 import bspkrs.treecapitator.network.TCMessageToMessageCodec;
@@ -31,7 +32,7 @@ public class CommonProxy
     
     public boolean isEnabled()
     {
-        return true;
+        return TCSettings.enabled;
     }
     
     public void setServerDetected()
