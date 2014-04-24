@@ -22,29 +22,34 @@ public class RegistryNBTManager
     
     public RegistryNBTManager()
     {
-        this.saveCurrentTCSettingsToLocal();
-        this.saveCurrentTreeRegistryToLocal();
-        this.saveCurrentToolRegistryToLocal();
+        this.saveCurrentTCSettingsToLocalNBT();
+        this.saveCurrentTreeRegistryToLocalNBT();
+        this.saveCurrentToolRegistryToLocalNBT();
         this.setRemoteTCSettings(localTCSettings);
         this.setRemoteTreeRegistry(localTreeRegistry);
         this.setRemoteToolRegistry(localToolRegistry);
     }
     
-    protected RegistryNBTManager saveCurrentTCSettingsToLocal()
+    public RegistryNBTManager saveAllCurrentObjectsToLocalNBT()
+    {
+        return this.saveCurrentTCSettingsToLocalNBT().saveCurrentToolRegistryToLocalNBT().saveCurrentTreeRegistryToLocalNBT();
+    }
+    
+    protected RegistryNBTManager saveCurrentTCSettingsToLocalNBT()
     {
         localTCSettings = new NBTTagCompound();
         TCSettings.instance().writeToNBT(localTCSettings);
         return this;
     }
     
-    protected RegistryNBTManager saveCurrentTreeRegistryToLocal()
+    protected RegistryNBTManager saveCurrentTreeRegistryToLocalNBT()
     {
         localTreeRegistry = new NBTTagCompound();
         TreeRegistry.instance().writeToNBT(localTreeRegistry);
         return this;
     }
     
-    protected RegistryNBTManager saveCurrentToolRegistryToLocal()
+    protected RegistryNBTManager saveCurrentToolRegistryToLocalNBT()
     {
         localToolRegistry = new NBTTagCompound();
         ToolRegistry.instance().writeToNBT(localToolRegistry);

@@ -98,7 +98,7 @@ public class ModConfigRegistry
         OreDictionaryHandler.instance().generateAndRegisterOreDictionaryTreeDefinitions();
         writeIMCConfigToConfigFile(userModCfgs.get(TCConst.TCMODID));
         
-        TCConfigHandler.instance().setApplyPrioritizedModConfigs(true);
+        TCConfigHandler.instance().setShouldRefreshRegistries(true);
     }
     
     protected void initDefaultModConfigs()

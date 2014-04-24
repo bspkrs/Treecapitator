@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import net.minecraft.client.gui.GuiScreen;
+import bspkrs.treecapitator.TreecapitatorMod;
 import bspkrs.treecapitator.config.TCConfigHandler;
 import bspkrs.util.config.ConfigProperty;
 import bspkrs.util.config.Configuration;
@@ -28,6 +29,9 @@ public class GuiTCConfig extends GuiConfig
     
     private static IConfigProperty[] getProps()
     {
+        // Make sure the local objects contain our local settings
+        TreecapitatorMod.instance.nbtManager().registerLocalInstances();
+        
         Set<String> processed = new TreeSet<String>();
         List<IConfigProperty> props = new ArrayList<IConfigProperty>();
         int index = 0;

@@ -2,6 +2,7 @@ package bspkrs.treecapitator.config;
 
 import java.io.File;
 
+import bspkrs.treecapitator.TreecapitatorMod;
 import bspkrs.treecapitator.registry.ModConfigRegistry;
 import bspkrs.treecapitator.util.TCLog;
 import bspkrs.util.CommonUtils;
@@ -11,7 +12,7 @@ public class TCConfigHandler
 {
     private static TCConfigHandler instance;
     private Configuration          config;
-    private boolean                applyPrioritizedModConfigs = false;
+    private boolean                shouldRefreshRegistries = false;
     
     public static TCConfigHandler instance()
     {
@@ -45,9 +46,9 @@ public class TCConfigHandler
         return config;
     }
     
-    public void setApplyPrioritizedModConfigs(boolean bol)
+    public void setShouldRefreshRegistries(boolean bol)
     {
-        this.applyPrioritizedModConfigs = bol;
+        this.shouldRefreshRegistries = bol;
     }
     
     public void syncConfig()
@@ -57,8 +58,11 @@ public class TCConfigHandler
         TCSettings.instance().syncConfiguration(config);
         ModConfigRegistry.instance().syncConfiguration(config);
         
-        if (this.applyPrioritizedModConfigs)
+        if (this.shouldRefreshRegistries)
+        {
             ModConfigRegistry.instance().applyPrioritizedModConfigs();
+            TreecapitatorMod.instance.nbtManager().saveAllCurrentObjectsToLocalNBT();
+        }
         
         config.save();
     }
