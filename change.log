@@ -1,3 +1,10 @@
+1.7.2.r02 - ???
+- refactored config to support config gui
+- moved around Ore Dictionary stuff
+- refactored config loading to support "hot" reloading
+- added enabled setting
+- added settings related to drops
+- fixed several defects in the break speed code :3
 1.7.2.r01 - 19-Jan-2014
 - updated for 1.7.2
 - new config format
