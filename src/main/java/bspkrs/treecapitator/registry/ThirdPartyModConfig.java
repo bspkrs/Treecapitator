@@ -138,7 +138,7 @@ public class ThirdPartyModConfig
         {
             if (ctgy.indexOf(category + ".") != -1)
             {
-                addTreeDef(config.getCategory(ctgy).getQualifiedName(), new TreeDefinition(config, ctgy));
+                addTreeDef(config.getCategory(ctgy).getName(), new TreeDefinition(config, ctgy));
             }
         }
         
