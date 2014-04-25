@@ -65,7 +65,7 @@ public class OreDictionaryHandler
                         if (item instanceof ItemBlock)
                         {
                             BlockID blockID = new BlockID(ItemHelper.getUniqueID(item));
-                            if (!TreeRegistry.instance().isRegistered(blockID))
+                            if (!TreeRegistry.instance().isRegistered(blockID) && !TreeRegistry.instance().blacklist().contains(blockID))
                                 genericTree.addLogID(blockID);
                         }
                     }
