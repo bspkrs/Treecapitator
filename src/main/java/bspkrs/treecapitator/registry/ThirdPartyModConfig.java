@@ -1,6 +1,5 @@
 package bspkrs.treecapitator.registry;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -25,9 +24,7 @@ public class ThirdPartyModConfig
     private String                      axeKeys;
     private String                      shearsKeys;
     private boolean                     overrideIMC;
-    private Map<String, TreeDefinition> configTreesMap;
     private Map<String, TreeDefinition> treesMap;
-    private Map<String, String>         tagMap;
     
     /*
      * This special constructor provides the default vanilla tree "mod"
@@ -37,21 +34,17 @@ public class ThirdPartyModConfig
         modID = TreecapitatorMod.metadata.modId;
         overrideIMC = TCSettings.userConfigOverridesIMC;
         
-        tagMap = new HashMap<String, String>();
-        treesMap = new TreeMap<String, TreeDefinition>();
-        
         if (init)
         {
             axeKeys = ListUtils.getListAsDelimitedString(ToolRegistry.instance().vanillaAxeList(), "; ");
             shearsKeys = ListUtils.getListAsDelimitedString(ToolRegistry.instance().vanillaShearsList(), "; ");
-            configTreesMap = TreeRegistry.instance().vanillaTrees();
-            refreshTreeDefinitionsFromConfig();
+            treesMap = TreeRegistry.instance().vanillaTrees();
         }
         else
         {
             axeKeys = "";
             shearsKeys = "";
-            configTreesMap = new TreeMap<String, TreeDefinition>();
+            treesMap = new TreeMap<String, TreeDefinition>();
         }
     }
     
@@ -67,7 +60,6 @@ public class ThirdPartyModConfig
         this.shearsKeys = shearsKeys;
         overrideIMC = TCSettings.userConfigOverridesIMC;
         
-        configTreesMap = new TreeMap<String, TreeDefinition>();
         treesMap = new TreeMap<String, TreeDefinition>();
     }
     
@@ -96,14 +88,14 @@ public class ThirdPartyModConfig
         if (tpModCfg.hasKey(TCConst.SHEARS_ID_LIST))
             shearsKeys = tpModCfg.getString(TCConst.SHEARS_ID_LIST);
         
-        configTreesMap = new TreeMap<String, TreeDefinition>();
+        treesMap = new TreeMap<String, TreeDefinition>();
         
         NBTTagList treeList = NBTTagCompoundHelper.getTagList(tpModCfg, TCConst.TREES, (byte) 10);
         
         for (int i = 0; i < treeList.tagCount(); i++)
         {
             NBTTagCompound tree = NBTTagListHelper.getCompoundTagAt(treeList, i);
-            this.addConfigTreeDef(tree.getString(TCConst.TREE_NAME), new TreeDefinition(tree));
+            this.addTreeDef(tree.getString(TCConst.TREE_NAME), new TreeDefinition(tree));
         }
         
         return this;
@@ -118,7 +110,7 @@ public class ThirdPartyModConfig
             tpModCfg.setString(TCConst.SHEARS_ID_LIST, shearsKeys);
         
         NBTTagList treeList = new NBTTagList();
-        for (Entry<String, TreeDefinition> e : configTreesMap.entrySet())
+        for (Entry<String, TreeDefinition> e : treesMap.entrySet())
         {
             NBTTagCompound tree = new NBTTagCompound();
             e.getValue().writeToNBT(tree);
@@ -140,13 +132,13 @@ public class ThirdPartyModConfig
         
         overrideIMC = config.getBoolean(TCConst.OVERRIDE_IMC, category, TCSettings.userConfigOverridesIMC, TCConst.overrideIMCDesc);
         
-        configTreesMap = new TreeMap<String, TreeDefinition>();
+        treesMap = new TreeMap<String, TreeDefinition>();
         
         for (String ctgy : config.getCategoryNames())
         {
             if (ctgy.indexOf(category + ".") != -1)
             {
-                addConfigTreeDef(config.getCategory(ctgy).getQualifiedName(), new TreeDefinition(config, ctgy));
+                addTreeDef(config.getCategory(ctgy).getQualifiedName(), new TreeDefinition(config, ctgy));
             }
         }
         
@@ -171,24 +163,11 @@ public class ThirdPartyModConfig
         
         config.getBoolean(TCConst.OVERRIDE_IMC, category, overrideIMC, TCConst.overrideIMCDesc, "bspkrs.tc.configgui." + TCConst.OVERRIDE_IMC);
         
-        for (Entry<String, TreeDefinition> e : configTreesMap.entrySet())
+        for (Entry<String, TreeDefinition> e : treesMap.entrySet())
             if (!e.getKey().startsWith(category))
                 e.getValue().writeToConfiguration(config, category + "." + e.getKey());
             else
                 e.getValue().writeToConfiguration(config, e.getKey());
-    }
-    
-    public ThirdPartyModConfig addConfigTreeDef(String key, TreeDefinition tree)
-    {
-        if (!configTreesMap.containsKey(key))
-            configTreesMap.put(key, tree);
-        else
-        {
-            TCLog.warning("Mod %s attempted to add two tree configs with the same name: %s", modID, key);
-            configTreesMap.get(key).append(tree);
-        }
-        
-        return this;
     }
     
     public ThirdPartyModConfig addTreeDef(String key, TreeDefinition tree)
@@ -206,8 +185,6 @@ public class ThirdPartyModConfig
     
     public ThirdPartyModConfig registerTrees()
     {
-        refreshTreeDefinitionsFromConfig();
-        
         for (Entry<String, TreeDefinition> e : treesMap.entrySet())
             TreeRegistry.instance().registerTree(e.getKey(), e.getValue());
         
@@ -216,19 +193,11 @@ public class ThirdPartyModConfig
     
     public ThirdPartyModConfig registerTools()
     {
-        String axeList = axeKeys;
-        String shearsList = shearsKeys;
-        for (Entry<String, String> e : tagMap.entrySet())
-        {
-            axeList = axeList.replace(e.getKey(), e.getValue());
-            shearsList = shearsList.replace(e.getKey(), e.getValue());
-        }
-        
-        for (ItemID axe : ListUtils.getDelimitedStringAsItemIDList(axeList, ";"))
+        for (ItemID axe : ListUtils.getDelimitedStringAsItemIDList(axeKeys, ";"))
             if (!axe.id.equals(""))
                 ToolRegistry.instance().registerAxe(axe);
         
-        for (ItemID shears : ListUtils.getDelimitedStringAsItemIDList(shearsList, ";"))
+        for (ItemID shears : ListUtils.getDelimitedStringAsItemIDList(shearsKeys, ";"))
             if (!shears.id.equals(""))
                 ToolRegistry.instance().registerShears(shears);
         
@@ -248,16 +217,6 @@ public class ThirdPartyModConfig
     public ThirdPartyModConfig setOverrideIMC(boolean bol)
     {
         overrideIMC = bol;
-        return this;
-    }
-    
-    public ThirdPartyModConfig refreshTreeDefinitionsFromConfig()
-    {
-        treesMap.clear();
-        
-        for (Entry<String, TreeDefinition> e : configTreesMap.entrySet())
-            treesMap.put(e.getKey(), e.getValue());
-        
         return this;
     }
 }

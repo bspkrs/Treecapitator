@@ -65,7 +65,10 @@ public class ModConfigRegistry
     
     public void appendTreeToModConfig(String modID, String treeName, TreeDefinition treeDef)
     {
-        userModCfgs.get(modID).addTreeDef(treeName, treeDef);
+        if (userModCfgs.containsKey(modID))
+            userModCfgs.get(modID).addTreeDef(treeName, treeDef);
+        else
+            TCLog.warning("Attempted to append a TreeDefinition object to missing mod %s!", modID);
     }
     
     public void applyPrioritizedModConfigs()
@@ -95,8 +98,8 @@ public class ModConfigRegistry
         for (ThirdPartyModConfig cfg : finalList)
             cfg.registerTools().registerTrees();
         
-        OreDictionaryHandler.instance().generateAndRegisterOreDictionaryTreeDefinitions();
-        writeIMCConfigToConfigFile(userModCfgs.get(TCConst.TCMODID));
+        if (OreDictionaryHandler.instance().generateAndRegisterOreDictionaryTreeDefinitions())
+            writeIMCConfigToConfigFile(userModCfgs.get(TCConst.TCMODID));
         
         TCConfigHandler.instance().setShouldRefreshRegistries(true);
     }

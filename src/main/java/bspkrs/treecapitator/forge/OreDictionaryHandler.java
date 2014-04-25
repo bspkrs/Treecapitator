@@ -28,7 +28,7 @@ public class OreDictionaryHandler
         return instance;
     }
     
-    public void generateAndRegisterOreDictionaryTreeDefinitions()
+    public boolean generateAndRegisterOreDictionaryTreeDefinitions()
     {
         if (TCSettings.allowOreDictionaryLookup)
         {
@@ -51,6 +51,7 @@ public class OreDictionaryHandler
                 }
             }
             
+            boolean didRegisterATree = false;
             // register a tree definition for each ore type searched on
             for (String oreName : TCSettings.oreDictionaryLogStrings.split(","))
             {
@@ -77,16 +78,19 @@ public class OreDictionaryHandler
                         for (BlockID blockID : TreeRegistry.instance().masterDefinition().getLeafList())
                             genericTree.addLeafID(blockID);
                         
-                        TCLog.debug("Registering generic Ore Dictionary tree %s...", oreName.trim());
+                        TCLog.info("Registering generic Ore Dictionary tree %s...", oreName.trim());
                         TreeRegistry.instance().registerTree(oreName.trim(), genericTree);
-                        ModConfigRegistry.instance().appendTreeToModConfig(TCConst.VAN_TREES_ITEMS_CTGY, oreName.trim(), genericTree);
+                        ModConfigRegistry.instance().appendTreeToModConfig(TCConst.TCMODID, oreName.trim(), genericTree);
+                        didRegisterATree = true;
                     }
                 }
             }
             
             TCLog.info("Ore Dictionary processing complete.");
+            return didRegisterATree;
         }
-        else
-            TCLog.info("Skipping Ore Dictionary processing.");
+        
+        TCLog.info("Skipping Ore Dictionary processing.");
+        return false;
     }
 }
