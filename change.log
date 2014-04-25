@@ -1,4 +1,4 @@
-1.7.2.r02 - ???
+1.7.2.r02 - 25-Apr-2014
 - refactored config to support config gui
 - moved around Ore Dictionary stuff
 - refactored config loading to support "hot" reloading

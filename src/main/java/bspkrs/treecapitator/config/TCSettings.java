@@ -317,6 +317,9 @@ public final class TCSettings
                 enabledDefault, TCConst.enabledDesc, "bspkrs.tc.configgui.enabled");
         config.addCustomCategoryLanguageKey(TCConst.SETTINGS_CTGY, "bspkrs.tc.configgui.ctgy." + TCConst.SETTINGS_CTGY);
         
+        config.addCustomCategoryComment(TCConst.SETTINGS_CTGY, "ATTENTION: Editing this file manually is no longer necessary UNLESS YOU ARE ADDING NEW MODS/TREES. \n" +
+                "On the Mods list screen select the entry for Treecapitator, then click the Config button to modify these settings.");
+        
         // Log configs if we are in debug logging mode
         if (allowDebugLogging)
         {
