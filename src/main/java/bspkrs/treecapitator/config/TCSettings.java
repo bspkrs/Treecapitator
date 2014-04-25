@@ -93,7 +93,7 @@ public final class TCSettings
     public static float          treeHeightModifier                    = treeHeightModifierDefault;
     private final static boolean allowOreDictionaryLookupDefault       = true;
     public static boolean        allowOreDictionaryLookup              = allowOreDictionaryLookupDefault;
-    private final static String  oreDictionaryLogStringsDefault        = "logWood,";
+    private final static String  oreDictionaryLogStringsDefault        = "logWood, woodRubber,";
     public static String         oreDictionaryLogStrings               = oreDictionaryLogStringsDefault;
     private final static String  oreDictionaryLeafStringsDefault       = "treeLeaves,";
     public static String         oreDictionaryLeafStrings              = oreDictionaryLeafStringsDefault;
