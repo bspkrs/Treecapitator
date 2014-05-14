@@ -5,13 +5,12 @@ import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 import bspkrs.treecapitator.config.TCSettings;
-import bspkrs.treecapitator.util.TCConst;
+import bspkrs.treecapitator.util.Reference;
 import bspkrs.util.BlockID;
 import bspkrs.util.HashCodeUtil;
 import bspkrs.util.ListUtils;
 import bspkrs.util.config.ConfigCategory;
 import bspkrs.util.config.Configuration;
-import bspkrs.util.config.Property;
 
 public class TreeDefinition
 {
@@ -94,6 +93,15 @@ public class TreeDefinition
         return result;
     }
     
+    public boolean hasCommonLog(TreeDefinition td)
+    {
+        for (BlockID blockID : td.logBlocks)
+            if (logBlocks.contains(blockID))
+                return true;
+        
+        return false;
+    }
+    
     public boolean isLogBlock(BlockID blockID)
     {
         return logBlocks.contains(blockID);
@@ -161,34 +169,34 @@ public class TreeDefinition
     
     public TreeDefinition readFromNBT(NBTTagCompound treeDefNBT)
     {
-        if (treeDefNBT.hasKey(TCConst.ALLOW_SMART_TREE_DETECT))
-            allowSmartTreeDetection = treeDefNBT.getBoolean(TCConst.ALLOW_SMART_TREE_DETECT);
-        if (treeDefNBT.hasKey(TCConst.ONLY_DESTROY_UPWARDS))
-            onlyDestroyUpwards = treeDefNBT.getBoolean(TCConst.ONLY_DESTROY_UPWARDS);
-        if (treeDefNBT.hasKey(TCConst.REQ_DECAY_CHECK))
-            requireLeafDecayCheck = treeDefNBT.getBoolean(TCConst.REQ_DECAY_CHECK);
-        if (treeDefNBT.hasKey(TCConst.MAX_H_LOG_DIST))
-            maxHorLogBreakDist = treeDefNBT.getInteger(TCConst.MAX_H_LOG_DIST);
-        if (treeDefNBT.hasKey(TCConst.MAX_V_LOG_DIST))
-            maxVerLogBreakDist = treeDefNBT.getInteger(TCConst.MAX_V_LOG_DIST);
-        if (treeDefNBT.hasKey(TCConst.MAX_H_LEAF_DIST))
-            maxHorLeafBreakDist = treeDefNBT.getInteger(TCConst.MAX_H_LEAF_DIST);
-        if (treeDefNBT.hasKey(TCConst.MAX_LEAF_ID_DIST))
-            maxLeafIDDist = treeDefNBT.getInteger(TCConst.MAX_LEAF_ID_DIST);
-        if (treeDefNBT.hasKey(TCConst.MIN_LEAF_ID))
-            minLeavesToID = treeDefNBT.getInteger(TCConst.MIN_LEAF_ID);
-        if (treeDefNBT.hasKey(TCConst.BREAK_SPEED_MOD))
-            breakSpeedModifier = treeDefNBT.getFloat(TCConst.BREAK_SPEED_MOD);
-        if (treeDefNBT.hasKey("useAdvancedTopLogLogic"))
-            useAdvancedTopLogLogic = treeDefNBT.getBoolean("useAdvancedTopLogLogic");
+        if (treeDefNBT.hasKey(Reference.ALLOW_SMART_TREE_DETECT))
+            allowSmartTreeDetection = treeDefNBT.getBoolean(Reference.ALLOW_SMART_TREE_DETECT);
+        if (treeDefNBT.hasKey(Reference.ONLY_DESTROY_UPWARDS))
+            onlyDestroyUpwards = treeDefNBT.getBoolean(Reference.ONLY_DESTROY_UPWARDS);
+        if (treeDefNBT.hasKey(Reference.REQ_DECAY_CHECK))
+            requireLeafDecayCheck = treeDefNBT.getBoolean(Reference.REQ_DECAY_CHECK);
+        if (treeDefNBT.hasKey(Reference.MAX_H_LOG_DIST))
+            maxHorLogBreakDist = treeDefNBT.getInteger(Reference.MAX_H_LOG_DIST);
+        if (treeDefNBT.hasKey(Reference.MAX_V_LOG_DIST))
+            maxVerLogBreakDist = treeDefNBT.getInteger(Reference.MAX_V_LOG_DIST);
+        if (treeDefNBT.hasKey(Reference.MAX_H_LEAF_DIST))
+            maxHorLeafBreakDist = treeDefNBT.getInteger(Reference.MAX_H_LEAF_DIST);
+        if (treeDefNBT.hasKey(Reference.MAX_LEAF_ID_DIST))
+            maxLeafIDDist = treeDefNBT.getInteger(Reference.MAX_LEAF_ID_DIST);
+        if (treeDefNBT.hasKey(Reference.MIN_LEAF_ID))
+            minLeavesToID = treeDefNBT.getInteger(Reference.MIN_LEAF_ID);
+        if (treeDefNBT.hasKey(Reference.BREAK_SPEED_MOD))
+            breakSpeedModifier = treeDefNBT.getFloat(Reference.BREAK_SPEED_MOD);
+        if (treeDefNBT.hasKey(Reference.USE_ADVANCED_TOP_LOG_LOGIC))
+            useAdvancedTopLogLogic = treeDefNBT.getBoolean(Reference.USE_ADVANCED_TOP_LOG_LOGIC);
         
-        if (treeDefNBT.hasKey(TCConst.LOGS) && treeDefNBT.getString(TCConst.LOGS).length() > 0)
-            logBlocks = ListUtils.getDelimitedStringAsBlockIDList(treeDefNBT.getString(TCConst.LOGS), ";");
+        if (treeDefNBT.hasKey(Reference.LOGS) && treeDefNBT.getString(Reference.LOGS).length() > 0)
+            logBlocks = ListUtils.getDelimitedStringAsBlockIDList(treeDefNBT.getString(Reference.LOGS), ";");
         else
             logBlocks = new ArrayList<BlockID>();
         
-        if (treeDefNBT.hasKey(TCConst.LEAVES) && treeDefNBT.getString(TCConst.LEAVES).length() > 0)
-            leafBlocks = ListUtils.getDelimitedStringAsBlockIDList(treeDefNBT.getString(TCConst.LEAVES), ";");
+        if (treeDefNBT.hasKey(Reference.LEAVES) && treeDefNBT.getString(Reference.LEAVES).length() > 0)
+            leafBlocks = ListUtils.getDelimitedStringAsBlockIDList(treeDefNBT.getString(Reference.LEAVES), ";");
         else
             leafBlocks = new ArrayList<BlockID>();
         
@@ -197,121 +205,145 @@ public class TreeDefinition
     
     public void writeToNBT(NBTTagCompound treeDefNBT)
     {
-        treeDefNBT.setBoolean(TCConst.ALLOW_SMART_TREE_DETECT, allowSmartTreeDetection);
-        treeDefNBT.setBoolean(TCConst.ONLY_DESTROY_UPWARDS, onlyDestroyUpwards);
-        treeDefNBT.setBoolean(TCConst.REQ_DECAY_CHECK, requireLeafDecayCheck);
-        treeDefNBT.setInteger(TCConst.MAX_H_LOG_DIST, maxHorLogBreakDist);
-        treeDefNBT.setInteger(TCConst.MAX_V_LOG_DIST, maxVerLogBreakDist);
-        treeDefNBT.setInteger(TCConst.MAX_H_LEAF_DIST, maxHorLeafBreakDist);
-        treeDefNBT.setInteger(TCConst.MAX_LEAF_ID_DIST, maxLeafIDDist);
-        treeDefNBT.setInteger(TCConst.MIN_LEAF_ID, minLeavesToID);
-        treeDefNBT.setFloat(TCConst.BREAK_SPEED_MOD, breakSpeedModifier);
-        treeDefNBT.setBoolean("useAdvancedTopLogLogic", useAdvancedTopLogLogic);
+        treeDefNBT.setBoolean(Reference.ALLOW_SMART_TREE_DETECT, allowSmartTreeDetection);
+        treeDefNBT.setBoolean(Reference.ONLY_DESTROY_UPWARDS, onlyDestroyUpwards);
+        treeDefNBT.setBoolean(Reference.REQ_DECAY_CHECK, requireLeafDecayCheck);
+        treeDefNBT.setInteger(Reference.MAX_H_LOG_DIST, maxHorLogBreakDist);
+        treeDefNBT.setInteger(Reference.MAX_V_LOG_DIST, maxVerLogBreakDist);
+        treeDefNBT.setInteger(Reference.MAX_H_LEAF_DIST, maxHorLeafBreakDist);
+        treeDefNBT.setInteger(Reference.MAX_LEAF_ID_DIST, maxLeafIDDist);
+        treeDefNBT.setInteger(Reference.MIN_LEAF_ID, minLeavesToID);
+        treeDefNBT.setFloat(Reference.BREAK_SPEED_MOD, breakSpeedModifier);
+        treeDefNBT.setBoolean(Reference.USE_ADVANCED_TOP_LOG_LOGIC, useAdvancedTopLogLogic);
         
-        treeDefNBT.setString(TCConst.LOGS, ListUtils.getListAsDelimitedString(logBlocks, ";"));
-        treeDefNBT.setString(TCConst.LEAVES, ListUtils.getListAsDelimitedString(leafBlocks, ";"));
+        treeDefNBT.setString(Reference.LOGS, ListUtils.getListAsDelimitedString(logBlocks, ";"));
+        treeDefNBT.setString(Reference.LEAVES, ListUtils.getListAsDelimitedString(leafBlocks, ";"));
     }
     
     public TreeDefinition readFromConfiguration(Configuration config, String category)
     {
         ConfigCategory cc = config.getCategory(category);
         
-        if (cc.containsKey(TCConst.ALLOW_SMART_TREE_DETECT))
-            onlyDestroyUpwards = cc.get(TCConst.ALLOW_SMART_TREE_DETECT).getBoolean(TCSettings.allowSmartTreeDetection);
-        if (cc.containsKey(TCConst.ONLY_DESTROY_UPWARDS))
-            onlyDestroyUpwards = cc.get(TCConst.ONLY_DESTROY_UPWARDS).getBoolean(TCSettings.onlyDestroyUpwards);
-        if (cc.containsKey(TCConst.REQ_DECAY_CHECK))
-            requireLeafDecayCheck = cc.get(TCConst.REQ_DECAY_CHECK).getBoolean(TCSettings.requireLeafDecayCheck);
-        if (cc.containsKey(TCConst.MAX_H_LOG_DIST))
-            maxHorLogBreakDist = cc.get(TCConst.MAX_H_LOG_DIST).getInt(TCSettings.maxHorLogBreakDist);
-        if (cc.containsKey(TCConst.MAX_V_LOG_DIST))
-            maxVerLogBreakDist = cc.get(TCConst.MAX_V_LOG_DIST).getInt(TCSettings.maxVerLogBreakDist);
-        if (cc.containsKey(TCConst.MAX_H_LEAF_DIST))
-            maxHorLeafBreakDist = cc.get(TCConst.MAX_H_LEAF_DIST).getInt(TCSettings.maxHorLeafBreakDist);
-        if (cc.containsKey(TCConst.MAX_LEAF_ID_DIST))
-            maxLeafIDDist = cc.get(TCConst.MAX_LEAF_ID_DIST).getInt(TCSettings.maxLeafIDDist);
-        if (cc.containsKey(TCConst.MIN_LEAF_ID))
-            minLeavesToID = cc.get(TCConst.MIN_LEAF_ID).getInt();
-        if (cc.containsKey(TCConst.BREAK_SPEED_MOD))
-            breakSpeedModifier = (float) cc.get(TCConst.BREAK_SPEED_MOD).getDouble(TCSettings.breakSpeedModifier);
-        if (cc.containsKey("useAdvancedTopLogLogic"))
-            useAdvancedTopLogLogic = cc.get("useAdvancedTopLogLogic").getBoolean(TCSettings.useAdvancedTopLogLogic);
+        if (cc.containsKey(Reference.ALLOW_SMART_TREE_DETECT))
+            onlyDestroyUpwards = cc.get(Reference.ALLOW_SMART_TREE_DETECT)
+                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.ALLOW_SMART_TREE_DETECT)
+                    .getBoolean(TCSettings.allowSmartTreeDetection);
+        if (cc.containsKey(Reference.ONLY_DESTROY_UPWARDS))
+            onlyDestroyUpwards = cc.get(Reference.ONLY_DESTROY_UPWARDS)
+                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.ONLY_DESTROY_UPWARDS)
+                    .getBoolean(TCSettings.onlyDestroyUpwards);
+        if (cc.containsKey(Reference.REQ_DECAY_CHECK))
+            requireLeafDecayCheck = cc.get(Reference.REQ_DECAY_CHECK)
+                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.REQ_DECAY_CHECK)
+                    .getBoolean(TCSettings.requireLeafDecayCheck);
+        if (cc.containsKey(Reference.MAX_H_LOG_DIST))
+            maxHorLogBreakDist = cc.get(Reference.MAX_H_LOG_DIST)
+                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.MAX_H_LOG_DIST)
+                    .getInt(TCSettings.maxHorLogBreakDist);
+        if (cc.containsKey(Reference.MAX_V_LOG_DIST))
+            maxVerLogBreakDist = cc.get(Reference.MAX_V_LOG_DIST)
+                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.MAX_V_LOG_DIST)
+                    .getInt(TCSettings.maxVerLogBreakDist);
+        if (cc.containsKey(Reference.MAX_H_LEAF_DIST))
+            maxHorLeafBreakDist = cc.get(Reference.MAX_H_LEAF_DIST)
+                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.MAX_H_LEAF_DIST)
+                    .getInt(TCSettings.maxHorLeafBreakDist);
+        if (cc.containsKey(Reference.MAX_LEAF_ID_DIST))
+            maxLeafIDDist = cc.get(Reference.MAX_LEAF_ID_DIST)
+                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.MAX_LEAF_ID_DIST)
+                    .getInt(TCSettings.maxLeafIDDist);
+        if (cc.containsKey(Reference.MIN_LEAF_ID))
+            minLeavesToID = cc.get(Reference.MIN_LEAF_ID)
+                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.MIN_LEAF_ID)
+                    .getInt();
+        if (cc.containsKey(Reference.BREAK_SPEED_MOD))
+            breakSpeedModifier = (float) cc.get(Reference.BREAK_SPEED_MOD)
+                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.BREAK_SPEED_MOD)
+                    .getDouble(TCSettings.breakSpeedModifier);
+        if (cc.containsKey(Reference.USE_ADVANCED_TOP_LOG_LOGIC))
+            useAdvancedTopLogLogic = cc.get(Reference.USE_ADVANCED_TOP_LOG_LOGIC)
+                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.USE_ADVANCED_TOP_LOG_LOGIC)
+                    .getBoolean(TCSettings.useAdvancedTopLogLogic);
         
-        logBlocks = ListUtils.getDelimitedStringAsBlockIDList(cc.get(TCConst.LOGS).getString(), "; ");
-        if (cc.containsKey(TCConst.LEAVES))
-            leafBlocks = ListUtils.getDelimitedStringAsBlockIDList(cc.get(TCConst.LEAVES).getString(), "; ");
+        if (cc.containsKey(Reference.LOGS))
+            logBlocks = ListUtils.getDelimitedStringAsBlockIDList(cc.get(Reference.LOGS)
+                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.LOGS)
+                    .getString(), "; ");
+        if (cc.containsKey(Reference.LEAVES))
+            leafBlocks = ListUtils.getDelimitedStringAsBlockIDList(cc.get(Reference.LEAVES)
+                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.LEAVES)
+                    .getString(), "; ");
         
         return this;
     }
     
     public void writeToConfiguration(Configuration config, String category)
     {
-        Property temp;
         if (allowSmartTreeDetection != TCSettings.allowSmartTreeDetection)
         {
-            temp = config.get(category, TCConst.ALLOW_SMART_TREE_DETECT, TCSettings.allowSmartTreeDetection, TCConst.OPTIONAL);
-            temp.set(allowSmartTreeDetection);
-            temp.setLanguageKey("bspkrs.tc.configgui." + TCConst.ALLOW_SMART_TREE_DETECT);
+            config.get(category, Reference.ALLOW_SMART_TREE_DETECT, TCSettings.allowSmartTreeDetection, Reference.OPTIONAL)
+                    .set(allowSmartTreeDetection)
+                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.ALLOW_SMART_TREE_DETECT);
         }
         if (onlyDestroyUpwards != TCSettings.onlyDestroyUpwards)
         {
-            temp = config.get(category, TCConst.ONLY_DESTROY_UPWARDS, TCSettings.onlyDestroyUpwards, TCConst.OPTIONAL);
-            temp.set(onlyDestroyUpwards);
-            temp.setLanguageKey("bspkrs.tc.configgui." + TCConst.ONLY_DESTROY_UPWARDS);
+            config.get(category, Reference.ONLY_DESTROY_UPWARDS, TCSettings.onlyDestroyUpwards, Reference.OPTIONAL)
+                    .set(onlyDestroyUpwards)
+                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.ONLY_DESTROY_UPWARDS);
         }
         if (requireLeafDecayCheck != TCSettings.requireLeafDecayCheck)
         {
-            temp = config.get(category, TCConst.REQ_DECAY_CHECK, TCSettings.requireLeafDecayCheck, TCConst.OPTIONAL);
-            temp.set(requireLeafDecayCheck);
-            temp.setLanguageKey("bspkrs.tc.configgui." + TCConst.REQ_DECAY_CHECK);
+            config.get(category, Reference.REQ_DECAY_CHECK, TCSettings.requireLeafDecayCheck, Reference.OPTIONAL)
+                    .set(requireLeafDecayCheck)
+                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.REQ_DECAY_CHECK);
         }
         if (maxHorLogBreakDist != TCSettings.maxHorLogBreakDist)
         {
-            temp = config.get(category, TCConst.MAX_H_LOG_DIST, TCSettings.maxHorLogBreakDist, TCConst.OPTIONAL);
-            temp.set(maxHorLogBreakDist);
-            temp.setLanguageKey("bspkrs.tc.configgui." + TCConst.MAX_H_LOG_DIST);
+            config.get(category, Reference.MAX_H_LOG_DIST, TCSettings.maxHorLogBreakDist, Reference.OPTIONAL)
+                    .set(maxHorLogBreakDist)
+                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.MAX_H_LOG_DIST);
         }
         if (maxVerLogBreakDist != TCSettings.maxVerLogBreakDist)
         {
-            temp = config.get(category, TCConst.MAX_V_LOG_DIST, TCSettings.maxVerLogBreakDist, TCConst.OPTIONAL);
-            temp.set(maxVerLogBreakDist);
-            temp.setLanguageKey("bspkrs.tc.configgui." + TCConst.MAX_V_LOG_DIST);
+            config.get(category, Reference.MAX_V_LOG_DIST, TCSettings.maxVerLogBreakDist, Reference.OPTIONAL)
+                    .set(maxVerLogBreakDist)
+                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.MAX_V_LOG_DIST);
         }
         if (maxHorLeafBreakDist != TCSettings.maxHorLeafBreakDist)
         {
-            temp = config.get(category, TCConst.MAX_H_LEAF_DIST, TCSettings.maxHorLeafBreakDist, TCConst.OPTIONAL);
-            temp.set(maxHorLeafBreakDist);
-            temp.setLanguageKey("bspkrs.tc.configgui." + TCConst.MAX_H_LEAF_DIST);
+            config.get(category, Reference.MAX_H_LEAF_DIST, TCSettings.maxHorLeafBreakDist, Reference.OPTIONAL)
+                    .set(maxHorLeafBreakDist)
+                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.MAX_H_LEAF_DIST);
         }
         if (maxLeafIDDist != TCSettings.maxLeafIDDist)
         {
-            temp = config.get(category, TCConst.MAX_LEAF_ID_DIST, TCSettings.maxLeafIDDist, TCConst.OPTIONAL);
-            temp.set(maxLeafIDDist);
-            temp.setLanguageKey("bspkrs.tc.configgui." + TCConst.MAX_LEAF_ID_DIST);
+            config.get(category, Reference.MAX_LEAF_ID_DIST, TCSettings.maxLeafIDDist, Reference.OPTIONAL)
+                    .set(maxLeafIDDist)
+                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.MAX_LEAF_ID_DIST);
         }
         if (minLeavesToID != TCSettings.minLeavesToID)
         {
-            temp = config.get(category, TCConst.MIN_LEAF_ID, TCSettings.minLeavesToID, TCConst.OPTIONAL);
-            temp.set(minLeavesToID);
-            temp.setLanguageKey("bspkrs.tc.configgui." + TCConst.MIN_LEAF_ID);
+            config.get(category, Reference.MIN_LEAF_ID, TCSettings.minLeavesToID, Reference.OPTIONAL)
+                    .set(minLeavesToID)
+                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.MIN_LEAF_ID);
         }
         if (breakSpeedModifier != TCSettings.breakSpeedModifier)
         {
-            temp = config.get(category, TCConst.BREAK_SPEED_MOD, TCSettings.breakSpeedModifier, TCConst.OPTIONAL);
-            temp.set(breakSpeedModifier);
-            temp.setLanguageKey("bspkrs.tc.configgui." + TCConst.BREAK_SPEED_MOD);
+            config.get(category, Reference.BREAK_SPEED_MOD, TCSettings.breakSpeedModifier, Reference.OPTIONAL)
+                    .set(breakSpeedModifier)
+                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.BREAK_SPEED_MOD);
         }
         if (useAdvancedTopLogLogic != TCSettings.useAdvancedTopLogLogic)
         {
-            temp = config.get(category, "useAdvancedTopLogLogic", TCSettings.useAdvancedTopLogLogic, TCConst.OPTIONAL);
-            temp.set(useAdvancedTopLogLogic);
-            temp.setLanguageKey("bspkrs.tc.configgui.useAdvancedTopLogLogic");
+            config.get(category, Reference.USE_ADVANCED_TOP_LOG_LOGIC, TCSettings.useAdvancedTopLogLogic, Reference.OPTIONAL)
+                    .set(useAdvancedTopLogLogic)
+                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.USE_ADVANCED_TOP_LOG_LOGIC);
         }
         
-        temp = config.get(category, TCConst.LOGS, ListUtils.getListAsDelimitedString(logBlocks, "; "));
-        temp.setLanguageKey("bspkrs.tc.configgui." + TCConst.LOGS);
-        temp = config.get(category, TCConst.LEAVES, ListUtils.getListAsDelimitedString(leafBlocks, "; "));
-        temp.setLanguageKey("bspkrs.tc.configgui." + TCConst.LEAVES);
+        config.get(category, Reference.LOGS, ListUtils.getListAsDelimitedString(logBlocks, "; "))
+                .setLanguageKey(Reference.LANG_KEY_BASE + Reference.LOGS);
+        config.get(category, Reference.LEAVES, ListUtils.getListAsDelimitedString(leafBlocks, "; "))
+                .setLanguageKey(Reference.LANG_KEY_BASE + Reference.LEAVES);
     }
     
     /*
