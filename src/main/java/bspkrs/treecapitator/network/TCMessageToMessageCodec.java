@@ -1,13 +1,13 @@
 package bspkrs.treecapitator.network;
 
 import bspkrs.network.BSMessageToMessageCodec;
-import bspkrs.treecapitator.util.TCConst;
+import bspkrs.treecapitator.util.Reference;
 
 public class TCMessageToMessageCodec extends BSMessageToMessageCodec
 {
     public TCMessageToMessageCodec()
     {
-        addDiscriminator(TCConst.PACKET_LOGIN, TCPacketLogin.class);
-        addDiscriminator(TCConst.PACKET_CONFIG, TCPacketConfig.class);
+        addDiscriminator(Reference.PACKET_LOGIN, TCPacketLogin.class);
+        addDiscriminator(Reference.PACKET_CONFIG, TCPacketConfig.class);
     }
 }

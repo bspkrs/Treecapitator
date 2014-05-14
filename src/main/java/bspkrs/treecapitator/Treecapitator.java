@@ -151,9 +151,6 @@ public class Treecapitator
                             for (Coord pos : listFinal)
                             {
                                 addLeaves(world, pos, leaves);
-                                
-                                // Deprecated in favor of simply not adding the "has log close" leaves in the first place
-                                // removeLeavesWithLogsAround(world, leaves);
                             }
                             TCLog.debug("Destroying %d leaf blocks...", leaves.size());
                             destroyBlocksWithChance(world, leaves, 0.5F, hasShearsInHotbar(player));
@@ -705,7 +702,7 @@ public class Treecapitator
                         }
                 
                 if (counter == 0)
-                    listFinal.add(pos.clone());
+                    listFinal.add(pos);
             }
             
             index = -1;

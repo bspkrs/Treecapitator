@@ -2,11 +2,11 @@ package bspkrs.treecapitator.network;
 
 import net.minecraft.network.PacketBuffer;
 import bspkrs.network.BSPacket;
-import bspkrs.treecapitator.util.TCConst;
+import bspkrs.treecapitator.util.Reference;
 
 public class TCPacketLogin implements BSPacket
 {
-    public byte protocolVersion = TCConst.PROTOCOL_VERSION;
+    public byte protocolVersion = Reference.PROTOCOL_VERSION;
     
     @Override
     public void readBytes(PacketBuffer bytes)

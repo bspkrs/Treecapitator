@@ -8,7 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import bspkrs.treecapitator.config.TCSettings;
-import bspkrs.treecapitator.util.TCConst;
+import bspkrs.treecapitator.util.Reference;
 import bspkrs.util.ItemID;
 import bspkrs.util.ListUtils;
 
@@ -80,16 +80,16 @@ public class ToolRegistry
     
     protected void readFromNBT(NBTTagCompound ntc)
     {
-        axeList = ListUtils.getDelimitedStringAsItemIDList(ntc.getString(TCConst.AXE_ID_LIST), ";");
-        shearsList = ListUtils.getDelimitedStringAsItemIDList(ntc.getString(TCConst.SHEARS_ID_LIST), ";");
-        blacklist = ListUtils.getDelimitedStringAsItemIDList(ntc.getString(TCConst.BLACKLIST), ";");
+        axeList = ListUtils.getDelimitedStringAsItemIDList(ntc.getString(Reference.AXE_ID_LIST), ";");
+        shearsList = ListUtils.getDelimitedStringAsItemIDList(ntc.getString(Reference.SHEARS_ID_LIST), ";");
+        blacklist = ListUtils.getDelimitedStringAsItemIDList(ntc.getString(Reference.BLACKLIST), ";");
     }
     
     public void writeToNBT(NBTTagCompound ntc)
     {
-        ntc.setString(TCConst.AXE_ID_LIST, ListUtils.getListAsDelimitedString(axeList, ";"));
-        ntc.setString(TCConst.SHEARS_ID_LIST, ListUtils.getListAsDelimitedString(shearsList, ";"));
-        ntc.setString(TCConst.BLACKLIST, ListUtils.getListAsDelimitedString(blacklist, ";"));
+        ntc.setString(Reference.AXE_ID_LIST, ListUtils.getListAsDelimitedString(axeList, ";"));
+        ntc.setString(Reference.SHEARS_ID_LIST, ListUtils.getListAsDelimitedString(shearsList, ";"));
+        ntc.setString(Reference.BLACKLIST, ListUtils.getListAsDelimitedString(blacklist, ";"));
     }
     
     public void registerAxe(ItemID axe)

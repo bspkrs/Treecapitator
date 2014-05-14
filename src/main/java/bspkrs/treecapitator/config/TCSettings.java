@@ -3,7 +3,7 @@ package bspkrs.treecapitator.config;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.nbt.NBTTagCompound;
 import bspkrs.treecapitator.EnchantmentTreecapitating;
-import bspkrs.treecapitator.util.TCConst;
+import bspkrs.treecapitator.util.Reference;
 import bspkrs.treecapitator.util.TCLog;
 import bspkrs.util.config.Configuration;
 
@@ -140,7 +140,7 @@ public final class TCSettings
         allowSmartTreeDetection = ntc.getBoolean("allowSmartTreeDetection");
         treeHeightDecidesBreakSpeed = ntc.getBoolean("treeHeightDecidesBreakSpeed");
         treeHeightModifier = ntc.getFloat("treeHeightModifier");
-        breakSpeedModifier = ntc.getFloat("breakSpeedModifier");
+        breakSpeedModifier = ntc.getFloat(Reference.BREAK_SPEED_MOD);
         damageIncreaseAmount = ntc.getFloat("damageIncreaseAmount");
         damageMultiplier = ntc.getFloat("damageMultiplier");
         destroyLeaves = ntc.getBoolean("destroyLeaves");
@@ -154,21 +154,21 @@ public final class TCSettings
         handleEnchantmentID(ntc.getInteger("enchantmentID"));
         
         increaseDamageEveryXBlocks = ntc.getInteger("increaseDamageEveryXBlocks");
-        maxHorLogBreakDist = ntc.getInteger("maxHorLogBreakDist");
-        maxHorLeafBreakDist = ntc.getInteger("maxHorLeafBreakDist");
-        maxLeafIDDist = ntc.getInteger("maxLeafIDDist");
-        maxVerLogBreakDist = ntc.getInteger("maxVerLogBreakDist");
-        minLeavesToID = ntc.getInteger("minLeavesToID");
+        maxHorLogBreakDist = ntc.getInteger(Reference.MAX_H_LOG_DIST);
+        maxHorLeafBreakDist = ntc.getInteger(Reference.MAX_H_LEAF_DIST);
+        maxLeafIDDist = ntc.getInteger(Reference.MAX_LEAF_ID_DIST);
+        maxVerLogBreakDist = ntc.getInteger(Reference.MAX_V_LOG_DIST);
+        minLeavesToID = ntc.getInteger(Reference.MIN_LEAF_ID);
         needItem = ntc.getBoolean("needItem");
-        onlyDestroyUpwards = ntc.getBoolean("onlyDestroyUpwards");
+        onlyDestroyUpwards = ntc.getBoolean(Reference.ONLY_DESTROY_UPWARDS);
         requireItemInAxeListForEnchant = ntc.getBoolean("requireItemInAxeListForEnchant");
-        requireLeafDecayCheck = ntc.getBoolean("requireLeafDecayCheck");
+        requireLeafDecayCheck = ntc.getBoolean(Reference.REQ_DECAY_CHECK);
         shearLeaves = ntc.getBoolean("shearLeaves");
         shearVines = ntc.getBoolean("shearVines");
         sneakAction = ntc.getString("sneakAction");
         stackDrops = ntc.getBoolean("stackDrops");
         itemsDropInPlace = ntc.getBoolean("itemsDropInPlace");
-        useAdvancedTopLogLogic = ntc.getBoolean("useAdvancedTopLogLogic");
+        useAdvancedTopLogLogic = ntc.getBoolean(Reference.USE_ADVANCED_TOP_LOG_LOGIC);
         useIncreasingItemDamage = ntc.getBoolean("useIncreasingItemDamage");
         useStrictBlockPairing = ntc.getBoolean("useStrictBlockPairing");
     }
@@ -182,7 +182,7 @@ public final class TCSettings
         ntc.setBoolean("allowSmartTreeDetection", allowSmartTreeDetection);
         ntc.setBoolean("treeHeightDecidesBreakSpeed", treeHeightDecidesBreakSpeed);
         ntc.setFloat("treeHeightModifier", treeHeightModifier);
-        ntc.setFloat("breakSpeedModifier", breakSpeedModifier);
+        ntc.setFloat(Reference.BREAK_SPEED_MOD, breakSpeedModifier);
         ntc.setFloat("damageIncreaseAmount", damageIncreaseAmount);
         ntc.setFloat("damageMultiplier", damageMultiplier);
         ntc.setBoolean("destroyLeaves", destroyLeaves);
@@ -191,23 +191,23 @@ public final class TCSettings
         ntc.setBoolean("enableEnchantmentMode", enableEnchantmentMode);
         ntc.setInteger("enchantmentID", enchantmentID);
         ntc.setInteger("increaseDamageEveryXBlocks", increaseDamageEveryXBlocks);
-        ntc.setInteger("maxHorLogBreakDist", maxHorLogBreakDist);
-        ntc.setInteger("maxHorLeafBreakDist", maxHorLeafBreakDist);
-        ntc.setInteger("maxLeafIDDist", maxLeafIDDist);
-        ntc.setInteger("maxVerLogBreakDist", maxVerLogBreakDist);
-        ntc.setInteger("minLeavesToID", minLeavesToID);
+        ntc.setInteger(Reference.MAX_H_LOG_DIST, maxHorLogBreakDist);
+        ntc.setInteger(Reference.MAX_H_LEAF_DIST, maxHorLeafBreakDist);
+        ntc.setInteger(Reference.MAX_LEAF_ID_DIST, maxLeafIDDist);
+        ntc.setInteger(Reference.MAX_V_LOG_DIST, maxVerLogBreakDist);
+        ntc.setInteger(Reference.MIN_LEAF_ID, minLeavesToID);
         ntc.setBoolean("needItem", needItem);
-        ntc.setBoolean("onlyDestroyUpwards", onlyDestroyUpwards);
+        ntc.setBoolean(Reference.ONLY_DESTROY_UPWARDS, onlyDestroyUpwards);
         ntc.setString("oreDictionaryLogStrings", oreDictionaryLogStrings);
         ntc.setString("oreDictionaryLeafStrings", oreDictionaryLeafStrings);
         ntc.setBoolean("requireItemInAxeListForEnchant", requireItemInAxeListForEnchant);
-        ntc.setBoolean("requireLeafDecayCheck", requireLeafDecayCheck);
+        ntc.setBoolean(Reference.REQ_DECAY_CHECK, requireLeafDecayCheck);
         ntc.setBoolean("shearLeaves", shearLeaves);
         ntc.setBoolean("shearVines", shearVines);
         ntc.setString("sneakAction", sneakAction);
         ntc.setBoolean("stackDrops", stackDrops);
         ntc.setBoolean("itemsDropInPlace", itemsDropInPlace);
-        ntc.setBoolean("useAdvancedTopLogLogic", useAdvancedTopLogLogic);
+        ntc.setBoolean(Reference.USE_ADVANCED_TOP_LOG_LOGIC, useAdvancedTopLogLogic);
         ntc.setBoolean("useIncreasingItemDamage", useIncreasingItemDamage);
         ntc.setBoolean("useStrictBlockPairing", useStrictBlockPairing);
     }
@@ -220,114 +220,114 @@ public final class TCSettings
     public void syncConfiguration(Configuration config)
     {
         // Since I moved that setting...
-        config.moveProperty(TCConst.MISC_CTGY, "sneakAction", TCConst.TREE_CHOP_BEHAVIOR_CTGY);
+        config.moveProperty(Reference.MISC_CTGY, "sneakAction", Reference.TREE_CHOP_BEHAVIOR_CTGY);
         
         // Misc settings
-        allowDebugLogging = config.getBoolean("allowDebugLogging", TCConst.MISC_CTGY,
-                allowDebugLoggingDefault, TCConst.allowDebugLoggingDesc, "bspkrs.tc.configgui.allowDebugLogging");
-        allowDebugOutput = config.getBoolean("allowDebugOutput", TCConst.MISC_CTGY,
-                allowDebugOutputDefault, TCConst.allowDebugOutputDesc, "bspkrs.tc.configgui.allowDebugOutput");
-        disableCreativeDrops = config.getBoolean("disableCreativeDrops", TCConst.MISC_CTGY,
-                disableCreativeDropsDefault, TCConst.disableCreativeDropsDesc, "bspkrs.tc.configgui.disableCreativeDrops");
-        disableInCreative = config.getBoolean("disableInCreative", TCConst.MISC_CTGY,
-                disableInCreativeDefault, TCConst.disableInCreativeDesc, "bspkrs.tc.configgui.disableInCreative");
-        allowOreDictionaryLookup = config.getBoolean("allowOreDictionaryLookup", TCConst.MISC_CTGY,
-                allowOreDictionaryLookupDefault, TCConst.allowOreDictionaryLookupDesc, "bspkrs.tc.configgui.allowOreDictionaryLookup");
-        oreDictionaryLogStrings = config.getString("oreDictionaryLogStrings", TCConst.MISC_CTGY,
-                oreDictionaryLogStringsDefault, TCConst.oreDictionaryLogStringsDesc, "bspkrs.tc.configgui.oreDictionaryLogStrings");
-        oreDictionaryLeafStrings = config.getString("oreDictionaryLeafStrings", TCConst.MISC_CTGY,
-                oreDictionaryLeafStringsDefault, TCConst.oreDictionaryLeafStringsDesc, "bspkrs.tc.configgui.oreDictionaryLeafStrings");
-        blockIDBlacklist = config.getString("blockIDBlacklist", TCConst.MISC_CTGY,
-                blockIDBlacklistDefault, TCConst.blockIDBlacklistDesc, "bspkrs.tc.configgui.blockIDBlacklist");
-        itemIDBlacklist = config.getString("itemIDBlacklist", TCConst.MISC_CTGY,
-                itemIDBlacklistDefault, TCConst.itemIDBlacklistDesc, "bspkrs.tc.configgui.itemIDBlacklist");
-        config.addCustomCategoryLanguageKey(TCConst.MISC_CTGY, "bspkrs.tc.configgui.ctgy." + TCConst.MISC_CTGY);
+        allowDebugLogging = config.getBoolean(Reference.ALLOW_DEBUG_LOGGING, Reference.MISC_CTGY,
+                allowDebugLoggingDefault, Reference.allowDebugLoggingDesc, Reference.LANG_KEY_BASE + Reference.ALLOW_DEBUG_LOGGING);
+        allowDebugOutput = config.getBoolean("allowDebugOutput", Reference.MISC_CTGY,
+                allowDebugOutputDefault, Reference.allowDebugOutputDesc, Reference.LANG_KEY_BASE + "allowDebugOutput");
+        disableCreativeDrops = config.getBoolean("disableCreativeDrops", Reference.MISC_CTGY,
+                disableCreativeDropsDefault, Reference.disableCreativeDropsDesc, Reference.LANG_KEY_BASE + "disableCreativeDrops");
+        disableInCreative = config.getBoolean("disableInCreative", Reference.MISC_CTGY,
+                disableInCreativeDefault, Reference.disableInCreativeDesc, Reference.LANG_KEY_BASE + "disableInCreative");
+        allowOreDictionaryLookup = config.getBoolean("allowOreDictionaryLookup", Reference.MISC_CTGY,
+                allowOreDictionaryLookupDefault, Reference.allowOreDictionaryLookupDesc, Reference.LANG_KEY_BASE + "allowOreDictionaryLookup");
+        oreDictionaryLogStrings = config.getString("oreDictionaryLogStrings", Reference.MISC_CTGY,
+                oreDictionaryLogStringsDefault, Reference.oreDictionaryLogStringsDesc, Reference.LANG_KEY_BASE + "oreDictionaryLogStrings");
+        oreDictionaryLeafStrings = config.getString("oreDictionaryLeafStrings", Reference.MISC_CTGY,
+                oreDictionaryLeafStringsDefault, Reference.oreDictionaryLeafStringsDesc, Reference.LANG_KEY_BASE + "oreDictionaryLeafStrings");
+        blockIDBlacklist = config.getString("blockIDBlacklist", Reference.MISC_CTGY,
+                blockIDBlacklistDefault, Reference.blockIDBlacklistDesc, Reference.LANG_KEY_BASE + "blockIDBlacklist");
+        itemIDBlacklist = config.getString("itemIDBlacklist", Reference.MISC_CTGY,
+                itemIDBlacklistDefault, Reference.itemIDBlacklistDesc, Reference.LANG_KEY_BASE + "itemIDBlacklist");
+        config.addCustomCategoryLanguageKey(Reference.MISC_CTGY, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.MISC_CTGY);
         
         // Break Speed settings
-        breakSpeedModifier = config.getFloat("breakSpeedModifier", TCConst.BREAK_SPEED_CTGY,
-                breakSpeedModifierDefault, 0.01F, 1F, TCConst.breakSpeedModifierDesc, "bspkrs.tc.configgui.breakSpeedModifier");
-        treeHeightDecidesBreakSpeed = config.getBoolean("treeHeightDecidesBreakSpeed", TCConst.BREAK_SPEED_CTGY,
-                treeHeightDecidesBreakSpeedDefault, TCConst.treeHeightDecidesBreakSpeedDesc, "bspkrs.tc.configgui.treeHeightDecidesBreakSpeed");
-        treeHeightModifier = config.getFloat("treeHeightModifier", TCConst.BREAK_SPEED_CTGY,
-                treeHeightModifierDefault, 0.25F, 10.0F, TCConst.treeHeightModifierDesc, "bspkrs.tc.configgui.treeHeightModifier");
-        config.addCustomCategoryLanguageKey(TCConst.BREAK_SPEED_CTGY, "bspkrs.tc.configgui.ctgy." + TCConst.BREAK_SPEED_CTGY);
+        breakSpeedModifier = config.getFloat(Reference.BREAK_SPEED_MOD, Reference.BREAK_SPEED_CTGY,
+                breakSpeedModifierDefault, 0.01F, 1F, Reference.breakSpeedModifierDesc, Reference.LANG_KEY_BASE + Reference.BREAK_SPEED_MOD);
+        treeHeightDecidesBreakSpeed = config.getBoolean("treeHeightDecidesBreakSpeed", Reference.BREAK_SPEED_CTGY,
+                treeHeightDecidesBreakSpeedDefault, Reference.treeHeightDecidesBreakSpeedDesc, Reference.LANG_KEY_BASE + "treeHeightDecidesBreakSpeed");
+        treeHeightModifier = config.getFloat("treeHeightModifier", Reference.BREAK_SPEED_CTGY,
+                treeHeightModifierDefault, 0.25F, 10.0F, Reference.treeHeightModifierDesc, Reference.LANG_KEY_BASE + "treeHeightModifier");
+        config.addCustomCategoryLanguageKey(Reference.BREAK_SPEED_CTGY, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.BREAK_SPEED_CTGY);
         
         // Item settings
-        needItem = config.getBoolean("needItem", TCConst.ITEM_CTGY,
-                needItemDefault, TCConst.needItemDesc, "bspkrs.tc.configgui.needItem");
-        allowItemDamage = config.getBoolean("allowItemDamage", TCConst.ITEM_CTGY,
-                allowItemDamageDefault, TCConst.allowItemDamageDesc, "bspkrs.tc.configgui.allowItemDamage");
-        allowMoreBlocksThanDamage = config.getBoolean("allowMoreBlocksThanDamage", TCConst.ITEM_CTGY,
-                allowMoreBlocksThanDamageDefault, TCConst.allowMoreBlocksThanDamageDesc, "bspkrs.tc.configgui.allowMoreBlocksThanDamage");
-        increaseDamageEveryXBlocks = config.getInt("increaseDamageEveryXBlocks", TCConst.ITEM_CTGY,
-                increaseDamageEveryXBlocksDefault, 1, 500, TCConst.increaseDamageEveryXBlocksDesc, "bspkrs.tc.configgui.increaseDamageEveryXBlocks");
-        useIncreasingItemDamage = config.getBoolean("useIncreasingItemDamage", TCConst.ITEM_CTGY,
-                useIncreasingItemDamageDefault, TCConst.useIncreasingItemDamageDesc, "bspkrs.tc.configgui.useIncreasingItemDamage");
-        damageIncreaseAmount = config.getFloat("damageIncreaseAmount", TCConst.ITEM_CTGY,
-                damageIncreaseAmountDefault, 0.1F, 100.0F, TCConst.damageIncreaseAmountDesc, "bspkrs.tc.configgui.damageIncreaseAmount");
-        damageMultiplier = config.getFloat("damageMultiplier", TCConst.ITEM_CTGY,
-                damageMultiplierDefault, 0.1F, 50.0F, TCConst.damageMultiplierDesc, "bspkrs.tc.configgui.damageMultiplier");
-        config.addCustomCategoryLanguageKey(TCConst.ITEM_CTGY, "bspkrs.tc.configgui.ctgy." + TCConst.ITEM_CTGY);
+        needItem = config.getBoolean("needItem", Reference.ITEM_CTGY,
+                needItemDefault, Reference.needItemDesc, Reference.LANG_KEY_BASE + "needItem");
+        allowItemDamage = config.getBoolean("allowItemDamage", Reference.ITEM_CTGY,
+                allowItemDamageDefault, Reference.allowItemDamageDesc, Reference.LANG_KEY_BASE + "allowItemDamage");
+        allowMoreBlocksThanDamage = config.getBoolean("allowMoreBlocksThanDamage", Reference.ITEM_CTGY,
+                allowMoreBlocksThanDamageDefault, Reference.allowMoreBlocksThanDamageDesc, Reference.LANG_KEY_BASE + "allowMoreBlocksThanDamage");
+        increaseDamageEveryXBlocks = config.getInt("increaseDamageEveryXBlocks", Reference.ITEM_CTGY,
+                increaseDamageEveryXBlocksDefault, 1, 500, Reference.increaseDamageEveryXBlocksDesc, Reference.LANG_KEY_BASE + "increaseDamageEveryXBlocks");
+        useIncreasingItemDamage = config.getBoolean("useIncreasingItemDamage", Reference.ITEM_CTGY,
+                useIncreasingItemDamageDefault, Reference.useIncreasingItemDamageDesc, Reference.LANG_KEY_BASE + "useIncreasingItemDamage");
+        damageIncreaseAmount = config.getFloat("damageIncreaseAmount", Reference.ITEM_CTGY,
+                damageIncreaseAmountDefault, 0.1F, 100.0F, Reference.damageIncreaseAmountDesc, Reference.LANG_KEY_BASE + "damageIncreaseAmount");
+        damageMultiplier = config.getFloat("damageMultiplier", Reference.ITEM_CTGY,
+                damageMultiplierDefault, 0.1F, 50.0F, Reference.damageMultiplierDesc, Reference.LANG_KEY_BASE + "damageMultiplier");
+        config.addCustomCategoryLanguageKey(Reference.ITEM_CTGY, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.ITEM_CTGY);
         
         // Tree Chop Behavior settings
-        allowSmartTreeDetection = config.getBoolean("allowSmartTreeDetection", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
-                allowSmartTreeDetectionDefault, TCConst.allowSmartTreeDetectionDesc, "bspkrs.tc.configgui.allowSmartTreeDetection");
-        useAdvancedTopLogLogic = config.getBoolean("useAdvancedTopLogLogic", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
-                useAdvancedTopLogLogicDefault, TCConst.useAdvancedTopLogLogicDesc, "bspkrs.tc.configgui.useAdvancedTopLogLogic");
-        useStrictBlockPairing = config.getBoolean("useStrictBlockPairing", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
-                useStrictBlockPairingDefault, TCConst.useStrictBlockPairingDesc, "bspkrs.tc.configgui.useStrictBlockPairing");
-        destroyLeaves = config.getBoolean("destroyLeaves", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
-                destroyLeavesDefault, TCConst.destroyLeavesDesc, "bspkrs.tc.configgui.destroyLeaves");
-        shearLeaves = config.getBoolean("shearLeaves", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
-                shearLeavesDefault, TCConst.shearLeavesDesc, "bspkrs.tc.configgui.shearLeaves");
-        shearVines = config.getBoolean("shearVines", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
-                shearVinesDefault, TCConst.shearVinesDesc, "bspkrs.tc.configgui.shearVines");
-        maxHorLeafBreakDist = config.getInt("maxHorLeafBreakDist", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
-                maxHorLeafBreakDistDefault, -1, 100, TCConst.maxHorLeafBreakDistDesc, "bspkrs.tc.configgui.maxHorLeafBreakDist");
-        maxHorLogBreakDist = config.getInt("maxHorLogBreakDist", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
-                maxHorLogBreakDistDefault, -1, 100, TCConst.maxHorLogBreakDistDesc, "bspkrs.tc.configgui.maxHorLogBreakDist");
-        maxVerLogBreakDist = config.getInt("maxVerLogBreakDist", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
-                maxVerLogBreakDistDefault, -1, 255, TCConst.maxVerLogBreakDistDesc, "bspkrs.tc.configgui.maxVerLogBreakDist");
-        maxLeafIDDist = config.getInt("maxLeafIDDist", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
-                maxLeafIDDistDefault, 1, 8, TCConst.maxLeafIDDistDesc, "bspkrs.tc.configgui.maxLeafIDDist");
-        minLeavesToID = config.getInt("minLeavesToID", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
-                minLeavesToIDDefault, 0, 8, TCConst.minLeavesToIDDesc, "bspkrs.tc.configgui.minLeavesToID");
-        onlyDestroyUpwards = config.getBoolean("onlyDestroyUpwards", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
-                onlyDestroyUpwardsDefault, TCConst.onlyDestroyUpwardsDesc, "bspkrs.tc.configgui.onlyDestroyUpwards");
-        requireLeafDecayCheck = config.getBoolean("requireLeafDecayCheck", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
-                requireLeafDecayCheckDefault, TCConst.requireLeafDecayCheckDesc, "bspkrs.tc.configgui.requireLeafDecayCheck");
-        sneakAction = config.getString("sneakAction", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
-                sneakActionDefault, TCConst.sneakActionDesc, new String[] { "enable", "disable", "none" }, "bspkrs.tc.configgui.sneakAction");
-        stackDrops = config.getBoolean("stackDrops", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
-                stackDropsDefault, TCConst.stackDropsDesc, "bspkrs.tc.configgui.stackDrops");
-        itemsDropInPlace = config.getBoolean("itemsDropInPlace", TCConst.TREE_CHOP_BEHAVIOR_CTGY,
-                itemsDropInPlaceDefault, TCConst.itemsDropInPlaceDesc, "bspkrs.tc.configgui.itemsDropInPlace");
-        config.addCustomCategoryLanguageKey(TCConst.TREE_CHOP_BEHAVIOR_CTGY, "bspkrs.tc.configgui.ctgy." + TCConst.TREE_CHOP_BEHAVIOR_CTGY);
+        allowSmartTreeDetection = config.getBoolean(Reference.ALLOW_SMART_TREE_DETECT, Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                allowSmartTreeDetectionDefault, Reference.allowSmartTreeDetectionDesc, Reference.LANG_KEY_BASE + Reference.ALLOW_SMART_TREE_DETECT);
+        useAdvancedTopLogLogic = config.getBoolean(Reference.USE_ADVANCED_TOP_LOG_LOGIC, Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                useAdvancedTopLogLogicDefault, Reference.useAdvancedTopLogLogicDesc, Reference.LANG_KEY_BASE + Reference.USE_ADVANCED_TOP_LOG_LOGIC);
+        useStrictBlockPairing = config.getBoolean("useStrictBlockPairing", Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                useStrictBlockPairingDefault, Reference.useStrictBlockPairingDesc, Reference.LANG_KEY_BASE + "useStrictBlockPairing");
+        destroyLeaves = config.getBoolean("destroyLeaves", Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                destroyLeavesDefault, Reference.destroyLeavesDesc, Reference.LANG_KEY_BASE + "destroyLeaves");
+        shearLeaves = config.getBoolean("shearLeaves", Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                shearLeavesDefault, Reference.shearLeavesDesc, Reference.LANG_KEY_BASE + "shearLeaves");
+        shearVines = config.getBoolean("shearVines", Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                shearVinesDefault, Reference.shearVinesDesc, Reference.LANG_KEY_BASE + "shearVines");
+        maxHorLeafBreakDist = config.getInt(Reference.MAX_H_LEAF_DIST, Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                maxHorLeafBreakDistDefault, -1, 100, Reference.maxHorLeafBreakDistDesc, Reference.LANG_KEY_BASE + Reference.MAX_H_LEAF_DIST);
+        maxHorLogBreakDist = config.getInt(Reference.MAX_H_LOG_DIST, Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                maxHorLogBreakDistDefault, -1, 100, Reference.maxHorLogBreakDistDesc, Reference.LANG_KEY_BASE + Reference.MAX_H_LOG_DIST);
+        maxVerLogBreakDist = config.getInt(Reference.MAX_V_LOG_DIST, Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                maxVerLogBreakDistDefault, -1, 255, Reference.maxVerLogBreakDistDesc, Reference.LANG_KEY_BASE + Reference.MAX_V_LOG_DIST);
+        maxLeafIDDist = config.getInt(Reference.MAX_LEAF_ID_DIST, Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                maxLeafIDDistDefault, 1, 8, Reference.maxLeafIDDistDesc, Reference.LANG_KEY_BASE + Reference.MAX_LEAF_ID_DIST);
+        minLeavesToID = config.getInt(Reference.MIN_LEAF_ID, Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                minLeavesToIDDefault, 0, 8, Reference.minLeavesToIDDesc, Reference.LANG_KEY_BASE + Reference.MIN_LEAF_ID);
+        onlyDestroyUpwards = config.getBoolean(Reference.ONLY_DESTROY_UPWARDS, Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                onlyDestroyUpwardsDefault, Reference.onlyDestroyUpwardsDesc, Reference.LANG_KEY_BASE + Reference.ONLY_DESTROY_UPWARDS);
+        requireLeafDecayCheck = config.getBoolean(Reference.REQ_DECAY_CHECK, Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                requireLeafDecayCheckDefault, Reference.requireLeafDecayCheckDesc, Reference.LANG_KEY_BASE + Reference.REQ_DECAY_CHECK);
+        sneakAction = config.getString("sneakAction", Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                sneakActionDefault, Reference.sneakActionDesc, new String[] { "enable", "disable", "none" }, Reference.LANG_KEY_BASE + "sneakAction");
+        stackDrops = config.getBoolean("stackDrops", Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                stackDropsDefault, Reference.stackDropsDesc, Reference.LANG_KEY_BASE + "stackDrops");
+        itemsDropInPlace = config.getBoolean("itemsDropInPlace", Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                itemsDropInPlaceDefault, Reference.itemsDropInPlaceDesc, Reference.LANG_KEY_BASE + "itemsDropInPlace");
+        config.addCustomCategoryLanguageKey(Reference.TREE_CHOP_BEHAVIOR_CTGY, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.TREE_CHOP_BEHAVIOR_CTGY);
         
         // Enchantment Mode settings
-        enableEnchantmentMode = config.getBoolean("enableEnchantmentMode", TCConst.ENCHANTMENT_MODE_CTGY,
-                enableEnchantmentModeDefault, TCConst.enableEnchantmentModeDesc, "bspkrs.tc.configgui.enableEnchantmentMode");
-        handleEnchantmentID(config.getInt("enchantmentID", TCConst.ENCHANTMENT_MODE_CTGY,
-                enchantmentIDDefault, 0, Enchantment.enchantmentsList.length - 1, TCConst.enchantmentIDDesc, "bspkrs.tc.configgui.enchantmentID"));
-        requireItemInAxeListForEnchant = config.getBoolean("requireItemInAxeListForEnchant", TCConst.ENCHANTMENT_MODE_CTGY,
-                requireItemInAxeListForEnchantDefault, TCConst.requireItemInAxeListForEnchantDesc, "bspkrs.tc.configgui.requireItemInAxeListForEnchant");
-        config.addCustomCategoryLanguageKey(TCConst.ENCHANTMENT_MODE_CTGY, "bspkrs.tc.configgui.ctgy." + TCConst.ENCHANTMENT_MODE_CTGY);
+        enableEnchantmentMode = config.getBoolean("enableEnchantmentMode", Reference.ENCHANTMENT_MODE_CTGY,
+                enableEnchantmentModeDefault, Reference.enableEnchantmentModeDesc, Reference.LANG_KEY_BASE + "enableEnchantmentMode");
+        handleEnchantmentID(config.getInt("enchantmentID", Reference.ENCHANTMENT_MODE_CTGY,
+                enchantmentIDDefault, 0, Enchantment.enchantmentsList.length - 1, Reference.enchantmentIDDesc, Reference.LANG_KEY_BASE + "enchantmentID"));
+        requireItemInAxeListForEnchant = config.getBoolean("requireItemInAxeListForEnchant", Reference.ENCHANTMENT_MODE_CTGY,
+                requireItemInAxeListForEnchantDefault, Reference.requireItemInAxeListForEnchantDesc, Reference.LANG_KEY_BASE + "requireItemInAxeListForEnchant");
+        config.addCustomCategoryLanguageKey(Reference.ENCHANTMENT_MODE_CTGY, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.ENCHANTMENT_MODE_CTGY);
         
-        enabled = config.getBoolean("enabled", TCConst.SETTINGS_CTGY,
-                enabledDefault, TCConst.enabledDesc, "bspkrs.tc.configgui.enabled");
-        config.addCustomCategoryLanguageKey(TCConst.SETTINGS_CTGY, "bspkrs.tc.configgui.ctgy." + TCConst.SETTINGS_CTGY);
+        enabled = config.getBoolean("enabled", Reference.SETTINGS_CTGY,
+                enabledDefault, Reference.enabledDesc, Reference.LANG_KEY_BASE + "enabled");
+        config.addCustomCategoryLanguageKey(Reference.SETTINGS_CTGY, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.SETTINGS_CTGY);
         
-        config.addCustomCategoryComment(TCConst.SETTINGS_CTGY, "ATTENTION: Editing this file manually is no longer necessary UNLESS YOU ARE ADDING NEW MODS/TREES. \n" +
+        config.addCustomCategoryComment(Reference.SETTINGS_CTGY, "ATTENTION: Editing this file manually is no longer necessary UNLESS YOU ARE ADDING NEW MODS/TREES. \n" +
                 "On the Mods list screen select the entry for Treecapitator, then click the Config button to modify these settings.");
         
         // Log configs if we are in debug logging mode
         if (allowDebugLogging)
         {
-            TCLog.configs(config, TCConst.MISC_CTGY);
-            TCLog.configs(config, TCConst.BREAK_SPEED_CTGY);
-            TCLog.configs(config, TCConst.ITEM_CTGY);
-            TCLog.configs(config, TCConst.TREE_CHOP_BEHAVIOR_CTGY);
-            TCLog.configs(config, TCConst.ENCHANTMENT_MODE_CTGY);
+            TCLog.configs(config, Reference.MISC_CTGY);
+            TCLog.configs(config, Reference.BREAK_SPEED_CTGY);
+            TCLog.configs(config, Reference.ITEM_CTGY);
+            TCLog.configs(config, Reference.TREE_CHOP_BEHAVIOR_CTGY);
+            TCLog.configs(config, Reference.ENCHANTMENT_MODE_CTGY);
         }
     }
 }

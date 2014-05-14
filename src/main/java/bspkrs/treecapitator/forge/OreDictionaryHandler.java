@@ -12,7 +12,7 @@ import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.registry.ModConfigRegistry;
 import bspkrs.treecapitator.registry.TreeDefinition;
 import bspkrs.treecapitator.registry.TreeRegistry;
-import bspkrs.treecapitator.util.TCConst;
+import bspkrs.treecapitator.util.Reference;
 import bspkrs.treecapitator.util.TCLog;
 import bspkrs.util.BlockID;
 
@@ -80,7 +80,7 @@ public class OreDictionaryHandler
                         
                         TCLog.info("Registering generic Ore Dictionary tree %s...", oreName.trim());
                         TreeRegistry.instance().registerTree(oreName.trim(), genericTree);
-                        ModConfigRegistry.instance().appendTreeToModConfig(TCConst.TCMODID, oreName.trim(), genericTree);
+                        ModConfigRegistry.instance().appendTreeToModConfig(Reference.MODID, oreName.trim(), genericTree);
                         didRegisterATree = true;
                     }
                 }

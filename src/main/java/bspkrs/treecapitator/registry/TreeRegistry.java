@@ -17,7 +17,7 @@ import net.minecraft.nbt.NBTTagString;
 import bspkrs.helpers.nbt.NBTTagCompoundHelper;
 import bspkrs.helpers.nbt.NBTTagListHelper;
 import bspkrs.treecapitator.config.TCSettings;
-import bspkrs.treecapitator.util.TCConst;
+import bspkrs.treecapitator.util.Reference;
 import bspkrs.treecapitator.util.TCLog;
 import bspkrs.util.BlockID;
 import bspkrs.util.Coord;
@@ -62,42 +62,42 @@ public class TreeRegistry
     protected void initVanillaTreeDefs()
     {
         vanTrees = new TreeMap<String, TreeDefinition>();
-        vanTrees.put(TCConst.OAK, new TreeDefinition().addLogID(new BlockID(Blocks.log, 0)).addLogID(new BlockID(Blocks.log, 4))
+        vanTrees.put(Reference.OAK, new TreeDefinition().addLogID(new BlockID(Blocks.log, 0)).addLogID(new BlockID(Blocks.log, 4))
                 .addLogID(new BlockID(Blocks.log, 8)).addLogID(new BlockID(Blocks.log, 12))
                 .addLeafID(new BlockID(Blocks.leaves, 0)).addLeafID(new BlockID(Blocks.leaves, 8)));
-        vanTrees.put(TCConst.SPRUCE, new TreeDefinition().addLogID(new BlockID(Blocks.log, 1)).addLogID(new BlockID(Blocks.log, 5))
+        vanTrees.put(Reference.SPRUCE, new TreeDefinition().addLogID(new BlockID(Blocks.log, 1)).addLogID(new BlockID(Blocks.log, 5))
                 .addLogID(new BlockID(Blocks.log, 9)).addLogID(new BlockID(Blocks.log, 13))
                 .addLeafID(new BlockID(Blocks.leaves, 1)).addLeafID(new BlockID(Blocks.leaves, 9)));
-        vanTrees.put(TCConst.BIRCH, new TreeDefinition().addLogID(new BlockID(Blocks.log, 2)).addLogID(new BlockID(Blocks.log, 6))
+        vanTrees.put(Reference.BIRCH, new TreeDefinition().addLogID(new BlockID(Blocks.log, 2)).addLogID(new BlockID(Blocks.log, 6))
                 .addLogID(new BlockID(Blocks.log, 10)).addLogID(new BlockID(Blocks.log, 14))
                 .addLeafID(new BlockID(Blocks.leaves, 2)).addLeafID(new BlockID(Blocks.leaves, 10)));
-        vanTrees.put(TCConst.JUNGLE, new TreeDefinition().addLogID(new BlockID(Blocks.log, 3)).addLogID(new BlockID(Blocks.log, 7))
+        vanTrees.put(Reference.JUNGLE, new TreeDefinition().addLogID(new BlockID(Blocks.log, 3)).addLogID(new BlockID(Blocks.log, 7))
                 .addLogID(new BlockID(Blocks.log, 11)).addLogID(new BlockID(Blocks.log, 15))
                 .addLeafID(new BlockID(Blocks.leaves, 3)).addLeafID(new BlockID(Blocks.leaves, 11))
                 .addLeafID(new BlockID(Blocks.leaves, 0)).addLeafID(new BlockID(Blocks.leaves, 8))
                 .setMaxHorLeafBreakDist(6).setRequireLeafDecayCheck(false).setUseAdvancedTopLogLogic(true));
-        vanTrees.put(TCConst.ACACIA, new TreeDefinition().addLogID(new BlockID(Blocks.log2, 0)).addLogID(new BlockID(Blocks.log2, 4))
+        vanTrees.put(Reference.ACACIA, new TreeDefinition().addLogID(new BlockID(Blocks.log2, 0)).addLogID(new BlockID(Blocks.log2, 4))
                 .addLogID(new BlockID(Blocks.log2, 8)).addLogID(new BlockID(Blocks.log2, 12))
                 .addLeafID(new BlockID(Blocks.leaves2, 0)).addLeafID(new BlockID(Blocks.leaves2, 8))
                 .setUseAdvancedTopLogLogic(true));
-        vanTrees.put(TCConst.DARK_OAK, new TreeDefinition().addLogID(new BlockID(Blocks.log2, 1)).addLogID(new BlockID(Blocks.log2, 5))
+        vanTrees.put(Reference.DARK_OAK, new TreeDefinition().addLogID(new BlockID(Blocks.log2, 1)).addLogID(new BlockID(Blocks.log2, 5))
                 .addLogID(new BlockID(Blocks.log2, 9)).addLogID(new BlockID(Blocks.log2, 13))
                 .addLeafID(new BlockID(Blocks.leaves2, 1)).addLeafID(new BlockID(Blocks.leaves2, 9))
                 .setUseAdvancedTopLogLogic(true));
-        vanTrees.put(TCConst.FUTURE_TREE_1, new TreeDefinition().addLogID(new BlockID(Blocks.log2, 2)).addLogID(new BlockID(Blocks.log2, 6))
+        vanTrees.put(Reference.FUTURE_TREE_1, new TreeDefinition().addLogID(new BlockID(Blocks.log2, 2)).addLogID(new BlockID(Blocks.log2, 6))
                 .addLogID(new BlockID(Blocks.log2, 10)).addLogID(new BlockID(Blocks.log2, 14))
                 .addLeafID(new BlockID(Blocks.leaves2, 2)).addLeafID(new BlockID(Blocks.leaves2, 10)));
-        vanTrees.put(TCConst.FUTURE_TREE_2, new TreeDefinition().addLogID(new BlockID(Blocks.log2, 3)).addLogID(new BlockID(Blocks.log2, 7))
+        vanTrees.put(Reference.FUTURE_TREE_2, new TreeDefinition().addLogID(new BlockID(Blocks.log2, 3)).addLogID(new BlockID(Blocks.log2, 7))
                 .addLogID(new BlockID(Blocks.log2, 11)).addLogID(new BlockID(Blocks.log2, 15))
                 .addLeafID(new BlockID(Blocks.leaves2, 3)).addLeafID(new BlockID(Blocks.leaves2, 11)));
-        vanTrees.put(TCConst.MUSH_BROWN, new TreeDefinition().addLogID(new BlockID(Blocks.brown_mushroom_block, 10)).addLogID(new BlockID(Blocks.brown_mushroom_block, 15))
+        vanTrees.put(Reference.MUSH_BROWN, new TreeDefinition().addLogID(new BlockID(Blocks.brown_mushroom_block, 10)).addLogID(new BlockID(Blocks.brown_mushroom_block, 15))
                 .addLeafID(new BlockID(Blocks.brown_mushroom_block, 1)).addLeafID(new BlockID(Blocks.brown_mushroom_block, 2))
                 .addLeafID(new BlockID(Blocks.brown_mushroom_block, 3)).addLeafID(new BlockID(Blocks.brown_mushroom_block, 4))
                 .addLeafID(new BlockID(Blocks.brown_mushroom_block, 5)).addLeafID(new BlockID(Blocks.brown_mushroom_block, 6))
                 .addLeafID(new BlockID(Blocks.brown_mushroom_block, 7)).addLeafID(new BlockID(Blocks.brown_mushroom_block, 8))
                 .addLeafID(new BlockID(Blocks.brown_mushroom_block, 9)).addLeafID(new BlockID(Blocks.brown_mushroom_block, 14))
                 .setMaxHorLeafBreakDist(6).setRequireLeafDecayCheck(false));
-        vanTrees.put(TCConst.MUSH_RED, new TreeDefinition().addLogID(new BlockID(Blocks.red_mushroom_block, 10)).addLogID(new BlockID(Blocks.red_mushroom_block, 15))
+        vanTrees.put(Reference.MUSH_RED, new TreeDefinition().addLogID(new BlockID(Blocks.red_mushroom_block, 10)).addLogID(new BlockID(Blocks.red_mushroom_block, 15))
                 .addLeafID(new BlockID(Blocks.red_mushroom_block, 1)).addLeafID(new BlockID(Blocks.red_mushroom_block, 2))
                 .addLeafID(new BlockID(Blocks.red_mushroom_block, 3)).addLeafID(new BlockID(Blocks.red_mushroom_block, 4))
                 .addLeafID(new BlockID(Blocks.red_mushroom_block, 5)).addLeafID(new BlockID(Blocks.red_mushroom_block, 6))
@@ -347,16 +347,16 @@ public class TreeRegistry
     {
         // treeDefs;
         treeDefs = new HashMap<String, TreeDefinition>();
-        NBTTagList l = NBTTagCompoundHelper.getTagList(ntc, TCConst.TREE_DEFS, (byte) 10);
+        NBTTagList l = NBTTagCompoundHelper.getTagList(ntc, Reference.TREE_DEFS, (byte) 10);
         for (int i = 0; i < l.tagCount(); i++)
         {
             NBTTagCompound treeNBT = NBTTagListHelper.getCompoundTagAt(l, i);;
-            treeDefs.put(treeNBT.getString(TCConst.TREE_NAME), new TreeDefinition(treeNBT));
+            treeDefs.put(treeNBT.getString(Reference.TREE_NAME), new TreeDefinition(treeNBT));
         }
         
         // logToStringMap;
         logToStringMap = new HashMap<BlockID, String>();
-        l = NBTTagCompoundHelper.getTagList(ntc, TCConst.LOG_STR_MAP, (byte) 8);
+        l = NBTTagCompoundHelper.getTagList(ntc, Reference.LOG_STR_MAP, (byte) 8);
         for (int i = 0; i < l.tagCount(); i++)
         {
             String s = NBTTagListHelper.getStringTagAt(l, i);
@@ -365,10 +365,10 @@ public class TreeRegistry
         }
         
         // masterDefinition;
-        masterDefinition = new TreeDefinition(ntc.getCompoundTag(TCConst.MASTER_DEF));
+        masterDefinition = new TreeDefinition(ntc.getCompoundTag(Reference.MASTER_DEF));
         
         // blacklist
-        blacklist = ListUtils.getDelimitedStringAsBlockIDList(ntc.getString(TCConst.BLACKLIST), ";");
+        blacklist = ListUtils.getDelimitedStringAsBlockIDList(ntc.getString(Reference.BLACKLIST), ";");
     }
     
     public void writeToNBT(NBTTagCompound ntc)
@@ -379,10 +379,10 @@ public class TreeRegistry
         {
             NBTTagCompound tree = new NBTTagCompound();
             e.getValue().writeToNBT(tree);
-            tree.setString(TCConst.TREE_NAME, e.getKey());
+            tree.setString(Reference.TREE_NAME, e.getKey());
             trees.appendTag(tree);
         }
-        ntc.setTag(TCConst.TREE_DEFS, trees);
+        ntc.setTag(Reference.TREE_DEFS, trees);
         
         //        logToStringMap;   
         NBTTagList entries = new NBTTagList();
@@ -391,14 +391,14 @@ public class TreeRegistry
             NBTTagString s = new NBTTagString(e.getKey() + "=" + e.getValue());
             entries.appendTag(s);
         }
-        ntc.setTag(TCConst.LOG_STR_MAP, entries);
+        ntc.setTag(Reference.LOG_STR_MAP, entries);
         
         //        masterDefinition;
         NBTTagCompound md = new NBTTagCompound();
         masterDefinition.writeToNBT(md);
-        ntc.setTag(TCConst.MASTER_DEF, md);
+        ntc.setTag(Reference.MASTER_DEF, md);
         
         // blacklist
-        ntc.setString(TCConst.BLACKLIST, ListUtils.getListAsDelimitedString(blacklist, ";"));
+        ntc.setString(Reference.BLACKLIST, ListUtils.getListAsDelimitedString(blacklist, ";"));
     }
 }

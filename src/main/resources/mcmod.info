@@ -2,7 +2,7 @@
   "modListVersion": 2,
   "modList": [{
     "modid": "TreeCapitator",
-    "name": "TreeCapitator",
+    "name": "Treecapitator",
     "description": "Allows you to chop down entire trees by breaking a single log.",
     "version": "${mod_version}",
     "mcversion": "${minecraft_version}",
