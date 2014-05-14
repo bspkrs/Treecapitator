@@ -16,14 +16,14 @@ import bspkrs.treecapitator.registry.RegistryNBTManager;
 import bspkrs.treecapitator.registry.ThirdPartyModConfig;
 import bspkrs.treecapitator.registry.TreeDefinition;
 import bspkrs.treecapitator.registry.TreeRegistry;
-import bspkrs.treecapitator.util.TCConst;
+import bspkrs.treecapitator.util.Reference;
 import bspkrs.treecapitator.util.TCLog;
-import bspkrs.util.BSConfiguration;
 import bspkrs.util.BlockID;
 import bspkrs.util.CommonUtils;
 import bspkrs.util.Const;
 import bspkrs.util.Coord;
 import bspkrs.util.ModVersionChecker;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -37,8 +37,8 @@ import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(name = TCConst.TCMODID, modid = TCConst.TCMODID, version = TCConst.VERSION_NUMBER, dependencies = "required-after:bspkrsCore", useMetadata = true,
-        guiFactory = "bspkrs.treecapitator.fml.gui.ModGuiFactoryHandler")
+@Mod(modid = Reference.MODID, name = Reference.NAME, version = "@MOD_VERSION@", dependencies = "required-after:bspkrsCore@[@BSCORE_VERSION@,)",
+        useMetadata = true, guiFactory = Reference.GUI_FACTORY)
 public class TreecapitatorMod
 {
     public static ModVersionChecker versionChecker;
@@ -46,15 +46,14 @@ public class TreecapitatorMod
     private final String            mcfTopic   = "http://www.minecraftforum.net/topic/1009577-";
     
     private RegistryNBTManager      nbtManager;
-    public BSConfiguration          config;
     
-    @Metadata(value = "TreeCapitator")
+    @Metadata(value = Reference.MODID)
     public static ModMetadata       metadata;
     
-    @SidedProxy(clientSide = "bspkrs.treecapitator.ClientProxy", serverSide = "bspkrs.treecapitator.CommonProxy")
+    @SidedProxy(clientSide = Reference.PROXY_CLIENT, serverSide = Reference.PROXY_COMMON)
     public static CommonProxy       proxy;
     
-    @Instance(value = "TreeCapitator")
+    @Instance(value = Reference.MODID)
     public static TreecapitatorMod  instance;
     
     @EventHandler
@@ -85,20 +84,20 @@ public class TreecapitatorMod
         {
             TCSettings.allowDebugLogging = true;
         }
-        
-        if (bspkrsCoreMod.instance.allowUpdateCheck)
-        {
-            versionChecker = new ModVersionChecker(metadata.name, metadata.version, versionURL, mcfTopic);
-            versionChecker.checkVersionWithLogging();
-        }
-        
     }
     
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
         MinecraftForge.EVENT_BUS.register(new ForgeEventHandler());
+        FMLCommonHandler.instance().bus().register(TCConfigHandler.instance());
         proxy.init(event);
+        
+        if (bspkrsCoreMod.instance.allowUpdateCheck)
+        {
+            versionChecker = new ModVersionChecker(metadata.name, metadata.version, versionURL, mcfTopic);
+            versionChecker.checkVersionWithLogging();
+        }
     }
     
     @EventHandler
@@ -108,7 +107,7 @@ public class TreecapitatorMod
             if (msg.isNBTMessage())
             {
                 TCLog.info("Received IMC message from mod %s.", msg.getSender());
-                ModConfigRegistry.instance().registerIMCModConfig(new ThirdPartyModConfig(msg.getNBTValue()));
+                ModConfigRegistry.instance().registerIMCModConfig(msg.getSender(), new ThirdPartyModConfig(msg.getNBTValue()));
             }
             else
                 TCLog.warning("Mod %s send an IMC message, but it is not an NBT object message. The message will be ignored.", msg.getSender());
