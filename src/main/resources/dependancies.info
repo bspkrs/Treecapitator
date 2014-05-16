@@ -1,0 +1,7 @@
+{
+    "repo": "https://dl.dropboxusercontent.com/u/20748481/MC/bspkrsCore",
+    "file": "${bscore_jar}",
+    "pattern": "${pattern}",
+    "class": "bspkrs.bspkrscore.fml.bspkrsCoreMod",
+    "version": "${bscore_version}"
+}
