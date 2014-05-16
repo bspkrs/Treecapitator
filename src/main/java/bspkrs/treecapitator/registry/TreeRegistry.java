@@ -10,12 +10,15 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.world.World;
 import bspkrs.helpers.nbt.NBTTagCompoundHelper;
 import bspkrs.helpers.nbt.NBTTagListHelper;
+import bspkrs.treecapitator.Treecapitator;
 import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.util.Reference;
 import bspkrs.treecapitator.util.TCLog;
@@ -270,9 +273,6 @@ public class TreeRegistry
     
     /**
      * Checks if a given BlockID has been registered with any tree.
-     * 
-     * @param log
-     * @return
      */
     public boolean isRegistered(BlockID log)
     {
@@ -318,6 +318,49 @@ public class TreeRegistry
             return null;
     }
     
+    public static boolean canAutoDetect(World world, Block block, int x, int y, int z)
+    {
+        return block.isWood(world, x, y, z) || block.canSustainLeaves(world, x, y, z);
+    }
+    
+    public static TreeDefinition autoDetectTree(World world, BlockID blockID, Coord blockPos, boolean shouldLog)
+    {
+        TreeDefinition treeDef = instance.get(blockID);
+        List<BlockID> leaves = Treecapitator.getLeavesForTree(world, blockID, blockPos, treeDef == null);
+        
+        if (treeDef == null && leaves.size() >= TCSettings.minLeavesToID)
+        {
+            treeDef = new TreeDefinition().addLogID(blockID).addAllLeafIDs(leaves);
+            int index = blockID.id.indexOf(":");
+            String modID = index == -1 ? Reference.MINECRAFT : blockID.id.substring(0, index);
+            String treeName = blockID.id + "_" + blockID.metadata;
+            treeName = treeName.replaceAll("\\.", "_").replaceAll(":", "_").trim();
+            instance.registerTree(treeName, treeDef);
+            ModConfigRegistry.instance().appendTreeToModConfig(modID, treeName, treeDef);
+            
+            if (shouldLog)
+                TCLog.debug("Auto Tree Detection: New tree added: %s (%s)", treeName, treeDef);
+        }
+        else if (leaves.size() >= TCSettings.minLeavesToID)
+        {
+            if (!ListUtils.doesListAContainAllUniqueListBValues(treeDef.leafBlocks, leaves))
+            {
+                treeDef.addAllLeafIDs(leaves);
+                if (shouldLog)
+                    TCLog.debug("Auto Tree Detection: Existing tree \"%s\" updated with new leaves: %s", instance.logToStringMap.get(blockID), ListUtils.getListAsUniqueDelimitedString(leaves, "; "));
+            }
+        }
+        else
+        {
+            if (shouldLog)
+                TCLog.debug("Auto Tree Detection: Block ID %s is a log, but not enough leaves were " +
+                        "found to identify this structure as a tree. Found %d leaves.", blockID, leaves.size());
+            treeDef = null;
+        }
+        
+        return treeDef;
+    }
+    
     public List<BlockID> masterLogList()
     {
         return masterDefinition.getLogList();
@@ -361,7 +404,7 @@ public class TreeRegistry
         {
             String s = NBTTagListHelper.getStringTagAt(l, i);
             String[] t = s.split("=");
-            logToStringMap.put(new BlockID(t[0], ","), t[1]);
+            logToStringMap.put(BlockID.parse(t[0]), t[1]);
         }
         
         // masterDefinition;
