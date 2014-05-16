@@ -334,7 +334,7 @@ public class TreeRegistry
             int index = blockID.id.indexOf(":");
             String modID = index == -1 ? Reference.MINECRAFT : blockID.id.substring(0, index);
             String treeName = blockID.id + "_" + blockID.metadata;
-            treeName = treeName.replaceAll("\\.", "_").replaceAll(":", "_").trim();
+            treeName = treeName.replaceAll("\\.", "_").replaceAll(":", "_").trim().replaceAll(" ", "_");
             instance.registerTree(treeName, treeDef);
             ModConfigRegistry.instance().appendTreeToModConfig(modID, treeName, treeDef);
             

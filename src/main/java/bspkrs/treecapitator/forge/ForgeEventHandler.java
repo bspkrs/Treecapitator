@@ -1,11 +1,11 @@
 package bspkrs.treecapitator.forge;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -34,16 +34,16 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ForgeEventHandler
 {
-    private Map<String, Boolean>         playerSneakingMap = new HashMap<String, Boolean>();
-    private Map<CachedBreakSpeed, Float> breakSpeedCache   = new ConcurrentHashMap<CachedBreakSpeed, Float>(1000);
+    private Map<String, Boolean>         playerSneakingMap = new ConcurrentHashMap<String, Boolean>(100);
+    private Map<CachedBreakSpeed, Float> breakSpeedCache   = new ConcurrentHashMap<CachedBreakSpeed, Float>(200);
     
     @SubscribeEvent
     public void onBlockClicked(PlayerInteractEvent event)
     {
-        if (TreecapitatorMod.proxy.isEnabled() && event.action.equals(PlayerInteractEvent.Action.LEFT_CLICK_BLOCK))
+        if (TreecapitatorMod.proxy.isEnabled() && !TCSettings.sneakAction.equalsIgnoreCase("none") && event.action.equals(PlayerInteractEvent.Action.LEFT_CLICK_BLOCK))
         {
             if (!WorldHelper.isAirBlock(event.entityPlayer.worldObj, event.x, event.y, event.z))
-                playerSneakingMap.put(EntityPlayerHelper.getGameProfile(event.entityPlayer).getName(), event.entityPlayer.isSneaking());
+                playerSneakingMap.put(event.entityPlayer.getGameProfile().getName(), event.entityPlayer.isSneaking());
         }
     }
     
@@ -65,9 +65,9 @@ public class ForgeEventHandler
             
             if (treeDef != null)
             {
-                boolean swappedSneak = !((playerSneakingMap.containsKey(EntityPlayerHelper.getGameProfile(event.entityPlayer).getName())
-                        && (playerSneakingMap.get(EntityPlayerHelper.getGameProfile(event.entityPlayer).getName()) == event.entityPlayer.isSneaking()))
-                        || !playerSneakingMap.containsKey(EntityPlayerHelper.getGameProfile(event.entityPlayer).getName()));
+                boolean swappedSneak = !((playerSneakingMap.containsKey(event.entityPlayer.getGameProfile().getName())
+                        && (playerSneakingMap.get(event.entityPlayer.getGameProfile().getName()) == event.entityPlayer.isSneaking()))
+                        || !playerSneakingMap.containsKey(event.entityPlayer.getGameProfile().getName()));
                 
                 CachedBreakSpeed c = new CachedBreakSpeed(event, swappedSneak);
                 if (!this.breakSpeedCache.containsKey(c))
@@ -102,17 +102,6 @@ public class ForgeEventHandler
     {
         if (event.block != null && event.world != null && event.getPlayer() != null)
         {
-            List<CachedBreakSpeed> toRemove = new ArrayList<CachedBreakSpeed>();
-            for (CachedBreakSpeed bs : this.breakSpeedCache.keySet())
-                if (bs.entityPlayer.getGameProfile().getName().equals(event.getPlayer().getGameProfile().getName()))
-                    toRemove.add(bs);
-            
-            for (CachedBreakSpeed bs : toRemove)
-                this.breakSpeedCache.remove(bs);
-            
-            if (playerSneakingMap.containsKey(event.getPlayer().getGameProfile().getName()))
-                playerSneakingMap.remove(event.getPlayer().getGameProfile().getName());
-            
             if (TreecapitatorMod.proxy.isEnabled() && !event.world.isRemote)
             {
                 ModulusBlockID blockID = new ModulusBlockID(event.block, event.blockMetadata, 4);
@@ -141,9 +130,25 @@ public class ForgeEventHandler
                 }
             }
             
+            cleanUpCaches(event.getPlayer());
+            
             if (ModConfigRegistry.instance().isChanged())
                 ModConfigRegistry.instance().writeChangesToConfig(TCConfigHandler.instance().getConfig());
         }
+    }
+    
+    public void cleanUpCaches(EntityPlayer player)
+    {
+        List<CachedBreakSpeed> toRemove = new ArrayList<CachedBreakSpeed>();
+        for (CachedBreakSpeed bs : this.breakSpeedCache.keySet())
+            if (bs.entityPlayer.getGameProfile().getName().equals(player.getGameProfile().getName()))
+                toRemove.add(bs);
+        
+        for (CachedBreakSpeed bs : toRemove)
+            this.breakSpeedCache.remove(bs);
+        
+        if (playerSneakingMap.containsKey(player.getGameProfile().getName()))
+            playerSneakingMap.remove(player.getGameProfile().getName());
     }
     
     private class CachedBreakSpeed extends BreakSpeed
