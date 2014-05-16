@@ -12,8 +12,10 @@ public final class TCSettings
     // Global
     private final static boolean allowDebugLoggingDefault              = false;
     public static boolean        allowDebugLogging                     = allowDebugLoggingDefault;
-    private final static boolean allowDebugOutputDefault               = false;
-    public static boolean        allowDebugOutput                      = allowDebugOutputDefault;
+    private final static boolean allowAutoAxeDetectionDefault          = true;
+    public static boolean        allowAutoAxeDetection                 = allowAutoAxeDetectionDefault;
+    private final static boolean allowAutoTreeDetectionDefault         = true;
+    public static boolean        allowAutoTreeDetection                = allowAutoTreeDetectionDefault;
     private final static boolean allowItemDamageDefault                = true;
     public static boolean        allowItemDamage                       = allowItemDamageDefault;
     private final static boolean allowMoreBlocksThanDamageDefault      = false;
@@ -63,7 +65,7 @@ public final class TCSettings
     public static float          breakSpeedModifier                    = breakSpeedModifierDefault;
     private final static int     maxHorLogBreakDistDefault             = 16;
     public static int            maxHorLogBreakDist                    = maxHorLogBreakDistDefault;
-    private final static int     maxHorLeafBreakDistDefault            = 4;
+    private final static int     maxHorLeafBreakDistDefault            = 6;
     public static int            maxHorLeafBreakDist                   = maxHorLeafBreakDistDefault;
     private final static int     maxLeafIDDistDefault                  = 1;
     public static int            maxLeafIDDist                         = maxLeafIDDistDefault;
@@ -138,6 +140,8 @@ public final class TCSettings
         allowItemDamage = ntc.getBoolean("allowItemDamage");
         allowMoreBlocksThanDamage = ntc.getBoolean("allowMoreBlocksThanDamage");
         allowSmartTreeDetection = ntc.getBoolean("allowSmartTreeDetection");
+        allowAutoTreeDetection = ntc.getBoolean(Reference.ALLOW_AUTO_TREE_DETECT);
+        allowAutoAxeDetection = ntc.getBoolean(Reference.ALLOW_AUTO_AXE_DETECT);
         treeHeightDecidesBreakSpeed = ntc.getBoolean("treeHeightDecidesBreakSpeed");
         treeHeightModifier = ntc.getFloat("treeHeightModifier");
         breakSpeedModifier = ntc.getFloat(Reference.BREAK_SPEED_MOD);
@@ -168,7 +172,7 @@ public final class TCSettings
         sneakAction = ntc.getString("sneakAction");
         stackDrops = ntc.getBoolean("stackDrops");
         itemsDropInPlace = ntc.getBoolean("itemsDropInPlace");
-        useAdvancedTopLogLogic = ntc.getBoolean(Reference.USE_ADVANCED_TOP_LOG_LOGIC);
+        useAdvancedTopLogLogic = ntc.getBoolean(Reference.USE_ADV_TOP_LOG_LOGIC);
         useIncreasingItemDamage = ntc.getBoolean("useIncreasingItemDamage");
         useStrictBlockPairing = ntc.getBoolean("useStrictBlockPairing");
     }
@@ -180,6 +184,8 @@ public final class TCSettings
         ntc.setBoolean("allowMoreBlocksThanDamage", allowMoreBlocksThanDamage);
         ntc.setBoolean("allowOreDictionaryLookup", allowOreDictionaryLookup);
         ntc.setBoolean("allowSmartTreeDetection", allowSmartTreeDetection);
+        ntc.setBoolean(Reference.ALLOW_AUTO_TREE_DETECT, allowAutoTreeDetection);
+        ntc.setBoolean(Reference.ALLOW_AUTO_AXE_DETECT, allowAutoAxeDetection);
         ntc.setBoolean("treeHeightDecidesBreakSpeed", treeHeightDecidesBreakSpeed);
         ntc.setFloat("treeHeightModifier", treeHeightModifier);
         ntc.setFloat(Reference.BREAK_SPEED_MOD, breakSpeedModifier);
@@ -207,7 +213,7 @@ public final class TCSettings
         ntc.setString("sneakAction", sneakAction);
         ntc.setBoolean("stackDrops", stackDrops);
         ntc.setBoolean("itemsDropInPlace", itemsDropInPlace);
-        ntc.setBoolean(Reference.USE_ADVANCED_TOP_LOG_LOGIC, useAdvancedTopLogLogic);
+        ntc.setBoolean(Reference.USE_ADV_TOP_LOG_LOGIC, useAdvancedTopLogLogic);
         ntc.setBoolean("useIncreasingItemDamage", useIncreasingItemDamage);
         ntc.setBoolean("useStrictBlockPairing", useStrictBlockPairing);
     }
@@ -225,8 +231,6 @@ public final class TCSettings
         // Misc settings
         allowDebugLogging = config.getBoolean(Reference.ALLOW_DEBUG_LOGGING, Reference.MISC_CTGY,
                 allowDebugLoggingDefault, Reference.allowDebugLoggingDesc, Reference.LANG_KEY_BASE + Reference.ALLOW_DEBUG_LOGGING);
-        allowDebugOutput = config.getBoolean("allowDebugOutput", Reference.MISC_CTGY,
-                allowDebugOutputDefault, Reference.allowDebugOutputDesc, Reference.LANG_KEY_BASE + "allowDebugOutput");
         disableCreativeDrops = config.getBoolean("disableCreativeDrops", Reference.MISC_CTGY,
                 disableCreativeDropsDefault, Reference.disableCreativeDropsDesc, Reference.LANG_KEY_BASE + "disableCreativeDrops");
         disableInCreative = config.getBoolean("disableInCreative", Reference.MISC_CTGY,
@@ -253,6 +257,8 @@ public final class TCSettings
         config.addCustomCategoryLanguageKey(Reference.BREAK_SPEED_CTGY, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.BREAK_SPEED_CTGY);
         
         // Item settings
+        allowAutoAxeDetection = config.getBoolean(Reference.ALLOW_AUTO_AXE_DETECT, Reference.ITEM_CTGY,
+                allowAutoAxeDetectionDefault, Reference.allowAutoAxeDetectionDesc, Reference.LANG_KEY_BASE + Reference.ALLOW_AUTO_AXE_DETECT);
         needItem = config.getBoolean("needItem", Reference.ITEM_CTGY,
                 needItemDefault, Reference.needItemDesc, Reference.LANG_KEY_BASE + "needItem");
         allowItemDamage = config.getBoolean("allowItemDamage", Reference.ITEM_CTGY,
@@ -270,10 +276,12 @@ public final class TCSettings
         config.addCustomCategoryLanguageKey(Reference.ITEM_CTGY, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.ITEM_CTGY);
         
         // Tree Chop Behavior settings
+        allowAutoTreeDetection = config.getBoolean(Reference.ALLOW_AUTO_TREE_DETECT, Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                allowAutoTreeDetectionDefault, Reference.allowAutoTreeDetectionDesc, Reference.LANG_KEY_BASE + Reference.ALLOW_AUTO_TREE_DETECT);
         allowSmartTreeDetection = config.getBoolean(Reference.ALLOW_SMART_TREE_DETECT, Reference.TREE_CHOP_BEHAVIOR_CTGY,
                 allowSmartTreeDetectionDefault, Reference.allowSmartTreeDetectionDesc, Reference.LANG_KEY_BASE + Reference.ALLOW_SMART_TREE_DETECT);
-        useAdvancedTopLogLogic = config.getBoolean(Reference.USE_ADVANCED_TOP_LOG_LOGIC, Reference.TREE_CHOP_BEHAVIOR_CTGY,
-                useAdvancedTopLogLogicDefault, Reference.useAdvancedTopLogLogicDesc, Reference.LANG_KEY_BASE + Reference.USE_ADVANCED_TOP_LOG_LOGIC);
+        useAdvancedTopLogLogic = config.getBoolean(Reference.USE_ADV_TOP_LOG_LOGIC, Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                useAdvancedTopLogLogicDefault, Reference.useAdvancedTopLogLogicDesc, Reference.LANG_KEY_BASE + Reference.USE_ADV_TOP_LOG_LOGIC);
         useStrictBlockPairing = config.getBoolean("useStrictBlockPairing", Reference.TREE_CHOP_BEHAVIOR_CTGY,
                 useStrictBlockPairingDefault, Reference.useStrictBlockPairingDesc, Reference.LANG_KEY_BASE + "useStrictBlockPairing");
         destroyLeaves = config.getBoolean("destroyLeaves", Reference.TREE_CHOP_BEHAVIOR_CTGY,
