@@ -80,7 +80,7 @@ public class OreDictionaryHandler
                         
                         TCLog.info("Registering generic Ore Dictionary tree %s...", oreName.trim());
                         TreeRegistry.instance().registerTree(oreName.trim(), genericTree);
-                        ModConfigRegistry.instance().appendTreeToModConfig(Reference.MODID, oreName.trim(), genericTree);
+                        ModConfigRegistry.instance().appendTreeToModConfig(Reference.MINECRAFT, oreName.trim(), genericTree);
                         didRegisterATree = true;
                     }
                 }
