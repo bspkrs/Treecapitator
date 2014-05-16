@@ -7,10 +7,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.util.Reference;
 import bspkrs.util.BlockID;
-import bspkrs.util.HashCodeUtil;
 import bspkrs.util.ListUtils;
 import bspkrs.util.config.ConfigCategory;
 import bspkrs.util.config.Configuration;
+
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hasher;
+import com.google.common.hash.Hashing;
 
 public class TreeDefinition
 {
@@ -87,10 +90,14 @@ public class TreeDefinition
     @Override
     public int hashCode()
     {
-        int result = 23;
-        result = HashCodeUtil.hash(result, logBlocks);
-        result = HashCodeUtil.hash(result, leafBlocks);
-        return result;
+        HashFunction hf = Hashing.md5();
+        Hasher h = hf.newHasher();
+        for (BlockID blockID : logBlocks)
+            h.putInt(blockID.hashCode());
+        for (BlockID blockID : leafBlocks)
+            h.putInt(blockID.hashCode() << 8);
+        
+        return h.hash().hashCode();
     }
     
     public boolean hasCommonLog(TreeDefinition td)
@@ -124,6 +131,24 @@ public class TreeDefinition
     {
         if (!isLeafBlock(blockID))
             leafBlocks.add(blockID);
+        
+        return this;
+    }
+    
+    public TreeDefinition addAllLogIDs(List<BlockID> blockIDs)
+    {
+        for (BlockID blockID : blockIDs)
+            if (!isLogBlock(blockID))
+                logBlocks.add(blockID);
+        
+        return this;
+    }
+    
+    public TreeDefinition addAllLeafIDs(List<BlockID> blockIDs)
+    {
+        for (BlockID blockID : blockIDs)
+            if (!isLeafBlock(blockID))
+                leafBlocks.add(blockID);
         
         return this;
     }
@@ -187,8 +212,8 @@ public class TreeDefinition
             minLeavesToID = treeDefNBT.getInteger(Reference.MIN_LEAF_ID);
         if (treeDefNBT.hasKey(Reference.BREAK_SPEED_MOD))
             breakSpeedModifier = treeDefNBT.getFloat(Reference.BREAK_SPEED_MOD);
-        if (treeDefNBT.hasKey(Reference.USE_ADVANCED_TOP_LOG_LOGIC))
-            useAdvancedTopLogLogic = treeDefNBT.getBoolean(Reference.USE_ADVANCED_TOP_LOG_LOGIC);
+        if (treeDefNBT.hasKey(Reference.USE_ADV_TOP_LOG_LOGIC))
+            useAdvancedTopLogLogic = treeDefNBT.getBoolean(Reference.USE_ADV_TOP_LOG_LOGIC);
         
         if (treeDefNBT.hasKey(Reference.LOGS) && treeDefNBT.getString(Reference.LOGS).length() > 0)
             logBlocks = ListUtils.getDelimitedStringAsBlockIDList(treeDefNBT.getString(Reference.LOGS), ";");
@@ -214,7 +239,7 @@ public class TreeDefinition
         treeDefNBT.setInteger(Reference.MAX_LEAF_ID_DIST, maxLeafIDDist);
         treeDefNBT.setInteger(Reference.MIN_LEAF_ID, minLeavesToID);
         treeDefNBT.setFloat(Reference.BREAK_SPEED_MOD, breakSpeedModifier);
-        treeDefNBT.setBoolean(Reference.USE_ADVANCED_TOP_LOG_LOGIC, useAdvancedTopLogLogic);
+        treeDefNBT.setBoolean(Reference.USE_ADV_TOP_LOG_LOGIC, useAdvancedTopLogLogic);
         
         treeDefNBT.setString(Reference.LOGS, ListUtils.getListAsDelimitedString(logBlocks, ";"));
         treeDefNBT.setString(Reference.LEAVES, ListUtils.getListAsDelimitedString(leafBlocks, ";"));
@@ -260,9 +285,9 @@ public class TreeDefinition
             breakSpeedModifier = (float) cc.get(Reference.BREAK_SPEED_MOD)
                     .setLanguageKey(Reference.LANG_KEY_BASE + Reference.BREAK_SPEED_MOD)
                     .getDouble(TCSettings.breakSpeedModifier);
-        if (cc.containsKey(Reference.USE_ADVANCED_TOP_LOG_LOGIC))
-            useAdvancedTopLogLogic = cc.get(Reference.USE_ADVANCED_TOP_LOG_LOGIC)
-                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.USE_ADVANCED_TOP_LOG_LOGIC)
+        if (cc.containsKey(Reference.USE_ADV_TOP_LOG_LOGIC))
+            useAdvancedTopLogLogic = cc.get(Reference.USE_ADV_TOP_LOG_LOGIC)
+                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.USE_ADV_TOP_LOG_LOGIC)
                     .getBoolean(TCSettings.useAdvancedTopLogLogic);
         
         if (cc.containsKey(Reference.LOGS))
@@ -335,9 +360,9 @@ public class TreeDefinition
         }
         if (useAdvancedTopLogLogic != TCSettings.useAdvancedTopLogLogic)
         {
-            config.get(category, Reference.USE_ADVANCED_TOP_LOG_LOGIC, TCSettings.useAdvancedTopLogLogic, Reference.OPTIONAL)
+            config.get(category, Reference.USE_ADV_TOP_LOG_LOGIC, TCSettings.useAdvancedTopLogLogic, Reference.OPTIONAL)
                     .set(useAdvancedTopLogLogic)
-                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.USE_ADVANCED_TOP_LOG_LOGIC);
+                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.USE_ADV_TOP_LOG_LOGIC);
         }
         
         config.get(category, Reference.LOGS, ListUtils.getListAsDelimitedString(logBlocks, "; "))
