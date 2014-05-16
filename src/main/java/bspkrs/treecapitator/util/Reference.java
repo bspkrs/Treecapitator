@@ -2,15 +2,18 @@ package bspkrs.treecapitator.util;
 
 public class Reference
 {
-    public static final String MODID                              = "TreeCapitator";
+    public static final String MODID                              = "Treecapitator";
     public static final String NAME                               = "Treecapitator";
     public static final String PROXY_COMMON                       = "bspkrs.treecapitator.CommonProxy";
     public static final String PROXY_CLIENT                       = "bspkrs.treecapitator.ClientProxy";
     public static final String GUI_FACTORY                        = "bspkrs.treecapitator.fml.gui.ModGuiFactoryHandler";
     
+    public static final String CONFIG_VERSION                     = "2.0";
+    
     public static final String LANG_KEY_BASE                      = "bspkrs.tc.configgui.";
     public static final String CTGY_LANG_KEY                      = "ctgy.";
     
+    public static final String MINECRAFT                          = "minecraft";
     public static final String OAK                                = "vanilla_oak";
     public static final String SPRUCE                             = "vanilla_spruce";
     public static final String BIRCH                              = "vanilla_birch";
@@ -48,6 +51,8 @@ public class Reference
     public static final String MISC_CTGY                          = Reference.SETTINGS_CTGY + "." + "miscellaneous_settings";
     public static final String ALLOW_DEBUG_LOGGING                = "allowDebugLogging";
     public static final String ALLOW_SMART_TREE_DETECT            = "allowSmartTreeDetection";
+    public static final String ALLOW_AUTO_TREE_DETECT             = "allowAutoTreeDetection";
+    public static final String ALLOW_AUTO_AXE_DETECT              = "allowAutoAxeDetection";
     public static final String ONLY_DESTROY_UPWARDS               = "onlyDestroyUpwards";
     public static final String REQ_DECAY_CHECK                    = "requireLeafDecayCheck";
     public static final String MAX_H_LOG_DIST                     = "maxHorLogBreakDist";
@@ -56,7 +61,7 @@ public class Reference
     public static final String MAX_H_LEAF_DIST                    = "maxHorLeafBreakDist";
     public static final String MIN_LEAF_ID                        = "minLeavesToID";
     public static final String BREAK_SPEED_MOD                    = "breakSpeedModifier";
-    public static final String USE_ADVANCED_TOP_LOG_LOGIC         = "useAdvancedTopLogLogic";
+    public static final String USE_ADV_TOP_LOG_LOGIC              = "useAdvancedTopLogLogic";
     public static final String THIRD_PARTY_MOD_CONFIG             = "ThirdPartyModConfig";
     
     //public static final String COMMENT_SEPARATOR                = "#--------------------------------------------------------------------------------------------------------#";
@@ -85,7 +90,7 @@ public class Reference
     public static final String onlyDestroyUpwardsDesc             = "[Global, PerTree] Setting this to false will allow the chopping to move downward as well as upward (and \n" +
                                                                           "blocks below the one you break will be chopped)";
     public static final String destroyLeavesDesc                  = "[Global] Enabling this will make leaves be destroyed when trees are chopped.";
-    public static final String requireLeafDecayCheckDesc          = "[Global, PerTree] When true TreeCapitator will only instantly decay leaves that have actually been marked \n" +
+    public static final String requireLeafDecayCheckDesc          = "[Global, PerTree] When true Treecapitator will only instantly decay leaves that have actually been marked \n" +
                                                                           "for decay. Set to false if you want leaves to be destroyed regardless of their decay status \n" +
                                                                           "(hint: or for \"leaf\" blocks that are not really leaves).";
     public static final String shearLeavesDesc                    = "[Global] Enabling this will cause destroyed leaves to be sheared when a shearing item is in the hotbar \n" +
@@ -98,7 +103,7 @@ public class Reference
                                                                           "When false, the original break speed is multiplied by the breakSpeedModifier value";
     
     public static final String treeHeightModifierDesc             = "[Global] See description for treeHeightDecidesBreakSpeed";
-    public static final String allowOreDictionaryLookupDesc       = "[Global] When true, TreeCapitator will scan the Forge Ore Dictionary for blocks with an ore name matching\n" +
+    public static final String allowOreDictionaryLookupDesc       = "[Global] When true, Treecapitator will scan the Forge Ore Dictionary for blocks with an ore name matching\n" +
                                                                           "one of the strings in oreDictionaryLogStrings and generate a generic tree definition for them on the fly. \n" +
                                                                           "When false oreDictionaryLogStrings and oreDictionaryLeafStrings will be ignored.";
     public static final String oreDictionaryLogStringsDesc        = "[Global] The list of log type values to check for in the Forge Ore Dictionary. Entries are comma (,) separated.";
@@ -136,38 +141,48 @@ public class Reference
     public static final String itemsDropInPlaceDesc               = "[Global] Set to true to have items drop in place, false to have them drop at the player's position.";
     //public static final String COMMENT_SEPARATOR                = "#--------------------------------------------------------------------------------------------------------#";
     //public static final String COMMENT_SEPARATOR_2              = "      #--------------------------------------------------------------------------------------------------------#";
-    public static final String allowSmartTreeDetectionDesc        = "[Global, PerTree] Set to false to disable TreeCapitator Smart Tree Detection.\n" +
+    public static final String allowSmartTreeDetectionDesc        = "[Global, PerTree] Set to false to disable Treecapitator Smart Tree Detection.\n" +
                                                                           "Smart Tree Detection counts the number of leaf blocks that are adjacent to the\n" +
                                                                           "top-most connected log block at the x, z location of a log you've broken. If\n" +
                                                                           "there are at least minLeavesToID leaf blocks within maxLeafIDDist blocks then\n" +
-                                                                          "TreeCapitator considers it a tree and allows chopping.\n" +
+                                                                          "Treecapitator considers it a tree and allows chopping.\n" +
                                                                           "WARNING: Disabling Smart Tree Detection will remove the only safeguard against\n" +
                                                                           "accidentally destroying a log structure.  Make sure you know what you're doing!";
+    public static final String allowAutoAxeDetectionDesc          = "[Global] This setting controls whether or not Treecapitator will automatically detect axe-type items. This is\n" +
+                                                                          "done by checking the effectiveness of the tool against logs.\n" +
+                                                                          "Set to true to enable this feature, false to disable.";
+    public static final String allowAutoTreeDetectionDesc         = "[Global] This setting controls whether or not Treecapitator will automatically detect new trees when they are\n" +
+                                                                          "chopped. This is done by first checking Block.isLog() for the block broken, finding the highest connected block\n" +
+                                                                          "of the same type above the block broken, and checking Block.isLeaves() for the blocks around the top log. If\n" +
+                                                                          "enough leaf blocks are found the structure is considered a tree and is added to the TreeRegistry. Trees will\n" +
+                                                                          "also be added to your local config file to allow for tweaking of settings if desired.\n" +
+                                                                          "Set to true to enable this feature, false to disable.";
     public static final String maxLeafIDDistDesc                  = "[Global, PerTree] If a tree's top log is not close enough to leaf blocks, the tree will not be chopped.\n" +
                                                                           "Increasing this value will search further.  I would try to keep it at or below 3.";
-    public static final String maxLeafBreakDistDesc               = "[Global, PerTree] The maximum distance to instantly decay leaves from any log block that is removed by TreeCapitator.";
+    public static final String maxLeafBreakDistDesc               = "[Global, PerTree] The maximum distance to instantly decay leaves from any log block that is removed by Treecapitator.";
     public static final String minLeavesToIDDesc                  = "[Global, PerTree] The minimum number of leaves within maxLeafIDDist of the top log block required to identify a tree.";
     public static final String useStrictBlockPairingDesc          = "[Global] Set to true if you want only the log/leaf blocks listed with each log in a tree\n"
                                                                           + "to break when that log type is chopped.  When set to false it will break\n"
                                                                           + "any log/leaf type blocks connected to the tree, not just the types for that tree.";
-    public static final String allowDebugOutputDesc               = "[Global] Set to true if you want TreeCapitator to tell you what kind of block you have clicked when \n" +
-                                                                          "sneaking, false to disable.";
-    public static final String allowDebugLoggingDesc              = "[Global] Set to true if you want TreeCapitator to log info about what it's doing, false to disable.\n" +
+    public static final String allowDebugLoggingDesc              = "[Global] Set to true if you want Treecapitator to log info about what it's doing, false to disable.\n" +
                                                                           "If you are having an issue with the mod, set this option to true and post the resulting log to the\n" +
                                                                           "Treecapitator Minecraftforum.net thread along with a detailed description of the issue.";
     public static final String OPTIONAL                           = "Optional";
     //public static final String COMMENT_SEPARATOR                = "#--------------------------------------------------------------------------------------------------------#";
     //public static final String COMMENT_SEPARATOR_2              = "      #--------------------------------------------------------------------------------------------------------#";
-    public static final String TREE_MOD_CFG_CTGY_DESC             = "This category is where all your settings live that are related to 3rd party mods.\n" +
-                                                                          "NOTE: Using item or block number IDs WILL NOT WORK. Refer to the UniqueNames.txt file in the config folder for a list of values.\n\n" +
+    public static final String TREE_MOD_CFG_CTGY_DESC             = "This category is where all your settings live that are related to trees, items that can chop trees, and mods.\n" +
+                                                                          "NOTE: Using item or block number IDs WILL NOT WORK. Refer to the UniqueNames.txt file in the config folder for " +
+                                                                          "the list of block and item IDs.\n\n" +
                                                                           "How to add new mods: \n\n" +
-                                                                          "Keep in mind that you can also include settings marked with [PerTree] on a per-tree basis to override the global default values.\n\n" +
+                                                                          "Keep in mind that you can also include settings marked with [PerTree] on a per-tree basis to override the " +
+                                                                          "global default values.\n\n" +
                                                                           "Format:\n" +
                                                                           "    <section_name> { (typically same as modID)\n" +
                                                                           "        S:modID=<modID> (this can be found on the Mods screen in game or in mcmod.info)\n" +
                                                                           "        S:axeIDList=<unique_item_identifier>,<optional metadata>; minecraft:wooden_axe; minecraft:stone_axe\n" +
                                                                           "        S:shearsIDList=<unique_item_identifier>,<optional metadata>\n" +
-                                                                          "        B:overrideIMC=<optional, defaults to false) whether or not a mod's user config (this file) should override a mod's IMC config (IMC allows mods to send messages to each other for compatibility)\n\n" +
+                                                                          "        B:overrideIMC=<optional, defaults to false) whether or not a mod's user config (this file) should " +
+                                                                          "            override a mod's IMC config (IMC allows mods to send messages to each other for compatibility)\n\n" +
                                                                           "        <tree_name> { (the tree name is just for organization and clarity)\n" +
                                                                           "            # logs/leaves: list of unique block name values. \",\" separates name and metadata, \";\" separates block entries\n" +
                                                                           "            S:logs=<unique block identifier>,<optional metadata>; <unique_block_identifier>,0; minecraft:log,0\n" +
@@ -177,6 +192,6 @@ public class Reference
                                                                           "    }";
     public static final String VAN_TREES_ITEMS_CTGY_DESC          = "This special category is the home of the vanilla tree block and item configurations. You can change the \n" +
                                                                           "values in this category to suit your preferences.\n\n" +
-                                                                          "WARNING: This config category must not be removed! If this category is renamed or removed TreeCapitator \n" +
+                                                                          "WARNING: This config category must not be removed! If this category is renamed or removed Treecapitator \n" +
                                                                           "will assume your config file is new and reload the default user mod config settings!";
 }
