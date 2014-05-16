@@ -3,12 +3,14 @@ package bspkrs.treecapitator.registry;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.ForgeHooks;
 import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.util.Reference;
+import bspkrs.treecapitator.util.TCLog;
 import bspkrs.util.ItemID;
 import bspkrs.util.ListUtils;
 
@@ -65,6 +67,20 @@ public class ToolRegistry
         vanAxeList.add(new ItemID(Items.diamond_axe));
         
         vanShearsList.add(new ItemID(Items.shears));
+    }
+    
+    public static void autoDetectAxe(ItemStack item, Block block, int blockMetadata)
+    {
+        if (ForgeHooks.isToolEffective(item, block, blockMetadata))
+        {
+            ItemID axe = new ItemID(item);
+            int index = axe.id.indexOf(":");
+            String modID = index == -1 ? Reference.MINECRAFT : axe.id.substring(0, index);
+            ToolRegistry.instance().registerAxe(axe);
+            ModConfigRegistry.instance().appendAxeToModConfig(modID, axe);
+            
+            TCLog.debug("Auto Axe Detection: New axe registered: %s", axe);
+        }
     }
     
     public List<ItemID> blacklist()
@@ -124,44 +140,27 @@ public class ToolRegistry
         return new ArrayList<ItemID>(vanShearsList);
     }
     
-    public boolean isAxe(ItemID itemID)
-    {
-        return !blacklist.contains(itemID) && axeList.contains(itemID);
-    }
-    
-    public boolean isAxe(Item item)
-    {
-        if (item != null)
-        {
-            ItemID itemID = new ItemID(item);
-            return !blacklist.contains(itemID) && axeList.contains(itemID);
-        }
-        
-        return false;
-    }
-    
     public boolean isAxe(ItemStack itemStack)
     {
         if (itemStack != null)
         {
             ItemID itemID = new ItemID(itemStack);
-            return !blacklist.contains(itemID) && axeList.contains(itemID);
+            if (!blacklist.contains(itemID))
+                return axeList.contains(itemID);
+            return false;
         }
         else
             return false;
     }
     
-    public boolean isShears(ItemID itemID)
+    public boolean isAxe(ItemStack itemStack, Block block, int blockMetadata)
     {
-        return !blacklist.contains(itemID) && shearsList.contains(itemID);
-    }
-    
-    public boolean isShears(Item item)
-    {
-        if (item != null)
+        if (itemStack != null)
         {
-            ItemID itemID = new ItemID(item);
-            return !blacklist.contains(itemID) && shearsList.contains(itemID);
+            ItemID itemID = new ItemID(itemStack);
+            if (!blacklist.contains(itemID))
+                return axeList.contains(itemID);
+            return false;
         }
         else
             return false;
