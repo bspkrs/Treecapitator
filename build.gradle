@@ -41,13 +41,13 @@ dependencies {
 }
 
 group = config.group_name
-version = "${config.minecraft_version}.${config.mod_version}"
+version = config.mod_version
 archivesBaseName = "[${config.minecraft_version}]${config.mod_id}"
 
 minecraft {
     version = config.minecraft_version + "-" + config.forge_version // grab latest forge
     assetDir = "run/assets"
-    replace '@MOD_VERSION@', "${config.minecraft_version}.${config.mod_version}"
+    replace '@MOD_VERSION@', version
     replace '@BSCORE_VERSION@', config.bscore_version
 }
 
