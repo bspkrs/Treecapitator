@@ -311,6 +311,12 @@ public final class TCSettings
         allowSmartTreeDetection = config.getBoolean(Reference.ALLOW_SMART_TREE_DETECT, Reference.TREE_CHOP_BEHAVIOR_CTGY,
                 allowSmartTreeDetectionDefault, Reference.allowSmartTreeDetectionDesc, Reference.LANG_KEY_BASE + Reference.ALLOW_SMART_TREE_DETECT);
         orderedKeys.add(Reference.ALLOW_SMART_TREE_DETECT);
+        maxLeafIDDist = config.getInt(Reference.MAX_LEAF_ID_DIST, Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                maxLeafIDDistDefault, 1, 8, Reference.maxLeafIDDistDesc, Reference.LANG_KEY_BASE + Reference.MAX_LEAF_ID_DIST);
+        orderedKeys.add(Reference.MAX_LEAF_ID_DIST);
+        minLeavesToID = config.getInt(Reference.MIN_LEAF_ID, Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                minLeavesToIDDefault, 0, 8, Reference.minLeavesToIDDesc, Reference.LANG_KEY_BASE + Reference.MIN_LEAF_ID);
+        orderedKeys.add(Reference.MIN_LEAF_ID);
         useAdvancedTopLogLogic = config.getBoolean(Reference.USE_ADV_TOP_LOG_LOGIC, Reference.TREE_CHOP_BEHAVIOR_CTGY,
                 useAdvancedTopLogLogicDefault, Reference.useAdvancedTopLogLogicDesc, Reference.LANG_KEY_BASE + Reference.USE_ADV_TOP_LOG_LOGIC);
         orderedKeys.add(Reference.USE_ADV_TOP_LOG_LOGIC);
@@ -320,6 +326,9 @@ public final class TCSettings
         destroyLeaves = config.getBoolean(Reference.DESTROY_LEAVES, Reference.TREE_CHOP_BEHAVIOR_CTGY,
                 destroyLeavesDefault, Reference.destroyLeavesDesc, Reference.LANG_KEY_BASE + Reference.DESTROY_LEAVES);
         orderedKeys.add(Reference.DESTROY_LEAVES);
+        requireLeafDecayCheck = config.getBoolean(Reference.REQ_DECAY_CHECK, Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                requireLeafDecayCheckDefault, Reference.requireLeafDecayCheckDesc, Reference.LANG_KEY_BASE + Reference.REQ_DECAY_CHECK);
+        orderedKeys.add(Reference.REQ_DECAY_CHECK);
         shearLeaves = config.getBoolean(Reference.SHEAR_LEAVES, Reference.TREE_CHOP_BEHAVIOR_CTGY,
                 shearLeavesDefault, Reference.shearLeavesDesc, Reference.LANG_KEY_BASE + Reference.SHEAR_LEAVES);
         orderedKeys.add(Reference.SHEAR_LEAVES);
@@ -335,18 +344,9 @@ public final class TCSettings
         maxVerLogBreakDist = config.getInt(Reference.MAX_V_LOG_DIST, Reference.TREE_CHOP_BEHAVIOR_CTGY,
                 maxVerLogBreakDistDefault, -1, 255, Reference.maxVerLogBreakDistDesc, Reference.LANG_KEY_BASE + Reference.MAX_V_LOG_DIST);
         orderedKeys.add(Reference.MAX_V_LOG_DIST);
-        maxLeafIDDist = config.getInt(Reference.MAX_LEAF_ID_DIST, Reference.TREE_CHOP_BEHAVIOR_CTGY,
-                maxLeafIDDistDefault, 1, 8, Reference.maxLeafIDDistDesc, Reference.LANG_KEY_BASE + Reference.MAX_LEAF_ID_DIST);
-        orderedKeys.add(Reference.MAX_LEAF_ID_DIST);
-        minLeavesToID = config.getInt(Reference.MIN_LEAF_ID, Reference.TREE_CHOP_BEHAVIOR_CTGY,
-                minLeavesToIDDefault, 0, 8, Reference.minLeavesToIDDesc, Reference.LANG_KEY_BASE + Reference.MIN_LEAF_ID);
-        orderedKeys.add(Reference.MIN_LEAF_ID);
         onlyDestroyUpwards = config.getBoolean(Reference.ONLY_DESTROY_UPWARDS, Reference.TREE_CHOP_BEHAVIOR_CTGY,
                 onlyDestroyUpwardsDefault, Reference.onlyDestroyUpwardsDesc, Reference.LANG_KEY_BASE + Reference.ONLY_DESTROY_UPWARDS);
         orderedKeys.add(Reference.ONLY_DESTROY_UPWARDS);
-        requireLeafDecayCheck = config.getBoolean(Reference.REQ_DECAY_CHECK, Reference.TREE_CHOP_BEHAVIOR_CTGY,
-                requireLeafDecayCheckDefault, Reference.requireLeafDecayCheckDesc, Reference.LANG_KEY_BASE + Reference.REQ_DECAY_CHECK);
-        orderedKeys.add(Reference.REQ_DECAY_CHECK);
         sneakAction = config.getString(Reference.SNEAK_ACTION, Reference.TREE_CHOP_BEHAVIOR_CTGY, sneakActionDefault,
                 Reference.sneakActionDesc, new String[] { Reference.ENABLE, Reference.DISABLE, Reference.NONE }, Reference.LANG_KEY_BASE + Reference.SNEAK_ACTION);
         orderedKeys.add(Reference.SNEAK_ACTION);
