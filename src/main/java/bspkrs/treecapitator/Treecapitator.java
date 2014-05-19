@@ -26,6 +26,7 @@ import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.registry.ToolRegistry;
 import bspkrs.treecapitator.registry.TreeDefinition;
 import bspkrs.treecapitator.registry.TreeRegistry;
+import bspkrs.treecapitator.util.Reference;
 import bspkrs.treecapitator.util.TCLog;
 import bspkrs.util.BlockID;
 import bspkrs.util.CommonUtils;
@@ -171,9 +172,9 @@ public class Treecapitator
     
     public static boolean isBreakingEnabled(EntityPlayer player)
     {
-        return (TCSettings.sneakAction.equalsIgnoreCase("none")
-                || (TCSettings.sneakAction.equalsIgnoreCase("disable") && !player.isSneaking())
-                || (TCSettings.sneakAction.equalsIgnoreCase("enable") && player.isSneaking()))
+        return (TCSettings.sneakAction.equalsIgnoreCase(Reference.NONE)
+                || (TCSettings.sneakAction.equalsIgnoreCase(Reference.DISABLE) && !player.isSneaking())
+                || (TCSettings.sneakAction.equalsIgnoreCase(Reference.ENABLE) && player.isSneaking()))
                 && !(player.capabilities.isCreativeMode && TCSettings.disableInCreative);
     }
     

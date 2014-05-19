@@ -1,6 +1,7 @@
 package bspkrs.treecapitator.registry;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -21,13 +22,14 @@ import bspkrs.util.config.Property;
 
 public class ThirdPartyModConfig
 {
-    private final String                modID;
-    private List<ItemID>                axeList;
-    private List<ItemID>                shearsList;
-    private boolean                     overrideIMC;
-    private Map<String, TreeDefinition> treesMap;
+    private final String                 modID;
+    private List<ItemID>                 axeList;
+    private List<ItemID>                 shearsList;
+    private boolean                      overrideIMC;
+    private Map<String, TreeDefinition>  treesMap;
     
-    private boolean                     isChanged = false;
+    private boolean                      isChanged   = false;
+    private static LinkedHashSet<String> orderedKeys = new LinkedHashSet<String>();
     
     /*
      * This special constructor provides the default vanilla tree "mod"
@@ -149,7 +151,6 @@ public class ThirdPartyModConfig
     public static ThirdPartyModConfig readFromConfiguration(Configuration config, String category)
     {
         ConfigCategory cc = config.getCategory(category);
-        cc.setCustomIGuiConfigListEntryClass(GuiConfigCustomCategoryListEntry.class);
         ThirdPartyModConfig tpmc = new ThirdPartyModConfig(config.get(category, Reference.MOD_ID, Reference.MINECRAFT, (String) null, Property.Type.MOD_ID)
                 .setLanguageKey("bspkrs.tc.configgui." + Reference.MOD_ID).getString());
         if (cc.containsKey(Reference.AXE_ID_LIST))
@@ -161,6 +162,9 @@ public class ThirdPartyModConfig
         
         tpmc.overrideIMC = config.getBoolean(Reference.OVERRIDE_IMC, category, TCSettings.userConfigOverridesIMC, Reference.overrideIMCDesc,
                 "bspkrs.tc.configgui." + Reference.OVERRIDE_IMC);
+        
+        cc.setCustomIGuiConfigListEntryClass(GuiConfigCustomCategoryListEntry.class);
+        cc.setPropertyOrder(orderedKeys);
         
         for (ConfigCategory ctgy : cc.getChildren())
             tpmc.addTreeDef(ctgy.getName(), new TreeDefinition(config, ctgy.getQualifiedName()));
@@ -182,6 +186,7 @@ public class ThirdPartyModConfig
                 e.getValue().writeToConfiguration(config, e.getKey());
         
         config.setCategoryCustomIGuiConfigListEntryClass(category, GuiConfigCustomCategoryListEntry.class);
+        config.setCategoryPropertyOrder(category, orderedKeys);
         
         this.isChanged = false;
     }
@@ -255,5 +260,13 @@ public class ThirdPartyModConfig
     public boolean isChanged()
     {
         return isChanged;
+    }
+    
+    static
+    {
+        orderedKeys.add(Reference.MOD_ID);
+        orderedKeys.add(Reference.AXE_ID_LIST);
+        orderedKeys.add(Reference.SHEARS_ID_LIST);
+        orderedKeys.add(Reference.OVERRIDE_IMC);
     }
 }

@@ -14,6 +14,13 @@ public class Reference
     public static final String CTGY_LANG_KEY                      = "ctgy.";
     
     public static final String MINECRAFT                          = "minecraft";
+    
+    // Packet constants
+    public static final byte   PROTOCOL_VERSION                   = 0x01;
+    public static final byte   PACKET_LOGIN                       = 0x00;
+    public static final byte   PACKET_CONFIG                      = 0x01;
+    
+    // Config Categories
     public static final String OAK                                = "vanilla_oak";
     public static final String SPRUCE                             = "vanilla_spruce";
     public static final String BIRCH                              = "vanilla_birch";
@@ -25,23 +32,6 @@ public class Reference
     public static final String MUSH_BROWN                         = "vanilla_huge_brown_mushroom";
     public static final String MUSH_RED                           = "vanilla_huge_red_mushroom";
     public static final String VAN_TREES_ITEMS_CTGY               = "1_vanilla_trees_and_items";
-    
-    public static final byte   PROTOCOL_VERSION                   = 0x01;
-    public static final byte   PACKET_LOGIN                       = 0x00;
-    public static final byte   PACKET_CONFIG                      = 0x01;
-    
-    public static final String LOGS                               = "logs";
-    public static final String TREES                              = "trees";
-    public static final String TREE_DEFS                          = "treeDefs";
-    public static final String TREE_NAME                          = "treeName";
-    public static final String MASTER_DEF                         = "masterDefinition";
-    public static final String BLACKLIST                          = "blacklist";
-    public static final String LOG_STR_MAP                        = "logToStringMap";
-    public static final String LEAVES                             = "leaves";
-    public static final String MOD_ID                             = "modID";
-    public static final String AXE_ID_LIST                        = "axeIDList";
-    public static final String SHEARS_ID_LIST                     = "shearsIDList";
-    public static final String OVERRIDE_IMC                       = "overrideIMC";
     public static final String TREE_MOD_CFG_CTGY                  = "tree_and_mod_configs";
     public static final String SETTINGS_CTGY                      = "general_settings";
     public static final String BREAK_SPEED_CTGY                   = Reference.SETTINGS_CTGY + "." + "break_speed_settings";
@@ -49,21 +39,70 @@ public class Reference
     public static final String ITEM_CTGY                          = Reference.SETTINGS_CTGY + "." + "item_settings";
     public static final String TREE_CHOP_BEHAVIOR_CTGY            = Reference.SETTINGS_CTGY + "." + "tree_chop_behavior_settings";
     public static final String MISC_CTGY                          = Reference.SETTINGS_CTGY + "." + "miscellaneous_settings";
-    public static final String ALLOW_DEBUG_LOGGING                = "allowDebugLogging";
-    public static final String ALLOW_SMART_TREE_DETECT            = "allowSmartTreeDetection";
-    public static final String ALLOW_AUTO_TREE_DETECT             = "allowAutoTreeDetection";
+    
+    // Sneak Actions
+    public static final String ENABLE                             = "enable";
+    public static final String DISABLE                            = "disable";
+    public static final String NONE                               = "none";
+    
+    // Config Keys    
     public static final String ALLOW_AUTO_AXE_DETECT              = "allowAutoAxeDetection";
-    public static final String ONLY_DESTROY_UPWARDS               = "onlyDestroyUpwards";
-    public static final String REQ_DECAY_CHECK                    = "requireLeafDecayCheck";
-    public static final String MAX_H_LOG_DIST                     = "maxHorLogBreakDist";
-    public static final String MAX_V_LOG_DIST                     = "maxVerLogBreakDist";
-    public static final String MAX_LEAF_ID_DIST                   = "maxLeafIDDist";
-    public static final String MAX_H_LEAF_DIST                    = "maxHorLeafBreakDist";
-    public static final String MIN_LEAF_ID                        = "minLeavesToID";
+    public static final String ALLOW_AUTO_TREE_DETECT             = "allowAutoTreeDetection";
+    public static final String ALLOW_DEBUG_LOGGING                = "allowDebugLogging";
+    public static final String ALLOW_ITEM_DAMAGE                  = "allowItemDamage";
+    public static final String ALLOW_MORE_BLOCKS_THAN_DAMAGE      = "allowMoreBlocksThanDamage";
+    public static final String ALLOW_ORE_DICT_LOOKUP              = "allowOreDictionaryLookup";
+    public static final String ALLOW_SMART_TREE_DETECT            = "allowSmartTreeDetection";
+    public static final String AXE_ID_LIST                        = "axeIDList";
+    public static final String BLACKLIST                          = "blacklist";
+    public static final String BLOCK_ID_BLACKLIST                 = "blockIDBlacklist";
     public static final String BREAK_SPEED_MOD                    = "breakSpeedModifier";
+    public static final String DAMAGE_INCREASE_AMOUNT             = "damageIncreaseAmount";
+    public static final String DAMAGE_MULTIPLIER                  = "damageMultiplier";
+    public static final String DESTROY_LEAVES                     = "destroyLeaves";
+    public static final String DISABLE_CREATIVE_DROPS             = "disableCreativeDrops";
+    public static final String DISABLE_IN_CREATIVE                = "disableInCreative";
+    public static final String ENABLED                            = "enabled";
+    public static final String ENABLE_ENCHANT_MODE                = "enableEnchantmentMode";
+    public static final String ENCHANT_ID                         = "enchantmentID";
+    public static final String INCREASE_DAMAGE_X_BLOCKS           = "increaseDamageEveryXBlocks";
+    public static final String ITEMS_DROP_IN_PLACE                = "itemsDropInPlace";
+    public static final String ITEM_ID_BLACKLIST                  = "itemIDBlacklist";
+    public static final String LEAVES                             = "leaves";
+    public static final String LOGS                               = "logs";
+    public static final String LOG_STR_MAP                        = "logToStringMap";
+    public static final String MASTER_DEF                         = "masterDefinition";
+    public static final String MAX_H_LEAF_DIST                    = "maxHorLeafBreakDist";
+    public static final String MAX_H_LOG_DIST                     = "maxHorLogBreakDist";
+    public static final String MAX_LEAF_ID_DIST                   = "maxLeafIDDist";
+    public static final String MAX_V_LOG_DIST                     = "maxVerLogBreakDist";
+    public static final String MIN_LEAF_ID                        = "minLeavesToID";
+    public static final String MOD_ID                             = "modID";
+    public static final String NEED_ITEM                          = "needItem";
+    public static final String ONLY_DESTROY_UPWARDS               = "onlyDestroyUpwards";
+    public static final String ORE_DICT_LEAF_KEYS                 = "oreDictionaryLeafStrings";
+    public static final String ORE_DICT_LOG_KEYS                  = "oreDictionaryLogStrings";
+    public static final String OVERRIDE_IMC                       = "overrideIMC";
+    public static final String REQ_DECAY_CHECK                    = "requireLeafDecayCheck";
+    public static final String REQ_ITEM_IN_AXE_LIST_ENCHANT       = "requireItemInAxeListForEnchant";
+    public static final String SHEARS_ID_LIST                     = "shearsIDList";
+    public static final String SHEAR_LEAVES                       = "shearLeaves";
+    public static final String SHEAR_VINES                        = "shearVines";
+    public static final String SNEAK_ACTION                       = "sneakAction";
+    public static final String STACK_DROPS                        = "stackDrops";
+    public static final String TREES                              = "trees";
+    public static final String TREE_DEFS                          = "treeDefs";
+    public static final String TREE_HEIGHT_DECIDES_BREAK_SPEED    = "treeHeightDecidesBreakSpeed";
+    public static final String TREE_HEIGHT_MOD                    = "treeHeightModifier";
+    public static final String TREE_NAME                          = "treeName";
     public static final String USE_ADV_TOP_LOG_LOGIC              = "useAdvancedTopLogLogic";
+    public static final String USE_INCREASING_ITEM_DAMAGE         = "useIncreasingItemDamage";
+    public static final String USE_STRICT_BLOCK_PAIRING           = "useStrictBlockPairing";
+    
+    // IMC Message Key
     public static final String THIRD_PARTY_MOD_CONFIG             = "ThirdPartyModConfig";
     
+    // Config Property Comments
     //public static final String COMMENT_SEPARATOR                = "#--------------------------------------------------------------------------------------------------------#";
     //public static final String COMMENT_SEPARATOR_2              = "      #--------------------------------------------------------------------------------------------------------#";
     public static final String enabledDesc                        = "[Global] Set to true to enable Treecapitator, false to disable.";

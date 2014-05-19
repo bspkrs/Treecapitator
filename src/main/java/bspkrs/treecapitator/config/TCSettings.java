@@ -1,5 +1,7 @@
 package bspkrs.treecapitator.config;
 
+import java.util.LinkedHashSet;
+
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.nbt.NBTTagCompound;
 import bspkrs.treecapitator.EnchantmentTreecapitating;
@@ -136,86 +138,86 @@ public final class TCSettings
     
     public void readFromNBT(NBTTagCompound ntc)
     {
-        enabled = ntc.getBoolean("enabled");
-        allowItemDamage = ntc.getBoolean("allowItemDamage");
-        allowMoreBlocksThanDamage = ntc.getBoolean("allowMoreBlocksThanDamage");
-        allowSmartTreeDetection = ntc.getBoolean("allowSmartTreeDetection");
+        enabled = ntc.getBoolean(Reference.ENABLED);
+        allowItemDamage = ntc.getBoolean(Reference.ALLOW_ITEM_DAMAGE);
+        allowMoreBlocksThanDamage = ntc.getBoolean(Reference.ALLOW_MORE_BLOCKS_THAN_DAMAGE);
+        allowSmartTreeDetection = ntc.getBoolean(Reference.ALLOW_SMART_TREE_DETECT);
         allowAutoTreeDetection = ntc.getBoolean(Reference.ALLOW_AUTO_TREE_DETECT);
         allowAutoAxeDetection = ntc.getBoolean(Reference.ALLOW_AUTO_AXE_DETECT);
-        treeHeightDecidesBreakSpeed = ntc.getBoolean("treeHeightDecidesBreakSpeed");
-        treeHeightModifier = ntc.getFloat("treeHeightModifier");
+        treeHeightDecidesBreakSpeed = ntc.getBoolean(Reference.TREE_HEIGHT_DECIDES_BREAK_SPEED);
+        treeHeightModifier = ntc.getFloat(Reference.TREE_HEIGHT_MOD);
         breakSpeedModifier = ntc.getFloat(Reference.BREAK_SPEED_MOD);
-        damageIncreaseAmount = ntc.getFloat("damageIncreaseAmount");
-        damageMultiplier = ntc.getFloat("damageMultiplier");
-        destroyLeaves = ntc.getBoolean("destroyLeaves");
-        disableCreativeDrops = ntc.getBoolean("disableCreativeDrops");
-        disableInCreative = ntc.getBoolean("disableInCreative");
-        enableEnchantmentMode = ntc.getBoolean("enableEnchantmentMode");
-        allowOreDictionaryLookup = ntc.getBoolean("allowOreDictionaryLookup");
-        oreDictionaryLogStrings = ntc.getString("oreDictionaryLogStrings");
-        oreDictionaryLeafStrings = ntc.getString("oreDictionaryLeafStrings");
+        damageIncreaseAmount = ntc.getFloat(Reference.DAMAGE_INCREASE_AMOUNT);
+        damageMultiplier = ntc.getFloat(Reference.DAMAGE_MULTIPLIER);
+        destroyLeaves = ntc.getBoolean(Reference.DESTROY_LEAVES);
+        disableCreativeDrops = ntc.getBoolean(Reference.DISABLE_CREATIVE_DROPS);
+        disableInCreative = ntc.getBoolean(Reference.DISABLE_IN_CREATIVE);
+        enableEnchantmentMode = ntc.getBoolean(Reference.ENABLE_ENCHANT_MODE);
+        allowOreDictionaryLookup = ntc.getBoolean(Reference.ALLOW_ORE_DICT_LOOKUP);
+        oreDictionaryLogStrings = ntc.getString(Reference.ORE_DICT_LOG_KEYS);
+        oreDictionaryLeafStrings = ntc.getString(Reference.ORE_DICT_LEAF_KEYS);
         
-        handleEnchantmentID(ntc.getInteger("enchantmentID"));
+        handleEnchantmentID(ntc.getInteger(Reference.ENCHANT_ID));
         
-        increaseDamageEveryXBlocks = ntc.getInteger("increaseDamageEveryXBlocks");
+        increaseDamageEveryXBlocks = ntc.getInteger(Reference.INCREASE_DAMAGE_X_BLOCKS);
         maxHorLogBreakDist = ntc.getInteger(Reference.MAX_H_LOG_DIST);
         maxHorLeafBreakDist = ntc.getInteger(Reference.MAX_H_LEAF_DIST);
         maxLeafIDDist = ntc.getInteger(Reference.MAX_LEAF_ID_DIST);
         maxVerLogBreakDist = ntc.getInteger(Reference.MAX_V_LOG_DIST);
         minLeavesToID = ntc.getInteger(Reference.MIN_LEAF_ID);
-        needItem = ntc.getBoolean("needItem");
+        needItem = ntc.getBoolean(Reference.NEED_ITEM);
         onlyDestroyUpwards = ntc.getBoolean(Reference.ONLY_DESTROY_UPWARDS);
-        requireItemInAxeListForEnchant = ntc.getBoolean("requireItemInAxeListForEnchant");
+        requireItemInAxeListForEnchant = ntc.getBoolean(Reference.REQ_ITEM_IN_AXE_LIST_ENCHANT);
         requireLeafDecayCheck = ntc.getBoolean(Reference.REQ_DECAY_CHECK);
-        shearLeaves = ntc.getBoolean("shearLeaves");
-        shearVines = ntc.getBoolean("shearVines");
-        sneakAction = ntc.getString("sneakAction");
-        stackDrops = ntc.getBoolean("stackDrops");
-        itemsDropInPlace = ntc.getBoolean("itemsDropInPlace");
+        shearLeaves = ntc.getBoolean(Reference.SHEAR_LEAVES);
+        shearVines = ntc.getBoolean(Reference.SHEAR_VINES);
+        sneakAction = ntc.getString(Reference.SNEAK_ACTION);
+        stackDrops = ntc.getBoolean(Reference.STACK_DROPS);
+        itemsDropInPlace = ntc.getBoolean(Reference.ITEMS_DROP_IN_PLACE);
         useAdvancedTopLogLogic = ntc.getBoolean(Reference.USE_ADV_TOP_LOG_LOGIC);
-        useIncreasingItemDamage = ntc.getBoolean("useIncreasingItemDamage");
-        useStrictBlockPairing = ntc.getBoolean("useStrictBlockPairing");
+        useIncreasingItemDamage = ntc.getBoolean(Reference.USE_INCREASING_ITEM_DAMAGE);
+        useStrictBlockPairing = ntc.getBoolean(Reference.USE_STRICT_BLOCK_PAIRING);
     }
     
     public void writeToNBT(NBTTagCompound ntc)
     {
-        ntc.setBoolean("enabled", enabled);
-        ntc.setBoolean("allowItemDamage", allowItemDamage);
-        ntc.setBoolean("allowMoreBlocksThanDamage", allowMoreBlocksThanDamage);
-        ntc.setBoolean("allowOreDictionaryLookup", allowOreDictionaryLookup);
-        ntc.setBoolean("allowSmartTreeDetection", allowSmartTreeDetection);
+        ntc.setBoolean(Reference.ENABLED, enabled);
+        ntc.setBoolean(Reference.ALLOW_ITEM_DAMAGE, allowItemDamage);
+        ntc.setBoolean(Reference.ALLOW_MORE_BLOCKS_THAN_DAMAGE, allowMoreBlocksThanDamage);
+        ntc.setBoolean(Reference.ALLOW_ORE_DICT_LOOKUP, allowOreDictionaryLookup);
+        ntc.setBoolean(Reference.ALLOW_SMART_TREE_DETECT, allowSmartTreeDetection);
         ntc.setBoolean(Reference.ALLOW_AUTO_TREE_DETECT, allowAutoTreeDetection);
         ntc.setBoolean(Reference.ALLOW_AUTO_AXE_DETECT, allowAutoAxeDetection);
-        ntc.setBoolean("treeHeightDecidesBreakSpeed", treeHeightDecidesBreakSpeed);
-        ntc.setFloat("treeHeightModifier", treeHeightModifier);
+        ntc.setBoolean(Reference.TREE_HEIGHT_DECIDES_BREAK_SPEED, treeHeightDecidesBreakSpeed);
+        ntc.setFloat(Reference.TREE_HEIGHT_MOD, treeHeightModifier);
         ntc.setFloat(Reference.BREAK_SPEED_MOD, breakSpeedModifier);
-        ntc.setFloat("damageIncreaseAmount", damageIncreaseAmount);
-        ntc.setFloat("damageMultiplier", damageMultiplier);
-        ntc.setBoolean("destroyLeaves", destroyLeaves);
-        ntc.setBoolean("disableCreativeDrops", disableCreativeDrops);
-        ntc.setBoolean("disableInCreative", disableInCreative);
-        ntc.setBoolean("enableEnchantmentMode", enableEnchantmentMode);
-        ntc.setInteger("enchantmentID", enchantmentID);
-        ntc.setInteger("increaseDamageEveryXBlocks", increaseDamageEveryXBlocks);
+        ntc.setFloat(Reference.DAMAGE_INCREASE_AMOUNT, damageIncreaseAmount);
+        ntc.setFloat(Reference.DAMAGE_MULTIPLIER, damageMultiplier);
+        ntc.setBoolean(Reference.DESTROY_LEAVES, destroyLeaves);
+        ntc.setBoolean(Reference.DISABLE_CREATIVE_DROPS, disableCreativeDrops);
+        ntc.setBoolean(Reference.DISABLE_IN_CREATIVE, disableInCreative);
+        ntc.setBoolean(Reference.ENABLE_ENCHANT_MODE, enableEnchantmentMode);
+        ntc.setInteger(Reference.ENCHANT_ID, enchantmentID);
+        ntc.setInteger(Reference.INCREASE_DAMAGE_X_BLOCKS, increaseDamageEveryXBlocks);
         ntc.setInteger(Reference.MAX_H_LOG_DIST, maxHorLogBreakDist);
         ntc.setInteger(Reference.MAX_H_LEAF_DIST, maxHorLeafBreakDist);
         ntc.setInteger(Reference.MAX_LEAF_ID_DIST, maxLeafIDDist);
         ntc.setInteger(Reference.MAX_V_LOG_DIST, maxVerLogBreakDist);
         ntc.setInteger(Reference.MIN_LEAF_ID, minLeavesToID);
-        ntc.setBoolean("needItem", needItem);
+        ntc.setBoolean(Reference.NEED_ITEM, needItem);
         ntc.setBoolean(Reference.ONLY_DESTROY_UPWARDS, onlyDestroyUpwards);
-        ntc.setString("oreDictionaryLogStrings", oreDictionaryLogStrings);
-        ntc.setString("oreDictionaryLeafStrings", oreDictionaryLeafStrings);
-        ntc.setBoolean("requireItemInAxeListForEnchant", requireItemInAxeListForEnchant);
+        ntc.setString(Reference.ORE_DICT_LOG_KEYS, oreDictionaryLogStrings);
+        ntc.setString(Reference.ORE_DICT_LEAF_KEYS, oreDictionaryLeafStrings);
+        ntc.setBoolean(Reference.REQ_ITEM_IN_AXE_LIST_ENCHANT, requireItemInAxeListForEnchant);
         ntc.setBoolean(Reference.REQ_DECAY_CHECK, requireLeafDecayCheck);
-        ntc.setBoolean("shearLeaves", shearLeaves);
-        ntc.setBoolean("shearVines", shearVines);
-        ntc.setString("sneakAction", sneakAction);
-        ntc.setBoolean("stackDrops", stackDrops);
-        ntc.setBoolean("itemsDropInPlace", itemsDropInPlace);
+        ntc.setBoolean(Reference.SHEAR_LEAVES, shearLeaves);
+        ntc.setBoolean(Reference.SHEAR_VINES, shearVines);
+        ntc.setString(Reference.SNEAK_ACTION, sneakAction);
+        ntc.setBoolean(Reference.STACK_DROPS, stackDrops);
+        ntc.setBoolean(Reference.ITEMS_DROP_IN_PLACE, itemsDropInPlace);
         ntc.setBoolean(Reference.USE_ADV_TOP_LOG_LOGIC, useAdvancedTopLogLogic);
-        ntc.setBoolean("useIncreasingItemDamage", useIncreasingItemDamage);
-        ntc.setBoolean("useStrictBlockPairing", useStrictBlockPairing);
+        ntc.setBoolean(Reference.USE_INCREASING_ITEM_DAMAGE, useIncreasingItemDamage);
+        ntc.setBoolean(Reference.USE_STRICT_BLOCK_PAIRING, useStrictBlockPairing);
     }
     
     /**
@@ -226,103 +228,153 @@ public final class TCSettings
     public void syncConfiguration(Configuration config)
     {
         // Since I moved that setting...
-        config.moveProperty(Reference.MISC_CTGY, "sneakAction", Reference.TREE_CHOP_BEHAVIOR_CTGY);
+        config.moveProperty(Reference.MISC_CTGY, Reference.SNEAK_ACTION, Reference.TREE_CHOP_BEHAVIOR_CTGY);
+        
+        LinkedHashSet<String> orderedKeys = new LinkedHashSet<String>();
         
         // Misc settings
         allowDebugLogging = config.getBoolean(Reference.ALLOW_DEBUG_LOGGING, Reference.MISC_CTGY,
                 allowDebugLoggingDefault, Reference.allowDebugLoggingDesc, Reference.LANG_KEY_BASE + Reference.ALLOW_DEBUG_LOGGING);
-        disableCreativeDrops = config.getBoolean("disableCreativeDrops", Reference.MISC_CTGY,
-                disableCreativeDropsDefault, Reference.disableCreativeDropsDesc, Reference.LANG_KEY_BASE + "disableCreativeDrops");
-        disableInCreative = config.getBoolean("disableInCreative", Reference.MISC_CTGY,
-                disableInCreativeDefault, Reference.disableInCreativeDesc, Reference.LANG_KEY_BASE + "disableInCreative");
-        allowOreDictionaryLookup = config.getBoolean("allowOreDictionaryLookup", Reference.MISC_CTGY,
-                allowOreDictionaryLookupDefault, Reference.allowOreDictionaryLookupDesc, Reference.LANG_KEY_BASE + "allowOreDictionaryLookup");
-        oreDictionaryLogStrings = config.getString("oreDictionaryLogStrings", Reference.MISC_CTGY,
-                oreDictionaryLogStringsDefault, Reference.oreDictionaryLogStringsDesc, Reference.LANG_KEY_BASE + "oreDictionaryLogStrings");
-        oreDictionaryLeafStrings = config.getString("oreDictionaryLeafStrings", Reference.MISC_CTGY,
-                oreDictionaryLeafStringsDefault, Reference.oreDictionaryLeafStringsDesc, Reference.LANG_KEY_BASE + "oreDictionaryLeafStrings");
-        blockIDBlacklist = config.getString("blockIDBlacklist", Reference.MISC_CTGY,
-                blockIDBlacklistDefault, Reference.blockIDBlacklistDesc, Reference.LANG_KEY_BASE + "blockIDBlacklist");
-        itemIDBlacklist = config.getString("itemIDBlacklist", Reference.MISC_CTGY,
-                itemIDBlacklistDefault, Reference.itemIDBlacklistDesc, Reference.LANG_KEY_BASE + "itemIDBlacklist");
+        orderedKeys.add(Reference.ALLOW_DEBUG_LOGGING);
+        disableCreativeDrops = config.getBoolean(Reference.DISABLE_CREATIVE_DROPS, Reference.MISC_CTGY,
+                disableCreativeDropsDefault, Reference.disableCreativeDropsDesc, Reference.LANG_KEY_BASE + Reference.DISABLE_CREATIVE_DROPS);
+        orderedKeys.add(Reference.DISABLE_CREATIVE_DROPS);
+        disableInCreative = config.getBoolean(Reference.DISABLE_IN_CREATIVE, Reference.MISC_CTGY,
+                disableInCreativeDefault, Reference.disableInCreativeDesc, Reference.LANG_KEY_BASE + Reference.DISABLE_IN_CREATIVE);
+        orderedKeys.add(Reference.DISABLE_IN_CREATIVE);
+        allowOreDictionaryLookup = config.getBoolean(Reference.ALLOW_ORE_DICT_LOOKUP, Reference.MISC_CTGY,
+                allowOreDictionaryLookupDefault, Reference.allowOreDictionaryLookupDesc, Reference.LANG_KEY_BASE + Reference.ALLOW_ORE_DICT_LOOKUP);
+        orderedKeys.add(Reference.ALLOW_ORE_DICT_LOOKUP);
+        oreDictionaryLogStrings = config.getString(Reference.ORE_DICT_LOG_KEYS, Reference.MISC_CTGY,
+                oreDictionaryLogStringsDefault, Reference.oreDictionaryLogStringsDesc, Reference.LANG_KEY_BASE + Reference.ORE_DICT_LOG_KEYS);
+        orderedKeys.add(Reference.ORE_DICT_LOG_KEYS);
+        oreDictionaryLeafStrings = config.getString(Reference.ORE_DICT_LEAF_KEYS, Reference.MISC_CTGY,
+                oreDictionaryLeafStringsDefault, Reference.oreDictionaryLeafStringsDesc, Reference.LANG_KEY_BASE + Reference.ORE_DICT_LEAF_KEYS);
+        orderedKeys.add(Reference.ORE_DICT_LEAF_KEYS);
+        blockIDBlacklist = config.getString(Reference.BLOCK_ID_BLACKLIST, Reference.MISC_CTGY,
+                blockIDBlacklistDefault, Reference.blockIDBlacklistDesc, Reference.LANG_KEY_BASE + Reference.BLOCK_ID_BLACKLIST);
+        orderedKeys.add(Reference.BLOCK_ID_BLACKLIST);
+        itemIDBlacklist = config.getString(Reference.ITEM_ID_BLACKLIST, Reference.MISC_CTGY,
+                itemIDBlacklistDefault, Reference.itemIDBlacklistDesc, Reference.LANG_KEY_BASE + Reference.ITEM_ID_BLACKLIST);
+        orderedKeys.add(Reference.ITEM_ID_BLACKLIST);
         config.addCustomCategoryLanguageKey(Reference.MISC_CTGY, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.MISC_CTGY);
+        config.setCategoryPropertyOrder(Reference.MISC_CTGY, orderedKeys);
         
+        orderedKeys = new LinkedHashSet<String>();
         // Break Speed settings
         breakSpeedModifier = config.getFloat(Reference.BREAK_SPEED_MOD, Reference.BREAK_SPEED_CTGY,
                 breakSpeedModifierDefault, 0.01F, 1F, Reference.breakSpeedModifierDesc, Reference.LANG_KEY_BASE + Reference.BREAK_SPEED_MOD);
-        treeHeightDecidesBreakSpeed = config.getBoolean("treeHeightDecidesBreakSpeed", Reference.BREAK_SPEED_CTGY,
-                treeHeightDecidesBreakSpeedDefault, Reference.treeHeightDecidesBreakSpeedDesc, Reference.LANG_KEY_BASE + "treeHeightDecidesBreakSpeed");
-        treeHeightModifier = config.getFloat("treeHeightModifier", Reference.BREAK_SPEED_CTGY,
-                treeHeightModifierDefault, 0.25F, 10.0F, Reference.treeHeightModifierDesc, Reference.LANG_KEY_BASE + "treeHeightModifier");
+        orderedKeys.add(Reference.BREAK_SPEED_MOD);
+        treeHeightDecidesBreakSpeed = config.getBoolean(Reference.TREE_HEIGHT_DECIDES_BREAK_SPEED, Reference.BREAK_SPEED_CTGY,
+                treeHeightDecidesBreakSpeedDefault, Reference.treeHeightDecidesBreakSpeedDesc, Reference.LANG_KEY_BASE + Reference.TREE_HEIGHT_DECIDES_BREAK_SPEED);
+        orderedKeys.add(Reference.TREE_HEIGHT_DECIDES_BREAK_SPEED);
+        treeHeightModifier = config.getFloat(Reference.TREE_HEIGHT_MOD, Reference.BREAK_SPEED_CTGY,
+                treeHeightModifierDefault, 0.25F, 10.0F, Reference.treeHeightModifierDesc, Reference.LANG_KEY_BASE + Reference.TREE_HEIGHT_MOD);
+        orderedKeys.add(Reference.TREE_HEIGHT_MOD);
         config.addCustomCategoryLanguageKey(Reference.BREAK_SPEED_CTGY, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.BREAK_SPEED_CTGY);
+        config.setCategoryPropertyOrder(Reference.BREAK_SPEED_CTGY, orderedKeys);
         
+        orderedKeys = new LinkedHashSet<String>();
         // Item settings
         allowAutoAxeDetection = config.getBoolean(Reference.ALLOW_AUTO_AXE_DETECT, Reference.ITEM_CTGY,
                 allowAutoAxeDetectionDefault, Reference.allowAutoAxeDetectionDesc, Reference.LANG_KEY_BASE + Reference.ALLOW_AUTO_AXE_DETECT);
-        needItem = config.getBoolean("needItem", Reference.ITEM_CTGY,
-                needItemDefault, Reference.needItemDesc, Reference.LANG_KEY_BASE + "needItem");
-        allowItemDamage = config.getBoolean("allowItemDamage", Reference.ITEM_CTGY,
-                allowItemDamageDefault, Reference.allowItemDamageDesc, Reference.LANG_KEY_BASE + "allowItemDamage");
-        allowMoreBlocksThanDamage = config.getBoolean("allowMoreBlocksThanDamage", Reference.ITEM_CTGY,
-                allowMoreBlocksThanDamageDefault, Reference.allowMoreBlocksThanDamageDesc, Reference.LANG_KEY_BASE + "allowMoreBlocksThanDamage");
-        increaseDamageEveryXBlocks = config.getInt("increaseDamageEveryXBlocks", Reference.ITEM_CTGY,
-                increaseDamageEveryXBlocksDefault, 1, 500, Reference.increaseDamageEveryXBlocksDesc, Reference.LANG_KEY_BASE + "increaseDamageEveryXBlocks");
-        useIncreasingItemDamage = config.getBoolean("useIncreasingItemDamage", Reference.ITEM_CTGY,
-                useIncreasingItemDamageDefault, Reference.useIncreasingItemDamageDesc, Reference.LANG_KEY_BASE + "useIncreasingItemDamage");
-        damageIncreaseAmount = config.getFloat("damageIncreaseAmount", Reference.ITEM_CTGY,
-                damageIncreaseAmountDefault, 0.1F, 100.0F, Reference.damageIncreaseAmountDesc, Reference.LANG_KEY_BASE + "damageIncreaseAmount");
-        damageMultiplier = config.getFloat("damageMultiplier", Reference.ITEM_CTGY,
-                damageMultiplierDefault, 0.1F, 50.0F, Reference.damageMultiplierDesc, Reference.LANG_KEY_BASE + "damageMultiplier");
+        orderedKeys.add(Reference.ALLOW_AUTO_AXE_DETECT);
+        needItem = config.getBoolean(Reference.NEED_ITEM, Reference.ITEM_CTGY,
+                needItemDefault, Reference.needItemDesc, Reference.LANG_KEY_BASE + Reference.NEED_ITEM);
+        orderedKeys.add(Reference.NEED_ITEM);
+        allowItemDamage = config.getBoolean(Reference.ALLOW_ITEM_DAMAGE, Reference.ITEM_CTGY,
+                allowItemDamageDefault, Reference.allowItemDamageDesc, Reference.LANG_KEY_BASE + Reference.ALLOW_ITEM_DAMAGE);
+        orderedKeys.add(Reference.ALLOW_ITEM_DAMAGE);
+        damageMultiplier = config.getFloat(Reference.DAMAGE_MULTIPLIER, Reference.ITEM_CTGY,
+                damageMultiplierDefault, 0.1F, 50.0F, Reference.damageMultiplierDesc, Reference.LANG_KEY_BASE + Reference.DAMAGE_MULTIPLIER);
+        orderedKeys.add(Reference.DAMAGE_MULTIPLIER);
+        allowMoreBlocksThanDamage = config.getBoolean(Reference.ALLOW_MORE_BLOCKS_THAN_DAMAGE, Reference.ITEM_CTGY,
+                allowMoreBlocksThanDamageDefault, Reference.allowMoreBlocksThanDamageDesc, Reference.LANG_KEY_BASE + Reference.ALLOW_MORE_BLOCKS_THAN_DAMAGE);
+        orderedKeys.add(Reference.ALLOW_MORE_BLOCKS_THAN_DAMAGE);
+        useIncreasingItemDamage = config.getBoolean(Reference.USE_INCREASING_ITEM_DAMAGE, Reference.ITEM_CTGY,
+                useIncreasingItemDamageDefault, Reference.useIncreasingItemDamageDesc, Reference.LANG_KEY_BASE + Reference.USE_INCREASING_ITEM_DAMAGE);
+        orderedKeys.add(Reference.USE_INCREASING_ITEM_DAMAGE);
+        damageIncreaseAmount = config.getFloat(Reference.DAMAGE_INCREASE_AMOUNT, Reference.ITEM_CTGY,
+                damageIncreaseAmountDefault, 0.1F, 100.0F, Reference.damageIncreaseAmountDesc, Reference.LANG_KEY_BASE + Reference.DAMAGE_INCREASE_AMOUNT);
+        orderedKeys.add(Reference.DAMAGE_INCREASE_AMOUNT);
+        increaseDamageEveryXBlocks = config.getInt(Reference.INCREASE_DAMAGE_X_BLOCKS, Reference.ITEM_CTGY,
+                increaseDamageEveryXBlocksDefault, 1, 500, Reference.increaseDamageEveryXBlocksDesc, Reference.LANG_KEY_BASE + Reference.INCREASE_DAMAGE_X_BLOCKS);
+        orderedKeys.add(Reference.INCREASE_DAMAGE_X_BLOCKS);
         config.addCustomCategoryLanguageKey(Reference.ITEM_CTGY, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.ITEM_CTGY);
+        config.setCategoryPropertyOrder(Reference.ITEM_CTGY, orderedKeys);
         
+        orderedKeys = new LinkedHashSet<String>();
         // Tree Chop Behavior settings
         allowAutoTreeDetection = config.getBoolean(Reference.ALLOW_AUTO_TREE_DETECT, Reference.TREE_CHOP_BEHAVIOR_CTGY,
                 allowAutoTreeDetectionDefault, Reference.allowAutoTreeDetectionDesc, Reference.LANG_KEY_BASE + Reference.ALLOW_AUTO_TREE_DETECT);
+        orderedKeys.add(Reference.ALLOW_AUTO_TREE_DETECT);
         allowSmartTreeDetection = config.getBoolean(Reference.ALLOW_SMART_TREE_DETECT, Reference.TREE_CHOP_BEHAVIOR_CTGY,
                 allowSmartTreeDetectionDefault, Reference.allowSmartTreeDetectionDesc, Reference.LANG_KEY_BASE + Reference.ALLOW_SMART_TREE_DETECT);
+        orderedKeys.add(Reference.ALLOW_SMART_TREE_DETECT);
         useAdvancedTopLogLogic = config.getBoolean(Reference.USE_ADV_TOP_LOG_LOGIC, Reference.TREE_CHOP_BEHAVIOR_CTGY,
                 useAdvancedTopLogLogicDefault, Reference.useAdvancedTopLogLogicDesc, Reference.LANG_KEY_BASE + Reference.USE_ADV_TOP_LOG_LOGIC);
-        useStrictBlockPairing = config.getBoolean("useStrictBlockPairing", Reference.TREE_CHOP_BEHAVIOR_CTGY,
-                useStrictBlockPairingDefault, Reference.useStrictBlockPairingDesc, Reference.LANG_KEY_BASE + "useStrictBlockPairing");
-        destroyLeaves = config.getBoolean("destroyLeaves", Reference.TREE_CHOP_BEHAVIOR_CTGY,
-                destroyLeavesDefault, Reference.destroyLeavesDesc, Reference.LANG_KEY_BASE + "destroyLeaves");
-        shearLeaves = config.getBoolean("shearLeaves", Reference.TREE_CHOP_BEHAVIOR_CTGY,
-                shearLeavesDefault, Reference.shearLeavesDesc, Reference.LANG_KEY_BASE + "shearLeaves");
-        shearVines = config.getBoolean("shearVines", Reference.TREE_CHOP_BEHAVIOR_CTGY,
-                shearVinesDefault, Reference.shearVinesDesc, Reference.LANG_KEY_BASE + "shearVines");
+        orderedKeys.add(Reference.USE_ADV_TOP_LOG_LOGIC);
+        useStrictBlockPairing = config.getBoolean(Reference.USE_STRICT_BLOCK_PAIRING, Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                useStrictBlockPairingDefault, Reference.useStrictBlockPairingDesc, Reference.LANG_KEY_BASE + Reference.USE_STRICT_BLOCK_PAIRING);
+        orderedKeys.add(Reference.USE_STRICT_BLOCK_PAIRING);
+        destroyLeaves = config.getBoolean(Reference.DESTROY_LEAVES, Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                destroyLeavesDefault, Reference.destroyLeavesDesc, Reference.LANG_KEY_BASE + Reference.DESTROY_LEAVES);
+        orderedKeys.add(Reference.DESTROY_LEAVES);
+        shearLeaves = config.getBoolean(Reference.SHEAR_LEAVES, Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                shearLeavesDefault, Reference.shearLeavesDesc, Reference.LANG_KEY_BASE + Reference.SHEAR_LEAVES);
+        orderedKeys.add(Reference.SHEAR_LEAVES);
+        shearVines = config.getBoolean(Reference.SHEAR_VINES, Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                shearVinesDefault, Reference.shearVinesDesc, Reference.LANG_KEY_BASE + Reference.SHEAR_VINES);
+        orderedKeys.add(Reference.SHEAR_VINES);
         maxHorLeafBreakDist = config.getInt(Reference.MAX_H_LEAF_DIST, Reference.TREE_CHOP_BEHAVIOR_CTGY,
                 maxHorLeafBreakDistDefault, -1, 100, Reference.maxHorLeafBreakDistDesc, Reference.LANG_KEY_BASE + Reference.MAX_H_LEAF_DIST);
+        orderedKeys.add(Reference.MAX_H_LEAF_DIST);
         maxHorLogBreakDist = config.getInt(Reference.MAX_H_LOG_DIST, Reference.TREE_CHOP_BEHAVIOR_CTGY,
                 maxHorLogBreakDistDefault, -1, 100, Reference.maxHorLogBreakDistDesc, Reference.LANG_KEY_BASE + Reference.MAX_H_LOG_DIST);
+        orderedKeys.add(Reference.MAX_H_LOG_DIST);
         maxVerLogBreakDist = config.getInt(Reference.MAX_V_LOG_DIST, Reference.TREE_CHOP_BEHAVIOR_CTGY,
                 maxVerLogBreakDistDefault, -1, 255, Reference.maxVerLogBreakDistDesc, Reference.LANG_KEY_BASE + Reference.MAX_V_LOG_DIST);
+        orderedKeys.add(Reference.MAX_V_LOG_DIST);
         maxLeafIDDist = config.getInt(Reference.MAX_LEAF_ID_DIST, Reference.TREE_CHOP_BEHAVIOR_CTGY,
                 maxLeafIDDistDefault, 1, 8, Reference.maxLeafIDDistDesc, Reference.LANG_KEY_BASE + Reference.MAX_LEAF_ID_DIST);
+        orderedKeys.add(Reference.MAX_LEAF_ID_DIST);
         minLeavesToID = config.getInt(Reference.MIN_LEAF_ID, Reference.TREE_CHOP_BEHAVIOR_CTGY,
                 minLeavesToIDDefault, 0, 8, Reference.minLeavesToIDDesc, Reference.LANG_KEY_BASE + Reference.MIN_LEAF_ID);
+        orderedKeys.add(Reference.MIN_LEAF_ID);
         onlyDestroyUpwards = config.getBoolean(Reference.ONLY_DESTROY_UPWARDS, Reference.TREE_CHOP_BEHAVIOR_CTGY,
                 onlyDestroyUpwardsDefault, Reference.onlyDestroyUpwardsDesc, Reference.LANG_KEY_BASE + Reference.ONLY_DESTROY_UPWARDS);
+        orderedKeys.add(Reference.ONLY_DESTROY_UPWARDS);
         requireLeafDecayCheck = config.getBoolean(Reference.REQ_DECAY_CHECK, Reference.TREE_CHOP_BEHAVIOR_CTGY,
                 requireLeafDecayCheckDefault, Reference.requireLeafDecayCheckDesc, Reference.LANG_KEY_BASE + Reference.REQ_DECAY_CHECK);
-        sneakAction = config.getString("sneakAction", Reference.TREE_CHOP_BEHAVIOR_CTGY,
-                sneakActionDefault, Reference.sneakActionDesc, new String[] { "enable", "disable", "none" }, Reference.LANG_KEY_BASE + "sneakAction");
-        stackDrops = config.getBoolean("stackDrops", Reference.TREE_CHOP_BEHAVIOR_CTGY,
-                stackDropsDefault, Reference.stackDropsDesc, Reference.LANG_KEY_BASE + "stackDrops");
-        itemsDropInPlace = config.getBoolean("itemsDropInPlace", Reference.TREE_CHOP_BEHAVIOR_CTGY,
-                itemsDropInPlaceDefault, Reference.itemsDropInPlaceDesc, Reference.LANG_KEY_BASE + "itemsDropInPlace");
+        orderedKeys.add(Reference.REQ_DECAY_CHECK);
+        sneakAction = config.getString(Reference.SNEAK_ACTION, Reference.TREE_CHOP_BEHAVIOR_CTGY, sneakActionDefault,
+                Reference.sneakActionDesc, new String[] { Reference.ENABLE, Reference.DISABLE, Reference.NONE }, Reference.LANG_KEY_BASE + Reference.SNEAK_ACTION);
+        orderedKeys.add(Reference.SNEAK_ACTION);
+        stackDrops = config.getBoolean(Reference.STACK_DROPS, Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                stackDropsDefault, Reference.stackDropsDesc, Reference.LANG_KEY_BASE + Reference.STACK_DROPS);
+        orderedKeys.add(Reference.STACK_DROPS);
+        itemsDropInPlace = config.getBoolean(Reference.ITEMS_DROP_IN_PLACE, Reference.TREE_CHOP_BEHAVIOR_CTGY,
+                itemsDropInPlaceDefault, Reference.itemsDropInPlaceDesc, Reference.LANG_KEY_BASE + Reference.ITEMS_DROP_IN_PLACE);
+        orderedKeys.add(Reference.ITEMS_DROP_IN_PLACE);
         config.addCustomCategoryLanguageKey(Reference.TREE_CHOP_BEHAVIOR_CTGY, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.TREE_CHOP_BEHAVIOR_CTGY);
+        config.setCategoryPropertyOrder(Reference.TREE_CHOP_BEHAVIOR_CTGY, orderedKeys);
         
+        orderedKeys = new LinkedHashSet<String>();
         // Enchantment Mode settings
-        enableEnchantmentMode = config.getBoolean("enableEnchantmentMode", Reference.ENCHANTMENT_MODE_CTGY,
-                enableEnchantmentModeDefault, Reference.enableEnchantmentModeDesc, Reference.LANG_KEY_BASE + "enableEnchantmentMode");
-        handleEnchantmentID(config.getInt("enchantmentID", Reference.ENCHANTMENT_MODE_CTGY,
-                enchantmentIDDefault, 0, Enchantment.enchantmentsList.length - 1, Reference.enchantmentIDDesc, Reference.LANG_KEY_BASE + "enchantmentID"));
-        requireItemInAxeListForEnchant = config.getBoolean("requireItemInAxeListForEnchant", Reference.ENCHANTMENT_MODE_CTGY,
-                requireItemInAxeListForEnchantDefault, Reference.requireItemInAxeListForEnchantDesc, Reference.LANG_KEY_BASE + "requireItemInAxeListForEnchant");
+        enableEnchantmentMode = config.getBoolean(Reference.ENABLE_ENCHANT_MODE, Reference.ENCHANTMENT_MODE_CTGY,
+                enableEnchantmentModeDefault, Reference.enableEnchantmentModeDesc, Reference.LANG_KEY_BASE + Reference.ENABLE_ENCHANT_MODE);
+        orderedKeys.add(Reference.ENABLE_ENCHANT_MODE);
+        handleEnchantmentID(config.getInt(Reference.ENCHANT_ID, Reference.ENCHANTMENT_MODE_CTGY,
+                enchantmentIDDefault, 0, Enchantment.enchantmentsList.length - 1, Reference.enchantmentIDDesc, Reference.LANG_KEY_BASE + Reference.ENCHANT_ID));
+        orderedKeys.add(Reference.ENCHANT_ID);
+        requireItemInAxeListForEnchant = config.getBoolean(Reference.REQ_ITEM_IN_AXE_LIST_ENCHANT, Reference.ENCHANTMENT_MODE_CTGY,
+                requireItemInAxeListForEnchantDefault, Reference.requireItemInAxeListForEnchantDesc, Reference.LANG_KEY_BASE + Reference.REQ_ITEM_IN_AXE_LIST_ENCHANT);
+        orderedKeys.add(Reference.REQ_ITEM_IN_AXE_LIST_ENCHANT);
         config.addCustomCategoryLanguageKey(Reference.ENCHANTMENT_MODE_CTGY, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.ENCHANTMENT_MODE_CTGY);
+        config.setCategoryPropertyOrder(Reference.ENCHANTMENT_MODE_CTGY, orderedKeys);
         
-        enabled = config.getBoolean("enabled", Reference.SETTINGS_CTGY,
-                enabledDefault, Reference.enabledDesc, Reference.LANG_KEY_BASE + "enabled");
+        enabled = config.getBoolean(Reference.ENABLED, Reference.SETTINGS_CTGY,
+                enabledDefault, Reference.enabledDesc, Reference.LANG_KEY_BASE + Reference.ENABLED);
         config.addCustomCategoryLanguageKey(Reference.SETTINGS_CTGY, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.SETTINGS_CTGY);
         
         config.addCustomCategoryComment(Reference.SETTINGS_CTGY, "ATTENTION: Editing this file manually is no longer necessary UNLESS YOU ARE ADDING NEW MODS/TREES. \n" +

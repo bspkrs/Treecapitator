@@ -1,6 +1,7 @@
 package bspkrs.treecapitator.registry;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,19 +18,20 @@ import com.google.common.hash.Hashing;
 
 public class TreeDefinition
 {
-    protected List<BlockID> logBlocks;
-    protected List<BlockID> leafBlocks;
-    protected boolean       allowSmartTreeDetection;
-    protected boolean       onlyDestroyUpwards;
-    protected boolean       requireLeafDecayCheck;
+    protected List<BlockID>              logBlocks;
+    protected List<BlockID>              leafBlocks;
+    protected boolean                    allowSmartTreeDetection;
+    protected boolean                    onlyDestroyUpwards;
+    protected boolean                    requireLeafDecayCheck;
     // max horizontal distance that logs will be broken
-    protected int           maxHorLogBreakDist;
-    protected int           maxVerLogBreakDist;
-    protected int           maxLeafIDDist;
-    protected int           maxHorLeafBreakDist;
-    protected int           minLeavesToID;
-    protected float         breakSpeedModifier;
-    protected boolean       useAdvancedTopLogLogic;
+    protected int                        maxHorLogBreakDist;
+    protected int                        maxVerLogBreakDist;
+    protected int                        maxLeafIDDist;
+    protected int                        maxHorLeafBreakDist;
+    protected int                        minLeavesToID;
+    protected float                      breakSpeedModifier;
+    protected boolean                    useAdvancedTopLogLogic;
+    private static LinkedHashSet<String> orderedKeys = new LinkedHashSet<String>();
     
     public TreeDefinition()
     {
@@ -299,6 +301,8 @@ public class TreeDefinition
                     .setLanguageKey(Reference.LANG_KEY_BASE + Reference.LEAVES)
                     .getString(), "; ");
         
+        cc.setPropertyOrder(orderedKeys);
+        
         return this;
     }
     
@@ -505,5 +509,21 @@ public class TreeDefinition
     public boolean useAdvancedTopLogLogic()
     {
         return useAdvancedTopLogLogic;
+    }
+    
+    static
+    {
+        orderedKeys.add(Reference.LOGS);
+        orderedKeys.add(Reference.LEAVES);
+        orderedKeys.add(Reference.ALLOW_SMART_TREE_DETECT);
+        orderedKeys.add(Reference.MAX_LEAF_ID_DIST);
+        orderedKeys.add(Reference.MIN_LEAF_ID);
+        orderedKeys.add(Reference.ONLY_DESTROY_UPWARDS);
+        orderedKeys.add(Reference.REQ_DECAY_CHECK);
+        orderedKeys.add(Reference.MAX_H_LOG_DIST);
+        orderedKeys.add(Reference.MAX_V_LOG_DIST);
+        orderedKeys.add(Reference.MAX_H_LEAF_DIST);
+        orderedKeys.add(Reference.BREAK_SPEED_MOD);
+        orderedKeys.add(Reference.USE_ADV_TOP_LOG_LOGIC);
     }
 }
