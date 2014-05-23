@@ -340,6 +340,7 @@ public final class TCSettings
         orderedKeys.add(Reference.SHEAR_VINES);
         maxNumberOfBlocksInTree = config.getInt(Reference.MAX_NUM_BLOCKS_IN_TREE, Reference.CTGY_TREE_CHOP_BEHAVIOR, maxNumberOfBlocksInTreeDefault, -1, Integer.MAX_VALUE,
                 Reference.maxNumberOfBlocksInTreeDesc, Reference.LANG_KEY_BASE + Reference.MAX_NUM_BLOCKS_IN_TREE);
+        orderedKeys.add(Reference.MAX_NUM_BLOCKS_IN_TREE);
         maxHorLeafBreakDist = config.getInt(Reference.MAX_H_LEAF_DIST, Reference.CTGY_TREE_CHOP_BEHAVIOR,
                 maxHorLeafBreakDistDefault, -1, 100, Reference.maxHorLeafBreakDistDesc, Reference.LANG_KEY_BASE + Reference.MAX_H_LEAF_DIST);
         orderedKeys.add(Reference.MAX_H_LEAF_DIST);
