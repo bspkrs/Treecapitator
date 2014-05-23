@@ -1,3 +1,5 @@
+2.0.1 - 23-May-2014
+- fix NPE on null itemstacks
 2.0.0 - 23-May-2014
 - implemented auto axe and tree detection
 - new config setting for maximum number of logs allowed in a tree
