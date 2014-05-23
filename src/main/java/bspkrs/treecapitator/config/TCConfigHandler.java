@@ -17,6 +17,7 @@ public class TCConfigHandler
     private static TCConfigHandler instance;
     private File                   fileRef;
     private Configuration          config;
+    private Configuration          oldConfig;
     private boolean                shouldRefreshRegistries = false;
     
     public static TCConfigHandler instance()
@@ -61,8 +62,10 @@ public class TCConfigHandler
         {
             File fileBak = new File(fileRef.getAbsolutePath() + "_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".old");
             TCLog.warning("Your Treecapitator config file is out of date and could cause issues. The existing file will be renamed to %s and a new one will be generated.", fileBak.getName());
+            TCLog.warning("Treecapitator will attempt to copy your old settings, but custom mod/tree settings will have to be migrated manually.");
             
             fileRef.renameTo(fileBak);
+            oldConfig = config;
             config = new Configuration(fileRef, Reference.CONFIG_VERSION);
         }
         
@@ -104,6 +107,15 @@ public class TCConfigHandler
         
         TCSettings.instance().syncConfiguration(config);
         ModConfigRegistry.instance().syncConfig(config);
+        
+        if (oldConfig != null)
+        {
+            config.copyCategoryProps(oldConfig, new String[] { Reference.CTGY_BREAK_SPEED, Reference.CTGY_ENCHANTMENT_MODE, Reference.CTGY_ITEM, Reference.CTGY_MISC,
+                    Reference.CTGY_SETTINGS, Reference.CTGY_TREE_CHOP_BEHAVIOR, Reference.CTGY_TREE_MOD_CFG });
+            TCSettings.instance().syncConfiguration(config);
+            ModConfigRegistry.instance().syncConfig(config);
+            oldConfig = null;
+        }
         
         if (this.shouldRefreshRegistries)
         {
