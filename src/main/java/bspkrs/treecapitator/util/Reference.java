@@ -31,14 +31,14 @@ public class Reference
     public static final String FUTURE_TREE_2                      = "vanilla_future_tree_2";
     public static final String MUSH_BROWN                         = "vanilla_huge_brown_mushroom";
     public static final String MUSH_RED                           = "vanilla_huge_red_mushroom";
-    public static final String VAN_TREES_ITEMS_CTGY               = "1_vanilla_trees_and_items";
-    public static final String TREE_MOD_CFG_CTGY                  = "tree_and_mod_configs";
-    public static final String SETTINGS_CTGY                      = "general_settings";
-    public static final String BREAK_SPEED_CTGY                   = Reference.SETTINGS_CTGY + "." + "break_speed_settings";
-    public static final String ENCHANTMENT_MODE_CTGY              = Reference.SETTINGS_CTGY + "." + "enchantment_mode_settings";
-    public static final String ITEM_CTGY                          = Reference.SETTINGS_CTGY + "." + "item_settings";
-    public static final String TREE_CHOP_BEHAVIOR_CTGY            = Reference.SETTINGS_CTGY + "." + "tree_chop_behavior_settings";
-    public static final String MISC_CTGY                          = Reference.SETTINGS_CTGY + "." + "miscellaneous_settings";
+    public static final String CTGY_VAN_TREES_ITEMS               = "1_vanilla_trees_and_items";
+    public static final String CTGY_TREE_MOD_CFG                  = "tree_and_mod_configs";
+    public static final String CTGY_SETTINGS                      = "general_settings";
+    public static final String CTGY_BREAK_SPEED                   = Reference.CTGY_SETTINGS + "." + "break_speed_settings";
+    public static final String CTGY_ENCHANTMENT_MODE              = Reference.CTGY_SETTINGS + "." + "enchantment_mode_settings";
+    public static final String CTGY_ITEM                          = Reference.CTGY_SETTINGS + "." + "item_settings";
+    public static final String CTGY_TREE_CHOP_BEHAVIOR            = Reference.CTGY_SETTINGS + "." + "tree_chop_behavior_settings";
+    public static final String CTGY_MISC                          = Reference.CTGY_SETTINGS + "." + "miscellaneous_settings";
     
     // Sneak Actions
     public static final String ENABLE                             = "enable";
@@ -75,6 +75,7 @@ public class Reference
     public static final String MAX_H_LEAF_DIST                    = "maxHorLeafBreakDist";
     public static final String MAX_H_LOG_DIST                     = "maxHorLogBreakDist";
     public static final String MAX_LEAF_ID_DIST                   = "maxLeafIDDist";
+    public static final String MAX_NUM_BLOCKS_IN_TREE             = "maxNumberOfBlocksInTree";
     public static final String MAX_V_LOG_DIST                     = "maxVerLogBreakDist";
     public static final String MIN_LEAF_ID                        = "minLeavesToID";
     public static final String MOD_ID                             = "modID";
@@ -101,10 +102,13 @@ public class Reference
     
     // IMC Message Key
     public static final String THIRD_PARTY_MOD_CONFIG             = "ThirdPartyModConfig";
+    public static final String EYE_NOTIFICATION                   = "EyeNotification";
     
     // Config Property Comments
     //public static final String COMMENT_SEPARATOR                = "#--------------------------------------------------------------------------------------------------------#";
     //public static final String COMMENT_SEPARATOR_2              = "      #--------------------------------------------------------------------------------------------------------#";
+    public static final String maxNumberOfBlocksInTreeDesc        = "[Gloabl] The maximum number of blocks allowed in a tree to be chopped. If a tree has more blocks than this \n" +
+                                                                          "chopping will be canceled. Set to -1 for no limit.";
     public static final String enabledDesc                        = "[Global] Set to true to enable Treecapitator, false to disable.";
     public static final String maxHorLeafBreakDistDesc            = "[Global, PerTree] The maximum horizontal distance that the leaf breaking effect will travel from the tree (use -1 for no limit).";
     public static final String maxHorLogBreakDistDesc             = "[Global, PerTree] The maximum horizontal distance that the log breaking effect will travel (use -1 for no limit).";
