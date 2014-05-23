@@ -7,7 +7,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-import bspkrs.helpers.item.ItemHelper;
 import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.registry.ModConfigRegistry;
 import bspkrs.treecapitator.registry.TreeDefinition;
@@ -15,6 +14,7 @@ import bspkrs.treecapitator.registry.TreeRegistry;
 import bspkrs.treecapitator.util.Reference;
 import bspkrs.treecapitator.util.TCLog;
 import bspkrs.util.BlockID;
+import cpw.mods.fml.common.registry.GameData;
 
 public class OreDictionaryHandler
 {
@@ -44,7 +44,7 @@ public class OreDictionaryHandler
                     for (ItemStack itemStack : OreDictionary.getOres(oreName.trim()))
                     {
                         Item item = itemStack.getItem();
-                        BlockID blockID = new BlockID(ItemHelper.getUniqueID(item));
+                        BlockID blockID = new BlockID(GameData.itemRegistry.getNameForObject(item));
                         if (item instanceof ItemBlock && !leafList.contains(blockID))
                             leafList.add(blockID);
                     }
@@ -64,7 +64,7 @@ public class OreDictionaryHandler
                         Item item = itemStack.getItem();
                         if (item instanceof ItemBlock)
                         {
-                            BlockID blockID = new BlockID(ItemHelper.getUniqueID(item));
+                            BlockID blockID = new BlockID(GameData.itemRegistry.getNameForObject(item));
                             if (!TreeRegistry.instance().isRegistered(blockID) && !TreeRegistry.instance().blacklist().contains(blockID))
                                 genericTree.addLogID(blockID);
                         }

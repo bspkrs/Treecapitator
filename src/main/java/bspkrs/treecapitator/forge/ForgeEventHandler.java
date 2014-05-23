@@ -10,10 +10,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
-import bspkrs.helpers.block.BlockHelper;
-import bspkrs.helpers.entity.player.EntityPlayerHelper;
-import bspkrs.helpers.item.ItemHelper;
-import bspkrs.helpers.world.WorldHelper;
 import bspkrs.treecapitator.Treecapitator;
 import bspkrs.treecapitator.TreecapitatorMod;
 import bspkrs.treecapitator.config.TCConfigHandler;
@@ -31,18 +27,19 @@ import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.registry.GameData;
 
 public class ForgeEventHandler
 {
-    private Map<String, Boolean>         playerSneakingMap = new ConcurrentHashMap<String, Boolean>(100);
-    private Map<CachedBreakSpeed, Float> breakSpeedCache   = new ConcurrentHashMap<CachedBreakSpeed, Float>(200);
+    private Map<String, Boolean>         playerSneakingMap = new ConcurrentHashMap<String, Boolean>(64);
+    private Map<CachedBreakSpeed, Float> breakSpeedCache   = new ConcurrentHashMap<CachedBreakSpeed, Float>(64);
     
     @SubscribeEvent
     public void onBlockClicked(PlayerInteractEvent event)
     {
         if (TreecapitatorMod.proxy.isEnabled() && !TCSettings.sneakAction.equalsIgnoreCase("none") && event.action.equals(PlayerInteractEvent.Action.LEFT_CLICK_BLOCK))
         {
-            if (!WorldHelper.isAirBlock(event.entityPlayer.worldObj, event.x, event.y, event.z))
+            if (!event.entityPlayer.worldObj.isAirBlock(event.x, event.y, event.z))
                 playerSneakingMap.put(event.entityPlayer.getGameProfile().getName(), event.entityPlayer.isSneaking());
         }
     }
@@ -106,7 +103,7 @@ public class ForgeEventHandler
             {
                 ModulusBlockID blockID = new ModulusBlockID(event.block, event.blockMetadata, 4);
                 
-                if (((TCSettings.allowAutoTreeDetection && TreeRegistry.canAutoDetect(event.world, event.block, event.x, event.y, event.z)) || TreeRegistry.instance().isRegistered(blockID))
+                if ((TreeRegistry.instance().isRegistered(blockID) || (TCSettings.allowAutoTreeDetection && TreeRegistry.canAutoDetect(event.world, event.block, event.x, event.y, event.z)))
                         && Treecapitator.isBreakingPossible(event.getPlayer(), event.block, event.blockMetadata, TCSettings.allowDebugLogging))
                 {
                     Coord blockPos = new Coord(event.x, event.y, event.z);
@@ -178,7 +175,7 @@ public class ForgeEventHandler
             ItemStack thisItem = this.entityPlayer.getCurrentEquippedItem();
             
             return bs.entityPlayer.equals(this.entityPlayer) && (oItem != null ? (thisItem != null ? thisItem.isItemEqual(oItem) : false) : thisItem == null)
-                    && BlockHelper.getUniqueID(bs.block).equals(BlockHelper.getUniqueID(this.block))
+                    && GameData.blockRegistry.getNameForObject(bs.block).equals(GameData.blockRegistry.getNameForObject(this.block))
                     && bs.isSneaking == this.isSneaking && bs.swappedSneak == this.swappedSneak
                     && bs.metadata == this.metadata && bs.originalSpeed == this.originalSpeed && bs.x == this.x && bs.y == this.y && bs.z == this.z;
         }
@@ -189,8 +186,8 @@ public class ForgeEventHandler
             ItemStack thisItem = this.entityPlayer.getCurrentEquippedItem();
             HashFunction hf = Hashing.md5();
             Hasher h = hf.newHasher()
-                    .putString(EntityPlayerHelper.getGameProfile(this.entityPlayer).getName(), Charsets.UTF_8)
-                    .putString(BlockHelper.getUniqueID(this.block), Charsets.UTF_8)
+                    .putString(this.entityPlayer.getGameProfile().getName(), Charsets.UTF_8)
+                    .putString(GameData.blockRegistry.getNameForObject(this.block), Charsets.UTF_8)
                     .putBoolean(this.isSneaking)
                     .putBoolean(this.swappedSneak)
                     .putInt(this.metadata)
@@ -198,7 +195,7 @@ public class ForgeEventHandler
                     .putInt(x + z << 8 + y << 16);
             
             if (thisItem != null)
-                h.putString(ItemHelper.getUniqueID(thisItem.getItem()), Charsets.UTF_8)
+                h.putString(GameData.itemRegistry.getNameForObject(thisItem.getItem()), Charsets.UTF_8)
                         .putInt(thisItem.getItemDamage());
             
             return h.hash().hashCode();
