@@ -9,12 +9,12 @@
     "url": "http://www.minecraftforum.net/topic/1009577-/",
     "updateUrl": "",
     "authorList": [ "DaftPVF", "bspkrs" ],
-    "credits": "Original by DaftPVF; additional credit to Lunatrius, AtomicStryker, ScottKillen, MisterFiber",
+    "credits": "Original by DaftPVF; additional credit to Lunatrius, AtomicStryker, ScottKillen",
     "logoFile": "",
     "screenshots": [  ],
     "parent": "",
-    "requiredMods": [ "bspkrsCore@[${bscore_version},)" ],
-    "dependencies": [ "bspkrsCore@[${bscore_version},)" ],
+    "requiredMods": [ "Forge@[${forge_version},)", "bspkrsCore@[${bscore_version},)" ],
+    "dependencies": [ "Forge@[${forge_version},)", "bspkrsCore@[${bscore_version},)" ],
     "dependants": [  ],
     "useDependencyInformation": "true"
   }]
