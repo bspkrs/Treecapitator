@@ -98,13 +98,21 @@ public class TreecapitatorMod
     public void processIMCMessages(IMCEvent event)
     {
         for (IMCMessage msg : event.getMessages().asList())
-            if (msg.isNBTMessage())
+            if (msg.isNBTMessage() && msg.key.equals(Reference.EYE_NOTIFICATION))
+            {
+                // TODO: something with this message
+            }
+            else if (msg.isNBTMessage() /*&& msg.key.equals(Reference.THIRD_PARTY_MOD_CONFIG)*/)
             {
                 TCLog.info("Received IMC message from mod %s.", msg.getSender());
-                ModConfigRegistry.instance().registerIMCModConfig(msg.getSender(), ThirdPartyModConfig.readFromNBT(msg.getNBTValue()));
+                if (ThirdPartyModConfig.isValidNBT(msg.getNBTValue()))
+                    ModConfigRegistry.instance().registerIMCModConfig(msg.getSender(), ThirdPartyModConfig.readFromNBT(msg.getNBTValue()));
+                else
+                    TCLog.severe("Validation failed for IMC message sent by %s", msg.getSender());
+                
             }
             else
-                TCLog.warning("Mod %s send an IMC message, but it is not an NBT object message. The message will be ignored.", msg.getSender());
+                TCLog.warning("Mod %s sent an IMC message, but it is not an NBT object message. The message will be ignored.", msg.getSender());
     }
     
     @EventHandler
