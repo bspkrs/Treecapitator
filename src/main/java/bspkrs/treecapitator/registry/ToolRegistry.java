@@ -71,7 +71,7 @@ public class ToolRegistry
     
     public static void autoDetectAxe(ItemStack item, Block block, int blockMetadata)
     {
-        if (ForgeHooks.isToolEffective(item, block, blockMetadata))
+        if (item != null && ForgeHooks.isToolEffective(item, block, blockMetadata))
         {
             ItemID axe = new ItemID(item);
             if (!ToolRegistry.instance.isAxe(item))

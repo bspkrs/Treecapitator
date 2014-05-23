@@ -162,7 +162,7 @@ public class Treecapitator
         }
         else
         {
-            if (!ToolRegistry.instance().isAxe(item) && TCSettings.allowAutoAxeDetection)
+            if (item != null && !ToolRegistry.instance().isAxe(item) && TCSettings.allowAutoAxeDetection)
                 ToolRegistry.autoDetectAxe(item, block, blockMetadata);
             
             return ToolRegistry.instance().isAxe(item);
