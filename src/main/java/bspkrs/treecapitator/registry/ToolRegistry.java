@@ -74,12 +74,14 @@ public class ToolRegistry
         if (ForgeHooks.isToolEffective(item, block, blockMetadata))
         {
             ItemID axe = new ItemID(item);
-            int index = axe.id.indexOf(":");
-            String modID = index == -1 ? Reference.MINECRAFT : axe.id.substring(0, index);
-            ToolRegistry.instance().registerAxe(axe);
-            ModConfigRegistry.instance().appendAxeToModConfig(modID, axe);
-            
-            TCLog.debug("Auto Axe Detection: New axe registered: %s", axe);
+            if (!ToolRegistry.instance.isAxe(item))
+                TCLog.debug("Auto Axe Detection: Attempting to register axe %s", axe);
+            if (ToolRegistry.instance().registerAxe(axe))
+            {
+                int index = axe.id.indexOf(":");
+                String modID = index == -1 ? Reference.MINECRAFT : axe.id.substring(0, index);
+                ModConfigRegistry.instance().appendAxeToModConfig(modID, axe);
+            }
         }
     }
     
@@ -108,16 +110,32 @@ public class ToolRegistry
         ntc.setString(Reference.BLACKLIST, ListUtils.getListAsDelimitedString(blacklist, ";"));
     }
     
-    public void registerAxe(ItemID axe)
+    public boolean registerAxe(ItemID axe)
     {
         if (axe != null && !blacklist.contains(axe) && !axeList.contains(axe))
+        {
             axeList.add(axe);
+            TCLog.debug("ToolRegistry: Successfully registered axe item %s", axe);
+            return true;
+        }
+        else if (blacklist.contains(axe))
+            TCLog.debug("ToolRegistry: Item %s is on the blacklist and will not be registered as an axe", axe);
+        
+        return false;
     }
     
-    public void registerShears(ItemID shears)
+    public boolean registerShears(ItemID shears)
     {
         if (shears != null && !blacklist.contains(shears) && !shearsList.contains(shears))
+        {
             shearsList.add(shears);
+            TCLog.debug("ToolRegistry: Successfully registered shears item %s", shears);
+            return true;
+        }
+        else if (blacklist.contains(shears))
+            TCLog.debug("ToolRegistry: Item %s is on the blacklist and will not be registered as shears", shears);
+        
+        return false;
     }
     
     public List<ItemID> axeList()
