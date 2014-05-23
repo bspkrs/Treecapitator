@@ -177,8 +177,8 @@ public class ModConfigRegistry
         
         TCLog.configs(config, Reference.CTGY_TREE_MOD_CFG);
         
-        config.addCustomCategoryComment(Reference.CTGY_TREE_MOD_CFG, Reference.TREE_MOD_CFG_CTGY_DESC);
-        config.addCustomCategoryLanguageKey(Reference.CTGY_TREE_MOD_CFG, "bspkrs.tc.configgui.ctgy." + Reference.CTGY_TREE_MOD_CFG);
+        config.setCategoryComment(Reference.CTGY_TREE_MOD_CFG, Reference.TREE_MOD_CFG_CTGY_DESC);
+        config.setCategoryLanguageKey(Reference.CTGY_TREE_MOD_CFG, "bspkrs.tc.configgui.ctgy." + Reference.CTGY_TREE_MOD_CFG);
         
         if (!config.hasCategory(Reference.CTGY_TREE_MOD_CFG + "." + Reference.CTGY_VAN_TREES_ITEMS))
         {
@@ -191,8 +191,8 @@ public class ModConfigRegistry
         else
             TCLog.info("Proceeding to load tree/mod configs from file.");
         
-        config.addCustomCategoryComment(Reference.CTGY_TREE_MOD_CFG + "." + Reference.CTGY_VAN_TREES_ITEMS, Reference.VAN_TREES_ITEMS_CTGY_DESC);
-        config.addCustomCategoryLanguageKey(Reference.CTGY_TREE_MOD_CFG + "." + Reference.CTGY_VAN_TREES_ITEMS,
+        config.setCategoryComment(Reference.CTGY_TREE_MOD_CFG + "." + Reference.CTGY_VAN_TREES_ITEMS, Reference.VAN_TREES_ITEMS_CTGY_DESC);
+        config.setCategoryLanguageKey(Reference.CTGY_TREE_MOD_CFG + "." + Reference.CTGY_VAN_TREES_ITEMS,
                 "bspkrs.tc.configgui.ctgy." + Reference.CTGY_TREE_MOD_CFG + "." + Reference.CTGY_VAN_TREES_ITEMS);
         
         // Load all configs found in the file to ModConfigRegistry
@@ -236,8 +236,8 @@ public class ModConfigRegistry
         
         tpmc.writeToConfiguration(config, modCtgy);
         
-        config.addCustomCategoryComment(Reference.CTGY_TREE_MOD_CFG + "." + Reference.CTGY_VAN_TREES_ITEMS, Reference.VAN_TREES_ITEMS_CTGY_DESC);
-        config.addCustomCategoryLanguageKey(Reference.CTGY_TREE_MOD_CFG + "." + Reference.CTGY_VAN_TREES_ITEMS,
+        config.setCategoryComment(Reference.CTGY_TREE_MOD_CFG + "." + Reference.CTGY_VAN_TREES_ITEMS, Reference.VAN_TREES_ITEMS_CTGY_DESC);
+        config.setCategoryLanguageKey(Reference.CTGY_TREE_MOD_CFG + "." + Reference.CTGY_VAN_TREES_ITEMS,
                 "bspkrs.tc.configgui.ctgy." + Reference.CTGY_TREE_MOD_CFG + "." + Reference.CTGY_VAN_TREES_ITEMS);
     }
     

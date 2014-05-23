@@ -260,7 +260,7 @@ public final class TCSettings
         itemIDBlacklist = config.getString(Reference.ITEM_ID_BLACKLIST, Reference.CTGY_MISC,
                 itemIDBlacklistDefault, Reference.itemIDBlacklistDesc, Reference.LANG_KEY_BASE + Reference.ITEM_ID_BLACKLIST);
         orderedKeys.add(Reference.ITEM_ID_BLACKLIST);
-        config.addCustomCategoryLanguageKey(Reference.CTGY_MISC, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.CTGY_MISC);
+        config.setCategoryLanguageKey(Reference.CTGY_MISC, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.CTGY_MISC);
         config.setCategoryPropertyOrder(Reference.CTGY_MISC, orderedKeys);
         
         orderedKeys = new ArrayList<String>();
@@ -274,7 +274,7 @@ public final class TCSettings
         treeHeightModifier = config.getFloat(Reference.TREE_HEIGHT_MOD, Reference.CTGY_BREAK_SPEED,
                 treeHeightModifierDefault, 0.25F, 10.0F, Reference.treeHeightModifierDesc, Reference.LANG_KEY_BASE + Reference.TREE_HEIGHT_MOD);
         orderedKeys.add(Reference.TREE_HEIGHT_MOD);
-        config.addCustomCategoryLanguageKey(Reference.CTGY_BREAK_SPEED, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.CTGY_BREAK_SPEED);
+        config.setCategoryLanguageKey(Reference.CTGY_BREAK_SPEED, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.CTGY_BREAK_SPEED);
         config.setCategoryPropertyOrder(Reference.CTGY_BREAK_SPEED, orderedKeys);
         
         orderedKeys = new ArrayList<String>();
@@ -303,7 +303,7 @@ public final class TCSettings
         increaseDamageEveryXBlocks = config.getInt(Reference.INCREASE_DAMAGE_X_BLOCKS, Reference.CTGY_ITEM,
                 increaseDamageEveryXBlocksDefault, 1, 500, Reference.increaseDamageEveryXBlocksDesc, Reference.LANG_KEY_BASE + Reference.INCREASE_DAMAGE_X_BLOCKS);
         orderedKeys.add(Reference.INCREASE_DAMAGE_X_BLOCKS);
-        config.addCustomCategoryLanguageKey(Reference.CTGY_ITEM, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.CTGY_ITEM);
+        config.setCategoryLanguageKey(Reference.CTGY_ITEM, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.CTGY_ITEM);
         config.setCategoryPropertyOrder(Reference.CTGY_ITEM, orderedKeys);
         
         orderedKeys = new ArrayList<String>();
@@ -362,7 +362,7 @@ public final class TCSettings
         itemsDropInPlace = config.getBoolean(Reference.ITEMS_DROP_IN_PLACE, Reference.CTGY_TREE_CHOP_BEHAVIOR,
                 itemsDropInPlaceDefault, Reference.itemsDropInPlaceDesc, Reference.LANG_KEY_BASE + Reference.ITEMS_DROP_IN_PLACE);
         orderedKeys.add(Reference.ITEMS_DROP_IN_PLACE);
-        config.addCustomCategoryLanguageKey(Reference.CTGY_TREE_CHOP_BEHAVIOR, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.CTGY_TREE_CHOP_BEHAVIOR);
+        config.setCategoryLanguageKey(Reference.CTGY_TREE_CHOP_BEHAVIOR, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.CTGY_TREE_CHOP_BEHAVIOR);
         config.setCategoryPropertyOrder(Reference.CTGY_TREE_CHOP_BEHAVIOR, orderedKeys);
         
         orderedKeys = new ArrayList<String>();
@@ -376,14 +376,14 @@ public final class TCSettings
         requireItemInAxeListForEnchant = config.getBoolean(Reference.REQ_ITEM_IN_AXE_LIST_ENCHANT, Reference.CTGY_ENCHANTMENT_MODE,
                 requireItemInAxeListForEnchantDefault, Reference.requireItemInAxeListForEnchantDesc, Reference.LANG_KEY_BASE + Reference.REQ_ITEM_IN_AXE_LIST_ENCHANT);
         orderedKeys.add(Reference.REQ_ITEM_IN_AXE_LIST_ENCHANT);
-        config.addCustomCategoryLanguageKey(Reference.CTGY_ENCHANTMENT_MODE, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.CTGY_ENCHANTMENT_MODE);
+        config.setCategoryLanguageKey(Reference.CTGY_ENCHANTMENT_MODE, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.CTGY_ENCHANTMENT_MODE);
         config.setCategoryPropertyOrder(Reference.CTGY_ENCHANTMENT_MODE, orderedKeys);
         
         enabled = config.getBoolean(Reference.ENABLED, Reference.CTGY_SETTINGS,
                 enabledDefault, Reference.enabledDesc, Reference.LANG_KEY_BASE + Reference.ENABLED);
-        config.addCustomCategoryLanguageKey(Reference.CTGY_SETTINGS, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.CTGY_SETTINGS);
+        config.setCategoryLanguageKey(Reference.CTGY_SETTINGS, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.CTGY_SETTINGS);
         
-        config.addCustomCategoryComment(Reference.CTGY_SETTINGS, "ATTENTION: Editing this file manually is no longer necessary UNLESS YOU ARE ADDING NEW MODS/TREES. \n" +
+        config.setCategoryComment(Reference.CTGY_SETTINGS, "ATTENTION: Editing this file manually is no longer necessary UNLESS YOU ARE ADDING NEW MODS/TREES. \n" +
                 "On the Mods list screen select the entry for Treecapitator, then click the Config button to modify these settings.");
         
         // Log configs if we are in debug logging mode

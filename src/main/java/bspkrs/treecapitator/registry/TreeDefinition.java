@@ -277,52 +277,52 @@ public class TreeDefinition
         
         if (cc.containsKey(Reference.ALLOW_SMART_TREE_DETECT))
             onlyDestroyUpwards = cc.get(Reference.ALLOW_SMART_TREE_DETECT)
-                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.ALLOW_SMART_TREE_DETECT)
+                    .setPropLanguageKey(Reference.LANG_KEY_BASE + Reference.ALLOW_SMART_TREE_DETECT)
                     .getBoolean(TCSettings.allowSmartTreeDetection);
         if (cc.containsKey(Reference.ONLY_DESTROY_UPWARDS))
             onlyDestroyUpwards = cc.get(Reference.ONLY_DESTROY_UPWARDS)
-                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.ONLY_DESTROY_UPWARDS)
+                    .setPropLanguageKey(Reference.LANG_KEY_BASE + Reference.ONLY_DESTROY_UPWARDS)
                     .getBoolean(TCSettings.onlyDestroyUpwards);
         if (cc.containsKey(Reference.REQ_DECAY_CHECK))
             requireLeafDecayCheck = cc.get(Reference.REQ_DECAY_CHECK)
-                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.REQ_DECAY_CHECK)
+                    .setPropLanguageKey(Reference.LANG_KEY_BASE + Reference.REQ_DECAY_CHECK)
                     .getBoolean(TCSettings.requireLeafDecayCheck);
         if (cc.containsKey(Reference.MAX_H_LOG_DIST))
             maxHorLogBreakDist = cc.get(Reference.MAX_H_LOG_DIST)
-                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.MAX_H_LOG_DIST)
+                    .setPropLanguageKey(Reference.LANG_KEY_BASE + Reference.MAX_H_LOG_DIST)
                     .getInt(TCSettings.maxHorLogBreakDist);
         if (cc.containsKey(Reference.MAX_V_LOG_DIST))
             maxVerLogBreakDist = cc.get(Reference.MAX_V_LOG_DIST)
-                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.MAX_V_LOG_DIST)
+                    .setPropLanguageKey(Reference.LANG_KEY_BASE + Reference.MAX_V_LOG_DIST)
                     .getInt(TCSettings.maxVerLogBreakDist);
         if (cc.containsKey(Reference.MAX_H_LEAF_DIST))
             maxHorLeafBreakDist = cc.get(Reference.MAX_H_LEAF_DIST)
-                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.MAX_H_LEAF_DIST)
+                    .setPropLanguageKey(Reference.LANG_KEY_BASE + Reference.MAX_H_LEAF_DIST)
                     .getInt(TCSettings.maxHorLeafBreakDist);
         if (cc.containsKey(Reference.MAX_LEAF_ID_DIST))
             maxLeafIDDist = cc.get(Reference.MAX_LEAF_ID_DIST)
-                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.MAX_LEAF_ID_DIST)
+                    .setPropLanguageKey(Reference.LANG_KEY_BASE + Reference.MAX_LEAF_ID_DIST)
                     .getInt(TCSettings.maxLeafIDDist);
         if (cc.containsKey(Reference.MIN_LEAF_ID))
             minLeavesToID = cc.get(Reference.MIN_LEAF_ID)
-                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.MIN_LEAF_ID)
+                    .setPropLanguageKey(Reference.LANG_KEY_BASE + Reference.MIN_LEAF_ID)
                     .getInt();
         if (cc.containsKey(Reference.BREAK_SPEED_MOD))
             breakSpeedModifier = (float) cc.get(Reference.BREAK_SPEED_MOD)
-                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.BREAK_SPEED_MOD)
+                    .setPropLanguageKey(Reference.LANG_KEY_BASE + Reference.BREAK_SPEED_MOD)
                     .getDouble(TCSettings.breakSpeedModifier);
         if (cc.containsKey(Reference.USE_ADV_TOP_LOG_LOGIC))
             useAdvancedTopLogLogic = cc.get(Reference.USE_ADV_TOP_LOG_LOGIC)
-                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.USE_ADV_TOP_LOG_LOGIC)
+                    .setPropLanguageKey(Reference.LANG_KEY_BASE + Reference.USE_ADV_TOP_LOG_LOGIC)
                     .getBoolean(TCSettings.useAdvancedTopLogLogic);
         
         if (cc.containsKey(Reference.LOGS))
             logBlocks = ListUtils.getDelimitedStringAsBlockIDList(cc.get(Reference.LOGS)
-                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.LOGS)
+                    .setPropLanguageKey(Reference.LANG_KEY_BASE + Reference.LOGS)
                     .getString(), "; ");
         if (cc.containsKey(Reference.LEAVES))
             leafBlocks = ListUtils.getDelimitedStringAsBlockIDList(cc.get(Reference.LEAVES)
-                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.LEAVES)
+                    .setPropLanguageKey(Reference.LANG_KEY_BASE + Reference.LEAVES)
                     .getString(), "; ");
         
         cc.setPropertyOrder(orderedKeys);
@@ -335,68 +335,68 @@ public class TreeDefinition
         if (allowSmartTreeDetection != TCSettings.allowSmartTreeDetection)
         {
             config.get(category, Reference.ALLOW_SMART_TREE_DETECT, TCSettings.allowSmartTreeDetection, Reference.OPTIONAL)
-                    .set(allowSmartTreeDetection)
-                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.ALLOW_SMART_TREE_DETECT);
+                    .setValue(allowSmartTreeDetection)
+                    .setPropLanguageKey(Reference.LANG_KEY_BASE + Reference.ALLOW_SMART_TREE_DETECT);
         }
         if (onlyDestroyUpwards != TCSettings.onlyDestroyUpwards)
         {
             config.get(category, Reference.ONLY_DESTROY_UPWARDS, TCSettings.onlyDestroyUpwards, Reference.OPTIONAL)
-                    .set(onlyDestroyUpwards)
-                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.ONLY_DESTROY_UPWARDS);
+                    .setValue(onlyDestroyUpwards)
+                    .setPropLanguageKey(Reference.LANG_KEY_BASE + Reference.ONLY_DESTROY_UPWARDS);
         }
         if (requireLeafDecayCheck != TCSettings.requireLeafDecayCheck)
         {
             config.get(category, Reference.REQ_DECAY_CHECK, TCSettings.requireLeafDecayCheck, Reference.OPTIONAL)
-                    .set(requireLeafDecayCheck)
-                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.REQ_DECAY_CHECK);
+                    .setValue(requireLeafDecayCheck)
+                    .setPropLanguageKey(Reference.LANG_KEY_BASE + Reference.REQ_DECAY_CHECK);
         }
         if (maxHorLogBreakDist != TCSettings.maxHorLogBreakDist)
         {
             config.get(category, Reference.MAX_H_LOG_DIST, TCSettings.maxHorLogBreakDist, Reference.OPTIONAL)
-                    .set(maxHorLogBreakDist)
-                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.MAX_H_LOG_DIST);
+                    .setValue(maxHorLogBreakDist)
+                    .setPropLanguageKey(Reference.LANG_KEY_BASE + Reference.MAX_H_LOG_DIST);
         }
         if (maxVerLogBreakDist != TCSettings.maxVerLogBreakDist)
         {
             config.get(category, Reference.MAX_V_LOG_DIST, TCSettings.maxVerLogBreakDist, Reference.OPTIONAL)
-                    .set(maxVerLogBreakDist)
-                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.MAX_V_LOG_DIST);
+                    .setValue(maxVerLogBreakDist)
+                    .setPropLanguageKey(Reference.LANG_KEY_BASE + Reference.MAX_V_LOG_DIST);
         }
         if (maxHorLeafBreakDist != TCSettings.maxHorLeafBreakDist)
         {
             config.get(category, Reference.MAX_H_LEAF_DIST, TCSettings.maxHorLeafBreakDist, Reference.OPTIONAL)
-                    .set(maxHorLeafBreakDist)
-                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.MAX_H_LEAF_DIST);
+                    .setValue(maxHorLeafBreakDist)
+                    .setPropLanguageKey(Reference.LANG_KEY_BASE + Reference.MAX_H_LEAF_DIST);
         }
         if (maxLeafIDDist != TCSettings.maxLeafIDDist)
         {
             config.get(category, Reference.MAX_LEAF_ID_DIST, TCSettings.maxLeafIDDist, Reference.OPTIONAL)
-                    .set(maxLeafIDDist)
-                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.MAX_LEAF_ID_DIST);
+                    .setValue(maxLeafIDDist)
+                    .setPropLanguageKey(Reference.LANG_KEY_BASE + Reference.MAX_LEAF_ID_DIST);
         }
         if (minLeavesToID != TCSettings.minLeavesToID)
         {
             config.get(category, Reference.MIN_LEAF_ID, TCSettings.minLeavesToID, Reference.OPTIONAL)
-                    .set(minLeavesToID)
-                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.MIN_LEAF_ID);
+                    .setValue(minLeavesToID)
+                    .setPropLanguageKey(Reference.LANG_KEY_BASE + Reference.MIN_LEAF_ID);
         }
         if (breakSpeedModifier != TCSettings.breakSpeedModifier)
         {
             config.get(category, Reference.BREAK_SPEED_MOD, TCSettings.breakSpeedModifier, Reference.OPTIONAL)
-                    .set(breakSpeedModifier)
-                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.BREAK_SPEED_MOD);
+                    .setValue(breakSpeedModifier)
+                    .setPropLanguageKey(Reference.LANG_KEY_BASE + Reference.BREAK_SPEED_MOD);
         }
         if (useAdvancedTopLogLogic != TCSettings.useAdvancedTopLogLogic)
         {
             config.get(category, Reference.USE_ADV_TOP_LOG_LOGIC, TCSettings.useAdvancedTopLogLogic, Reference.OPTIONAL)
-                    .set(useAdvancedTopLogLogic)
-                    .setLanguageKey(Reference.LANG_KEY_BASE + Reference.USE_ADV_TOP_LOG_LOGIC);
+                    .setValue(useAdvancedTopLogLogic)
+                    .setPropLanguageKey(Reference.LANG_KEY_BASE + Reference.USE_ADV_TOP_LOG_LOGIC);
         }
         
         config.get(category, Reference.LOGS, ListUtils.getListAsDelimitedString(logBlocks, "; "))
-                .setLanguageKey(Reference.LANG_KEY_BASE + Reference.LOGS);
+                .setPropLanguageKey(Reference.LANG_KEY_BASE + Reference.LOGS);
         config.get(category, Reference.LEAVES, ListUtils.getListAsDelimitedString(leafBlocks, "; "))
-                .setLanguageKey(Reference.LANG_KEY_BASE + Reference.LEAVES);
+                .setPropLanguageKey(Reference.LANG_KEY_BASE + Reference.LEAVES);
         
         config.setCategoryPropertyOrder(category, orderedKeys);
     }

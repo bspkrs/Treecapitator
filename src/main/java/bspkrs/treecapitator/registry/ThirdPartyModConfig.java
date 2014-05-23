@@ -178,12 +178,12 @@ public class ThirdPartyModConfig
     {
         ConfigCategory cc = config.getCategory(category);
         ThirdPartyModConfig tpmc = new ThirdPartyModConfig(config.get(category, Reference.MOD_ID, Reference.MINECRAFT, (String) null, Property.Type.MOD_ID)
-                .setLanguageKey("bspkrs.tc.configgui." + Reference.MOD_ID).getString());
+                .setPropLanguageKey("bspkrs.tc.configgui." + Reference.MOD_ID).getString());
         if (cc.containsKey(Reference.AXE_ID_LIST))
-            for (ItemID itemID : ListUtils.getDelimitedStringAsItemIDList(cc.get(Reference.AXE_ID_LIST).setLanguageKey("bspkrs.tc.configgui." + Reference.AXE_ID_LIST).getString(), ";"))
+            for (ItemID itemID : ListUtils.getDelimitedStringAsItemIDList(cc.get(Reference.AXE_ID_LIST).setPropLanguageKey("bspkrs.tc.configgui." + Reference.AXE_ID_LIST).getString(), ";"))
                 tpmc.addAxe(itemID);
         if (cc.containsKey(Reference.SHEARS_ID_LIST))
-            for (ItemID itemID : ListUtils.getDelimitedStringAsItemIDList(cc.get(Reference.SHEARS_ID_LIST).setLanguageKey("bspkrs.tc.configgui." + Reference.SHEARS_ID_LIST).getString(), ";"))
+            for (ItemID itemID : ListUtils.getDelimitedStringAsItemIDList(cc.get(Reference.SHEARS_ID_LIST).setPropLanguageKey("bspkrs.tc.configgui." + Reference.SHEARS_ID_LIST).getString(), ";"))
                 tpmc.addShears(itemID);
         
         tpmc.overrideIMC = config.getBoolean(Reference.OVERRIDE_IMC, category, TCSettings.userConfigOverridesIMC, Reference.overrideIMCDesc,
@@ -200,9 +200,9 @@ public class ThirdPartyModConfig
     
     public void writeToConfiguration(Configuration config, String category)
     {
-        config.get(category, Reference.MOD_ID, modID, (String) null, Property.Type.MOD_ID).setLanguageKey("bspkrs.tc.configgui." + Reference.MOD_ID);
-        config.get(category, Reference.AXE_ID_LIST, ListUtils.getListAsDelimitedString(axeList, "; ")).setLanguageKey("bspkrs.tc.configgui." + Reference.AXE_ID_LIST);
-        config.get(category, Reference.SHEARS_ID_LIST, ListUtils.getListAsDelimitedString(shearsList, "; ")).setLanguageKey("bspkrs.tc.configgui." + Reference.SHEARS_ID_LIST);
+        config.get(category, Reference.MOD_ID, modID, (String) null, Property.Type.MOD_ID).setPropLanguageKey("bspkrs.tc.configgui." + Reference.MOD_ID);
+        config.get(category, Reference.AXE_ID_LIST, ListUtils.getListAsDelimitedString(axeList, "; ")).setPropLanguageKey("bspkrs.tc.configgui." + Reference.AXE_ID_LIST);
+        config.get(category, Reference.SHEARS_ID_LIST, ListUtils.getListAsDelimitedString(shearsList, "; ")).setPropLanguageKey("bspkrs.tc.configgui." + Reference.SHEARS_ID_LIST);
         config.getBoolean(Reference.OVERRIDE_IMC, category, overrideIMC, Reference.overrideIMCDesc, "bspkrs.tc.configgui." + Reference.OVERRIDE_IMC);
         
         for (Entry<String, TreeDefinition> e : treesMap.entrySet())
