@@ -19,6 +19,7 @@ public class GuiConfigCustomCategoryListEntry extends GuiConfigCategoryListEntry
         // TODO: create a custom IGuiConfigListEntry class that adds a new tree to a mod config
         
         subGuiConfig = new GuiConfig(this.parentGuiConfig, props, this.prop.isHotLoadable(), this.parentGuiConfig.modID,
-                this.parentGuiConfig.allowNonHotLoadConfigChanges, this.parentGuiConfig.title, this.prop.getQualifiedName());
+                this.parentGuiConfig.allowNonHotLoadConfigChanges, this.parentGuiConfig.title,
+                ((this.parentGuiConfig.titleLine2 == null ? "" : this.parentGuiConfig.titleLine2) + " > " + this.propName));
     }
 }
