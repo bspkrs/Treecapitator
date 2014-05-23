@@ -1,19 +1,19 @@
 package bspkrs.treecapitator.registry;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import bspkrs.helpers.nbt.NBTTagCompoundHelper;
-import bspkrs.helpers.nbt.NBTTagListHelper;
 import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.fml.gui.GuiConfigCustomCategoryListEntry;
 import bspkrs.treecapitator.util.Reference;
+import bspkrs.treecapitator.util.TCLog;
 import bspkrs.util.ItemID;
 import bspkrs.util.ListUtils;
 import bspkrs.util.config.ConfigCategory;
@@ -22,14 +22,15 @@ import bspkrs.util.config.Property;
 
 public class ThirdPartyModConfig
 {
-    private final String                 modID;
-    private List<ItemID>                 axeList;
-    private List<ItemID>                 shearsList;
-    private boolean                      overrideIMC;
-    private Map<String, TreeDefinition>  treesMap;
+    private final String                modID;
+    private List<ItemID>                axeList;
+    private List<ItemID>                shearsList;
+    private boolean                     overrideIMC;
+    private Map<String, TreeDefinition> treesMap;
     
-    private boolean                      isChanged   = false;
-    private static LinkedHashSet<String> orderedKeys = new LinkedHashSet<String>();
+    private boolean                     isChanged   = false;
+    private static List<String>         orderedKeys = new ArrayList<String>();
+    private static Set<String>          validKeys   = new HashSet<String>();
     
     /*
      * This special constructor provides the default vanilla tree "mod"
@@ -103,6 +104,29 @@ public class ThirdPartyModConfig
         isChanged = true;
     }
     
+    public static boolean isValidNBT(NBTTagCompound tpModCfg)
+    {
+        for (String s : (Set<String>) tpModCfg.func_150296_c())
+            if (!validKeys.contains(s))
+                TCLog.warning("Unknown tag \"%s\" found while verifying a ThirdPartyModConfig NBTTagCompound object", s);
+        
+        if (!tpModCfg.hasKey(Reference.MOD_ID))
+        {
+            TCLog.severe("ThirdPartyModConfig NBTTagCompound objects must contain a string tag with the key \"%s\"", Reference.MOD_ID);
+            return false;
+        }
+        
+        if (tpModCfg.hasKey(Reference.TREES))
+        {
+            NBTTagList treeList = tpModCfg.getTagList(Reference.TREES, (byte) 10);
+            for (int i = 0; i < treeList.tagCount(); i++)
+                if (!TreeDefinition.isValidNBT(treeList.getCompoundTagAt(i)))
+                    return false;
+        }
+        
+        return true;
+    }
+    
     public static ThirdPartyModConfig readFromNBT(NBTTagCompound tpModCfg)
     {
         ThirdPartyModConfig tpmc = new ThirdPartyModConfig(tpModCfg.getString(Reference.MOD_ID));
@@ -115,12 +139,14 @@ public class ThirdPartyModConfig
             for (ItemID itemID : ListUtils.getDelimitedStringAsItemIDList(tpModCfg.getString(Reference.SHEARS_ID_LIST), ";"))
                 tpmc.addShears(itemID);
         
-        NBTTagList treeList = NBTTagCompoundHelper.getTagList(tpModCfg, Reference.TREES, (byte) 10);
-        
-        for (int i = 0; i < treeList.tagCount(); i++)
+        if (tpModCfg.hasKey(Reference.TREES))
         {
-            NBTTagCompound tree = NBTTagListHelper.getCompoundTagAt(treeList, i);
-            tpmc.addTreeDef(tree.getString(Reference.TREE_NAME), new TreeDefinition(tree));
+            NBTTagList treeList = tpModCfg.getTagList(Reference.TREES, (byte) 10);
+            for (int i = 0; i < treeList.tagCount(); i++)
+            {
+                NBTTagCompound tree = treeList.getCompoundTagAt(i);
+                tpmc.addTreeDef(tree.getString(Reference.TREE_NAME), new TreeDefinition(tree));
+            }
         }
         
         tpmc.isChanged = true;
@@ -268,5 +294,10 @@ public class ThirdPartyModConfig
         orderedKeys.add(Reference.AXE_ID_LIST);
         orderedKeys.add(Reference.SHEARS_ID_LIST);
         orderedKeys.add(Reference.OVERRIDE_IMC);
+        
+        validKeys.add(Reference.MOD_ID);
+        validKeys.add(Reference.AXE_ID_LIST);
+        validKeys.add(Reference.SHEARS_ID_LIST);
+        validKeys.add(Reference.OVERRIDE_IMC);
     }
 }

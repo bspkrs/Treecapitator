@@ -1,12 +1,14 @@
 package bspkrs.treecapitator.registry;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
 import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.util.Reference;
+import bspkrs.treecapitator.util.TCLog;
 import bspkrs.util.BlockID;
 import bspkrs.util.ListUtils;
 import bspkrs.util.config.ConfigCategory;
@@ -18,20 +20,21 @@ import com.google.common.hash.Hashing;
 
 public class TreeDefinition
 {
-    protected List<BlockID>              logBlocks;
-    protected List<BlockID>              leafBlocks;
-    protected boolean                    allowSmartTreeDetection;
-    protected boolean                    onlyDestroyUpwards;
-    protected boolean                    requireLeafDecayCheck;
+    protected List<BlockID>     logBlocks;
+    protected List<BlockID>     leafBlocks;
+    protected boolean           allowSmartTreeDetection;
+    protected boolean           onlyDestroyUpwards;
+    protected boolean           requireLeafDecayCheck;
     // max horizontal distance that logs will be broken
-    protected int                        maxHorLogBreakDist;
-    protected int                        maxVerLogBreakDist;
-    protected int                        maxLeafIDDist;
-    protected int                        maxHorLeafBreakDist;
-    protected int                        minLeavesToID;
-    protected float                      breakSpeedModifier;
-    protected boolean                    useAdvancedTopLogLogic;
-    private static LinkedHashSet<String> orderedKeys = new LinkedHashSet<String>();
+    protected int               maxHorLogBreakDist;
+    protected int               maxVerLogBreakDist;
+    protected int               maxLeafIDDist;
+    protected int               maxHorLeafBreakDist;
+    protected int               minLeavesToID;
+    protected float             breakSpeedModifier;
+    protected boolean           useAdvancedTopLogLogic;
+    private static List<String> orderedKeys = new ArrayList<String>();
+    private static Set<String>  validKeys   = new HashSet<String>();
     
     public TreeDefinition()
     {
@@ -192,6 +195,27 @@ public class TreeDefinition
             useAdvancedTopLogLogic = toAdd.useAdvancedTopLogLogic;
         
         return this;
+    }
+    
+    public static boolean isValidNBT(NBTTagCompound treeDefNBT)
+    {
+        for (String s : (Set<String>) treeDefNBT.func_150296_c())
+            if (!validKeys.contains(s))
+                TCLog.warning("Unknown tag \"%s\" found while verifying a TreeDefinition NBTTagCompound object", s);
+        
+        if (!treeDefNBT.hasKey(Reference.TREE_NAME))
+        {
+            TCLog.severe("TreeDefinition NBTTagCompound objects must contain a string tag with the key \"%s\"", Reference.TREE_NAME);
+            return false;
+        }
+        
+        if (!(treeDefNBT.hasKey(Reference.LOGS) || treeDefNBT.hasKey(Reference.LEAVES)))
+        {
+            TCLog.severe("TreeDefinition NBTTagCompound objects must contain at least one string tag with the key \"%s\" or \"%s\"", Reference.LOGS, Reference.LEAVES);
+            return false;
+        }
+        
+        return true;
     }
     
     public TreeDefinition readFromNBT(NBTTagCompound treeDefNBT)
@@ -373,6 +397,8 @@ public class TreeDefinition
                 .setLanguageKey(Reference.LANG_KEY_BASE + Reference.LOGS);
         config.get(category, Reference.LEAVES, ListUtils.getListAsDelimitedString(leafBlocks, "; "))
                 .setLanguageKey(Reference.LANG_KEY_BASE + Reference.LEAVES);
+        
+        config.setCategoryPropertyOrder(category, orderedKeys);
     }
     
     /*
@@ -525,5 +551,18 @@ public class TreeDefinition
         orderedKeys.add(Reference.MAX_H_LEAF_DIST);
         orderedKeys.add(Reference.BREAK_SPEED_MOD);
         orderedKeys.add(Reference.USE_ADV_TOP_LOG_LOGIC);
+        
+        validKeys.add(Reference.ALLOW_SMART_TREE_DETECT);
+        validKeys.add(Reference.ONLY_DESTROY_UPWARDS);
+        validKeys.add(Reference.REQ_DECAY_CHECK);
+        validKeys.add(Reference.MAX_H_LOG_DIST);
+        validKeys.add(Reference.MAX_V_LOG_DIST);
+        validKeys.add(Reference.MAX_H_LEAF_DIST);
+        validKeys.add(Reference.MAX_LEAF_ID_DIST);
+        validKeys.add(Reference.MIN_LEAF_ID);
+        validKeys.add(Reference.BREAK_SPEED_MOD);
+        validKeys.add(Reference.USE_ADV_TOP_LOG_LOGIC);
+        validKeys.add(Reference.LOGS);
+        validKeys.add(Reference.LEAVES);
     }
 }
