@@ -1,7 +1,5 @@
 package bspkrs.treecapitator.network;
 
-import java.io.IOException;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import bspkrs.network.BSPacket;
@@ -40,7 +38,7 @@ public class TCPacketConfig implements BSPacket
             treeRegistry = buffer.readNBTTagCompoundFromBuffer();
             toolRegistry = buffer.readNBTTagCompoundFromBuffer();
         }
-        catch (IOException e)
+        catch (Throwable e)
         {
             e.printStackTrace();
         }
@@ -55,7 +53,7 @@ public class TCPacketConfig implements BSPacket
             buffer.writeNBTTagCompoundToBuffer(treeRegistry);
             buffer.writeNBTTagCompoundToBuffer(toolRegistry);
         }
-        catch (IOException e)
+        catch (Throwable e)
         {
             e.printStackTrace();
         }
