@@ -7,18 +7,17 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import bspkrs.treecapitator.config.TCConfigHandler;
 import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.forge.OreDictionaryHandler;
 import bspkrs.treecapitator.util.Reference;
 import bspkrs.treecapitator.util.TCLog;
+import bspkrs.util.BlockID;
 import bspkrs.util.ItemID;
+import bspkrs.util.ModulusBlockID;
 import bspkrs.util.config.ConfigCategory;
 import bspkrs.util.config.Configuration;
 import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.event.FMLInterModComms;
 
 public class ModConfigRegistry
 {
@@ -169,38 +168,38 @@ public class ModConfigRegistry
         /*
          * Get / Set 3rd Party Mod configs
          */
-        TCSettings.multiMineModID = config.getString("multiMineID", Reference.TREE_MOD_CFG_CTGY,
+        TCSettings.multiMineModID = config.getString("multiMineID", Reference.CTGY_TREE_MOD_CFG,
                 TCSettings.multiMineModIDDefault, Reference.multiMineIDDesc, "bspkrs.tc.configgui.multiMineID");
-        TCSettings.userConfigOverridesIMC = config.getBoolean("userConfigOverridesIMC", Reference.TREE_MOD_CFG_CTGY,
+        TCSettings.userConfigOverridesIMC = config.getBoolean("userConfigOverridesIMC", Reference.CTGY_TREE_MOD_CFG,
                 TCSettings.userConfigOverridesIMCDefault, Reference.userConfigOverridesIMCDesc, "bspkrs.tc.configgui.userConfigOverridesIMC");
-        TCSettings.saveIMCConfigsToFile = config.getBoolean("saveIMCConfigsToFile", Reference.TREE_MOD_CFG_CTGY,
+        TCSettings.saveIMCConfigsToFile = config.getBoolean("saveIMCConfigsToFile", Reference.CTGY_TREE_MOD_CFG,
                 TCSettings.saveIMCConfigsToFileDefault, Reference.saveIMCConfigsToFileDesc, "bspkrs.tc.configgui.saveIMCConfigsToFile");
         
-        TCLog.configs(config, Reference.TREE_MOD_CFG_CTGY);
+        TCLog.configs(config, Reference.CTGY_TREE_MOD_CFG);
         
-        config.addCustomCategoryComment(Reference.TREE_MOD_CFG_CTGY, Reference.TREE_MOD_CFG_CTGY_DESC);
-        config.addCustomCategoryLanguageKey(Reference.TREE_MOD_CFG_CTGY, "bspkrs.tc.configgui.ctgy." + Reference.TREE_MOD_CFG_CTGY);
+        config.addCustomCategoryComment(Reference.CTGY_TREE_MOD_CFG, Reference.TREE_MOD_CFG_CTGY_DESC);
+        config.addCustomCategoryLanguageKey(Reference.CTGY_TREE_MOD_CFG, "bspkrs.tc.configgui.ctgy." + Reference.CTGY_TREE_MOD_CFG);
         
-        if (!config.hasCategory(Reference.TREE_MOD_CFG_CTGY + "." + Reference.VAN_TREES_ITEMS_CTGY))
+        if (!config.hasCategory(Reference.CTGY_TREE_MOD_CFG + "." + Reference.CTGY_VAN_TREES_ITEMS))
         {
             // Write default tree/mod settings to config
             for (Entry<String, ThirdPartyModConfig> e : defaultConfigs().entrySet())
-                e.getValue().writeToConfiguration(config, Reference.TREE_MOD_CFG_CTGY + "." + e.getKey());
+                e.getValue().writeToConfiguration(config, Reference.CTGY_TREE_MOD_CFG + "." + e.getKey());
             
             TCLog.info("Looks like a fresh config; default config loaded.");
         }
         else
             TCLog.info("Proceeding to load tree/mod configs from file.");
         
-        config.addCustomCategoryComment(Reference.TREE_MOD_CFG_CTGY + "." + Reference.VAN_TREES_ITEMS_CTGY, Reference.VAN_TREES_ITEMS_CTGY_DESC);
-        config.addCustomCategoryLanguageKey(Reference.TREE_MOD_CFG_CTGY + "." + Reference.VAN_TREES_ITEMS_CTGY,
-                "bspkrs.tc.configgui.ctgy." + Reference.TREE_MOD_CFG_CTGY + "." + Reference.VAN_TREES_ITEMS_CTGY);
+        config.addCustomCategoryComment(Reference.CTGY_TREE_MOD_CFG + "." + Reference.CTGY_VAN_TREES_ITEMS, Reference.VAN_TREES_ITEMS_CTGY_DESC);
+        config.addCustomCategoryLanguageKey(Reference.CTGY_TREE_MOD_CFG + "." + Reference.CTGY_VAN_TREES_ITEMS,
+                "bspkrs.tc.configgui.ctgy." + Reference.CTGY_TREE_MOD_CFG + "." + Reference.CTGY_VAN_TREES_ITEMS);
         
         // Load all configs found in the file to ModConfigRegistry
         for (String ctgy : config.getCategoryNames())
         {
             ConfigCategory cc = config.getCategory(ctgy);
-            if (ctgy.indexOf(Reference.TREE_MOD_CFG_CTGY + ".") != -1 && cc.containsKey(Reference.MOD_ID)
+            if (ctgy.indexOf(Reference.CTGY_TREE_MOD_CFG + ".") != -1 && cc.containsKey(Reference.MOD_ID)
                     && (cc.get(Reference.MOD_ID).getString().equals(Reference.MINECRAFT) || Loader.isModLoaded(cc.get(Reference.MOD_ID).getString())))
             {
                 TCLog.debug("Loading file config for mod %s (config category %s)...", cc.get(Reference.MOD_ID).getString(), ctgy);
@@ -223,7 +222,7 @@ public class ModConfigRegistry
         for (String ctgy : config.getCategoryNames())
         {
             ConfigCategory cc = config.getCategory(ctgy);
-            if (ctgy.indexOf(Reference.TREE_MOD_CFG_CTGY + ".") != -1 && cc.containsKey(Reference.MOD_ID) && tpmc.modID().equals(cc.get(Reference.MOD_ID).getString()))
+            if (ctgy.indexOf(Reference.CTGY_TREE_MOD_CFG + ".") != -1 && cc.containsKey(Reference.MOD_ID) && tpmc.modID().equals(cc.get(Reference.MOD_ID).getString()))
             {
                 modCtgy = ctgy;
                 break;
@@ -231,24 +230,32 @@ public class ModConfigRegistry
         }
         
         if (modCtgy.isEmpty())
-            modCtgy = Reference.TREE_MOD_CFG_CTGY + "." + tpmc.modID();
+            modCtgy = Reference.CTGY_TREE_MOD_CFG + "." + tpmc.modID();
         else if (config.hasCategory(modCtgy))
             config.removeCategory(config.getCategory(modCtgy));
         
         tpmc.writeToConfiguration(config, modCtgy);
         
-        config.addCustomCategoryComment(Reference.TREE_MOD_CFG_CTGY + "." + Reference.VAN_TREES_ITEMS_CTGY, Reference.VAN_TREES_ITEMS_CTGY_DESC);
-        config.addCustomCategoryLanguageKey(Reference.TREE_MOD_CFG_CTGY + "." + Reference.VAN_TREES_ITEMS_CTGY,
-                "bspkrs.tc.configgui.ctgy." + Reference.TREE_MOD_CFG_CTGY + "." + Reference.VAN_TREES_ITEMS_CTGY);
+        config.addCustomCategoryComment(Reference.CTGY_TREE_MOD_CFG + "." + Reference.CTGY_VAN_TREES_ITEMS, Reference.VAN_TREES_ITEMS_CTGY_DESC);
+        config.addCustomCategoryLanguageKey(Reference.CTGY_TREE_MOD_CFG + "." + Reference.CTGY_VAN_TREES_ITEMS,
+                "bspkrs.tc.configgui.ctgy." + Reference.CTGY_TREE_MOD_CFG + "." + Reference.CTGY_VAN_TREES_ITEMS);
     }
     
     protected void initDefaultModConfigs()
     {
         defaultModCfgs = new TreeMap<String, ThirdPartyModConfig>();
-        defaultModCfgs.put(Reference.VAN_TREES_ITEMS_CTGY, new ThirdPartyModConfig());
+        defaultModCfgs.put(Reference.CTGY_VAN_TREES_ITEMS, new ThirdPartyModConfig());
         
         //        defaultModCfgs.put("AppliedEnergistics", new ThirdPartyModConfig("AppliedEnergistics", "AppliedEnergistics.cfg", "",
         //                "item:appeng.toolQuartzAxe", "<item:appeng.toolQuartzAxe>", "", true).setOverrideIMC(false));
+        
+        defaultModCfgs.put("BiomesOPlenty", new ThirdPartyModConfig("BiomesOPlenty")
+                .addAxe(new ItemID("BiomesOPlenty:axeMud"))
+                .addAxe(new ItemID("BiomesOPlenty:axeAmethyst"))
+                .addTreeDef("bop_cherry", new TreeDefinition().addLogID(new ModulusBlockID("BiomesOPlenty:logs1", 1, 4)).addLeafID(new ModulusBlockID("BiomesOPlenty:leaves3", 3, 8)))
+                .addTreeDef("bop_darkwood", new TreeDefinition().addLogID(new ModulusBlockID("BiomesOPlenty:logs1", 2, 4)).addLeafID(new ModulusBlockID("BiomesOPlenty:leaves1", 3, 8)))
+                .addTreeDef("bop_magic", new TreeDefinition().addLogID(new ModulusBlockID("BiomesOPlenty:logs2", 1, 4)).addLeafID(new ModulusBlockID("BiomesOPlenty:leaves1", 2, 8)))
+                );
         
         //        defaultModCfgs.put("DivineRPG", new ThirdPartyModConfig("DivineRPG", "DivineRPG.cfg", "block:eucalyptus",
         //                "item:Bedrock Axe; item:Crystal Axe; item:Realmite Axe; item:azuriteaxe; item:corruptedaxe; item:denseaxe; item:divineaxe; " +
@@ -257,84 +264,84 @@ public class ModConfigRegistry
         //                        "<item:divineaxe>; <item:donatoraxe>; <item:energyaxe>; <item:mythrilaxe>; <item:plasmaaxe>; <item:serenityaxe>; " +
         //                        "<item:twilightaxe>", "", true)
         //                .setOverrideIMC(false)
-        //                .addConfigTreeDef("eucalyptus", new ConfigTreeDefinition("<block:eucalyptus>", "18"))); // still not sure on this
+        //                .addTreeDef("eucalyptus", new TreeDefinition("<block:eucalyptus>", "18"))); // still not sure on this
         
         //        defaultModCfgs.put("Forestry", new ThirdPartyModConfig("Forestry", "forestry/base.conf", "block:log1; block:log2; block:log3; " +
         //                "block:log4; block:log5; block:log6; block:log7; block:leaves")
         //                .setOverrideIMC(false)
-        //                .addConfigTreeDef("larch", new ConfigTreeDefinition("<block:log1>,0; <block:log1>,4; <block:log1>,8",
+        //                .addTreeDef("larch", new TreeDefinition("<block:log1>,0; <block:log1>,4; <block:log1>,8",
         //                        "<block:leaves>,0; <block:leaves>,8")
         //                        .setRequireLeafDecayCheck(false))
-        //                .addConfigTreeDef("teak", new ConfigTreeDefinition("<block:log1>,1; <block:log1>,5; <block:log1>,9",
+        //                .addTreeDef("teak", new TreeDefinition("<block:log1>,1; <block:log1>,5; <block:log1>,9",
         //                        "<block:leaves>,0; <block:leaves>,8")
         //                        .setRequireLeafDecayCheck(false))
-        //                .addConfigTreeDef("acacia", new ConfigTreeDefinition("<block:log1>,2; <block:log1>,6; <block:log1>,10",
+        //                .addTreeDef("acacia", new TreeDefinition("<block:log1>,2; <block:log1>,6; <block:log1>,10",
         //                        "<block:leaves>,0; <block:leaves>,8")
         //                        .setRequireLeafDecayCheck(false))
-        //                .addConfigTreeDef("lime", new ConfigTreeDefinition("<block:log1>,3; <block:log1>,7; <block:log1>,11",
+        //                .addTreeDef("lime", new TreeDefinition("<block:log1>,3; <block:log1>,7; <block:log1>,11",
         //                        "<block:leaves>,0; <block:leaves>,8")
         //                        .setRequireLeafDecayCheck(false))
-        //                .addConfigTreeDef("chestnut", new ConfigTreeDefinition("<block:log2>,0; <block:log2>,4; <block:log2>,8",
+        //                .addTreeDef("chestnut", new TreeDefinition("<block:log2>,0; <block:log2>,4; <block:log2>,8",
         //                        "<block:leaves>,0; <block:leaves>,8")
         //                        .setRequireLeafDecayCheck(false))
-        //                .addConfigTreeDef("wenge", new ConfigTreeDefinition("<block:log2>,1; <block:log2>,5; <block:log2>,9",
+        //                .addTreeDef("wenge", new TreeDefinition("<block:log2>,1; <block:log2>,5; <block:log2>,9",
         //                        "<block:leaves>,0; <block:leaves>,8")
         //                        .setRequireLeafDecayCheck(false))
-        //                .addConfigTreeDef("baobab", new ConfigTreeDefinition("<block:log2>,2; <block:log2>,6; <block:log2>,10",
+        //                .addTreeDef("baobab", new TreeDefinition("<block:log2>,2; <block:log2>,6; <block:log2>,10",
         //                        "<block:leaves>,0; <block:leaves>,8")
         //                        .setRequireLeafDecayCheck(false))
-        //                .addConfigTreeDef("sequoia", new ConfigTreeDefinition("<block:log2>,3; <block:log2>,7; <block:log2>,11",
+        //                .addTreeDef("sequoia", new TreeDefinition("<block:log2>,3; <block:log2>,7; <block:log2>,11",
         //                        "<block:leaves>,0; <block:leaves>,8")
         //                        .setRequireLeafDecayCheck(false))
-        //                .addConfigTreeDef("kapok", new ConfigTreeDefinition("<block:log3>,0; <block:log3>,4; <block:log3>,8",
+        //                .addTreeDef("kapok", new TreeDefinition("<block:log3>,0; <block:log3>,4; <block:log3>,8",
         //                        "<block:leaves>,0; <block:leaves>,8")
         //                        .setRequireLeafDecayCheck(false))
-        //                .addConfigTreeDef("ebony", new ConfigTreeDefinition("<block:log3>,1; <block:log3>,5; <block:log3>,9",
+        //                .addTreeDef("ebony", new TreeDefinition("<block:log3>,1; <block:log3>,5; <block:log3>,9",
         //                        "<block:leaves>,0; <block:leaves>,8")
         //                        .setRequireLeafDecayCheck(false))
-        //                .addConfigTreeDef("mahogany", new ConfigTreeDefinition("<block:log3>,2; <block:log3>,6; <block:log3>,10",
+        //                .addTreeDef("mahogany", new TreeDefinition("<block:log3>,2; <block:log3>,6; <block:log3>,10",
         //                        "<block:leaves>,0; <block:leaves>,8")
         //                        .setRequireLeafDecayCheck(false))
-        //                .addConfigTreeDef("balsa", new ConfigTreeDefinition("<block:log3>,3; <block:log3>,7; <block:log3>,11",
+        //                .addTreeDef("balsa", new TreeDefinition("<block:log3>,3; <block:log3>,7; <block:log3>,11",
         //                        "<block:leaves>,0; <block:leaves>,8")
         //                        .setRequireLeafDecayCheck(false))
-        //                .addConfigTreeDef("willow", new ConfigTreeDefinition("<block:log4>,0; <block:log4>,4; <block:log4>,8",
+        //                .addTreeDef("willow", new TreeDefinition("<block:log4>,0; <block:log4>,4; <block:log4>,8",
         //                        "<block:leaves>,0; <block:leaves>,8")
         //                        .setRequireLeafDecayCheck(false))
-        //                .addConfigTreeDef("walnut", new ConfigTreeDefinition("<block:log4>,1; <block:log4>,5; <block:log4>,9",
+        //                .addTreeDef("walnut", new TreeDefinition("<block:log4>,1; <block:log4>,5; <block:log4>,9",
         //                        "<block:leaves>,0; <block:leaves>,8")
         //                        .setRequireLeafDecayCheck(false))
-        //                .addConfigTreeDef("boojum", new ConfigTreeDefinition("<block:log4>,2; <block:log4>,6; <block:log4>,10",
+        //                .addTreeDef("boojum", new TreeDefinition("<block:log4>,2; <block:log4>,6; <block:log4>,10",
         //                        "<block:leaves>,0; <block:leaves>,8")
         //                        .setRequireLeafDecayCheck(false))
-        //                .addConfigTreeDef("cherry", new ConfigTreeDefinition("<block:log4>,3; <block:log4>,7; <block:log4>,11",
+        //                .addTreeDef("cherry", new TreeDefinition("<block:log4>,3; <block:log4>,7; <block:log4>,11",
         //                        "<block:leaves>,0; <block:leaves>,8")
         //                        .setRequireLeafDecayCheck(false))
-        //                .addConfigTreeDef("bullpine", new ConfigTreeDefinition("<block:log6>,0; <block:log6>,4; <block:log6>,8",
+        //                .addTreeDef("bullpine", new TreeDefinition("<block:log6>,0; <block:log6>,4; <block:log6>,8",
         //                        "<block:leaves>,0; <block:leaves>,8")
         //                        .setRequireLeafDecayCheck(false))
-        //                .addConfigTreeDef("giant_sequoia", new ConfigTreeDefinition("<block:log7>,0; <block:log7>,4; <block:log7>,8",
+        //                .addTreeDef("giant_sequoia", new TreeDefinition("<block:log7>,0; <block:log7>,4; <block:log7>,8",
         //                        "<block:leaves>,0; <block:leaves>,8")
         //                        .setRequireLeafDecayCheck(false))
-        //                .addConfigTreeDef("datepalm", new ConfigTreeDefinition("<block:log5>,2; block:log5>,6; block:log5>,10",
+        //                .addTreeDef("datepalm", new TreeDefinition("<block:log5>,2; block:log5>,6; block:log5>,10",
         //                        "<block:leaves>,0; <block:leaves>,8")
         //                        .setRequireLeafDecayCheck(false))
-        //                .addConfigTreeDef("bluemahoe", new ConfigTreeDefinition("<block:log5>,0; <block:log5>,4; <block:log5>,8",
+        //                .addTreeDef("bluemahoe", new TreeDefinition("<block:log5>,0; <block:log5>,4; <block:log5>,8",
         //                        "<block:leaves>,0; <block:leaves>,8")
         //                        .setRequireLeafDecayCheck(false))
-        //                .addConfigTreeDef("white_poplar", new ConfigTreeDefinition("<block:log5>,1; <block:log5>,5; <block:log5>,9",
+        //                .addTreeDef("white_poplar", new TreeDefinition("<block:log5>,1; <block:log5>,5; <block:log5>,9",
         //                        "<block:leaves>,0; <block:leaves>,8")
         //                        .setRequireLeafDecayCheck(false))
-        //                .addConfigTreeDef("lemon", new ConfigTreeDefinition("<block:log6>,3; <block:log6>,7; <block:log6>,11",
+        //                .addTreeDef("lemon", new TreeDefinition("<block:log6>,3; <block:log6>,7; <block:log6>,11",
         //                        "<block:leaves>,0; <block:leaves>,8")
         //                        .setRequireLeafDecayCheck(false))
-        //                .addConfigTreeDef("plum", new ConfigTreeDefinition("<block:log6>,1; <block:log6>,5; <block:log6>,9",
+        //                .addTreeDef("plum", new TreeDefinition("<block:log6>,1; <block:log6>,5; <block:log6>,9",
         //                        "<block:leaves>,0; <block:leaves>,8")
         //                        .setRequireLeafDecayCheck(false))
-        //                .addConfigTreeDef("papaya", new ConfigTreeDefinition("<block:log5>,3; <block:log5>,7; <block:log5>,11",
+        //                .addTreeDef("papaya", new TreeDefinition("<block:log5>,3; <block:log5>,7; <block:log5>,11",
         //                        "<block:leaves>,0; <block:leaves>,8")
         //                        .setRequireLeafDecayCheck(false))
-        //                .addConfigTreeDef("sugar_maple", new ConfigTreeDefinition("<block:log6>,2; <block:log6>,6; <block:log6>,10",
+        //                .addTreeDef("sugar_maple", new TreeDefinition("<block:log6>,2; <block:log6>,6; <block:log6>,10",
         //                        "<block:leaves>,0; <block:leaves>,8")
         //                        .setRequireLeafDecayCheck(false)));
         
@@ -348,11 +355,10 @@ public class ModConfigRegistry
         //        defaultModCfgs.put("GraviSuite", new ThirdPartyModConfig("GraviSuite", "GraviSuite.cfg", "", "items:advChainsawID",
         //                "<items:advChainsawID>", "", true));
         
-        //        defaultModCfgs.put("IC2", new ThirdPartyModConfig("IC2", "IC2.cfg", "block:blockRubWood; block:blockRubLeaves",
-        //                "item:itemToolBronzeAxe; item:itemToolChainsaw", "<item:itemToolBronzeAxe>; <item:itemToolChainsaw>",
-        //                "<item:itemToolChainsaw>", true)
-        //                .setOverrideIMC(false)
-        //                .addConfigTreeDef("rubber", new ConfigTreeDefinition("<block:blockRubWood>", "<block:blockRubLeaves>")));
+        defaultModCfgs.put("IC2", new ThirdPartyModConfig("IC2").addAxe(new ItemID("IC2:itemToolBronzeAxe")).addAxe(new ItemID("IC2:itemToolChainsaw"))
+                .addShears(new ItemID("IC2:itemToolChainsaw"))
+                .setOverrideIMC(false)
+                .addTreeDef("ic2_rubber_tree", new TreeDefinition().addLogID(new BlockID("IC2:blockRubWood")).addLeafID(new BlockID("IC2:blockRubLeaves"))));
         
         //        defaultModCfgs.put("Mekanism", new ThirdPartyModConfig("Mekanism", "Mekanism.cfg", "",
         //                "item:BronzeAxe; item:BronzePaxel; item:DiamondPaxel; item:GlowstoneAxe; item:GlowstonePaxel; item:GoldPaxel; " +
@@ -372,283 +378,68 @@ public class ModConfigRegistry
         //        defaultModCfgs.put("MineFactoryReloaded", new ThirdPartyModConfig("MineFactoryReloaded", "powercrystals/minefactoryreloaded/common.cfg",
         //                "block:ID.RubberWood; block:ID.RubberLeaves; block:ID.RubberSapling")
         //                .setOverrideIMC(false)
-        //                .addConfigTreeDef("rubber", new ConfigTreeDefinition("<block:ID.RubberWood>", "<block:ID.RubberLeaves>")));
+        //                .addTreeDef("rubber", new TreeDefinition("<block:ID.RubberWood>", "<block:ID.RubberLeaves>")));
         
-        //        defaultModCfgs.put("Natura", new ThirdPartyModConfig("Natura", "Natura.txt", "block:Bloodwood Block; block:Flora Leaves; " +
-        //                "block:Redwood Block; block:Sakura Leaves; block:Wood Block; block:Rare Log; block:Rare Leaves; block:Willow Log")
-        //                .setOverrideIMC(false)
-        //                .addConfigTreeDef("bloodwood", new ConfigTreeDefinition("<block:Bloodwood Block>", "<block:Sakura Leaves>,2"))
-        //                .addConfigTreeDef("eucalyptus", new ConfigTreeDefinition("<block:Wood Block>,0; <block:Wood Block>,4; <block:Wood Block>,8",
-        //                        "<block:Flora Leaves>,1; <block:Flora Leaves>,9"))
-        //                .addConfigTreeDef("ghostwood", new ConfigTreeDefinition("<block:Wood Block>,2; <block:Wood Block>, 6; <block:Wood Block>, 10",
-        //                        "<block:Sakura Leaves>,1"))
-        //                .addConfigTreeDef("hopseed", new ConfigTreeDefinition("<block:Wood Block>,3; <block:Wood Block>, 7; <block:Wood Block>, 11",
-        //                        "<block:Flora Leaves>,2"))
-        //                .addConfigTreeDef("redwood", new ConfigTreeDefinition("<block:Redwood Block>", "<block:Flora Leaves>,0"))
-        //                .addConfigTreeDef("sakura", new ConfigTreeDefinition("<block:Wood Block>, 1; <block:Wood Block>, 5; <block:Wood Block>, 9",
-        //                        "<block:Sakura Leaves>,0; <block:Sakura Leaves>,8"))
-        //                .addConfigTreeDef("amaranth", new ConfigTreeDefinition("<block:Rare Log>,2; <block:Rare Log>,6; <block:Rare Log>,10",
-        //                        "<block:Rare Leaves>,2; <block:Rare Leaves>,10"))
-        //                .addConfigTreeDef("maple", new ConfigTreeDefinition("<block:Rare Log>,0; <block:Rare Log>,4; <block:Rare Log>,8",
-        //                        "<block:Rare Leaves>,0; <block:Rare Leaves>,8"))
-        //                .addConfigTreeDef("siverbell", new ConfigTreeDefinition("<block:Rare Log>,1; <block:Rare Log>,5; <block:Rare Log>,9",
-        //                        "<block:Rare Leaves>,1; <block:Rare Leaves>,9"))
-        //                .addConfigTreeDef("tigerwood", new ConfigTreeDefinition("<block:Rare Log>,3; <block:Rare Log>,7; <block:Rare Log>,11",
-        //                        "<block:Rare Leaves>,3; <block:Rare Leaves>,11"))
-        //                .addConfigTreeDef("willow", new ConfigTreeDefinition("<block:Willow Log>",
-        //                        "<block:Sakura Leaves>,3; <block:Sakura Leaves>,11; <block:Sakura Leaves>,15").setMaxHorLeafBreakDist(5)));
+        defaultModCfgs.put("Natura", new ThirdPartyModConfig("Natura")
+                .addAxe(new ItemID("Natura:natura.axe.bloodwood"))
+                .addAxe(new ItemID("Natura:natura.axe.darkwood"))
+                .addAxe(new ItemID("Natura:natura.axe.fusewood"))
+                .addAxe(new ItemID("Natura:natura.axe.ghostwood"))
+                .addAxe(new ItemID("Natura:natura.axe.netherquartz"))
+                .setOverrideIMC(false)
+                //                                .addTreeDef("bloodwood", new TreeDefinition("<block:Bloodwood Block>", "<block:Sakura Leaves>,2").addLogID(new ModulusBlockID("", 0, 4)).addLeafID(new ModulusBlockID("", 0, 8)))
+                .addTreeDef("eucalyptus", new TreeDefinition().addLogID(new ModulusBlockID("Natura:tree", 0, 4)).addLeafID(new ModulusBlockID("Natura:floraleaves", 1, 8)))
+                .addTreeDef("sakura", new TreeDefinition().addLogID(new ModulusBlockID("Natura:tree", 1, 4)).addLeafID(new ModulusBlockID("Natura:floraleavesnocolor", 0, 8)))
+                .addTreeDef("ghostwood", new TreeDefinition().addLogID(new ModulusBlockID("Natura:tree", 2, 4)).addLeafID(new ModulusBlockID("Natura:floraleavesnocolor", 1, 8)))
+                .addTreeDef("hopseed", new TreeDefinition().addLogID(new ModulusBlockID("Natura:tree", 3, 4)).addLeafID(new ModulusBlockID("Natura:floraleaves", 2, 8)))
+                //                                .addTreeDef("redwood", new TreeDefinition("<block:Redwood Block>", "<block:Flora Leaves>,0"))
+                //                                .addTreeDef("amaranth", new TreeDefinition("<block:Rare Log>,2; <block:Rare Log>,6; <block:Rare Log>,10",
+                //                                        "<block:Rare Leaves>,2; <block:Rare Leaves>,10"))
+                //                                .addTreeDef("maple", new TreeDefinition("<block:Rare Log>,0; <block:Rare Log>,4; <block:Rare Log>,8",
+                //                                        "<block:Rare Leaves>,0; <block:Rare Leaves>,8"))
+                //                                .addTreeDef("siverbell", new TreeDefinition("<block:Rare Log>,1; <block:Rare Log>,5; <block:Rare Log>,9",
+                //                                        "<block:Rare Leaves>,1; <block:Rare Leaves>,9"))
+                //                                .addTreeDef("tigerwood", new TreeDefinition("<block:Rare Log>,3; <block:Rare Log>,7; <block:Rare Log>,11",
+                //                                        "<block:Rare Leaves>,3; <block:Rare Leaves>,11"))
+                //                                .addTreeDef("willow", new TreeDefinition("<block:Willow Log>",
+                //                                        "<block:Sakura Leaves>,3; <block:Sakura Leaves>,11; <block:Sakura Leaves>,15").setMaxHorLeafBreakDist(5))
+                );
         
         //        defaultModCfgs.put("Railcraft", new ThirdPartyModConfig("Railcraft", "railcraft/railcraft.cfg", "", "item:tool.steel.axe", "<item:tool.steel.axe>",
         //                "", true).setOverrideIMC(false));
         
-        //        defaultModCfgs.put("RedPowerWorld", new ThirdPartyModConfig("RedPowerWorld", "redpower/redpower.cfg",
-        //                "blocks.world:log.id; blocks.world:leaves.id",
-        //                "items.world:axeRuby.id; items.world:axeGreenSapphire.id; items.world:axeSapphire.id",
-        //                "<items.world:axeRuby.id>; <items.world:axeGreenSapphire.id>; <items.world:axeSapphire.id>", "", true)
-        //                .setOverrideIMC(false)
-        //                .addConfigTreeDef("rubber", new ConfigTreeDefinition("<blocks.world:log.id>", "<blocks.world:leaves.id>")));
+        defaultModCfgs.put("Thaumcraft", new ThirdPartyModConfig("Thaumcraft")
+                .addAxe(new ItemID("Thaumcraft:ItemAxeThaumium"))
+                .addAxe(new ItemID("Thaumcraft:ItemAxeElemental"))
+                .setOverrideIMC(false)
+                .addTreeDef("greatwood", new TreeDefinition().addLogID(new ModulusBlockID("Thaumcraft:blockMagicalLog", 0, 4)).addLeafID(new ModulusBlockID("Thaumcraft:blockMagicalLeaves", 0, 8))
+                        .setMaxHorLeafBreakDist(7).setRequireLeafDecayCheck(false))
+                .addTreeDef("silverwood", new TreeDefinition().addLogID(new ModulusBlockID("Thaumcraft:blockMagicalLog", 1, 4)).addLeafID(new ModulusBlockID("Thaumcraft:blockMagicalLeaves", 1, 8))));
         
-        //        defaultModCfgs.put("Thaumcraft", new ThirdPartyModConfig("Thaumcraft", "Thaumcraft.cfg", "block:BlockMagicalLog; block:BlockMagicalLeaves",
-        //                "item:Thaumaxe", "<item:Thaumaxe>", "", true)
-        //                .setOverrideIMC(false)
-        //                .addConfigTreeDef("greatwood",
-        //                        new ConfigTreeDefinition("<block:BlockMagicalLog>,0; <block:BlockMagicalLog>,4; <block:BlockMagicalLog>,8",
-        //                                "<block:BlockMagicalLeaves>,0; <block:BlockMagicalLeaves>,8"))
-        //                .addConfigTreeDef("silverwood",
-        //                        new ConfigTreeDefinition("<block:BlockMagicalLog>,1; <block:BlockMagicalLog>,5; <block:BlockMagicalLog>,9",
-        //                                "<block:BlockMagicalLeaves>,1; <block:BlockMagicalLeaves>,9")));
+        defaultModCfgs.put("TConstruct", new ThirdPartyModConfig("TConstruct")
+                .addAxe(new ItemID("TConstruct:hatchet"))
+                .addAxe(new ItemID("TConstruct:mattock"))
+                .addAxe(new ItemID("TConstruct:lumberaxe"))
+                .setOverrideIMC(false));
         
-        //        defaultModCfgs.put("TConstruct", new ThirdPartyModConfig("TConstruct", "TinkersWorkshop.txt", "",
-        //                "tools:Axe; tools:Lumber Axe; tools:Mattock", "<tools:Axe>; <tools:Lumber Axe>; <tools:Mattock>", "", true)
-        //                .setOverrideIMC(false));
-        
-        //        defaultModCfgs.put("TwilightForest", new ThirdPartyModConfig("TwilightForest", "TwilightForest.cfg",
-        //                "block:Log; block:MagicLog; block:Leaves; block:MagicLeaves; block:MagicLogSpecial; block:Hedge", "item:IronwoodAxe; item:SteeleafAxe; item:MinotaurAxe",
-        //                "<item:IronwoodAxe>; <item:SteeleafAxe>; <item:MinotaurAxe>", "", true)
-        //                .setOverrideIMC(false)
-        //                .addConfigTreeDef("oak", new ConfigTreeDefinition("<block:Log>,0; <block:Log>,4; <block:Log>,8; <block:Log>,12",
-        //                        "<block:Leaves>,0; <block:Leaves>,3; <block:Leaves>,8; <block:Leaves>,11"))
-        //                .addConfigTreeDef("canopy", new ConfigTreeDefinition("<block:Log>,1; <block:Log>,5; <block:Log>,9; <block:Log>,13",
-        //                        "<block:Leaves>, 1; <block:Leaves>,9"))
-        //                .addConfigTreeDef("mangrove", new ConfigTreeDefinition("<block:Log>,2; <block:Log>,6; <block:Log>,10; <block:Log>,14",
-        //                        "<block:Leaves>, 2; <block:Leaves>,10"))
-        //                .addConfigTreeDef("darkwood", new ConfigTreeDefinition("<block:Log>,3; <block:Log>,7; <block:Log>,11;  <block:Log>,15",
-        //                        "<block:Hedge>,1").setMaxLeafIDDist(2).setRequireLeafDecayCheck(false).setMaxHorLeafBreakDist(5))
-        //                .addConfigTreeDef("time", new ConfigTreeDefinition("<block:MagicLog>,0; <block:MagicLog>,4; <block:MagicLog>,8; <block:MagicLog>,12; " +
-        //                        "<block:MagicLogSpecial>,0",
-        //                        "<block:MagicLeaves>,0; <block:MagicLeaves>,8"))
-        //                .addConfigTreeDef("transformation", new ConfigTreeDefinition("<block:MagicLog>,1; <block:MagicLog>,5; <block:MagicLog>,9; <block:MagicLog>,13; " +
-        //                        "<block:MagicLogSpecial>,1",
-        //                        "<block:MagicLeaves>,1; <block:MagicLeaves>,9"))
-        //                .addConfigTreeDef("miner", new ConfigTreeDefinition("<block:MagicLog>,2; <block:MagicLog>,6; <block:MagicLog>,10; <block:MagicLog>,14; " +
-        //                        "<block:MagicLogSpecial>,2",
-        //                        "<block:MagicLeaves>,2; <block:MagicLeaves>,10").setOnlyDestroyUpwards(false))
-        //                .addConfigTreeDef("sorting", new ConfigTreeDefinition("<block:MagicLog>,3; <block:MagicLog>,7; <block:MagicLog>,11; <block:MagicLog>,15; " +
-        //                        "<block:MagicLogSpecial>,3",
-        //                        "<block:MagicLeaves>,3; <block:MagicLeaves>,11")));
-    }
-    
-    protected void imcSendMessageBoP()
-    {
-        if (Loader.isModLoaded("TreeCapitator"))
-        {
-            NBTTagCompound tpModCfg = new NBTTagCompound();
-            tpModCfg.setString("modID", "BiomesOPlenty");
-            tpModCfg.setString("axeIDList", "<item:Muddy Axe ID>; <item:Amethyst Axe ID>");
-            tpModCfg.setString("shearsIDList", "");
-            tpModCfg.setBoolean("useShiftedItemID", true);
-            
-            NBTTagList treeList = new NBTTagList();
-            
-            // Vanilla Oak additions
-            NBTTagCompound tree = new NBTTagCompound();
-            tree.setString("treeName", "vanilla_oak");
-            tree.setString("logs", "");
-            tree.setString("leaves", "<block:Leaf Block ID 1>,4; <block:Leaf Block ID 1>,7; " +
-                    "<block:Leaf Block ID 1>,12; <block:Leaf Block ID 1>,15; <block:Fruit Leaf Block ID>; <block:Leaf Block ID 2>,0; " +
-                    "<block:Leaf Block ID 2>,8; <block:Leaf Block ID 2>,2; <block:Leaf Block ID 2>,10");
-            treeList.appendTag(tree);
-            
-            // Vanilla Birch additions
-            tree = new NBTTagCompound();
-            tree.setString("treeName", "vanilla_birch");
-            tree.setString("logs", "");
-            tree.setString("leaves", "<block:Leaf Block ID 1>,0; <block:Leaf Block ID 1>,8");
-            treeList.appendTag(tree);
-            
-            // BoP acacia
-            tree = new NBTTagCompound();
-            tree.setString("treeName", "acacia");
-            tree.setString("logs", "<block:Log Block ID 1>,0; <block:Log Block ID 1>,4; <block:Log Block ID 1>,8");
-            tree.setString("leaves", "<block:Colourized Leaves ID>,0; <block:Colourized Leaves ID>,8");
-            tree.setBoolean("requireLeafDecayCheck", false);
-            treeList.appendTag(tree);
-            // BoP cherry
-            tree = new NBTTagCompound();
-            tree.setString("treeName", "cherry");
-            tree.setString("logs", "<block:Log Block ID 1>,1; <block:Log Block ID 1>,5; <block:Log Block ID 1>,9");
-            tree.setString("leaves", "<block:Leaf Block ID 2>,1; <block:Leaf Block ID 2>,3; <block:Leaf Block ID 2>,9; <block:Leaf Block ID 2>,11");
-            tree.setBoolean("requireLeafDecayCheck", false);
-            treeList.appendTag(tree);
-            // BoP darkwood
-            tree = new NBTTagCompound();
-            tree.setString("treeName", "darkwood");
-            tree.setString("logs", "<block:Log Block ID 1>,2; <block:Log Block ID 1>,6; <block:Log Block ID 1>,10");
-            tree.setString("leaves", "<block:Leaf Block ID 1>,3; <block:Leaf Block ID 1>,11");
-            tree.setBoolean("requireLeafDecayCheck", false);
-            treeList.appendTag(tree);
-            // BoP fir
-            tree = new NBTTagCompound();
-            tree.setString("treeName", "fir");
-            tree.setString("logs", "<block:Log Block ID 1>,3; <block:Log Block ID 1>,7; <block:Log Block ID 1>,11");
-            tree.setString("leaves", "<block:Leaf Block ID 1>,5; <block:Leaf Block ID 1>,13");
-            tree.setBoolean("requireLeafDecayCheck", false);
-            treeList.appendTag(tree);
-            
-            // BoP holy
-            tree = new NBTTagCompound();
-            tree.setString("treeName", "holy");
-            tree.setString("logs", "<block:Log Block ID 2>,0; <block:Log Block ID 2>,4; <block:Log Block ID 2>,8");
-            tree.setString("leaves", "<block:Leaf Block ID 1>,6; <block:Leaf Block ID 1>,14");
-            tree.setBoolean("requireLeafDecayCheck", false);
-            treeList.appendTag(tree);
-            // BoP magic
-            tree = new NBTTagCompound();
-            tree.setString("treeName", "magic");
-            tree.setString("logs", "<block:Log Block ID 2>,1; <block:Log Block ID 2>,5; <block:Log Block ID 2>,9");
-            tree.setString("leaves", "<block:Leaf Block ID 1>,2; <block:Leaf Block ID 1>,10");
-            tree.setBoolean("requireLeafDecayCheck", false);
-            treeList.appendTag(tree);
-            // BoP mangrove
-            tree = new NBTTagCompound();
-            tree.setString("treeName", "mangrove");
-            tree.setString("logs", "<block:Log Block ID 2>,2; <block:Log Block ID 2>,6; <block:Log Block ID 2>,10");
-            tree.setString("leaves", "<block:Colourized Leaves ID>,1; <block:Colourized Leaves ID>,9");
-            tree.setBoolean("requireLeafDecayCheck", false);
-            treeList.appendTag(tree);
-            // BoP palm
-            tree = new NBTTagCompound();
-            tree.setString("treeName", "palm");
-            tree.setString("logs", "<block:Log Block ID 2>,3; <block:Log Block ID 2>,7; <block:Log Block ID 2>,11");
-            tree.setString("leaves", "<block:Colourized Leaves ID>,2; <block:Colourized Leaves ID>,10");
-            tree.setBoolean("requireLeafDecayCheck", false);
-            treeList.appendTag(tree);
-            
-            // BoP redwood
-            tree = new NBTTagCompound();
-            tree.setString("treeName", "redwood");
-            tree.setString("logs", "<block:Log Block ID 3>,0; <block:Log Block ID 3>,4; <block:Log Block ID 3>,8");
-            tree.setString("leaves", "<block:Colourized Leaves ID>,3; <block:Colourized Leaves ID>,11");
-            tree.setBoolean("requireLeafDecayCheck", false);
-            treeList.appendTag(tree);
-            // BoP willow
-            tree = new NBTTagCompound();
-            tree.setString("treeName", "willow");
-            tree.setString("logs", "<block:Log Block ID 3>,1; <block:Log Block ID 3>,5; <block:Log Block ID 3>,9");
-            tree.setString("leaves", "<block:Colourized Leaves ID>,4; <block:Colourized Leaves ID>,12");
-            tree.setBoolean("requireLeafDecayCheck", false);
-            treeList.appendTag(tree);
-            // BoP dead
-            tree = new NBTTagCompound();
-            tree.setString("treeName", "dead");
-            tree.setString("logs", "<block:Log Block ID 3>,2; <block:Log Block ID 3>,6; <block:Log Block ID 3>,10");
-            tree.setString("leaves", "");
-            tree.setBoolean("requireLeafDecayCheck", false);
-            treeList.appendTag(tree);
-            // BoP big_flower
-            tree = new NBTTagCompound();
-            tree.setString("treeName", "big_flower");
-            tree.setString("logs", "<block:Log Block ID 3>,3; <block:Log Block ID 3>,7; <block:Log Block ID 3>,11");
-            tree.setString("leaves", "<block:Petal ID>");
-            tree.setBoolean("requireLeafDecayCheck", false);
-            treeList.appendTag(tree);
-            
-            // BoP pine
-            tree = new NBTTagCompound();
-            tree.setString("treeName", "pine");
-            tree.setString("logs", "<block:Log Block ID 4>,0; <block:Log Block ID 4>,4; <block:Log Block ID 4>,8");
-            tree.setString("leaves", "<block:Colourized Leaves ID>,5; <block:Colourized Leaves ID>,13");
-            tree.setBoolean("requireLeafDecayCheck", false);
-            treeList.appendTag(tree);
-            // BoP hellbark
-            tree = new NBTTagCompound();
-            tree.setString("treeName", "hellbark");
-            tree.setString("logs", "<block:Log Block ID 4>,1; <block:Log Block ID 4>,5; <block:Log Block ID 4>,9");
-            tree.setString("leaves", "<block:Leaf Block ID 2>,4; <block:Leaf Block ID 2>,12");
-            tree.setBoolean("requireLeafDecayCheck", false);
-            treeList.appendTag(tree);
-            // BoP jacaranda
-            tree = new NBTTagCompound();
-            tree.setString("treeName", "jacaranda");
-            tree.setString("logs", "<block:Log Block ID 4>,2; <block:Log Block ID 4>,6; <block:Log Block ID 4>,10");
-            tree.setString("leaves", "<block:Leaf Block ID 1>,5; <block:Leaf Block ID 1>,13");
-            tree.setBoolean("requireLeafDecayCheck", false);
-            treeList.appendTag(tree);
-            
-            tpModCfg.setTag("trees", treeList);
-            
-            FMLInterModComms.sendMessage("TreeCapitator", "ThirdPartyModConfig", tpModCfg);
-        }
-    }
-    
-    /**
-     * This method is provided as an example for mods to use if they want to send an IMC message to TreeCapitator. The message should be
-     * sent in the @Init mod event method.
-     */
-    protected void imcSendMessageEBXL()
-    {
-        if (Loader.isModLoaded("TreeCapitator"))
-        {
-            NBTTagCompound tpModCfg = new NBTTagCompound();
-            tpModCfg.setString("modID", "ExtraBiomesXL");
-            tpModCfg.setString("axeIDList", "");
-            tpModCfg.setString("shearsIDList", "");
-            tpModCfg.setBoolean("useShiftedItemID", true);
-            
-            NBTTagList treeList = new NBTTagList();
-            
-            // Vanilla Oak additions
-            NBTTagCompound tree = new NBTTagCompound();
-            tree.setString("treeName", "vanilla_oak");
-            tree.setString("logs", "<block:quarterlog0.id>,2; <block:quarterlog1.id>,2; <block:quarterlog2.id>,2; <block:quarterlog3.id>,2;");
-            tree.setString("leaves", "<block:autumnleaves.id>");
-            treeList.appendTag(tree);
-            
-            // Vanilla Spruce additions
-            tree = new NBTTagCompound();
-            tree.setString("treeName", "vanilla_spruce");
-            tree.setString("logs", "");
-            tree.setString("leaves", "<block:autumnleaves.id>");
-            treeList.appendTag(tree);
-            
-            // EBXL fir
-            tree = new NBTTagCompound();
-            tree.setString("treeName", "fir");
-            tree.setString("logs", "<block:customlog.id>,0; <block:quarterlog0.id>,1; <block:quarterlog1.id>,1; <block:quarterlog2.id>,1; <block:quarterlog3.id>,1");
-            tree.setString("leaves", "<block:greenleaves.id>,0; <block:greenleaves.id>,8");
-            tree.setInteger("maxHorLeafBreakDist", 10);
-            tree.setBoolean("requireLeafDecayCheck", false);
-            treeList.appendTag(tree);
-            
-            // EBXL redwood
-            tree = new NBTTagCompound();
-            tree.setString("treeName", "redwood");
-            tree.setString("logs", "<block:quarterlog0.id>,0; <block:quarterlog1.id>,0; <block:quarterlog2.id>,0; <block:quarterlog3.id>,0");
-            tree.setString("leaves", "<block:greenleaves.id>,1; <block:greenleaves.id>,9");
-            tree.setInteger("maxHorLeafBreakDist", 10);
-            tree.setBoolean("requireLeafDecayCheck", false);
-            treeList.appendTag(tree);
-            
-            // EBXL acacia
-            tree = new NBTTagCompound();
-            tree.setString("treeName", "acacia");
-            tree.setString("logs", "<block:customlog.id>,1");
-            tree.setString("leaves", "<block:greenleaves.id>,2");
-            treeList.appendTag(tree);
-            
-            tpModCfg.setTag("trees", treeList);
-            
-            FMLInterModComms.sendMessage("TreeCapitator", "ThirdPartyModConfig", tpModCfg);
-        }
+        defaultModCfgs.put("TwilightForest", new ThirdPartyModConfig("TwilightForest")
+                .addAxe(new ItemID("TwilightForest:item.ironwoodAxe"))
+                .addAxe(new ItemID("TwilightForest:item.knightlyAxe"))
+                .addAxe(new ItemID("TwilightForest:item.minotaurAxe"))
+                .addAxe(new ItemID("TwilightForest:item.steeleafAxe"))
+                .setOverrideIMC(false)
+                .addTreeDef("TF_oak", new TreeDefinition().addLogID(new ModulusBlockID("TwilightForest:tile.TFLog", 0, 4)).addLeafID(new ModulusBlockID("TwilightForest:tile.TFLeaves", 0, 8)))
+                .addTreeDef("TF_canopy", new TreeDefinition().addLogID(new ModulusBlockID("TwilightForest:tile.TFLog", 1, 4)).addLeafID(new ModulusBlockID("TwilightForest:tile.TFLeaves", 1, 8)))
+                .addTreeDef("TF_mangrove", new TreeDefinition().addLogID(new ModulusBlockID("TwilightForest:tile.TFLog", 2, 4)).addLeafID(new ModulusBlockID("TwilightForest:tile.TFLeaves", 2, 8)))
+                .addTreeDef("TF_darkwood", new TreeDefinition().addLogID(new ModulusBlockID("TwilightForest:tile.TFLog", 3, 4)).addLeafID(new BlockID("TwilightForest:tile.TFHedge", 1))
+                        .setMaxLeafIDDist(2).setRequireLeafDecayCheck(false).setMaxHorLeafBreakDist(5))
+                .addTreeDef("TF_time", new TreeDefinition().addLogID(new ModulusBlockID("TwilightForest:tile.TFMagicLog", 0, 4)).addLogID(new ModulusBlockID("TwilightForest:tile.TFMagicLogSpecial", 0, 4))
+                        .addLeafID(new ModulusBlockID("TwilightForest:tile.TFMagicLeaves", 0, 8)))
+                .addTreeDef("TF_transformation", new TreeDefinition().addLogID(new ModulusBlockID("TwilightForest:tile.TFMagicLog", 1, 4)).addLogID(new ModulusBlockID("TwilightForest:tile.TFMagicLogSpecial", 1, 4))
+                        .addLeafID(new ModulusBlockID("TwilightForest:tile.TFMagicLeaves", 1, 8)))
+                .addTreeDef("TF_miner", new TreeDefinition().addLogID(new ModulusBlockID("TwilightForest:tile.TFMagicLog", 2, 4)).addLogID(new ModulusBlockID("TwilightForest:tile.TFMagicLogSpecial", 2, 4))
+                        .addLeafID(new ModulusBlockID("TwilightForest:tile.TFMagicLeaves", 2, 8)))
+                .addTreeDef("TF_sorting", new TreeDefinition().addLogID(new ModulusBlockID("TwilightForest:tile.TFMagicLog", 3, 4)).addLogID(new ModulusBlockID("TwilightForest:tile.TFMagicLogSpecial", 3, 4))
+                        .addLeafID(new ModulusBlockID("TwilightForest:tile.TFMagicLeaves", 3, 8))));
     }
 }
