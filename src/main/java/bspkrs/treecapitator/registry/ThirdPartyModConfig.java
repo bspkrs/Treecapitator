@@ -10,8 +10,8 @@ import java.util.TreeMap;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import bspkrs.treecapitator.TreecapitatorMod;
 import bspkrs.treecapitator.config.TCSettings;
-import bspkrs.treecapitator.fml.gui.GuiConfigCustomCategoryListEntry;
 import bspkrs.treecapitator.util.Reference;
 import bspkrs.treecapitator.util.TCLog;
 import bspkrs.util.ItemID;
@@ -189,7 +189,7 @@ public class ThirdPartyModConfig
         tpmc.overrideIMC = config.getBoolean(Reference.OVERRIDE_IMC, category, TCSettings.userConfigOverridesIMC, Reference.overrideIMCDesc,
                 "bspkrs.tc.configgui." + Reference.OVERRIDE_IMC);
         
-        cc.setCustomIGuiConfigListEntryClass(GuiConfigCustomCategoryListEntry.class);
+        TreecapitatorMod.proxy.addGuiConfigCustomCategoryListEntry(config, category);
         cc.setPropertyOrder(orderedKeys);
         
         for (ConfigCategory ctgy : cc.getChildren())
@@ -211,7 +211,7 @@ public class ThirdPartyModConfig
             else
                 e.getValue().writeToConfiguration(config, e.getKey());
         
-        config.setCategoryCustomIGuiConfigListEntryClass(category, GuiConfigCustomCategoryListEntry.class);
+        TreecapitatorMod.proxy.addGuiConfigCustomCategoryListEntry(config, category);
         config.setCategoryPropertyOrder(category, orderedKeys);
         
         this.isChanged = false;

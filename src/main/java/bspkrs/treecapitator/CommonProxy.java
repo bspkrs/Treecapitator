@@ -9,6 +9,7 @@ import bspkrs.treecapitator.network.TCMessageToMessageCodec;
 import bspkrs.treecapitator.network.TCPacketConfig;
 import bspkrs.treecapitator.network.TCPacketLogin;
 import bspkrs.treecapitator.util.TCLog;
+import bspkrs.util.config.Configuration;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -56,4 +57,7 @@ public class CommonProxy
         
         channel.writeOutbound(new TCPacketConfig(TreecapitatorMod.instance.nbtManager().getPacketArray()));
     }
+    
+    public void addGuiConfigCustomCategoryListEntry(Configuration config, String Category)
+    {}
 }

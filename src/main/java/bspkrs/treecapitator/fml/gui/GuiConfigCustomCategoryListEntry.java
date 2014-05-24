@@ -6,7 +6,10 @@ import bspkrs.util.config.gui.GuiConfig;
 import bspkrs.util.config.gui.GuiPropertyList;
 import bspkrs.util.config.gui.GuiPropertyList.GuiConfigCategoryListEntry;
 import bspkrs.util.config.gui.IConfigProperty;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class GuiConfigCustomCategoryListEntry extends GuiConfigCategoryListEntry
 {
     public GuiConfigCustomCategoryListEntry(GuiConfig parentGuiConfig, GuiPropertyList parentPropertyList, IConfigProperty prop)
