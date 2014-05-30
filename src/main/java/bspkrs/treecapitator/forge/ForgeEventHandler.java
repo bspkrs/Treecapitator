@@ -62,9 +62,8 @@ public class ForgeEventHandler
             
             if (treeDef != null)
             {
-                boolean swappedSneak = !((playerSneakingMap.containsKey(event.entityPlayer.getGameProfile().getName())
-                        && (playerSneakingMap.get(event.entityPlayer.getGameProfile().getName()) == event.entityPlayer.isSneaking()))
-                        || !playerSneakingMap.containsKey(event.entityPlayer.getGameProfile().getName()));
+                Boolean isSneaking = playerSneakingMap.get(event.entityPlayer.getGameProfile().getName());
+                boolean swappedSneak = !((isSneaking != null && (isSneaking.booleanValue() == event.entityPlayer.isSneaking())) || isSneaking == null);
                 
                 CachedBreakSpeed cachedBreakSpeed = new CachedBreakSpeed(event, swappedSneak);
                 Float newBreakSpeed = this.breakSpeedCache.get(cachedBreakSpeed);
@@ -176,7 +175,9 @@ public class ForgeEventHandler
             ItemStack oItem = bs.entityPlayer.getCurrentEquippedItem();
             ItemStack thisItem = this.entityPlayer.getCurrentEquippedItem();
             
-            return bs.entityPlayer.equals(this.entityPlayer) && (oItem != null ? (thisItem != null ? thisItem.isItemEqual(oItem) : false) : thisItem == null)
+            return bs.entityPlayer.getGameProfile().getName().equals(this.entityPlayer.getGameProfile().getName())
+                    && (oItem != null && oItem.getItem() != null ? (thisItem != null && thisItem.getItem() != null
+                            ? GameData.itemRegistry.getNameForObject(thisItem).equals(GameData.itemRegistry.getNameForObject(oItem)) : false) : thisItem == null || thisItem.getItem() == null)
                     && GameData.blockRegistry.getNameForObject(bs.block).equals(GameData.blockRegistry.getNameForObject(this.block))
                     && bs.isSneaking == this.isSneaking && bs.swappedSneak == this.swappedSneak
                     && bs.metadata == this.metadata && bs.originalSpeed == this.originalSpeed && bs.x == this.x && bs.y == this.y && bs.z == this.z;
@@ -196,7 +197,7 @@ public class ForgeEventHandler
                     .putFloat(this.originalSpeed)
                     .putInt(x + z << 8 + y << 16);
             
-            if (thisItem != null)
+            if (thisItem != null && thisItem.getItem() != null)
                 h.putString(GameData.itemRegistry.getNameForObject(thisItem.getItem()), Charsets.UTF_8)
                         .putInt(thisItem.getItemDamage());
             
