@@ -66,8 +66,10 @@ public class ForgeEventHandler
                         && (playerSneakingMap.get(event.entityPlayer.getGameProfile().getName()) == event.entityPlayer.isSneaking()))
                         || !playerSneakingMap.containsKey(event.entityPlayer.getGameProfile().getName()));
                 
-                CachedBreakSpeed c = new CachedBreakSpeed(event, swappedSneak);
-                if (!this.breakSpeedCache.containsKey(c))
+                CachedBreakSpeed cachedBreakSpeed = new CachedBreakSpeed(event, swappedSneak);
+                Float newBreakSpeed = this.breakSpeedCache.get(cachedBreakSpeed);
+                
+                if (newBreakSpeed == null)
                 {
                     if (!swappedSneak)
                     {
@@ -86,10 +88,10 @@ public class ForgeEventHandler
                     else
                         event.newSpeed = 0.0f;
                     
-                    this.breakSpeedCache.put(c, event.newSpeed);
+                    this.breakSpeedCache.put(cachedBreakSpeed, event.newSpeed);
                 }
                 else
-                    event.newSpeed = this.breakSpeedCache.get(c);
+                    event.newSpeed = newBreakSpeed;
             }
         }
     }

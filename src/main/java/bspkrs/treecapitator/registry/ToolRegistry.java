@@ -71,12 +71,12 @@ public class ToolRegistry
     
     public static void autoDetectAxe(ItemStack item, Block block, int blockMetadata)
     {
-        if (item != null && ForgeHooks.isToolEffective(item, block, blockMetadata))
+        if (item != null && item.getItem() != null && ForgeHooks.isToolEffective(item, block, blockMetadata))
         {
             ItemID axe = new ItemID(item);
-            if (!ToolRegistry.instance.isAxe(item))
+            if (!instance.isAxe(item))
                 TCLog.debug("Auto Axe Detection: Attempting to register axe %s", axe);
-            if (ToolRegistry.instance().registerAxe(axe))
+            if (instance.registerAxe(axe))
             {
                 int index = axe.id.indexOf(":");
                 String modID = index == -1 ? Reference.MINECRAFT : axe.id.substring(0, index);
@@ -160,25 +160,10 @@ public class ToolRegistry
     
     public boolean isAxe(ItemStack itemStack)
     {
-        if (itemStack != null)
+        if (itemStack != null && itemStack.getItem() != null)
         {
             ItemID itemID = new ItemID(itemStack);
-            if (!blacklist.contains(itemID))
-                return axeList.contains(itemID);
-            return false;
-        }
-        else
-            return false;
-    }
-    
-    public boolean isAxe(ItemStack itemStack, Block block, int blockMetadata)
-    {
-        if (itemStack != null)
-        {
-            ItemID itemID = new ItemID(itemStack);
-            if (!blacklist.contains(itemID))
-                return axeList.contains(itemID);
-            return false;
+            return !blacklist.contains(itemID) && axeList.contains(itemID);
         }
         else
             return false;
@@ -186,10 +171,10 @@ public class ToolRegistry
     
     public boolean isShears(ItemStack itemStack)
     {
-        if (itemStack != null)
+        if (itemStack != null && itemStack.getItem() != null)
         {
             ItemID itemID = new ItemID(itemStack);
-            return !blacklist.contains(itemID) && shearsList.contains(new ItemID(itemStack));
+            return !blacklist.contains(itemID) && shearsList.contains(itemID);
         }
         else
             return false;
