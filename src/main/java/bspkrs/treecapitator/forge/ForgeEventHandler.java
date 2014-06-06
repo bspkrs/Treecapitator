@@ -53,7 +53,6 @@ public class ForgeEventHandler
                 || (TCSettings.allowAutoTreeDetection && TreeRegistry.canAutoDetect(event.entityPlayer.worldObj, event.block, event.x, event.y, event.z)))
                 && Treecapitator.isBreakingPossible(event.entityPlayer, event.block, event.metadata, false))
         {
-            
             TreeDefinition treeDef;
             if (TCSettings.allowAutoTreeDetection)
                 treeDef = TreeRegistry.autoDetectTree(event.entityPlayer.worldObj, blockID, new Coord(event.x, event.y, event.z), TCSettings.allowDebugLogging);
@@ -177,7 +176,8 @@ public class ForgeEventHandler
             
             return bs.entityPlayer.getGameProfile().getName().equals(this.entityPlayer.getGameProfile().getName())
                     && (oItem != null && oItem.getItem() != null ? (thisItem != null && thisItem.getItem() != null
-                            ? GameData.itemRegistry.getNameForObject(thisItem).equals(GameData.itemRegistry.getNameForObject(oItem)) : false) : thisItem == null || thisItem.getItem() == null)
+                            ? GameData.itemRegistry.getNameForObject(thisItem.getItem()).equals(GameData.itemRegistry.getNameForObject(oItem.getItem())) : false)
+                            : thisItem == null || thisItem.getItem() == null)
                     && GameData.blockRegistry.getNameForObject(bs.block).equals(GameData.blockRegistry.getNameForObject(this.block))
                     && bs.isSneaking == this.isSneaking && bs.swappedSneak == this.swappedSneak
                     && bs.metadata == this.metadata && bs.originalSpeed == this.originalSpeed && bs.x == this.x && bs.y == this.y && bs.z == this.z;

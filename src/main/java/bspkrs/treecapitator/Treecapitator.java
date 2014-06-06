@@ -215,19 +215,23 @@ public class Treecapitator
                 {
                     if (isBreakingPossible())
                     {
+                        long beginning = System.currentTimeMillis();
                         TCLog.debug("Proceeding to chop tree...");
                         LinkedList<Coord> listFinal = new LinkedList<Coord>();
                         TCLog.debug("Finding log blocks...");
+                        long startTime = System.currentTimeMillis();
                         LinkedList<Coord> logs = addLogs(world, new Coord(x, y, z));
+                        TCLog.debug("Log Discovery: %dms", System.currentTimeMillis() - startTime);
                         if (logs.isEmpty() && maxAllowed)
                             return;
-                        // TODO: do we need this?
-                        //addLogsAbove(world, new Coord(x, y, z), listFinal);
-                        listFinal = (LinkedList<Coord>) logs.clone();
-                        listFinal.add(startPos);
+                        startTime = System.currentTimeMillis();
+                        addLogsAbove(world, new Coord(x, y, z), listFinal);
+                        TCLog.debug("Final Logs: %dms", System.currentTimeMillis() - startTime);
                         
                         TCLog.debug("Destroying %d log blocks...", logs.size());
+                        startTime = System.currentTimeMillis();
                         destroyBlocks(world, logs);
+                        TCLog.debug("Log Destruction: %dms", System.currentTimeMillis() - startTime);
                         if (numLogsBroken > 1)
                             TCLog.debug("Number of logs broken: %d", numLogsBroken);
                         
@@ -235,12 +239,16 @@ public class Treecapitator
                         {
                             TCLog.debug("Finding leaf blocks...");
                             List<Coord> leaves = new ArrayList<Coord>();
+                            startTime = System.currentTimeMillis();
                             for (Coord pos : listFinal)
                             {
                                 addLeaves(world, pos, leaves);
                             }
+                            TCLog.debug("Leaf Discovery: %dms", System.currentTimeMillis() - startTime);
                             TCLog.debug("Destroying %d leaf blocks...", leaves.size());
+                            startTime = System.currentTimeMillis();
                             destroyBlocksWithChance(world, leaves, 0.5F, hasShearsInHotbar(player));
+                            TCLog.debug("Leaf Destruction: %dms", System.currentTimeMillis() - startTime);
                             
                             if (numLeavesSheared > 1)
                                 TCLog.debug("Number of leaves sheared: %d", numLeavesSheared);
@@ -268,9 +276,13 @@ public class Treecapitator
                                     shears.getItem().onBlockDestroyed(shears, world, treeDef.getLeafList().get(0).getBlock(), x, y, z, player);
                         }
                         
+                        startTime = System.currentTimeMillis();
                         if (TCSettings.stackDrops)
                             while (drops.size() > 0)
                                 world.spawnEntityInWorld(new EntityItem(world, dropPos.x, dropPos.y, dropPos.z, drops.remove(0)));
+                        TCLog.debug("Drops: %dms", System.currentTimeMillis() - startTime);
+                        
+                        TCLog.debug("Total: %dms", System.currentTimeMillis() - beginning);
                     }
                 }
                 else
@@ -636,8 +648,6 @@ public class Treecapitator
         else
         {
             stacks = block.getDrops(world, pos.x, pos.y, pos.z, metadata, EnchantmentHelper.getFortuneModifier(player));
-            // for dropXp (not needed for Treecapitator
-            //block.dropBlockAsItemWithChance(world, dropPos.x, dropPos.y, dropPos.z, metadata, -1.0F, fortune);
         }
         
         addDrops(stacks);
@@ -833,7 +843,7 @@ public class Treecapitator
         while (++index < list.size())
         {
             Coord pos2 = list.get(index);
-            if (CommonUtils.getHorSquaredDistance(pos, pos2) < treeDef.maxHorLeafBreakDist())
+            if (treeDef.maxHorLeafBreakDist() == -1 || CommonUtils.getHorSquaredDistance(pos, pos2) <= treeDef.maxHorLeafBreakDist())
                 addLeavesInDistance(world, pos2, 1, list);
         }
         
@@ -842,6 +852,9 @@ public class Treecapitator
     
     public void addLeavesInDistance(World world, Coord pos, int range, List<Coord> list)
     {
+        if (range == -1)
+            range = 4;
+        
         for (int x = -range; x <= range; x++)
             for (int y = -range; y <= range; y++)
                 for (int z = -range; z <= range; z++)
@@ -871,11 +884,8 @@ public class Treecapitator
                 {
                     Coord neighborPos = new Coord(x + pos.x, y + pos.y, z + pos.z);
                     Block neighborBlock = world.getBlock(neighborPos.x, neighborPos.y, neighborPos.z);
-                    /*
-                     * Use TreeCapitator.logIDList here so that we find ANY type of log block, not just the type for this tree
-                     */
                     if ((x != 0 || y != 0 || z != 0) && !neighborPos.isAirBlock(world) &&
-                            masterLogList.contains(new BlockID(world, neighborPos.x, neighborPos.y, neighborPos.z))
+                            treeDef.getLogList().contains(new BlockID(world, neighborPos.x, neighborPos.y, neighborPos.z))
                             && !neighborPos.equals(startPos))
                         return true;
                 }

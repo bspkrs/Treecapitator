@@ -552,6 +552,7 @@ public class TreeDefinition
         orderedKeys.add(Reference.BREAK_SPEED_MOD);
         orderedKeys.add(Reference.USE_ADV_TOP_LOG_LOGIC);
         
+        validKeys.add(Reference.TREE_NAME);
         validKeys.add(Reference.ALLOW_SMART_TREE_DETECT);
         validKeys.add(Reference.ONLY_DESTROY_UPWARDS);
         validKeys.add(Reference.REQ_DECAY_CHECK);
