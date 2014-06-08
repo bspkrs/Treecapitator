@@ -168,8 +168,6 @@ public class ModConfigRegistry
         /*
          * Get / Set 3rd Party Mod configs
          */
-        TCSettings.multiMineModID = config.getString("multiMineID", Reference.CTGY_TREE_MOD_CFG,
-                TCSettings.multiMineModIDDefault, Reference.multiMineIDDesc, "bspkrs.tc.configgui.multiMineID");
         TCSettings.userConfigOverridesIMC = config.getBoolean("userConfigOverridesIMC", Reference.CTGY_TREE_MOD_CFG,
                 TCSettings.userConfigOverridesIMCDefault, Reference.userConfigOverridesIMCDesc, "bspkrs.tc.configgui.userConfigOverridesIMC");
         TCSettings.saveIMCConfigsToFile = config.getBoolean("saveIMCConfigsToFile", Reference.CTGY_TREE_MOD_CFG,

@@ -44,9 +44,12 @@ public class OreDictionaryHandler
                     for (ItemStack itemStack : OreDictionary.getOres(oreName.trim()))
                     {
                         Item item = itemStack.getItem();
-                        BlockID blockID = new BlockID(GameData.itemRegistry.getNameForObject(item));
-                        if (item instanceof ItemBlock && !leafList.contains(blockID))
-                            leafList.add(blockID);
+                        if (item instanceof ItemBlock)
+                        {
+                            BlockID blockID = new BlockID(GameData.itemRegistry.getNameForObject(item));
+                            if (!leafList.contains(blockID))
+                                leafList.add(blockID);
+                        }
                     }
                 }
             }

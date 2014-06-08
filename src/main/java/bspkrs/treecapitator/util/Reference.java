@@ -8,7 +8,7 @@ public class Reference
     public static final String PROXY_CLIENT                       = "bspkrs.treecapitator.ClientProxy";
     public static final String GUI_FACTORY                        = "bspkrs.treecapitator.fml.gui.ModGuiFactoryHandler";
     
-    public static final String CONFIG_VERSION                     = "2.0";
+    public static final String CONFIG_VERSION                     = "2.1";
     
     public static final String LANG_KEY_BASE                      = "bspkrs.tc.configgui.";
     public static final String CTGY_LANG_KEY                      = "ctgy.";
@@ -113,7 +113,6 @@ public class Reference
     public static final String maxHorLeafBreakDistDesc            = "[Global, PerTree] The maximum horizontal distance that the leaf breaking effect will travel from the tree (use -1 for no limit).";
     public static final String maxHorLogBreakDistDesc             = "[Global, PerTree] The maximum horizontal distance that the log breaking effect will travel (use -1 for no limit).";
     public static final String maxVerLogBreakDistDesc             = "[Global, PerTree] The maximum vertical distance that the log breaking effect will travel (use -1 for no limit).";
-    public static final String multiMineIDDesc                    = "The mod ID value for Multi-Mine.";
     public static final String userConfigOverridesIMCDesc         = "This setting controls the default behavior when a mod is both configured manually (in the config file) and \n" +
                                                                           "by the mod itself via IMC (inter-mod communication).";
     public static final String overrideIMCDesc                    = "This setting controls whether or not the mod config section it appears in will override an IMC message sent by that mod.";
