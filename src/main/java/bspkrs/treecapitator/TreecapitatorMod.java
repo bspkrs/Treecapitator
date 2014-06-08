@@ -4,21 +4,18 @@ import java.io.File;
 
 import net.minecraftforge.common.MinecraftForge;
 import bspkrs.bspkrscore.fml.bspkrsCoreMod;
-import bspkrs.treecapitator.compat.MultiMineCompat;
 import bspkrs.treecapitator.config.TCConfigHandler;
 import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.forge.ForgeEventHandler;
 import bspkrs.treecapitator.registry.ModConfigRegistry;
 import bspkrs.treecapitator.registry.RegistryNBTManager;
 import bspkrs.treecapitator.registry.ThirdPartyModConfig;
-import bspkrs.treecapitator.registry.TreeRegistry;
 import bspkrs.treecapitator.util.Reference;
 import bspkrs.treecapitator.util.TCLog;
 import bspkrs.util.CommonUtils;
 import bspkrs.util.Const;
 import bspkrs.util.ModVersionChecker;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -119,14 +116,6 @@ public class TreecapitatorMod
     public void postInit(FMLPostInitializationEvent event)
     {
         ModConfigRegistry.instance().applyPrioritizedModConfigs();
-        
-        // Multi-Mine stuff
-        if (Loader.isModLoaded(TCSettings.multiMineModID))
-        {
-            TCLog.info("Initializing MultiMine compatibility...");
-            new MultiMineCompat(TreeRegistry.instance().getMultiMineExclusionString());
-        }
-        
         // Make sure the NBT manager is initialized while we can still be sure of the values in our local objects
         nbtManager();
     }
