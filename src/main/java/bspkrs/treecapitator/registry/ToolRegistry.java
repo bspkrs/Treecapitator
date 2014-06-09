@@ -69,7 +69,7 @@ public class ToolRegistry
         vanShearsList.add(new ItemID(Items.shears));
     }
     
-    public static void autoDetectAxe(ItemStack item, Block block, int blockMetadata)
+    public static synchronized void autoDetectAxe(ItemStack item, Block block, int blockMetadata)
     {
         if (item != null && item.getItem() != null && ForgeHooks.isToolEffective(item, block, blockMetadata))
         {
@@ -110,7 +110,7 @@ public class ToolRegistry
         ntc.setString(Reference.BLACKLIST, ListUtils.getListAsDelimitedString(blacklist, ";"));
     }
     
-    public boolean registerAxe(ItemID axe)
+    public synchronized boolean registerAxe(ItemID axe)
     {
         if (axe != null && !blacklist.contains(axe) && !axeList.contains(axe))
         {
@@ -124,7 +124,7 @@ public class ToolRegistry
         return false;
     }
     
-    public boolean registerShears(ItemID shears)
+    public synchronized boolean registerShears(ItemID shears)
     {
         if (shears != null && !blacklist.contains(shears) && !shearsList.contains(shears))
         {

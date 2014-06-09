@@ -70,7 +70,7 @@ public class TreeRegistry
         vanTrees.put(Reference.JUNGLE, new TreeDefinition().addLogID(new ModulusBlockID(Blocks.log, 3, 4)).addLeafID(new ModulusBlockID(Blocks.leaves, 3, 8))
                 .addLeafID(new ModulusBlockID(Blocks.leaves, 0, 8)).setMaxHorLeafBreakDist(6).setRequireLeafDecayCheck(false));
         vanTrees.put(Reference.ACACIA, new TreeDefinition().addLogID(new ModulusBlockID(Blocks.log2, 0, 4)).addLeafID(new ModulusBlockID(Blocks.leaves2, 0, 8)));
-        vanTrees.put(Reference.DARK_OAK, new TreeDefinition().addLogID(new BlockID(Blocks.log2, 1)).addLeafID(new BlockID(Blocks.leaves2, 1)));
+        vanTrees.put(Reference.DARK_OAK, new TreeDefinition().addLogID(new ModulusBlockID(Blocks.log2, 1, 4)).addLeafID(new ModulusBlockID(Blocks.leaves2, 1, 8)));
         vanTrees.put(Reference.FUTURE_TREE_1, new TreeDefinition().addLogID(new ModulusBlockID(Blocks.log2, 2, 4)).addLeafID(new ModulusBlockID(Blocks.leaves2, 2, 8)));
         vanTrees.put(Reference.FUTURE_TREE_2, new TreeDefinition().addLogID(new ModulusBlockID(Blocks.log2, 3, 4)).addLeafID(new ModulusBlockID(Blocks.leaves2, 3, 8)));
         vanTrees.put(Reference.MUSH_BROWN, new TreeDefinition().addLogID(new BlockID(Blocks.brown_mushroom_block, 10)).addLogID(new BlockID(Blocks.brown_mushroom_block, 15))
@@ -102,7 +102,7 @@ public class TreeRegistry
      * @param newKey
      * @param newTD
      */
-    public void registerTree(String newKey, TreeDefinition newTD)
+    public synchronized void registerTree(String newKey, TreeDefinition newTD)
     {
         // Do NOT register null tree defs!
         if (newTD != null)
@@ -213,28 +213,6 @@ public class TreeRegistry
             blocksBeingChopped.remove(c);
     }
     
-    /**
-     * Gets a comma-delimited string with all generic log IDs (no metadata).
-     * 
-     * @return
-     */
-    public String getMultiMineExclusionString()
-    {
-        String r = "";
-        Set<String> processed = new HashSet<String>();
-        
-        for (BlockID log : masterDefinition.logBlocks)
-        {
-            if (!processed.contains(log.id))
-            {
-                processed.add(log.id);
-                r += "," + log.id;
-            }
-        }
-        
-        return r.replaceFirst(",", "");
-    }
-    
     public TreeDefinition masterDefinition()
     {
         return masterDefinition;
@@ -303,7 +281,7 @@ public class TreeRegistry
         return block.isWood(world, x, y, z) || block.canSustainLeaves(world, x, y, z);
     }
     
-    public static TreeDefinition autoDetectTree(World world, BlockID blockID, Coord blockPos, boolean shouldLog)
+    public static synchronized TreeDefinition autoDetectTree(World world, BlockID blockID, Coord blockPos, boolean shouldLog)
     {
         TreeDefinition treeDef = instance.get(blockID);
         List<BlockID> leaves = Treecapitator.getLeavesForTree(world, blockID, blockPos, treeDef == null);
