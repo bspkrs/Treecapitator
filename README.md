@@ -6,8 +6,8 @@ This repo contains source files for Forge (dependant on bspkrsCore).
 ## Links of Interest
  - [Official Minecraft Forum Thread](http://www.minecraftforum.net/topic/1009577-)
  - [Old ModLoader Downloads](http://bspk.rs/MC/TreeCapitator_ML/index.html)
- - [Forge Player Downloads](http://bspk.rs/MC/TreeCapitator_Forge/index.html) - for Minecraft players to use
- - [Developer Downloads](http://bspk.rs/MC/TreeCapitator_Forge/deobf/index.html) - for developers to use in an IDE such as Eclipse
+ - [Forge Player Downloads](http://bspk.rs/MC/Treecapitator/index.html) - for Minecraft players to use
+ - [Developer Downloads](http://bspk.rs/MC/Treecapitator/deobf/index.html) - for developers to use in an IDE such as Eclipse
  - [Treecapitator Wiki](https://github.com/bspkrs/Treecapitator/wiki)
  - [Issue Tracking System](https://github.com/bspkrs/Treecapitator/issues)
  - [Contributing](#contributing) - for those that want to help out  
@@ -82,7 +82,7 @@ This section assumes that you're using the command-line version of Git.
 ***
 
 #### Compile Treecapitator
-1. Execute `gradle setupDevWorkspace`. This sets up Forge and downloads the necessary libraries to build Treecapitator. This might take some time, be patient.
+1. Execute `gradle setupDecompWorkspace`. This sets up Forge and downloads the necessary libraries to build Treecapitator. This might take some time, be patient.
     * You will generally only have to do this once until the Forge version in `build.properties` changes.
 2. Execute `gradle build`. If you did everything right, `BUILD SUCCESSFUL` will be displayed after it finishes. This should be relatively quick.
     * If you see `BUILD FAILED`, check the error output (it should be right around `BUILD FAILED`), fix everything (if possible), and try again.
