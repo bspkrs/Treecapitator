@@ -176,9 +176,9 @@ public class ForgeEventHandler
             
             return bs.entityPlayer.getGameProfile().getName().equals(this.entityPlayer.getGameProfile().getName())
                     && (oItem != null && oItem.getItem() != null ? (thisItem != null && thisItem.getItem() != null
-                            ? GameData.itemRegistry.getNameForObject(thisItem.getItem()).equals(GameData.itemRegistry.getNameForObject(oItem.getItem())) : false)
+                            ? GameData.getItemRegistry().getNameForObject(thisItem.getItem()).equals(GameData.getItemRegistry().getNameForObject(oItem.getItem())) : false)
                             : thisItem == null || thisItem.getItem() == null)
-                    && GameData.blockRegistry.getNameForObject(bs.block).equals(GameData.blockRegistry.getNameForObject(this.block))
+                    && GameData.getBlockRegistry().getNameForObject(bs.block).equals(GameData.getBlockRegistry().getNameForObject(this.block))
                     && bs.isSneaking == this.isSneaking && bs.swappedSneak == this.swappedSneak
                     && bs.metadata == this.metadata && bs.originalSpeed == this.originalSpeed && bs.x == this.x && bs.y == this.y && bs.z == this.z;
         }
@@ -190,7 +190,7 @@ public class ForgeEventHandler
             HashFunction hf = Hashing.md5();
             Hasher h = hf.newHasher()
                     .putString(this.entityPlayer.getGameProfile().getName(), Charsets.UTF_8)
-                    .putString(GameData.blockRegistry.getNameForObject(this.block), Charsets.UTF_8)
+                    .putString(GameData.getBlockRegistry().getNameForObject(this.block), Charsets.UTF_8)
                     .putBoolean(this.isSneaking)
                     .putBoolean(this.swappedSneak)
                     .putInt(this.metadata)
@@ -198,7 +198,7 @@ public class ForgeEventHandler
                     .putInt(x + z << 8 + y << 16);
             
             if (thisItem != null && thisItem.getItem() != null)
-                h.putString(GameData.itemRegistry.getNameForObject(thisItem.getItem()), Charsets.UTF_8)
+                h.putString(GameData.getItemRegistry().getNameForObject(thisItem.getItem()), Charsets.UTF_8)
                         .putInt(thisItem.getItemDamage());
             
             return h.hash().hashCode();

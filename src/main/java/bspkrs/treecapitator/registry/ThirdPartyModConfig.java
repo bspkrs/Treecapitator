@@ -10,15 +10,15 @@ import java.util.TreeMap;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.config.ConfigCategory;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 import bspkrs.treecapitator.TreecapitatorMod;
 import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.util.Reference;
 import bspkrs.treecapitator.util.TCLog;
 import bspkrs.util.ItemID;
 import bspkrs.util.ListUtils;
-import bspkrs.util.config.ConfigCategory;
-import bspkrs.util.config.Configuration;
-import bspkrs.util.config.Property;
 
 public class ThirdPartyModConfig
 {
@@ -178,18 +178,18 @@ public class ThirdPartyModConfig
     {
         ConfigCategory cc = config.getCategory(category);
         ThirdPartyModConfig tpmc = new ThirdPartyModConfig(config.get(category, Reference.MOD_ID, Reference.MINECRAFT, (String) null, Property.Type.MOD_ID)
-                .setPropLanguageKey("bspkrs.tc.configgui." + Reference.MOD_ID).getString());
+                .setLanguageKey("bspkrs.tc.configgui." + Reference.MOD_ID).getString());
         if (cc.containsKey(Reference.AXE_ID_LIST))
-            for (ItemID itemID : ListUtils.getDelimitedStringAsItemIDList(cc.get(Reference.AXE_ID_LIST).setPropLanguageKey("bspkrs.tc.configgui." + Reference.AXE_ID_LIST).getString(), ";"))
+            for (ItemID itemID : ListUtils.getDelimitedStringAsItemIDList(cc.get(Reference.AXE_ID_LIST).setLanguageKey("bspkrs.tc.configgui." + Reference.AXE_ID_LIST).getString(), ";"))
                 tpmc.addAxe(itemID);
         if (cc.containsKey(Reference.SHEARS_ID_LIST))
-            for (ItemID itemID : ListUtils.getDelimitedStringAsItemIDList(cc.get(Reference.SHEARS_ID_LIST).setPropLanguageKey("bspkrs.tc.configgui." + Reference.SHEARS_ID_LIST).getString(), ";"))
+            for (ItemID itemID : ListUtils.getDelimitedStringAsItemIDList(cc.get(Reference.SHEARS_ID_LIST).setLanguageKey("bspkrs.tc.configgui." + Reference.SHEARS_ID_LIST).getString(), ";"))
                 tpmc.addShears(itemID);
         
         tpmc.overrideIMC = config.getBoolean(Reference.OVERRIDE_IMC, category, TCSettings.userConfigOverridesIMC, Reference.overrideIMCDesc,
                 "bspkrs.tc.configgui." + Reference.OVERRIDE_IMC);
         
-        TreecapitatorMod.proxy.addGuiConfigCustomCategoryListEntry(config, category);
+        TreecapitatorMod.proxy.setCategoryConfigEntryClass(config, category);
         cc.setPropertyOrder(orderedKeys);
         
         for (ConfigCategory ctgy : cc.getChildren())
@@ -200,9 +200,9 @@ public class ThirdPartyModConfig
     
     public void writeToConfiguration(Configuration config, String category)
     {
-        config.get(category, Reference.MOD_ID, modID, (String) null, Property.Type.MOD_ID).setPropLanguageKey("bspkrs.tc.configgui." + Reference.MOD_ID);
-        config.get(category, Reference.AXE_ID_LIST, ListUtils.getListAsDelimitedString(axeList, "; ")).setPropLanguageKey("bspkrs.tc.configgui." + Reference.AXE_ID_LIST);
-        config.get(category, Reference.SHEARS_ID_LIST, ListUtils.getListAsDelimitedString(shearsList, "; ")).setPropLanguageKey("bspkrs.tc.configgui." + Reference.SHEARS_ID_LIST);
+        config.get(category, Reference.MOD_ID, modID, (String) null, Property.Type.MOD_ID).setLanguageKey("bspkrs.tc.configgui." + Reference.MOD_ID);
+        config.get(category, Reference.AXE_ID_LIST, ListUtils.getListAsDelimitedString(axeList, "; ")).setLanguageKey("bspkrs.tc.configgui." + Reference.AXE_ID_LIST);
+        config.get(category, Reference.SHEARS_ID_LIST, ListUtils.getListAsDelimitedString(shearsList, "; ")).setLanguageKey("bspkrs.tc.configgui." + Reference.SHEARS_ID_LIST);
         config.getBoolean(Reference.OVERRIDE_IMC, category, overrideIMC, Reference.overrideIMCDesc, "bspkrs.tc.configgui." + Reference.OVERRIDE_IMC);
         
         for (Entry<String, TreeDefinition> e : treesMap.entrySet())
@@ -211,7 +211,7 @@ public class ThirdPartyModConfig
             else
                 e.getValue().writeToConfiguration(config, e.getKey());
         
-        TreecapitatorMod.proxy.addGuiConfigCustomCategoryListEntry(config, category);
+        TreecapitatorMod.proxy.setCategoryConfigEntryClass(config, category);
         config.setCategoryPropertyOrder(category, orderedKeys);
         
         this.isChanged = false;

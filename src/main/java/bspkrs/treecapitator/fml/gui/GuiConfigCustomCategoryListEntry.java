@@ -2,27 +2,28 @@ package bspkrs.treecapitator.fml.gui;
 
 import java.util.List;
 
-import bspkrs.util.config.gui.GuiConfig;
-import bspkrs.util.config.gui.GuiPropertyList;
-import bspkrs.util.config.gui.GuiPropertyList.GuiConfigCategoryListEntry;
-import bspkrs.util.config.gui.IConfigProperty;
+import cpw.mods.fml.client.config.GuiConfig;
+import cpw.mods.fml.client.config.GuiConfigEntries;
+import cpw.mods.fml.client.config.GuiConfigEntries.CategoryEntry;
+import cpw.mods.fml.client.config.IConfigElement;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiConfigCustomCategoryListEntry extends GuiConfigCategoryListEntry
+public class GuiConfigCustomCategoryListEntry extends CategoryEntry
 {
-    public GuiConfigCustomCategoryListEntry(GuiConfig parentGuiConfig, GuiPropertyList parentPropertyList, IConfigProperty prop)
+    @SuppressWarnings("rawtypes")
+    public GuiConfigCustomCategoryListEntry(GuiConfig parentGuiConfig, GuiConfigEntries parentPropertyList, IConfigElement prop)
     {
         super(parentGuiConfig, parentPropertyList, prop);
         
-        List<IConfigProperty> props = this.prop.getConfigPropertiesList(false);
+        List<IConfigElement> props = this.configElement.getChildElements();
         // TODO: create a custom IGuiConfigListEntry class for adding a new mod config
         // TODO: create a custom IGuiConfigListEntry class that extends this class and provides a button for removing the mod config
         // TODO: create a custom IGuiConfigListEntry class that adds a new tree to a mod config
         
-        subGuiConfig = new GuiConfig(this.parentGuiConfig, props, this.prop.isHotLoadable(), this.parentGuiConfig.modID,
-                this.parentGuiConfig.allowNonHotLoadConfigChanges, this.parentGuiConfig.title,
-                ((this.parentGuiConfig.titleLine2 == null ? "" : this.parentGuiConfig.titleLine2) + " > " + this.propName));
+        childScreen = new GuiConfig(this.owningScreen, props, this.owningScreen.title, this.owningScreen.modID,
+                this.configElement.requiresWorldRestart(), this.configElement.requiresMcRestart(),
+                ((this.owningScreen.titleLine2 == null ? "" : this.owningScreen.titleLine2) + " > " + this.name));
     }
 }

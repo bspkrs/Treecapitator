@@ -5,10 +5,10 @@ import java.util.List;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.config.Configuration;
 import bspkrs.treecapitator.EnchantmentTreecapitating;
 import bspkrs.treecapitator.util.Reference;
 import bspkrs.treecapitator.util.TCLog;
-import bspkrs.util.config.Configuration;
 
 public final class TCSettings
 {

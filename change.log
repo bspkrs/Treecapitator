@@ -1,5 +1,7 @@
 2.0.4 - ???
+- 1.7.10 initial update
 - fixed Dark Oak vanilla treedef
+- fixed tooltip messages
 2.0.3 - 8-Jun-2014
 - removed Multi-Mine code
 - fixed various NPE crashes

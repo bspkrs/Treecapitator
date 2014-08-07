@@ -1,8 +1,8 @@
 package bspkrs.treecapitator;
 
+import net.minecraftforge.common.config.Configuration;
 import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.fml.gui.GuiConfigCustomCategoryListEntry;
-import bspkrs.util.config.Configuration;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -32,8 +32,8 @@ public class ClientProxy extends CommonProxy
     }
     
     @Override
-    public void addGuiConfigCustomCategoryListEntry(Configuration config, String category)
+    public void setCategoryConfigEntryClass(Configuration config, String category)
     {
-        config.setCategoryCustomIGuiConfigListEntryClass(category, GuiConfigCustomCategoryListEntry.class);
+        config.setCategoryConfigEntryClass(category, GuiConfigCustomCategoryListEntry.class);
     }
 }

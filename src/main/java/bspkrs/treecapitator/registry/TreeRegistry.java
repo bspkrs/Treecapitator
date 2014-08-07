@@ -299,7 +299,7 @@ public class TreeRegistry
             if (shouldLog)
                 TCLog.debug("Auto Tree Detection: New tree added: %s (%s)", treeName, treeDef);
         }
-        else if (leaves.size() >= TCSettings.minLeavesToID)
+        else if (treeDef != null && leaves.size() >= TCSettings.minLeavesToID)
         {
             if (!ListUtils.doesListAContainAllUniqueListBValues(treeDef.leafBlocks, leaves))
             {

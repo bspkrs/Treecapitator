@@ -46,7 +46,7 @@ public class OreDictionaryHandler
                         Item item = itemStack.getItem();
                         if (item instanceof ItemBlock)
                         {
-                            BlockID blockID = new BlockID(GameData.itemRegistry.getNameForObject(item));
+                            BlockID blockID = new BlockID(GameData.getItemRegistry().getNameForObject(item));
                             if (!leafList.contains(blockID))
                                 leafList.add(blockID);
                         }
@@ -67,7 +67,7 @@ public class OreDictionaryHandler
                         Item item = itemStack.getItem();
                         if (item instanceof ItemBlock)
                         {
-                            BlockID blockID = new BlockID(GameData.itemRegistry.getNameForObject(item));
+                            BlockID blockID = new BlockID(GameData.getItemRegistry().getNameForObject(item));
                             if (!TreeRegistry.instance().isRegistered(blockID) && !TreeRegistry.instance().blacklist().contains(blockID))
                                 genericTree.addLogID(blockID);
                         }

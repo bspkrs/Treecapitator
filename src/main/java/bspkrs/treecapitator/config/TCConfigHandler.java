@@ -4,12 +4,12 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import net.minecraftforge.common.config.Configuration;
 import bspkrs.treecapitator.TreecapitatorMod;
 import bspkrs.treecapitator.registry.ModConfigRegistry;
 import bspkrs.treecapitator.util.Reference;
 import bspkrs.treecapitator.util.TCLog;
-import bspkrs.util.config.ConfigChangedEvent.OnConfigChangedEvent;
-import bspkrs.util.config.Configuration;
+import cpw.mods.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class TCConfigHandler

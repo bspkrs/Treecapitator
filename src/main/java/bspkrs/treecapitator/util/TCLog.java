@@ -1,13 +1,14 @@
 package bspkrs.treecapitator.util;
 
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.util.CommonUtils;
-import bspkrs.util.config.Configuration;
-import bspkrs.util.config.Property;
 
 public enum TCLog
 {

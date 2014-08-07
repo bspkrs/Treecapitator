@@ -883,7 +883,6 @@ public class Treecapitator
                 for (int z = -i; z <= i; z++)
                 {
                     Coord neighborPos = new Coord(x + pos.x, y + pos.y, z + pos.z);
-                    Block neighborBlock = world.getBlock(neighborPos.x, neighborPos.y, neighborPos.z);
                     if ((x != 0 || y != 0 || z != 0) && !neighborPos.isAirBlock(world) &&
                             treeDef.getLogList().contains(new BlockID(world, neighborPos.x, neighborPos.y, neighborPos.z))
                             && !neighborPos.equals(startPos))
