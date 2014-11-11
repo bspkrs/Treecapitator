@@ -1,7 +1,8 @@
-2.0.4 - ???
+2.0.4 - 11-Nov-2014
 - 1.7.10 initial update
 - fixed Dark Oak vanilla treedef
 - fixed tooltip messages
+- removed dropbox URLs
 2.0.3 - 8-Jun-2014
 - removed Multi-Mine code
 - fixed various NPE crashes
