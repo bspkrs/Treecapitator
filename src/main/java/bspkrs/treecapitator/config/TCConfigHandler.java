@@ -19,26 +19,26 @@ public class TCConfigHandler
     private Configuration          config;
     private Configuration          oldConfig;
     private boolean                shouldRefreshRegistries = false;
-    
+
     public static TCConfigHandler instance()
     {
         if (instance == null)
             new TCConfigHandler();
-        
+
         return instance;
     }
-    
+
     public static TCConfigHandler setInstance(File file)
     {
         new TCConfigHandler(file);
         return instance;
     }
-    
+
     private TCConfigHandler()
     {
         instance = this;
     }
-    
+
     private TCConfigHandler(File file)
     {
         this();
@@ -53,40 +53,40 @@ public class TCConfigHandler
             File fileBak = new File(fileRef.getAbsolutePath() + "_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".errored");
             TCLog.severe("An exception occurred while loading your config file. This file will be renamed to %s and a new config file will be generated.", fileBak.getName());
             e.printStackTrace();
-            
+
             fileRef.renameTo(fileBak);
             config = new Configuration(fileRef, Reference.CONFIG_VERSION);
         }
-        
+
         if (!Reference.CONFIG_VERSION.equals(config.getLoadedConfigVersion()))
         {
             File fileBak = new File(fileRef.getAbsolutePath() + "_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".old");
             TCLog.warning("Your Treecapitator config file is out of date and could cause issues. The existing file will be renamed to %s and a new one will be generated.", fileBak.getName());
             TCLog.warning("Treecapitator will attempt to copy your old settings, but custom mod/tree settings will have to be migrated manually.");
-            
+
             fileRef.renameTo(fileBak);
             oldConfig = config;
             config = new Configuration(fileRef, Reference.CONFIG_VERSION);
         }
-        
+
         syncConfig(true);
     }
-    
+
     public Configuration getConfig()
     {
         return config;
     }
-    
+
     public void setShouldRefreshRegistries(boolean bol)
     {
         this.shouldRefreshRegistries = bol;
     }
-    
+
     public void syncConfig()
     {
         syncConfig(false);
     }
-    
+
     public void syncConfig(boolean init)
     {
         if (!init)
@@ -99,15 +99,15 @@ public class TCConfigHandler
                 File fileBak = new File(fileRef.getAbsolutePath() + "_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".errored");
                 TCLog.severe("An exception occurred while loading your config file. This file will be renamed to %s and a new config file will be generated.", fileBak.getName());
                 e.printStackTrace();
-                
+
                 fileRef.renameTo(fileBak);
-                
+
                 config = new Configuration(fileRef, Reference.CONFIG_VERSION);
             }
-        
+
         TCSettings.instance().syncConfiguration(config);
         ModConfigRegistry.instance().syncConfig(config);
-        
+
         if (oldConfig != null)
         {
             config.copyCategoryProps(oldConfig, new String[] { Reference.CTGY_BREAK_SPEED, Reference.CTGY_ENCHANTMENT_MODE, Reference.CTGY_ITEM, Reference.CTGY_MISC,
@@ -116,16 +116,16 @@ public class TCConfigHandler
             ModConfigRegistry.instance().syncConfig(config);
             oldConfig = null;
         }
-        
+
         if (this.shouldRefreshRegistries)
         {
             ModConfigRegistry.instance().applyPrioritizedModConfigs();
             TreecapitatorMod.instance.nbtManager().saveAllCurrentObjectsToLocalNBT();
         }
-        
+
         config.save();
     }
-    
+
     @SubscribeEvent
     public void onConfigChanged(OnConfigChangedEvent event)
     {

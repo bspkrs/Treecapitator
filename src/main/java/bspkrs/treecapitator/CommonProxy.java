@@ -22,42 +22,42 @@ import cpw.mods.fml.relauncher.Side;
 public class CommonProxy
 {
     protected static EnumMap<Side, FMLEmbeddedChannel> networkChannel;
-    
+
     public void init(FMLInitializationEvent event)
     {
         networkChannel = NetworkRegistry.INSTANCE.newChannel(TreecapitatorMod.metadata.modId, new TCMessageToMessageCodec(),
                 new LoginPacketHandler(), new ConfigPacketHandler());
-        
+
         FMLCommonHandler.instance().bus().register(this);
     }
-    
+
     public boolean isEnabled()
     {
         return TCSettings.enabled;
     }
-    
+
     public void setServerDetected()
     {}
-    
+
     public void debugOutputBlockID(String id, int metadata)
     {
         TCLog.debug("Block Clicked: %s, %s", id, metadata);
     }
-    
+
     @SubscribeEvent
     public void onPlayerLoggedIn(PlayerLoggedInEvent e)
     {
         FMLEmbeddedChannel channel = networkChannel.get(Side.SERVER);
-        
+
         channel.attr(FMLOutboundHandler.FML_MESSAGETARGET).set(
                 FMLOutboundHandler.OutboundTarget.PLAYER);
         channel.attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(e.player);
-        
+
         channel.writeOutbound(new TCPacketLogin());
-        
+
         channel.writeOutbound(new TCPacketConfig(TreecapitatorMod.instance.nbtManager().getPacketArray()));
     }
-    
+
     public void setCategoryConfigEntryClass(Configuration config, String Category)
     {}
 }

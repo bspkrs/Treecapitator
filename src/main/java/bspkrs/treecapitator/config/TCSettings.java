@@ -62,7 +62,7 @@ public final class TCSettings
     public static boolean        useIncreasingItemDamage               = useIncreasingItemDamageDefault;
     private final static boolean useStrictBlockPairingDefault          = true;
     public static boolean        useStrictBlockPairing                 = useStrictBlockPairingDefault;
-    
+
     // Per-tree
     private final static boolean allowSmartTreeDetectionDefault        = true;
     public static boolean        allowSmartTreeDetection               = allowSmartTreeDetectionDefault;
@@ -84,14 +84,14 @@ public final class TCSettings
     public static boolean        requireLeafDecayCheck                 = requireLeafDecayCheckDefault;
     private final static boolean useAdvancedTopLogLogicDefault         = true;
     public static boolean        useAdvancedTopLogLogic                = useAdvancedTopLogLogicDefault;
-    
+
     public final static String   multiMineModIDDefault                 = "AS_MultiMine";
     public static String         multiMineModID                        = multiMineModIDDefault;
     public final static boolean  userConfigOverridesIMCDefault         = false;
     public static boolean        userConfigOverridesIMC                = userConfigOverridesIMCDefault;
     public final static boolean  saveIMCConfigsToFileDefault           = true;
     public static boolean        saveIMCConfigsToFile                  = saveIMCConfigsToFileDefault;
-    
+
     private final static boolean treeHeightDecidesBreakSpeedDefault    = true;
     public static boolean        treeHeightDecidesBreakSpeed           = treeHeightDecidesBreakSpeedDefault;
     private final static float   treeHeightModifierDefault             = 2.0F;
@@ -106,25 +106,25 @@ public final class TCSettings
     public static String         blockIDBlacklist                      = blockIDBlacklistDefault;
     private final static String  itemIDBlacklistDefault                = "";
     public static String         itemIDBlacklist                       = itemIDBlacklistDefault;
-    
+
     // static object references
     public static Enchantment    treecapitating;
-    
+
     private static TCSettings    instance;
-    
+
     public static TCSettings instance()
     {
         if (instance == null)
             new TCSettings();
-        
+
         return instance;
     }
-    
+
     private TCSettings()
     {
         instance = this;
     }
-    
+
     public void handleEnchantmentID(int id)
     {
         if (id >= 0 && id < 256 && enableEnchantmentMode)
@@ -136,7 +136,7 @@ public final class TCSettings
             treecapitating.setName("treecapitating");
         }
     }
-    
+
     public void readFromNBT(NBTTagCompound ntc)
     {
         enabled = ntc.getBoolean(Reference.ENABLED);
@@ -157,9 +157,9 @@ public final class TCSettings
         allowOreDictionaryLookup = ntc.getBoolean(Reference.ALLOW_ORE_DICT_LOOKUP);
         oreDictionaryLogStrings = ntc.getString(Reference.ORE_DICT_LOG_KEYS);
         oreDictionaryLeafStrings = ntc.getString(Reference.ORE_DICT_LEAF_KEYS);
-        
+
         handleEnchantmentID(ntc.getInteger(Reference.ENCHANT_ID));
-        
+
         increaseDamageEveryXBlocks = ntc.getInteger(Reference.INCREASE_DAMAGE_X_BLOCKS);
         maxHorLogBreakDist = ntc.getInteger(Reference.MAX_H_LOG_DIST);
         maxHorLeafBreakDist = ntc.getInteger(Reference.MAX_H_LEAF_DIST);
@@ -180,7 +180,7 @@ public final class TCSettings
         useIncreasingItemDamage = ntc.getBoolean(Reference.USE_INCREASING_ITEM_DAMAGE);
         useStrictBlockPairing = ntc.getBoolean(Reference.USE_STRICT_BLOCK_PAIRING);
     }
-    
+
     public void writeToNBT(NBTTagCompound ntc)
     {
         ntc.setBoolean(Reference.ENABLED, enabled);
@@ -222,7 +222,7 @@ public final class TCSettings
         ntc.setBoolean(Reference.USE_INCREASING_ITEM_DAMAGE, useIncreasingItemDamage);
         ntc.setBoolean(Reference.USE_STRICT_BLOCK_PAIRING, useStrictBlockPairing);
     }
-    
+
     /**
      * Synchronizes current values with the config object. config must be loaded (config.load()).
      * 
@@ -232,9 +232,9 @@ public final class TCSettings
     {
         // Since I moved that setting...
         config.moveProperty(Reference.CTGY_MISC, Reference.SNEAK_ACTION, Reference.CTGY_TREE_CHOP_BEHAVIOR);
-        
+
         List<String> orderedKeys = new ArrayList<String>();
-        
+
         // Misc settings
         allowDebugLogging = config.getBoolean(Reference.ALLOW_DEBUG_LOGGING, Reference.CTGY_MISC,
                 allowDebugLoggingDefault, Reference.allowDebugLoggingDesc, Reference.LANG_KEY_BASE + Reference.ALLOW_DEBUG_LOGGING);
@@ -262,7 +262,7 @@ public final class TCSettings
         orderedKeys.add(Reference.ITEM_ID_BLACKLIST);
         config.setCategoryLanguageKey(Reference.CTGY_MISC, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.CTGY_MISC);
         config.setCategoryPropertyOrder(Reference.CTGY_MISC, orderedKeys);
-        
+
         orderedKeys = new ArrayList<String>();
         // Break Speed settings
         breakSpeedModifier = config.getFloat(Reference.BREAK_SPEED_MOD, Reference.CTGY_BREAK_SPEED,
@@ -276,7 +276,7 @@ public final class TCSettings
         orderedKeys.add(Reference.TREE_HEIGHT_MOD);
         config.setCategoryLanguageKey(Reference.CTGY_BREAK_SPEED, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.CTGY_BREAK_SPEED);
         config.setCategoryPropertyOrder(Reference.CTGY_BREAK_SPEED, orderedKeys);
-        
+
         orderedKeys = new ArrayList<String>();
         // Item settings
         allowAutoAxeDetection = config.getBoolean(Reference.ALLOW_AUTO_AXE_DETECT, Reference.CTGY_ITEM,
@@ -305,7 +305,7 @@ public final class TCSettings
         orderedKeys.add(Reference.INCREASE_DAMAGE_X_BLOCKS);
         config.setCategoryLanguageKey(Reference.CTGY_ITEM, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.CTGY_ITEM);
         config.setCategoryPropertyOrder(Reference.CTGY_ITEM, orderedKeys);
-        
+
         orderedKeys = new ArrayList<String>();
         // Tree Chop Behavior settings
         allowAutoTreeDetection = config.getBoolean(Reference.ALLOW_AUTO_TREE_DETECT, Reference.CTGY_TREE_CHOP_BEHAVIOR,
@@ -364,7 +364,7 @@ public final class TCSettings
         orderedKeys.add(Reference.ITEMS_DROP_IN_PLACE);
         config.setCategoryLanguageKey(Reference.CTGY_TREE_CHOP_BEHAVIOR, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.CTGY_TREE_CHOP_BEHAVIOR);
         config.setCategoryPropertyOrder(Reference.CTGY_TREE_CHOP_BEHAVIOR, orderedKeys);
-        
+
         orderedKeys = new ArrayList<String>();
         // Enchantment Mode settings
         enableEnchantmentMode = config.getBoolean(Reference.ENABLE_ENCHANT_MODE, Reference.CTGY_ENCHANTMENT_MODE,
@@ -378,14 +378,14 @@ public final class TCSettings
         orderedKeys.add(Reference.REQ_ITEM_IN_AXE_LIST_ENCHANT);
         config.setCategoryLanguageKey(Reference.CTGY_ENCHANTMENT_MODE, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.CTGY_ENCHANTMENT_MODE);
         config.setCategoryPropertyOrder(Reference.CTGY_ENCHANTMENT_MODE, orderedKeys);
-        
+
         enabled = config.getBoolean(Reference.ENABLED, Reference.CTGY_SETTINGS,
                 enabledDefault, Reference.enabledDesc, Reference.LANG_KEY_BASE + Reference.ENABLED);
         config.setCategoryLanguageKey(Reference.CTGY_SETTINGS, Reference.LANG_KEY_BASE + Reference.CTGY_LANG_KEY + Reference.CTGY_SETTINGS);
-        
+
         config.setCategoryComment(Reference.CTGY_SETTINGS, "ATTENTION: Editing this file manually is no longer necessary UNLESS YOU ARE ADDING NEW MODS/TREES. \n" +
                 "On the Mods list screen select the entry for Treecapitator, then click the Config button to modify these settings.");
-        
+
         // Log configs if we are in debug logging mode
         if (allowDebugLogging)
         {

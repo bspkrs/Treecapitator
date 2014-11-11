@@ -7,13 +7,13 @@ import bspkrs.treecapitator.util.Reference;
 public class TCPacketLogin implements BSPacket
 {
     public byte protocolVersion = Reference.PROTOCOL_VERSION;
-    
+
     @Override
     public void readBytes(PacketBuffer bytes)
     {
         protocolVersion = bytes.readByte();
     }
-    
+
     @Override
     public void writeBytes(PacketBuffer bytes)
     {

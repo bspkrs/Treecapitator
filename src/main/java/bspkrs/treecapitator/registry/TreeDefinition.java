@@ -35,12 +35,12 @@ public class TreeDefinition
     protected boolean           useAdvancedTopLogLogic;
     private static List<String> orderedKeys = new ArrayList<String>();
     private static Set<String>  validKeys   = new HashSet<String>();
-    
+
     public TreeDefinition()
     {
         logBlocks = new ArrayList<BlockID>();
         leafBlocks = new ArrayList<BlockID>();
-        
+
         allowSmartTreeDetection = TCSettings.allowSmartTreeDetection;
         onlyDestroyUpwards = TCSettings.onlyDestroyUpwards;
         requireLeafDecayCheck = TCSettings.requireLeafDecayCheck;
@@ -52,46 +52,46 @@ public class TreeDefinition
         breakSpeedModifier = TCSettings.breakSpeedModifier;
         useAdvancedTopLogLogic = TCSettings.useAdvancedTopLogLogic;
     }
-    
+
     @Override
     public String toString()
     {
         return "Logs: " + ListUtils.getListAsDelimitedString(logBlocks, "; ") + "  Leaves: " + ListUtils.getListAsDelimitedString(leafBlocks, "; ");
     }
-    
+
     public TreeDefinition(List<BlockID> logs, List<BlockID> leaves)
     {
         this();
         logBlocks.addAll(logs);
         leafBlocks.addAll(leaves);
     }
-    
+
     public TreeDefinition(NBTTagCompound tree)
     {
         this();
         this.readFromNBT(tree);
     }
-    
+
     public TreeDefinition(Configuration config, String category)
     {
         this();
         readFromConfiguration(config, category);
     }
-    
+
     @Override
     public boolean equals(Object o)
     {
         if (!(o instanceof TreeDefinition))
             return false;
-        
+
         if (o == this)
             return true;
-        
+
         TreeDefinition td = (TreeDefinition) o;
         return td.logBlocks.equals(logBlocks) && td.leafBlocks.equals(leafBlocks);
-        
+
     }
-    
+
     @Override
     public int hashCode()
     {
@@ -101,80 +101,80 @@ public class TreeDefinition
             h.putInt(blockID.hashCode());
         for (BlockID blockID : leafBlocks)
             h.putInt(blockID.hashCode() << 8);
-        
+
         return h.hash().hashCode();
     }
-    
+
     public boolean hasCommonLog(TreeDefinition td)
     {
         for (BlockID blockID : td.logBlocks)
             if (logBlocks.contains(blockID))
                 return true;
-        
+
         return false;
     }
-    
+
     public boolean isLogBlock(BlockID blockID)
     {
         return logBlocks.contains(blockID);
     }
-    
+
     public boolean isLeafBlock(BlockID blockID)
     {
         return leafBlocks.contains(blockID);
     }
-    
+
     public TreeDefinition addLogID(BlockID blockID)
     {
         if (!isLogBlock(blockID))
             logBlocks.add(blockID);
-        
+
         return this;
     }
-    
+
     public TreeDefinition addLeafID(BlockID blockID)
     {
         if (!isLeafBlock(blockID))
             leafBlocks.add(blockID);
-        
+
         return this;
     }
-    
+
     public TreeDefinition addAllLogIDs(List<BlockID> blockIDs)
     {
         for (BlockID blockID : blockIDs)
             if (!isLogBlock(blockID))
                 logBlocks.add(blockID);
-        
+
         return this;
     }
-    
+
     public TreeDefinition addAllLeafIDs(List<BlockID> blockIDs)
     {
         for (BlockID blockID : blockIDs)
             if (!isLeafBlock(blockID))
                 leafBlocks.add(blockID);
-        
+
         return this;
     }
-    
+
     public TreeDefinition append(TreeDefinition toAdd)
     {
         for (BlockID blockID : toAdd.logBlocks)
             if (!logBlocks.contains(blockID))
                 logBlocks.add(blockID);
-        
+
         for (BlockID blockID : toAdd.leafBlocks)
             if (!leafBlocks.contains(blockID))
                 leafBlocks.add(blockID);
-        
+
         return this;
     }
-    
+
     public TreeDefinition appendWithSettings(TreeDefinition toAdd)
     {
         append(toAdd);
-        
+
         if (toAdd.allowSmartTreeDetection != TCSettings.allowSmartTreeDetection)
             allowSmartTreeDetection = toAdd.allowSmartTreeDetection;
         if (toAdd.onlyDestroyUpwards != TCSettings.onlyDestroyUpwards)
@@ -193,31 +193,31 @@ public class TreeDefinition
             breakSpeedModifier = toAdd.breakSpeedModifier;
         if (toAdd.useAdvancedTopLogLogic != TCSettings.useAdvancedTopLogLogic)
             useAdvancedTopLogLogic = toAdd.useAdvancedTopLogLogic;
-        
+
         return this;
     }
-    
+
     public static boolean isValidNBT(NBTTagCompound treeDefNBT)
     {
-        for (String s : (Set<String>) treeDefNBT.func_150296_c())
+        for (String s : (Set<String>) treeDefNBT.getKeySet())
             if (!validKeys.contains(s))
                 TCLog.warning("Unknown tag \"%s\" found while verifying a TreeDefinition NBTTagCompound object", s);
-        
+
         if (!treeDefNBT.hasKey(Reference.TREE_NAME))
         {
             TCLog.severe("TreeDefinition NBTTagCompound objects must contain a string tag with the key \"%s\"", Reference.TREE_NAME);
             return false;
         }
-        
+
         if (!(treeDefNBT.hasKey(Reference.LOGS) || treeDefNBT.hasKey(Reference.LEAVES)))
         {
             TCLog.severe("TreeDefinition NBTTagCompound objects must contain at least one string tag with the key \"%s\" or \"%s\"", Reference.LOGS, Reference.LEAVES);
             return false;
         }
-        
+
         return true;
     }
-    
+
     public TreeDefinition readFromNBT(NBTTagCompound treeDefNBT)
     {
         if (treeDefNBT.hasKey(Reference.ALLOW_SMART_TREE_DETECT))
@@ -240,20 +240,20 @@ public class TreeDefinition
             breakSpeedModifier = treeDefNBT.getFloat(Reference.BREAK_SPEED_MOD);
         if (treeDefNBT.hasKey(Reference.USE_ADV_TOP_LOG_LOGIC))
             useAdvancedTopLogLogic = treeDefNBT.getBoolean(Reference.USE_ADV_TOP_LOG_LOGIC);
-        
+
         if (treeDefNBT.hasKey(Reference.LOGS) && treeDefNBT.getString(Reference.LOGS).length() > 0)
             logBlocks = ListUtils.getDelimitedStringAsBlockIDList(treeDefNBT.getString(Reference.LOGS), ";");
         else
             logBlocks = new ArrayList<BlockID>();
-        
+
         if (treeDefNBT.hasKey(Reference.LEAVES) && treeDefNBT.getString(Reference.LEAVES).length() > 0)
             leafBlocks = ListUtils.getDelimitedStringAsBlockIDList(treeDefNBT.getString(Reference.LEAVES), ";");
         else
             leafBlocks = new ArrayList<BlockID>();
-        
+
         return this;
     }
-    
+
     public void writeToNBT(NBTTagCompound treeDefNBT)
     {
         treeDefNBT.setBoolean(Reference.ALLOW_SMART_TREE_DETECT, allowSmartTreeDetection);
@@ -266,15 +266,15 @@ public class TreeDefinition
         treeDefNBT.setInteger(Reference.MIN_LEAF_ID, minLeavesToID);
         treeDefNBT.setFloat(Reference.BREAK_SPEED_MOD, breakSpeedModifier);
         treeDefNBT.setBoolean(Reference.USE_ADV_TOP_LOG_LOGIC, useAdvancedTopLogLogic);
-        
+
         treeDefNBT.setString(Reference.LOGS, ListUtils.getListAsDelimitedString(logBlocks, ";"));
         treeDefNBT.setString(Reference.LEAVES, ListUtils.getListAsDelimitedString(leafBlocks, ";"));
     }
-    
+
     public TreeDefinition readFromConfiguration(Configuration config, String category)
     {
         ConfigCategory cc = config.getCategory(category);
-        
+
         if (cc.containsKey(Reference.ALLOW_SMART_TREE_DETECT))
             onlyDestroyUpwards = cc.get(Reference.ALLOW_SMART_TREE_DETECT)
                     .setLanguageKey(Reference.LANG_KEY_BASE + Reference.ALLOW_SMART_TREE_DETECT)
@@ -315,7 +315,7 @@ public class TreeDefinition
             useAdvancedTopLogLogic = cc.get(Reference.USE_ADV_TOP_LOG_LOGIC)
                     .setLanguageKey(Reference.LANG_KEY_BASE + Reference.USE_ADV_TOP_LOG_LOGIC)
                     .getBoolean(TCSettings.useAdvancedTopLogLogic);
-        
+
         if (cc.containsKey(Reference.LOGS))
             logBlocks = ListUtils.getDelimitedStringAsBlockIDList(cc.get(Reference.LOGS)
                     .setLanguageKey(Reference.LANG_KEY_BASE + Reference.LOGS)
@@ -324,12 +324,12 @@ public class TreeDefinition
             leafBlocks = ListUtils.getDelimitedStringAsBlockIDList(cc.get(Reference.LEAVES)
                     .setLanguageKey(Reference.LANG_KEY_BASE + Reference.LEAVES)
                     .getString(), "; ");
-        
+
         cc.setPropertyOrder(orderedKeys);
-        
+
         return this;
     }
-    
+
     public void writeToConfiguration(Configuration config, String category)
     {
         if (allowSmartTreeDetection != TCSettings.allowSmartTreeDetection)
@@ -392,15 +392,15 @@ public class TreeDefinition
                     .setValue(useAdvancedTopLogLogic)
                     .setLanguageKey(Reference.LANG_KEY_BASE + Reference.USE_ADV_TOP_LOG_LOGIC);
         }
-        
+
         config.get(category, Reference.LOGS, ListUtils.getListAsDelimitedString(logBlocks, "; "))
                 .setLanguageKey(Reference.LANG_KEY_BASE + Reference.LOGS);
         config.get(category, Reference.LEAVES, ListUtils.getListAsDelimitedString(leafBlocks, "; "))
                 .setLanguageKey(Reference.LANG_KEY_BASE + Reference.LEAVES);
-        
+
         config.setCategoryPropertyOrder(category, orderedKeys);
     }
-    
+
     /*
      * Field setters
      */
@@ -409,61 +409,61 @@ public class TreeDefinition
         this.allowSmartTreeDetection = allowSmartTreeDetection;
         return this;
     }
-    
+
     public TreeDefinition setOnlyDestroyUpwards(boolean onlyDestroyUpwards)
     {
         this.onlyDestroyUpwards = onlyDestroyUpwards;
         return this;
     }
-    
+
     public TreeDefinition setRequireLeafDecayCheck(boolean requireLeafDecayCheck)
     {
         this.requireLeafDecayCheck = requireLeafDecayCheck;
         return this;
     }
-    
+
     public TreeDefinition setMaxHorLogBreakDist(int maxHorLogBreakDist)
     {
         this.maxHorLogBreakDist = maxHorLogBreakDist;
         return this;
     }
-    
+
     public TreeDefinition setMaxVerLogBreakDist(int maxVerLogBreakDist)
     {
         this.maxVerLogBreakDist = maxVerLogBreakDist;
         return this;
     }
-    
+
     public TreeDefinition setMaxLeafIDDist(int maxLeafIDDist)
     {
         this.maxLeafIDDist = maxLeafIDDist;
         return this;
     }
-    
+
     public TreeDefinition setMaxHorLeafBreakDist(int maxLeafBreakDist)
     {
         maxHorLeafBreakDist = maxLeafBreakDist;
         return this;
     }
-    
+
     public TreeDefinition setMinLeavesToID(int minLeavesToID)
     {
         this.minLeavesToID = minLeavesToID;
         return this;
     }
-    
+
     public TreeDefinition setBreakSpeedModifier(float breakSpeedModifier)
     {
         this.breakSpeedModifier = breakSpeedModifier;
         return this;
     }
-    
+
     public TreeDefinition setUseAdvancedTopLogLogic(boolean useAdvancedTopLogLogic)
     {
         this.useAdvancedTopLogLogic = useAdvancedTopLogLogic;
         return this;
     }
-    
+
     /**
      * Retrieves a copy of the list of logs in this TreeDefinition.
      * 
@@ -473,7 +473,7 @@ public class TreeDefinition
     {
         return logBlocks;
     }
-    
+
     /**
      * Retrieves a copy of the list of leaves in this TreeDefinition.
      * 
@@ -483,7 +483,7 @@ public class TreeDefinition
     {
         return leafBlocks;
     }
-    
+
     /*
      * Field accessors
      */
@@ -491,52 +491,52 @@ public class TreeDefinition
     {
         return allowSmartTreeDetection;
     }
-    
+
     public boolean onlyDestroyUpwards()
     {
         return onlyDestroyUpwards;
     }
-    
+
     public boolean requireLeafDecayCheck()
     {
         return requireLeafDecayCheck;
     }
-    
+
     public int maxHorLogBreakDist()
     {
         return maxHorLogBreakDist;
     }
-    
+
     public int maxVerLogBreakDist()
     {
         return maxVerLogBreakDist;
     }
-    
+
     public int maxLeafIDDist()
     {
         return maxLeafIDDist;
     }
-    
+
     public int maxHorLeafBreakDist()
     {
         return maxHorLeafBreakDist;
     }
-    
+
     public int minLeavesToID()
     {
         return minLeavesToID;
     }
-    
+
     public float breakSpeedModifier()
     {
         return breakSpeedModifier;
     }
-    
+
     public boolean useAdvancedTopLogLogic()
     {
         return useAdvancedTopLogLogic;
     }
-    
+
     static
     {
         orderedKeys.add(Reference.LOGS);
@@ -551,7 +551,7 @@ public class TreeDefinition
         orderedKeys.add(Reference.MAX_H_LEAF_DIST);
         orderedKeys.add(Reference.BREAK_SPEED_MOD);
         orderedKeys.add(Reference.USE_ADV_TOP_LOG_LOGIC);
-        
+
         validKeys.add(Reference.TREE_NAME);
         validKeys.add(Reference.ALLOW_SMART_TREE_DETECT);
         validKeys.add(Reference.ONLY_DESTROY_UPWARDS);

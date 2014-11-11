@@ -17,46 +17,46 @@ import bspkrs.util.ListUtils;
 public class ToolRegistry
 {
     private static ToolRegistry instance;
-    
+
     public static ToolRegistry instance()
     {
         if (instance == null)
             new ToolRegistry();
-        
+
         return instance;
     }
-    
+
     // Registry tool lists
     private List<ItemID> axeList;
     private List<ItemID> shearsList;
-    
+
     // Vanilla tool lists
     private List<ItemID> vanAxeList;
     private List<ItemID> vanShearsList;
-    
+
     private List<ItemID> blacklist;
-    
+
     protected ToolRegistry()
     {
         instance = this;
-        
+
         initLists();
         initVanillaItemLists();
     }
-    
+
     protected void initLists()
     {
         axeList = new ArrayList<ItemID>();
         shearsList = new ArrayList<ItemID>();
         readBlacklistFromDelimitedString(TCSettings.itemIDBlacklist);
     }
-    
+
     protected void initVanillaLists()
     {
         vanAxeList = new ArrayList<ItemID>();
         vanShearsList = new ArrayList<ItemID>();
     }
-    
+
     protected void initVanillaItemLists()
     {
         initVanillaLists();
@@ -65,10 +65,10 @@ public class ToolRegistry
         vanAxeList.add(new ItemID(Items.iron_axe));
         vanAxeList.add(new ItemID(Items.golden_axe));
         vanAxeList.add(new ItemID(Items.diamond_axe));
-        
+
         vanShearsList.add(new ItemID(Items.shears));
     }
-    
+
     public static synchronized void autoDetectAxe(ItemStack item, Block block, int blockMetadata)
     {
         if (item != null && item.getItem() != null && ForgeHooks.isToolEffective(item, block, blockMetadata))
@@ -84,32 +84,32 @@ public class ToolRegistry
             }
         }
     }
-    
+
     public List<ItemID> blacklist()
     {
         return new ArrayList<ItemID>(blacklist);
     }
-    
+
     // This must be done after all trees are registered to avoid screwing up the registration process
     public void readBlacklistFromDelimitedString(String dList)
     {
         blacklist = ListUtils.getDelimitedStringAsItemIDList(dList, ";");
     }
-    
+
     protected void readFromNBT(NBTTagCompound ntc)
     {
         axeList = ListUtils.getDelimitedStringAsItemIDList(ntc.getString(Reference.AXE_ID_LIST), ";");
         shearsList = ListUtils.getDelimitedStringAsItemIDList(ntc.getString(Reference.SHEARS_ID_LIST), ";");
         blacklist = ListUtils.getDelimitedStringAsItemIDList(ntc.getString(Reference.BLACKLIST), ";");
     }
-    
+
     public void writeToNBT(NBTTagCompound ntc)
     {
         ntc.setString(Reference.AXE_ID_LIST, ListUtils.getListAsDelimitedString(axeList, ";"));
         ntc.setString(Reference.SHEARS_ID_LIST, ListUtils.getListAsDelimitedString(shearsList, ";"));
         ntc.setString(Reference.BLACKLIST, ListUtils.getListAsDelimitedString(blacklist, ";"));
     }
-    
+
     public synchronized boolean registerAxe(ItemID axe)
     {
         if (axe != null && !blacklist.contains(axe) && !axeList.contains(axe))
@@ -120,10 +120,10 @@ public class ToolRegistry
         }
         else if (blacklist.contains(axe))
             TCLog.debug("ToolRegistry: Item %s is on the blacklist and will not be registered as an axe", axe);
-        
+
         return false;
     }
-    
+
     public synchronized boolean registerShears(ItemID shears)
     {
         if (shears != null && !blacklist.contains(shears) && !shearsList.contains(shears))
@@ -134,30 +134,30 @@ public class ToolRegistry
         }
         else if (blacklist.contains(shears))
             TCLog.debug("ToolRegistry: Item %s is on the blacklist and will not be registered as shears", shears);
-        
+
         return false;
     }
-    
+
     public List<ItemID> axeList()
     {
         return new ArrayList<ItemID>(axeList);
     }
-    
+
     public List<ItemID> shearsList()
     {
         return new ArrayList<ItemID>(shearsList);
     }
-    
+
     public List<ItemID> vanillaAxeList()
     {
         return new ArrayList<ItemID>(vanAxeList);
     }
-    
+
     public List<ItemID> vanillaShearsList()
     {
         return new ArrayList<ItemID>(vanShearsList);
     }
-    
+
     public boolean isAxe(ItemStack itemStack)
     {
         if (itemStack != null && itemStack.getItem() != null)
@@ -168,7 +168,7 @@ public class ToolRegistry
         else
             return false;
     }
-    
+
     public boolean isShears(ItemStack itemStack)
     {
         if (itemStack != null && itemStack.getItem() != null)

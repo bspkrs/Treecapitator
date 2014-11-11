@@ -15,26 +15,26 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class TCClientTicker
 {
     private Minecraft mcClient;
-    
+
     public TCClientTicker()
     {
         mcClient = FMLClientHandler.instance().getClient();
         FMLCommonHandler.instance().bus().register(this);
     }
-    
+
     @SubscribeEvent
     public void onTick(ClientTickEvent event)
     {
         if (event.phase.equals(Phase.START))
             return;
-        
+
         if (mcClient != null && mcClient.thePlayer != null)
         {
             if (bspkrsCoreMod.instance.allowUpdateCheck && TreecapitatorMod.versionChecker != null)
                 if (!TreecapitatorMod.versionChecker.isCurrentVersion())
                     for (String msg : TreecapitatorMod.versionChecker.getInGameMessage())
                         mcClient.thePlayer.addChatMessage(new ChatComponentText(msg));
-            
+
             FMLCommonHandler.instance().bus().unregister(this);
         }
     }

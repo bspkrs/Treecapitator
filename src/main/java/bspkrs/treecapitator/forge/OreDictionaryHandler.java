@@ -19,24 +19,24 @@ import cpw.mods.fml.common.registry.GameData;
 public class OreDictionaryHandler
 {
     private static OreDictionaryHandler instance;
-    
+
     public static OreDictionaryHandler instance()
     {
         if (instance == null)
             instance = new OreDictionaryHandler();
-        
+
         return instance;
     }
-    
+
     public boolean generateAndRegisterOreDictionaryTreeDefinitions()
     {
         if (TCSettings.allowOreDictionaryLookup)
         {
             TCLog.info("Scanning Ore Dictionary for unregistered tree blocks...");
-            
+
             // Get leaves first so they can be added to all generic trees
             List<BlockID> leafList = new LinkedList<BlockID>();
-            
+
             for (String oreName : TCSettings.oreDictionaryLeafStrings.split(","))
             {
                 if (!oreName.trim().isEmpty())
@@ -53,7 +53,7 @@ public class OreDictionaryHandler
                     }
                 }
             }
-            
+
             boolean didRegisterATree = false;
             // register a tree definition for each ore type searched on
             for (String oreName : TCSettings.oreDictionaryLogStrings.split(","))
@@ -61,7 +61,7 @@ public class OreDictionaryHandler
                 if (!oreName.trim().isEmpty())
                 {
                     TreeDefinition genericTree = new TreeDefinition();
-                    
+
                     for (ItemStack itemStack : OreDictionary.getOres(oreName.trim()))
                     {
                         Item item = itemStack.getItem();
@@ -72,15 +72,15 @@ public class OreDictionaryHandler
                                 genericTree.addLogID(blockID);
                         }
                     }
-                    
+
                     if (!genericTree.getLogList().isEmpty())
                     {
                         for (BlockID blockID : leafList)
                             genericTree.addLeafID(blockID);
-                        
+
                         for (BlockID blockID : TreeRegistry.instance().masterDefinition().getLeafList())
                             genericTree.addLeafID(blockID);
-                        
+
                         TCLog.info("Registering generic Ore Dictionary tree %s...", oreName.trim());
                         TreeRegistry.instance().registerTree(oreName.trim(), genericTree);
                         ModConfigRegistry.instance().appendTreeToModConfig(Reference.MINECRAFT, oreName.trim(), genericTree);
@@ -88,11 +88,11 @@ public class OreDictionaryHandler
                     }
                 }
             }
-            
+
             TCLog.info("Ore Dictionary processing complete.");
             return didRegisterATree;
         }
-        
+
         TCLog.info("Skipping Ore Dictionary processing.");
         return false;
     }

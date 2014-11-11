@@ -33,7 +33,7 @@ public class ForgeEventHandler
 {
     private Map<String, Boolean>         playerSneakingMap = new ConcurrentHashMap<String, Boolean>(64);
     private Map<CachedBreakSpeed, Float> breakSpeedCache   = new ConcurrentHashMap<CachedBreakSpeed, Float>(64);
-    
+
     @SubscribeEvent
     public void onBlockClicked(PlayerInteractEvent event)
     {
@@ -43,12 +43,12 @@ public class ForgeEventHandler
                 playerSneakingMap.put(event.entityPlayer.getGameProfile().getName(), event.entityPlayer.isSneaking());
         }
     }
-    
+
     @SubscribeEvent
     public void getPlayerBreakSpeed(BreakSpeed event)
     {
         ModulusBlockID blockID = new ModulusBlockID(event.block, event.metadata, 4);
-        
+
         if (TreecapitatorMod.proxy.isEnabled() && (TreeRegistry.instance().isRegistered(blockID)
                 || (TCSettings.allowAutoTreeDetection && TreeRegistry.canAutoDetect(event.entityPlayer.worldObj, event.block, event.x, event.y, event.z)))
                 && Treecapitator.isBreakingPossible(event.entityPlayer, event.block, event.metadata, false))
@@ -58,15 +58,15 @@ public class ForgeEventHandler
                 treeDef = TreeRegistry.autoDetectTree(event.entityPlayer.worldObj, blockID, new Coord(event.x, event.y, event.z), TCSettings.allowDebugLogging);
             else
                 treeDef = TreeRegistry.instance().get(blockID);
-            
+
             if (treeDef != null)
             {
                 Boolean isSneaking = playerSneakingMap.get(event.entityPlayer.getGameProfile().getName());
                 boolean swappedSneak = !((isSneaking != null && (isSneaking.booleanValue() == event.entityPlayer.isSneaking())) || isSneaking == null);
-                
+
                 CachedBreakSpeed cachedBreakSpeed = new CachedBreakSpeed(event, swappedSneak);
                 Float newBreakSpeed = this.breakSpeedCache.get(cachedBreakSpeed);
-                
+
                 if (newBreakSpeed == null)
                 {
                     if (!swappedSneak)
@@ -85,7 +85,7 @@ public class ForgeEventHandler
                     }
                     else
                         event.newSpeed = 0.0f;
-                    
+
                     this.breakSpeedCache.put(cachedBreakSpeed, event.newSpeed);
                 }
                 else
@@ -93,7 +93,7 @@ public class ForgeEventHandler
             }
         }
     }
-    
+
     @SubscribeEvent
     public void onBlockHarvested(BreakEvent event)
     {
@@ -102,7 +102,7 @@ public class ForgeEventHandler
             if (TreecapitatorMod.proxy.isEnabled() && !event.world.isRemote)
             {
                 ModulusBlockID blockID = new ModulusBlockID(event.block, event.blockMetadata, 4);
-                
+
                 if ((TreeRegistry.instance().isRegistered(blockID) || (TCSettings.allowAutoTreeDetection && TreeRegistry.canAutoDetect(event.world, event.block, event.x, event.y, event.z)))
                         && Treecapitator.isBreakingPossible(event.getPlayer(), event.block, event.blockMetadata, TCSettings.allowDebugLogging))
                 {
@@ -110,70 +110,70 @@ public class ForgeEventHandler
                     if (TreeRegistry.instance().trackTreeChopEventAt(blockPos))
                     {
                         TCLog.debug("BlockID " + blockID + " is a log.");
-                        
+
                         TreeDefinition treeDef;
                         if (TCSettings.allowAutoTreeDetection)
                             treeDef = TreeRegistry.autoDetectTree(event.world, blockID, blockPos, TCSettings.allowDebugLogging);
                         else
                             treeDef = TreeRegistry.instance().get(blockID);
-                        
+
                         if (treeDef != null)
                             (new Treecapitator(event.getPlayer(), treeDef)).onBlockHarvested(event.world, event.x, event.y, event.z, event.blockMetadata);
-                        
+
                         TreeRegistry.instance().endTreeChopEventAt(blockPos);
                     }
                     else
                         TCLog.debug("Previous chopping event detected for block @%s", blockPos.toString());
                 }
             }
-            
+
             cleanUpCaches(event.getPlayer());
-            
+
             if (ModConfigRegistry.instance().isChanged())
                 ModConfigRegistry.instance().writeChangesToConfig(TCConfigHandler.instance().getConfig());
         }
     }
-    
+
     public void cleanUpCaches(EntityPlayer player)
     {
         List<CachedBreakSpeed> toRemove = new ArrayList<CachedBreakSpeed>();
         for (CachedBreakSpeed bs : this.breakSpeedCache.keySet())
             if (bs.entityPlayer.getGameProfile().getName().equals(player.getGameProfile().getName()))
                 toRemove.add(bs);
-        
+
         for (CachedBreakSpeed bs : toRemove)
             this.breakSpeedCache.remove(bs);
-        
+
         if (playerSneakingMap.containsKey(player.getGameProfile().getName()))
             playerSneakingMap.remove(player.getGameProfile().getName());
     }
-    
+
     private class CachedBreakSpeed extends BreakSpeed
     {
         private boolean isSneaking;
         private boolean swappedSneak;
-        
+
         public CachedBreakSpeed(BreakSpeed event, boolean swappedSneak)
         {
             super(event.entityPlayer, event.block, event.metadata, event.originalSpeed, event.x, event.y, event.z);
             this.isSneaking = event.entityPlayer.isSneaking();
             this.swappedSneak = swappedSneak;
         }
-        
+
         @Override
         public boolean equals(Object o)
         {
             if (this == o)
                 return true;
-            
+
             if (!(o instanceof CachedBreakSpeed))
                 return false;
-            
+
             CachedBreakSpeed bs = (CachedBreakSpeed) o;
-            
+
             ItemStack oItem = bs.entityPlayer.getCurrentEquippedItem();
             ItemStack thisItem = this.entityPlayer.getCurrentEquippedItem();
-            
+
             return bs.entityPlayer.getGameProfile().getName().equals(this.entityPlayer.getGameProfile().getName())
                     && (oItem != null && oItem.getItem() != null ? (thisItem != null && thisItem.getItem() != null
                             ? GameData.getItemRegistry().getNameForObject(thisItem.getItem()).equals(GameData.getItemRegistry().getNameForObject(oItem.getItem())) : false)
@@ -182,7 +182,7 @@ public class ForgeEventHandler
                     && bs.isSneaking == this.isSneaking && bs.swappedSneak == this.swappedSneak
                     && bs.metadata == this.metadata && bs.originalSpeed == this.originalSpeed && bs.x == this.x && bs.y == this.y && bs.z == this.z;
         }
-        
+
         @Override
         public int hashCode()
         {
@@ -196,11 +196,11 @@ public class ForgeEventHandler
                     .putInt(this.metadata)
                     .putFloat(this.originalSpeed)
                     .putInt(x + z << 8 + y << 16);
-            
+
             if (thisItem != null && thisItem.getItem() != null)
                 h.putString(GameData.getItemRegistry().getNameForObject(thisItem.getItem()), Charsets.UTF_8)
-                        .putInt(thisItem.getItemDamage());
-            
+                        .putInt(thisItem.getMetadata());
+
             return h.hash().hashCode();
         }
     }

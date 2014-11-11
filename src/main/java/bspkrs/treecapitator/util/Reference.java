@@ -7,19 +7,19 @@ public class Reference
     public static final String PROXY_COMMON                       = "bspkrs.treecapitator.CommonProxy";
     public static final String PROXY_CLIENT                       = "bspkrs.treecapitator.ClientProxy";
     public static final String GUI_FACTORY                        = "bspkrs.treecapitator.fml.gui.ModGuiFactoryHandler";
-    
+
     public static final String CONFIG_VERSION                     = "2.1";
-    
+
     public static final String LANG_KEY_BASE                      = "bspkrs.tc.configgui.";
     public static final String CTGY_LANG_KEY                      = "ctgy.";
-    
+
     public static final String MINECRAFT                          = "minecraft";
-    
+
     // Packet constants
     public static final byte   PROTOCOL_VERSION                   = 0x01;
     public static final byte   PACKET_LOGIN                       = 0x00;
     public static final byte   PACKET_CONFIG                      = 0x01;
-    
+
     // Config Categories
     public static final String OAK                                = "vanilla_oak";
     public static final String SPRUCE                             = "vanilla_spruce";
@@ -39,12 +39,12 @@ public class Reference
     public static final String CTGY_ITEM                          = Reference.CTGY_SETTINGS + "." + "item_settings";
     public static final String CTGY_TREE_CHOP_BEHAVIOR            = Reference.CTGY_SETTINGS + "." + "tree_chop_behavior_settings";
     public static final String CTGY_MISC                          = Reference.CTGY_SETTINGS + "." + "miscellaneous_settings";
-    
+
     // Sneak Actions
     public static final String ENABLE                             = "enable";
     public static final String DISABLE                            = "disable";
     public static final String NONE                               = "none";
-    
+
     // Config Keys    
     public static final String ALLOW_AUTO_AXE_DETECT              = "allowAutoAxeDetection";
     public static final String ALLOW_AUTO_TREE_DETECT             = "allowAutoTreeDetection";
@@ -99,11 +99,11 @@ public class Reference
     public static final String USE_ADV_TOP_LOG_LOGIC              = "useAdvancedTopLogLogic";
     public static final String USE_INCREASING_ITEM_DAMAGE         = "useIncreasingItemDamage";
     public static final String USE_STRICT_BLOCK_PAIRING           = "useStrictBlockPairing";
-    
+
     // IMC Message Key
     public static final String THIRD_PARTY_MOD_CONFIG             = "ThirdPartyModConfig";
     public static final String EYE_NOTIFICATION                   = "EyeNotification";
-    
+
     // Config Property Comments
     //public static final String COMMENT_SEPARATOR                = "#--------------------------------------------------------------------------------------------------------#";
     //public static final String COMMENT_SEPARATOR_2              = "      #--------------------------------------------------------------------------------------------------------#";
@@ -143,7 +143,7 @@ public class Reference
     //public static final String COMMENT_SEPARATOR_2              = "      #--------------------------------------------------------------------------------------------------------#";
     public static final String treeHeightDecidesBreakSpeedDesc    = "[Global] When true, the log break speed is equal to original break speed / (tree height * <treeHeightModifier>)\n" +
                                                                           "When false, the original break speed is multiplied by the breakSpeedModifier value";
-    
+
     public static final String treeHeightModifierDesc             = "[Global] See description for treeHeightDecidesBreakSpeed";
     public static final String allowOreDictionaryLookupDesc       = "[Global] When true, Treecapitator will scan the Forge Ore Dictionary for blocks with an ore name matching\n" +
                                                                           "one of the strings in oreDictionaryLogStrings and generate a generic tree definition for them on the fly. \n" +

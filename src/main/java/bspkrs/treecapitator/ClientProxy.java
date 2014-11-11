@@ -11,26 +11,26 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ClientProxy extends CommonProxy
 {
     public boolean serverDetected = false;
-    
+
     @Override
     public void init(FMLInitializationEvent event)
     {
         super.init(event);
         new TCClientTicker();
     }
-    
+
     @Override
     public boolean isEnabled()
     {
         return serverDetected && TCSettings.enabled;
     }
-    
+
     @Override
     public void setServerDetected()
     {
         serverDetected = true;
     }
-    
+
     @Override
     public void setCategoryConfigEntryClass(Configuration config, String category)
     {

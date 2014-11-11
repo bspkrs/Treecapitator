@@ -29,7 +29,7 @@ configFile.withReader {
 
 repositories {
     ivy {
-        url "https://dl.dropboxusercontent.com/u/20748481/MC"
+        url "http://bspk.rs/MC"
         layout "pattern", {
             artifact "[module]/deobf/%5B${config.minecraft_version}%5D[module]-deobf-[revision].[ext]"
         }
@@ -46,6 +46,7 @@ archivesBaseName = "[${config.minecraft_version}]${config.mod_id}"
 
 minecraft {
     version = config.minecraft_version + "-" + config.forge_version // grab latest forge
+    mappings = config.mappings_version
     assetDir = "run/assets"
     replace '@MOD_VERSION@', version
     replace '@BSCORE_VERSION@', config.bscore_version

@@ -13,51 +13,54 @@ import bspkrs.util.CommonUtils;
 public enum TCLog
 {
     INSTANCE;
-    
+
     private Logger logger;
-    
+
     public Logger getLogger()
     {
         if (logger == null)
             init();
-        
+
         return logger;
     }
-    
+
     private void init()
     {
         if (logger != null)
             return;
-        
+
         logger = LogManager.getLogger("Treecapitator");
     }
-    
+
     public static void info(String format, Object... args)
     {
         INSTANCE.log(Level.INFO, format, args);
     }
-    
+
     public static void log(Level level, Throwable exception, String format, Object... args)
     {
-        INSTANCE.getLogger().log(level, String.format(format, args), exception);
+        if (args != null && args.length > 0)
+            INSTANCE.getLogger().log(level, String.format(format, args), exception);
+        else
+            INSTANCE.getLogger().log(level, format, exception);
     }
-    
+
     public static void severe(String format, Object... args)
     {
         INSTANCE.log(Level.ERROR, format, args);
     }
-    
+
     public static void warning(String format, Object... args)
     {
         INSTANCE.log(Level.WARN, format, args);
     }
-    
+
     public static void config(String format, Object... args)
     {
         if (TCSettings.allowDebugLogging)
             INSTANCE.log(Level.INFO, format, args);
     }
-    
+
     public static void config(Property prop)
     {
         if (TCSettings.allowDebugLogging)
@@ -66,7 +69,7 @@ public enum TCLog
             else
                 INSTANCE.log(Level.INFO, "%s: %s", prop.getName(), prop.getString());
     }
-    
+
     public static void configs(Configuration config, String category)
     {
         if (TCSettings.allowDebugLogging)
@@ -76,12 +79,15 @@ public enum TCLog
                 config(prop);
         }
     }
-    
+
     private void log(Level level, String format, Object... data)
     {
-        getLogger().log(level, String.format(format, data));
+        if (data != null && data.length > 0)
+            getLogger().log(level, String.format(format, data));
+        else
+            getLogger().log(level, format);
     }
-    
+
     public static void debug(String format, Object... args)
     {
         if (TCSettings.allowDebugLogging)

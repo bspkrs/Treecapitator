@@ -19,13 +19,13 @@ public class GuiTCConfig extends GuiConfig
     {
         super(parent, getProps(), Reference.MODID, false, false, GuiConfig.getAbridgedConfigPath(TCConfigHandler.instance().getConfig().toString()));
     }
-    
+
     @SuppressWarnings("rawtypes")
     private static List<IConfigElement> getProps()
     {
         // Make sure the local objects contain our local settings
         TreecapitatorMod.instance.nbtManager().registerLocalInstances();
-        
+
         Set<String> processed = new TreeSet<String>();
         List<IConfigElement> props = new ArrayList<IConfigElement>();
         for (String catName : TCConfigHandler.instance().getConfig().getCategoryNames())
@@ -41,7 +41,7 @@ public class GuiTCConfig extends GuiConfig
             if (shouldAdd)
                 props.add(new ConfigElement(TCConfigHandler.instance().getConfig().getCategory(catName)));
         }
-        
+
         return props;
     }
 }

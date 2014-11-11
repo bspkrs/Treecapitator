@@ -35,25 +35,25 @@ public class TreecapitatorMod
     public static ModVersionChecker versionChecker;
     private final String            versionURL = Const.VERSION_URL + "/Minecraft/" + Const.MCVERSION + "/treecapitator.version";
     private final String            mcfTopic   = "http://www.minecraftforum.net/topic/1009577-";
-    
+
     private RegistryNBTManager      nbtManager;
-    
+
     @Metadata(value = Reference.MODID)
     public static ModMetadata       metadata;
-    
+
     @SidedProxy(clientSide = Reference.PROXY_CLIENT, serverSide = Reference.PROXY_COMMON)
     public static CommonProxy       proxy;
-    
+
     @Instance(value = Reference.MODID)
     public static TreecapitatorMod  instance;
-    
+
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
         metadata = event.getModMetadata();
-        
+
         File file = event.getSuggestedConfigurationFile();
-        
+
         if (!CommonUtils.isObfuscatedEnv())
         {
             // debug settings for deobfuscated execution
@@ -68,29 +68,29 @@ public class TreecapitatorMod
             //            if (file.exists())
             //                file.delete();
         }
-        
+
         TCConfigHandler.setInstance(file);
-        
+
         if (!CommonUtils.isObfuscatedEnv())
         {
             TCSettings.allowDebugLogging = true;
         }
     }
-    
+
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
         MinecraftForge.EVENT_BUS.register(new ForgeEventHandler());
         FMLCommonHandler.instance().bus().register(TCConfigHandler.instance());
         proxy.init(event);
-        
+
         if (bspkrsCoreMod.instance.allowUpdateCheck)
         {
             versionChecker = new ModVersionChecker(metadata.name, metadata.version, versionURL, mcfTopic);
             versionChecker.checkVersionWithLogging();
         }
     }
-    
+
     @EventHandler
     public void processIMCMessages(IMCEvent event)
     {
@@ -106,12 +106,12 @@ public class TreecapitatorMod
                     ModConfigRegistry.instance().registerIMCModConfig(msg.getSender(), ThirdPartyModConfig.readFromNBT(msg.getNBTValue()));
                 else
                     TCLog.severe("Validation failed for IMC message sent by %s", msg.getSender());
-                
+
             }
             else
                 TCLog.warning("Mod %s sent an IMC message, but it is not an NBT object message. The message will be ignored.", msg.getSender());
     }
-    
+
     @EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
@@ -119,12 +119,12 @@ public class TreecapitatorMod
         // Make sure the NBT manager is initialized while we can still be sure of the values in our local objects
         nbtManager();
     }
-    
+
     public RegistryNBTManager nbtManager()
     {
         if (nbtManager == null)
             nbtManager = new RegistryNBTManager();
-        
+
         return nbtManager;
     }
 }
