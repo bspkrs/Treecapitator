@@ -32,6 +32,7 @@ repositories {
         url "http://bspk.rs/MC"
         layout "pattern", {
             artifact "[module]/deobf/%5B${config.minecraft_version}%5D[module]-deobf-[revision].[ext]"
+            artifact "[module]/deobf/[${config.minecraft_version}][module]-deobf-[revision].[ext]"
         }
     }
 }
@@ -78,7 +79,7 @@ processResources {
 
 // change the name of my obfuscated jar
 jar {
-    appendix = 'universal'
+    appendix = config.appendix
 }
 
 // add a source jar
