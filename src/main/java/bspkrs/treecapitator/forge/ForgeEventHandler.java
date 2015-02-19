@@ -79,10 +79,10 @@ public class ForgeEventHandler
                                 if (height > 1)
                                 {
                                     event.newSpeed = event.originalSpeed / (height * TCSettings.treeHeightModifier);
-                                    TCLog.debug("Old Break Speed: %d", event.originalSpeed);
-                                    TCLog.debug("New Break Speed: %d", event.newSpeed);
+                                    TCLog.debug("Old Break Speed: %s", event.originalSpeed);
+                                    TCLog.debug("New Break Speed: %s", event.newSpeed);
                                     TCLog.debug("Tree Height    : %d", height);
-                                    TCLog.debug("Tree Height Mod: %d", TCSettings.treeHeightModifier);
+                                    TCLog.debug("Tree Height Mod: %s", TCSettings.treeHeightModifier);
                                 }
                             }
                         }
