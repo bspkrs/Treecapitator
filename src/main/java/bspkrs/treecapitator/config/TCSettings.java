@@ -127,10 +127,8 @@ public final class TCSettings
 
     public void handleEnchantmentID(int id)
     {
-        if (id >= 0 && id < 256 && enableEnchantmentMode)
+        if ((id >= 0) && (id < 256) && enableEnchantmentMode)
         {
-            if (Enchantment.enchantmentsList[enchantmentID] != null)
-                Enchantment.enchantmentsList[enchantmentID] = null;
             enchantmentID = id;
             treecapitating = new EnchantmentTreecapitating(enchantmentID, enchantmentWeight);
             treecapitating.setName("treecapitating");
@@ -371,7 +369,8 @@ public final class TCSettings
                 enableEnchantmentModeDefault, Reference.enableEnchantmentModeDesc, Reference.LANG_KEY_BASE + Reference.ENABLE_ENCHANT_MODE);
         orderedKeys.add(Reference.ENABLE_ENCHANT_MODE);
         handleEnchantmentID(config.getInt(Reference.ENCHANT_ID, Reference.CTGY_ENCHANTMENT_MODE,
-                enchantmentIDDefault, 0, Enchantment.enchantmentsList.length - 1, Reference.enchantmentIDDesc, Reference.LANG_KEY_BASE + Reference.ENCHANT_ID));
+                enchantmentIDDefault, 0, 255, Reference.enchantmentIDDesc, Reference.LANG_KEY_BASE + Reference.ENCHANT_ID));
+        config.getCategory(Reference.CTGY_ENCHANTMENT_MODE).get(Reference.ENCHANT_ID).setRequiresMcRestart(true);
         orderedKeys.add(Reference.ENCHANT_ID);
         requireItemInAxeListForEnchant = config.getBoolean(Reference.REQ_ITEM_IN_AXE_LIST_ENCHANT, Reference.CTGY_ENCHANTMENT_MODE,
                 requireItemInAxeListForEnchantDefault, Reference.requireItemInAxeListForEnchantDesc, Reference.LANG_KEY_BASE + Reference.REQ_ITEM_IN_AXE_LIST_ENCHANT);

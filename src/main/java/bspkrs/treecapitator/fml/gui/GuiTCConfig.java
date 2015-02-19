@@ -10,8 +10,8 @@ import net.minecraftforge.common.config.ConfigElement;
 import bspkrs.treecapitator.TreecapitatorMod;
 import bspkrs.treecapitator.config.TCConfigHandler;
 import bspkrs.treecapitator.util.Reference;
-import cpw.mods.fml.client.config.GuiConfig;
-import cpw.mods.fml.client.config.IConfigElement;
+import net.minecraftforge.fml.client.config.GuiConfig;
+import net.minecraftforge.fml.client.config.IConfigElement;
 
 public class GuiTCConfig extends GuiConfig
 {

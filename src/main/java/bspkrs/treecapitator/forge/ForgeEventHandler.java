@@ -10,6 +10,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameData;
 import bspkrs.treecapitator.Treecapitator;
 import bspkrs.treecapitator.TreecapitatorMod;
 import bspkrs.treecapitator.config.TCConfigHandler;
@@ -26,20 +28,17 @@ import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.registry.GameData;
-
 public class ForgeEventHandler
 {
-    private Map<String, Boolean>         playerSneakingMap = new ConcurrentHashMap<String, Boolean>(64);
-    private Map<CachedBreakSpeed, Float> breakSpeedCache   = new ConcurrentHashMap<CachedBreakSpeed, Float>(64);
+    private final Map<String, Boolean>         playerSneakingMap = new ConcurrentHashMap<String, Boolean>(64);
+    private final Map<CachedBreakSpeed, Float> breakSpeedCache   = new ConcurrentHashMap<CachedBreakSpeed, Float>(64);
 
     @SubscribeEvent
     public void onBlockClicked(PlayerInteractEvent event)
     {
         if (TreecapitatorMod.proxy.isEnabled() && !TCSettings.sneakAction.equalsIgnoreCase("none") && event.action.equals(PlayerInteractEvent.Action.LEFT_CLICK_BLOCK))
         {
-            if (!event.entityPlayer.worldObj.isAirBlock(event.x, event.y, event.z))
+            if (!event.entityPlayer.worldObj.isAirBlock(event.pos))
                 playerSneakingMap.put(event.entityPlayer.getGameProfile().getName(), event.entityPlayer.isSneaking());
         }
     }
@@ -47,25 +46,26 @@ public class ForgeEventHandler
     @SubscribeEvent
     public void getPlayerBreakSpeed(BreakSpeed event)
     {
-        ModulusBlockID blockID = new ModulusBlockID(event.block, event.metadata, 4);
+        ModulusBlockID blockID = new ModulusBlockID(event.state, 4);
+        Coord pos = new Coord(event.pos);
 
         if (TreecapitatorMod.proxy.isEnabled() && (TreeRegistry.instance().isRegistered(blockID)
-                || (TCSettings.allowAutoTreeDetection && TreeRegistry.canAutoDetect(event.entityPlayer.worldObj, event.block, event.x, event.y, event.z)))
-                && Treecapitator.isBreakingPossible(event.entityPlayer, event.block, event.metadata, false))
+                || (TCSettings.allowAutoTreeDetection && TreeRegistry.canAutoDetect(event.entityPlayer.worldObj, event.state.getBlock(), pos)))
+                && Treecapitator.isBreakingPossible(event.entityPlayer, event.pos, false))
         {
             TreeDefinition treeDef;
             if (TCSettings.allowAutoTreeDetection)
-                treeDef = TreeRegistry.autoDetectTree(event.entityPlayer.worldObj, blockID, new Coord(event.x, event.y, event.z), TCSettings.allowDebugLogging);
+                treeDef = TreeRegistry.autoDetectTree(event.entityPlayer.worldObj, blockID, pos, TCSettings.allowDebugLogging);
             else
                 treeDef = TreeRegistry.instance().get(blockID);
 
             if (treeDef != null)
             {
                 Boolean isSneaking = playerSneakingMap.get(event.entityPlayer.getGameProfile().getName());
-                boolean swappedSneak = !((isSneaking != null && (isSneaking.booleanValue() == event.entityPlayer.isSneaking())) || isSneaking == null);
+                boolean swappedSneak = !(((isSneaking != null) && (isSneaking.booleanValue() == event.entityPlayer.isSneaking())) || (isSneaking == null));
 
                 CachedBreakSpeed cachedBreakSpeed = new CachedBreakSpeed(event, swappedSneak);
-                Float newBreakSpeed = this.breakSpeedCache.get(cachedBreakSpeed);
+                Float newBreakSpeed = breakSpeedCache.get(cachedBreakSpeed);
 
                 if (newBreakSpeed == null)
                 {
@@ -75,7 +75,7 @@ public class ForgeEventHandler
                         {
                             if (Treecapitator.isBreakingEnabled(event.entityPlayer))
                             {
-                                int height = Treecapitator.getTreeHeight(treeDef, event.entityPlayer.worldObj, event.x, event.y, event.z, event.metadata, event.entityPlayer);
+                                int height = Treecapitator.getTreeHeight(treeDef, event.entityPlayer.worldObj, pos, event.entityPlayer);
                                 if (height > 1)
                                     event.newSpeed = event.originalSpeed / (height * TCSettings.treeHeightModifier);
                             }
@@ -86,7 +86,7 @@ public class ForgeEventHandler
                     else
                         event.newSpeed = 0.0f;
 
-                    this.breakSpeedCache.put(cachedBreakSpeed, event.newSpeed);
+                    breakSpeedCache.put(cachedBreakSpeed, event.newSpeed);
                 }
                 else
                     event.newSpeed = newBreakSpeed;
@@ -97,33 +97,34 @@ public class ForgeEventHandler
     @SubscribeEvent
     public void onBlockHarvested(BreakEvent event)
     {
-        if (event.block != null && event.world != null && event.getPlayer() != null)
+        if ((event.state != null) && (event.world != null) && (event.getPlayer() != null))
         {
             if (TreecapitatorMod.proxy.isEnabled() && !event.world.isRemote)
             {
-                ModulusBlockID blockID = new ModulusBlockID(event.block, event.blockMetadata, 4);
+                ModulusBlockID blockID = new ModulusBlockID(event.state, 4);
 
-                if ((TreeRegistry.instance().isRegistered(blockID) || (TCSettings.allowAutoTreeDetection && TreeRegistry.canAutoDetect(event.world, event.block, event.x, event.y, event.z)))
-                        && Treecapitator.isBreakingPossible(event.getPlayer(), event.block, event.blockMetadata, TCSettings.allowDebugLogging))
+                if ((TreeRegistry.instance().isRegistered(blockID) || (TCSettings.allowAutoTreeDetection
+                        && TreeRegistry.canAutoDetect(event.world, event.state.getBlock(), event.pos)))
+                        && Treecapitator.isBreakingPossible(event.getPlayer(), event.pos, TCSettings.allowDebugLogging))
                 {
-                    Coord blockPos = new Coord(event.x, event.y, event.z);
-                    if (TreeRegistry.instance().trackTreeChopEventAt(blockPos))
+                    Coord pos = new Coord(event.pos);
+                    if (TreeRegistry.instance().trackTreeChopEventAt(pos))
                     {
                         TCLog.debug("BlockID " + blockID + " is a log.");
 
                         TreeDefinition treeDef;
                         if (TCSettings.allowAutoTreeDetection)
-                            treeDef = TreeRegistry.autoDetectTree(event.world, blockID, blockPos, TCSettings.allowDebugLogging);
+                            treeDef = TreeRegistry.autoDetectTree(event.world, blockID, pos, TCSettings.allowDebugLogging);
                         else
                             treeDef = TreeRegistry.instance().get(blockID);
 
                         if (treeDef != null)
-                            (new Treecapitator(event.getPlayer(), treeDef)).onBlockHarvested(event.world, event.x, event.y, event.z, event.blockMetadata);
+                            (new Treecapitator(event.getPlayer(), treeDef)).onBlockHarvested(event.world, pos);
 
-                        TreeRegistry.instance().endTreeChopEventAt(blockPos);
+                        TreeRegistry.instance().endTreeChopEventAt(pos);
                     }
                     else
-                        TCLog.debug("Previous chopping event detected for block @%s", blockPos.toString());
+                        TCLog.debug("Previous chopping event detected for block @%s", pos.toString());
                 }
             }
 
@@ -137,12 +138,12 @@ public class ForgeEventHandler
     public void cleanUpCaches(EntityPlayer player)
     {
         List<CachedBreakSpeed> toRemove = new ArrayList<CachedBreakSpeed>();
-        for (CachedBreakSpeed bs : this.breakSpeedCache.keySet())
+        for (CachedBreakSpeed bs : breakSpeedCache.keySet())
             if (bs.entityPlayer.getGameProfile().getName().equals(player.getGameProfile().getName()))
                 toRemove.add(bs);
 
         for (CachedBreakSpeed bs : toRemove)
-            this.breakSpeedCache.remove(bs);
+            breakSpeedCache.remove(bs);
 
         if (playerSneakingMap.containsKey(player.getGameProfile().getName()))
             playerSneakingMap.remove(player.getGameProfile().getName());
@@ -150,13 +151,13 @@ public class ForgeEventHandler
 
     private class CachedBreakSpeed extends BreakSpeed
     {
-        private boolean isSneaking;
-        private boolean swappedSneak;
+        private final boolean isSneaking;
+        private final boolean swappedSneak;
 
         public CachedBreakSpeed(BreakSpeed event, boolean swappedSneak)
         {
-            super(event.entityPlayer, event.block, event.metadata, event.originalSpeed, event.x, event.y, event.z);
-            this.isSneaking = event.entityPlayer.isSneaking();
+            super(event.entityPlayer, event.state, event.originalSpeed, event.pos);
+            isSneaking = event.entityPlayer.isSneaking();
             this.swappedSneak = swappedSneak;
         }
 
@@ -172,33 +173,34 @@ public class ForgeEventHandler
             CachedBreakSpeed bs = (CachedBreakSpeed) o;
 
             ItemStack oItem = bs.entityPlayer.getCurrentEquippedItem();
-            ItemStack thisItem = this.entityPlayer.getCurrentEquippedItem();
+            ItemStack thisItem = entityPlayer.getCurrentEquippedItem();
 
-            return bs.entityPlayer.getGameProfile().getName().equals(this.entityPlayer.getGameProfile().getName())
-                    && (oItem != null && oItem.getItem() != null ? (thisItem != null && thisItem.getItem() != null
+            return bs.entityPlayer.getGameProfile().getName().equals(entityPlayer.getGameProfile().getName())
+                    && ((oItem != null) && (oItem.getItem() != null) ? ((thisItem != null) && (thisItem.getItem() != null)
                             ? GameData.getItemRegistry().getNameForObject(thisItem.getItem()).equals(GameData.getItemRegistry().getNameForObject(oItem.getItem())) : false)
-                            : thisItem == null || thisItem.getItem() == null)
-                    && GameData.getBlockRegistry().getNameForObject(bs.block).equals(GameData.getBlockRegistry().getNameForObject(this.block))
-                    && bs.isSneaking == this.isSneaking && bs.swappedSneak == this.swappedSneak
-                    && bs.metadata == this.metadata && bs.originalSpeed == this.originalSpeed && bs.x == this.x && bs.y == this.y && bs.z == this.z;
+                            : (thisItem == null) || (thisItem.getItem() == null))
+                    && GameData.getBlockRegistry().getNameForObject(bs.state.getBlock()).equals(GameData.getBlockRegistry().getNameForObject(state.getBlock()))
+                    && (bs.isSneaking == isSneaking) && (bs.swappedSneak == swappedSneak)
+                    && (bs.state.getBlock().getMetaFromState(bs.state) == state.getBlock().getMetaFromState(state))
+                    && (bs.originalSpeed == originalSpeed) && (bs.pos.equals(pos));
         }
 
         @Override
         public int hashCode()
         {
-            ItemStack thisItem = this.entityPlayer.getCurrentEquippedItem();
+            ItemStack thisItem = entityPlayer.getCurrentEquippedItem();
             HashFunction hf = Hashing.md5();
             Hasher h = hf.newHasher()
-                    .putString(this.entityPlayer.getGameProfile().getName(), Charsets.UTF_8)
-                    .putString(GameData.getBlockRegistry().getNameForObject(this.block), Charsets.UTF_8)
-                    .putBoolean(this.isSneaking)
-                    .putBoolean(this.swappedSneak)
-                    .putInt(this.metadata)
-                    .putFloat(this.originalSpeed)
-                    .putInt(x + z << 8 + y << 16);
+                    .putString(entityPlayer.getGameProfile().getName(), Charsets.UTF_8)
+                    .putString(GameData.getBlockRegistry().getNameForObject(state.getBlock()).toString(), Charsets.UTF_8)
+                    .putBoolean(isSneaking)
+                    .putBoolean(swappedSneak)
+                    .putInt(state.getBlock().getMetaFromState(state))
+                    .putFloat(originalSpeed)
+                    .putInt(pos.hashCode());
 
-            if (thisItem != null && thisItem.getItem() != null)
-                h.putString(GameData.getItemRegistry().getNameForObject(thisItem.getItem()), Charsets.UTF_8)
+            if ((thisItem != null) && (thisItem.getItem() != null))
+                h.putString(GameData.getItemRegistry().getNameForObject(thisItem.getItem()).toString(), Charsets.UTF_8)
                         .putInt(thisItem.getMetadata());
 
             return h.hash().hashCode();

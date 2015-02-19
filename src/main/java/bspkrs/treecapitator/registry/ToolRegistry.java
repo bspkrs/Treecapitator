@@ -3,10 +3,11 @@ package bspkrs.treecapitator.registry;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.util.Reference;
@@ -69,9 +70,9 @@ public class ToolRegistry
         vanShearsList.add(new ItemID(Items.shears));
     }
 
-    public static synchronized void autoDetectAxe(ItemStack item, Block block, int blockMetadata)
+    public static synchronized void autoDetectAxe(World world, BlockPos pos, ItemStack item)
     {
-        if (item != null && item.getItem() != null && ForgeHooks.isToolEffective(item, block, blockMetadata))
+        if ((item != null) && (item.getItem() != null) && ForgeHooks.isToolEffective(world, pos, item))
         {
             ItemID axe = new ItemID(item);
             if (!instance.isAxe(item))
@@ -112,7 +113,7 @@ public class ToolRegistry
 
     public synchronized boolean registerAxe(ItemID axe)
     {
-        if (axe != null && !blacklist.contains(axe) && !axeList.contains(axe))
+        if ((axe != null) && !blacklist.contains(axe) && !axeList.contains(axe))
         {
             axeList.add(axe);
             TCLog.debug("ToolRegistry: Successfully registered axe item %s", axe);
@@ -126,7 +127,7 @@ public class ToolRegistry
 
     public synchronized boolean registerShears(ItemID shears)
     {
-        if (shears != null && !blacklist.contains(shears) && !shearsList.contains(shears))
+        if ((shears != null) && !blacklist.contains(shears) && !shearsList.contains(shears))
         {
             shearsList.add(shears);
             TCLog.debug("ToolRegistry: Successfully registered shears item %s", shears);
@@ -160,7 +161,7 @@ public class ToolRegistry
 
     public boolean isAxe(ItemStack itemStack)
     {
-        if (itemStack != null && itemStack.getItem() != null)
+        if ((itemStack != null) && (itemStack.getItem() != null))
         {
             ItemID itemID = new ItemID(itemStack);
             return !blacklist.contains(itemID) && axeList.contains(itemID);
@@ -171,7 +172,7 @@ public class ToolRegistry
 
     public boolean isShears(ItemStack itemStack)
     {
-        if (itemStack != null && itemStack.getItem() != null)
+        if ((itemStack != null) && (itemStack.getItem() != null))
         {
             ItemID itemID = new ItemID(itemStack);
             return !blacklist.contains(itemID) && shearsList.contains(itemID);

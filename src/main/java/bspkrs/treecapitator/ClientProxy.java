@@ -3,9 +3,9 @@ package bspkrs.treecapitator;
 import net.minecraftforge.common.config.Configuration;
 import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.fml.gui.GuiConfigCustomCategoryListEntry;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy

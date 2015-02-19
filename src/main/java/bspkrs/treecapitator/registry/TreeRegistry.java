@@ -15,6 +15,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import bspkrs.treecapitator.Treecapitator;
 import bspkrs.treecapitator.config.TCSettings;
@@ -123,7 +124,7 @@ public class TreeRegistry
                     // Whoa! this BlockID isn't new, we need to do some merging
                     sharedLogTrees.add(logToStringMap.get(blockID));
 
-            if (!newKey.trim().isEmpty() && !isRegistered(newKey) && sharedLogTrees.size() == 0)
+            if (!newKey.trim().isEmpty() && !isRegistered(newKey) && (sharedLogTrees.size() == 0))
             {
                 // New definition all around.  Easy.
                 TCLog.debug("Tree Definition \"%s\" is new.  Proceeding to insert new key.", newKey);
@@ -276,9 +277,9 @@ public class TreeRegistry
             return null;
     }
 
-    public static boolean canAutoDetect(World world, Block block, int x, int y, int z)
+    public static boolean canAutoDetect(World world, Block block, BlockPos pos)
     {
-        return block.isWood(world, x, y, z) || block.canSustainLeaves(world, x, y, z);
+        return block.isWood(world, pos) || block.canSustainLeaves(world, pos);
     }
 
     public static synchronized TreeDefinition autoDetectTree(World world, BlockID blockID, Coord blockPos, boolean shouldLog)
@@ -286,7 +287,7 @@ public class TreeRegistry
         TreeDefinition treeDef = instance.get(blockID);
         List<BlockID> leaves = Treecapitator.getLeavesForTree(world, blockID, blockPos, treeDef == null);
 
-        if (treeDef == null && leaves.size() >= TCSettings.minLeavesToID)
+        if ((treeDef == null) && (leaves.size() >= TCSettings.minLeavesToID))
         {
             treeDef = new TreeDefinition().addLogID(blockID).addAllLeafIDs(leaves);
             int index = blockID.id.indexOf(":");
@@ -299,7 +300,7 @@ public class TreeRegistry
             if (shouldLog)
                 TCLog.debug("Auto Tree Detection: New tree added: %s (%s)", treeName, treeDef);
         }
-        else if (treeDef != null && leaves.size() >= TCSettings.minLeavesToID)
+        else if ((treeDef != null) && (leaves.size() >= TCSettings.minLeavesToID))
         {
             if (!ListUtils.doesListAContainAllUniqueListBValues(treeDef.leafBlocks, leaves))
             {

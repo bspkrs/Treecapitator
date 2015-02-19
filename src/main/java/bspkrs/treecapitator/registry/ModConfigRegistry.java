@@ -17,7 +17,7 @@ import bspkrs.treecapitator.util.TCLog;
 import bspkrs.util.BlockID;
 import bspkrs.util.ItemID;
 import bspkrs.util.ModulusBlockID;
-import cpw.mods.fml.common.Loader;
+import net.minecraftforge.fml.common.Loader;
 
 public class ModConfigRegistry
 {

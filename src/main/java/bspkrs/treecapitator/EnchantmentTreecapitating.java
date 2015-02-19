@@ -10,7 +10,7 @@ public class EnchantmentTreecapitating extends Enchantment
 {
     public EnchantmentTreecapitating(int par1, int par2)
     {
-        super(par1, par2, EnumEnchantmentType.digger);
+        super(par1, par2, EnumEnchantmentType.DIGGER);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class EnchantmentTreecapitating extends Enchantment
     @Override
     public boolean canApplyTogether(Enchantment enchantment)
     {
-        return TCSettings.enableEnchantmentMode && super.canApplyTogether(enchantment) && enchantment.effectId != fortune.effectId;
+        return TCSettings.enableEnchantmentMode && super.canApplyTogether(enchantment) && (enchantment.effectId != fortune.effectId);
     }
 
 }
