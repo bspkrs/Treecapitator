@@ -77,7 +77,13 @@ public class ForgeEventHandler
                             {
                                 int height = Treecapitator.getTreeHeight(treeDef, event.entityPlayer.worldObj, event.x, event.y, event.z, event.metadata, event.entityPlayer);
                                 if (height > 1)
+                                {
                                     event.newSpeed = event.originalSpeed / (height * TCSettings.treeHeightModifier);
+                                    TCLog.debug("Old Break Speed: %d", event.originalSpeed);
+                                    TCLog.debug("New Break Speed: %d", event.newSpeed);
+                                    TCLog.debug("Tree Height    : %d", height);
+                                    TCLog.debug("Tree Height Mod: %d", TCSettings.treeHeightModifier);
+                                }
                             }
                         }
                         else if (Treecapitator.isBreakingEnabled(event.entityPlayer))
