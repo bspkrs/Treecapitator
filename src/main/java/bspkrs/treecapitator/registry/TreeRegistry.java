@@ -22,7 +22,6 @@ import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.util.Reference;
 import bspkrs.treecapitator.util.TCLog;
 import bspkrs.util.BlockID;
-import bspkrs.util.Coord;
 import bspkrs.util.ListUtils;
 import bspkrs.util.ModulusBlockID;
 
@@ -33,7 +32,7 @@ public class TreeRegistry
     private TreeDefinition              masterDefinition;
     private Map<String, TreeDefinition> vanTrees;
     private List<BlockID>               blacklist;
-    private Set<Coord>                  blocksBeingChopped;
+    private Set<BlockPos>               blocksBeingChopped;
 
     private static TreeRegistry         instance;
 
@@ -58,7 +57,7 @@ public class TreeRegistry
         treeDefs = new HashMap<String, TreeDefinition>();
         logToStringMap = new HashMap<BlockID, String>();
         masterDefinition = new TreeDefinition();
-        blocksBeingChopped = new HashSet<Coord>();
+        blocksBeingChopped = new HashSet<BlockPos>();
         readBlacklistFromDelimitedString(TCSettings.blockIDBlacklist);
     }
 
@@ -198,7 +197,7 @@ public class TreeRegistry
             TCLog.warning("TreeDefinition cannot be null when registering a tree!");
     }
 
-    public boolean trackTreeChopEventAt(Coord c)
+    public boolean trackTreeChopEventAt(BlockPos c)
     {
         if (!blocksBeingChopped.contains(c))
         {
@@ -208,7 +207,7 @@ public class TreeRegistry
         return false;
     }
 
-    public void endTreeChopEventAt(Coord c)
+    public void endTreeChopEventAt(BlockPos c)
     {
         if (blocksBeingChopped.contains(c))
             blocksBeingChopped.remove(c);
@@ -282,7 +281,7 @@ public class TreeRegistry
         return block.isWood(world, pos) || block.canSustainLeaves(world, pos);
     }
 
-    public static synchronized TreeDefinition autoDetectTree(World world, BlockID blockID, Coord blockPos, boolean shouldLog)
+    public static synchronized TreeDefinition autoDetectTree(World world, BlockID blockID, BlockPos blockPos, boolean shouldLog)
     {
         TreeDefinition treeDef = instance.get(blockID);
         List<BlockID> leaves = Treecapitator.getLeavesForTree(world, blockID, blockPos, treeDef == null);
@@ -311,9 +310,9 @@ public class TreeRegistry
         }
         else
         {
-            if (shouldLog)
-                TCLog.debug("Auto Tree Detection: Block ID %s is a log, but not enough leaves were " +
-                        "found to identify this structure as a tree. Found %d leaves.", blockID, leaves.size());
+            //            if (shouldLog)
+            //                TCLog.debug("Auto Tree Detection: Block ID %s is a log, but not enough leaves were " +
+            //                        "found to identify this structure as a tree. Found %d leaves.", blockID, leaves.size());
             treeDef = null;
         }
 

@@ -27,7 +27,6 @@ import bspkrs.treecapitator.util.Reference;
 import bspkrs.treecapitator.util.TCLog;
 import bspkrs.util.BlockID;
 import bspkrs.util.CommonUtils;
-import bspkrs.util.Coord;
 import bspkrs.util.ModulusBlockID;
 
 public class Treecapitator
@@ -35,7 +34,7 @@ public class Treecapitator
     // The player chopping
     private World                world;
     private final EntityPlayer   player;
-    private Coord                startPos;
+    private BlockPos             startPos;
     // The axe of the player currently chopping
     private ItemStack            axe;
     private ItemStack            shears;
@@ -48,7 +47,7 @@ public class Treecapitator
     private float                logDamageMultiplier;
     private float                leafDamageMultiplier;
     private List<ItemStack>      drops;
-    private Coord                dropPos;
+    private BlockPos             dropPos;
     private boolean              maxAllowed = false;
 
     public Treecapitator(EntityPlayer entityPlayer, TreeDefinition treeDef)
@@ -176,9 +175,9 @@ public class Treecapitator
                 && !(player.capabilities.isCreativeMode && TCSettings.disableInCreative);
     }
 
-    public static int getTreeHeight(TreeDefinition tree, World world, Coord pos, EntityPlayer entityPlayer)
+    public static int getTreeHeight(TreeDefinition tree, World world, BlockPos pos, EntityPlayer entityPlayer)
     {
-        Coord startPos = pos.clone();
+        BlockPos startPos = pos;
 
         if (!tree.onlyDestroyUpwards())
             if (tree.useAdvancedTopLogLogic())
@@ -186,102 +185,38 @@ public class Treecapitator
             else
                 startPos = getBottomLogAtPos(tree.getLogList(), world, startPos, false);
 
-        Coord topLog = tree.useAdvancedTopLogLogic() ? getTopLog(tree.getLogList(), world, pos, false)
+        BlockPos topLog = tree.useAdvancedTopLogLogic() ? getTopLog(tree.getLogList(), world, pos, false)
                 : getTopLogAtPos(tree.getLogList(), world, pos, false);
 
         if (!tree.allowSmartTreeDetection() || (tree.getLeafList().size() == 0)
                 || hasXLeavesInDist(tree.getLeafList(), world, topLog, tree.maxLeafIDDist(), tree.minLeavesToID(), false))
-            return (topLog.y - startPos.y) + 1;
+            return (topLog.getY() - startPos.getY()) + 1;
 
         return 1;
     }
 
-    public void onBlockHarvested(World world, Coord pos)
+    public void onBlockHarvested(World world, BlockPos pos)
     {
         if (!world.isRemote)
         {
             TCLog.debug("In TreeCapitator.onBlockHarvested() " + pos.toString());
             this.world = world;
-            startPos = pos.clone();
-            dropPos = startPos.clone();
+            startPos = pos;
+            dropPos = startPos;
             drops = new ArrayList<ItemStack>();
 
             if (isBreakingEnabled(player))
             {
-                Coord topLog = getTopLog(world, pos);
+                BlockPos topLog = getTopLog(world, pos);
                 if (!treeDef.allowSmartTreeDetection() || (treeDef.getLeafList().size() == 0)
                         || hasXLeavesInDist(world, topLog, treeDef.maxLeafIDDist(), treeDef.minLeavesToID()))
                 {
                     if (isBreakingPossible())
                     {
-                        long beginning = System.currentTimeMillis();
-                        TCLog.debug("Proceeding to chop tree...");
-                        LinkedList<Coord> listFinal = new LinkedList<Coord>();
-                        TCLog.debug("Finding log blocks...");
-                        long startTime = System.currentTimeMillis();
-                        LinkedList<Coord> logs = addLogs(world, pos);
-                        TCLog.debug("Log Discovery: %dms", System.currentTimeMillis() - startTime);
-                        if (logs.isEmpty() && maxAllowed)
-                            return;
-                        startTime = System.currentTimeMillis();
-                        addLogsAbove(world, pos, listFinal);
-                        TCLog.debug("Final Logs: %dms", System.currentTimeMillis() - startTime);
-
-                        TCLog.debug("Destroying %d log blocks...", logs.size());
-                        startTime = System.currentTimeMillis();
-                        destroyBlocks(world, logs);
-                        TCLog.debug("Log Destruction: %dms", System.currentTimeMillis() - startTime);
-                        if (numLogsBroken > 1)
-                            TCLog.debug("Number of logs broken: %d", numLogsBroken);
-
-                        if (TCSettings.destroyLeaves && (treeDef.getLeafList().size() != 0))
-                        {
-                            TCLog.debug("Finding leaf blocks...");
-                            List<Coord> leaves = new ArrayList<Coord>();
-                            startTime = System.currentTimeMillis();
-                            for (Coord coord : listFinal)
-                            {
-                                addLeaves(world, coord, leaves);
-                            }
-                            TCLog.debug("Leaf Discovery: %dms", System.currentTimeMillis() - startTime);
-                            TCLog.debug("Destroying %d leaf blocks...", leaves.size());
-                            startTime = System.currentTimeMillis();
-                            destroyBlocksWithChance(world, leaves, 0.5F, hasShearsInHotbar(player));
-                            TCLog.debug("Leaf Destruction: %dms", System.currentTimeMillis() - startTime);
-
-                            if (numLeavesSheared > 1)
-                                TCLog.debug("Number of leaves sheared: %d", numLeavesSheared);
-                        }
-
-                        /*
-                         * Apply remaining damage if it rounds to a non-zero value
-                         */
-                        if ((currentAxeDamage > 0.0F) && (axe != null))
-                        {
-                            currentAxeDamage = Math.round(currentAxeDamage);
-
-                            for (int i = 0; i < MathHelper.floor_double(currentAxeDamage); i++)
-                                axe.getItem().onBlockDestroyed(axe, world, treeDef.getLogList().get(0).getBlock(), pos, player);
-                        }
-
-                        if ((currentShearsDamage > 0.0F) && (shears != null))
-                        {
-                            currentShearsDamage = Math.round(currentShearsDamage);
-
-                            for (int i = 0; i < Math.floor(currentShearsDamage); i++)
-                                if (shears.getItem().equals(Items.shears))
-                                    shears.damageItem(1, player);
-                                else
-                                    shears.getItem().onBlockDestroyed(shears, world, treeDef.getLeafList().get(0).getBlock(), pos, player);
-                        }
-
-                        startTime = System.currentTimeMillis();
-                        if (TCSettings.stackDrops)
-                            while (drops.size() > 0)
-                                world.spawnEntityInWorld(new EntityItem(world, dropPos.x, dropPos.y, dropPos.z, drops.remove(0)));
-                        TCLog.debug("Drops: %dms", System.currentTimeMillis() - startTime);
-
-                        TCLog.debug("Total: %dms", System.currentTimeMillis() - beginning);
+                        //                        if (TCSettings.useTickBasedChopping)
+                        //                            this.startTickingChop(pos);
+                        //                        else
+                        this.doProceduralChop(pos);
                     }
                 }
                 else
@@ -294,13 +229,97 @@ public class Treecapitator
             TCLog.debug("World is remote, skipping TreeCapitator.onBlockHarvested().");
     }
 
-    public static List<BlockID> getLeavesForTree(World world, BlockID logID, Coord pos, boolean shouldLog)
+    //    public void startTickingChop(BlockPos pos)
+    //    {
+    //        // TODO!!!
+    //    }
+    //
+    //    public class LogFinder
+    //    {
+    //        LinkedList<BlockPos> listFinal;
+    //        LinkedList<BlockPos> logs;
+    //
+    //    }
+
+    public void doProceduralChop(BlockPos pos)
+    {
+        long beginning = System.currentTimeMillis();
+        TCLog.debug("Proceeding to chop tree...");
+        LinkedList<BlockPos> listFinal = new LinkedList<BlockPos>();
+        TCLog.debug("Finding log blocks...");
+        long startTime = System.currentTimeMillis();
+        LinkedList<BlockPos> logs = addLogs(world, pos);
+        TCLog.debug("Log Discovery: %dms", System.currentTimeMillis() - startTime);
+        if (logs.isEmpty() && maxAllowed)
+            return;
+        startTime = System.currentTimeMillis();
+        addLogsAbove(world, pos, listFinal);
+        TCLog.debug("Final Logs: %dms", System.currentTimeMillis() - startTime);
+
+        TCLog.debug("Destroying %d log blocks...", logs.size());
+        startTime = System.currentTimeMillis();
+        destroyBlocks(world, logs);
+        TCLog.debug("Log Destruction: %dms", System.currentTimeMillis() - startTime);
+        if (numLogsBroken > 1)
+            TCLog.debug("Number of logs broken: %d", numLogsBroken);
+
+        if (TCSettings.destroyLeaves && (treeDef.getLeafList().size() != 0))
+        {
+            TCLog.debug("Finding leaf blocks...");
+            List<BlockPos> leaves = new ArrayList<BlockPos>();
+            startTime = System.currentTimeMillis();
+            for (BlockPos BlockPos : listFinal)
+            {
+                addLeaves(world, BlockPos, leaves);
+            }
+            TCLog.debug("Leaf Discovery: %dms", System.currentTimeMillis() - startTime);
+            TCLog.debug("Destroying %d leaf blocks...", leaves.size());
+            startTime = System.currentTimeMillis();
+            destroyBlocksWithChance(world, leaves, 0.5F, hasShearsInHotbar(player));
+            TCLog.debug("Leaf Destruction: %dms", System.currentTimeMillis() - startTime);
+
+            if (numLeavesSheared > 1)
+                TCLog.debug("Number of leaves sheared: %d", numLeavesSheared);
+        }
+
+        /*
+         * Apply remaining damage if it rounds to a non-zero value
+         */
+        if ((currentAxeDamage > 0.0F) && (axe != null))
+        {
+            currentAxeDamage = Math.round(currentAxeDamage);
+
+            for (int i = 0; i < MathHelper.floor_double(currentAxeDamage); i++)
+                axe.getItem().onBlockDestroyed(axe, world, treeDef.getLogList().get(0).getBlock(), pos, player);
+        }
+
+        if ((currentShearsDamage > 0.0F) && (shears != null))
+        {
+            currentShearsDamage = Math.round(currentShearsDamage);
+
+            for (int i = 0; i < Math.floor(currentShearsDamage); i++)
+                if (shears.getItem().equals(Items.shears))
+                    shears.damageItem(1, player);
+                else
+                    shears.getItem().onBlockDestroyed(shears, world, treeDef.getLeafList().get(0).getBlock(), pos, player);
+        }
+
+        startTime = System.currentTimeMillis();
+        if (TCSettings.stackDrops)
+            while (drops.size() > 0)
+                world.spawnEntityInWorld(new EntityItem(world, dropPos.getX(), dropPos.getY(), dropPos.getZ(), drops.remove(0)));
+        TCLog.debug("Drops: %dms", System.currentTimeMillis() - startTime);
+
+        TCLog.debug("Total: %dms", System.currentTimeMillis() - beginning);
+    }
+
+    public static List<BlockID> getLeavesForTree(World world, BlockID logID, BlockPos pos, boolean shouldLog)
     {
         List<BlockID> leaves = new ArrayList<BlockID>();
         List<BlockID> logs = new ArrayList<BlockID>();
         logs.add(logID);
 
-        Coord topLogPos;
+        BlockPos topLogPos;
         if (TCSettings.useAdvancedTopLogLogic)
             topLogPos = getTopLog(logs, world, pos, shouldLog);
         else
@@ -311,7 +330,7 @@ public class Treecapitator
         return leaves;
     }
 
-    private static List<BlockID> getLeavesInDist(World world, Coord pos, int range, boolean shouldLog)
+    private static List<BlockID> getLeavesInDist(World world, BlockPos pos, int range, boolean shouldLog)
     {
         if (shouldLog)
             TCLog.debug("Attempting to identify tree...");
@@ -324,10 +343,10 @@ public class Treecapitator
                 for (int z = -range; z <= range; z++)
                     if ((x != 0) || (y != 0) || (z != 0))
                     {
-                        Coord pos2 = pos.add(new Coord(x, y, z));
+                        BlockPos pos2 = pos.add(new BlockPos(x, y, z));
                         if (!world.isAirBlock(pos2))
                         {
-                            Block block = pos2.getBlock(world);
+                            Block block = world.getBlockState(pos2).getBlock();
                             ModulusBlockID blockID = new ModulusBlockID(world, pos2, 8);
                             if (block.isLeaves(world, pos2))
                             {
@@ -347,7 +366,7 @@ public class Treecapitator
         return leaves;
     }
 
-    private Coord getTopLog(World world, Coord pos)
+    private BlockPos getTopLog(World world, BlockPos pos)
     {
         if (treeDef.useAdvancedTopLogLogic())
             return getTopLog(treeDef.getLogList(), world, pos, true);
@@ -355,30 +374,30 @@ public class Treecapitator
             return getTopLogAtPos(treeDef.getLogList(), world, pos, true);
     }
 
-    private static Coord getTopLog(List<BlockID> logBlocks, World world, Coord pos, boolean shouldLog)
+    private static BlockPos getTopLog(List<BlockID> logBlocks, World world, BlockPos pos, boolean shouldLog)
     {
-        LinkedList<Coord> topLogs = new LinkedList<Coord>();
-        HashSet<Coord> processed = new HashSet<Coord>();
-        Coord topLog = pos.clone();
+        LinkedList<BlockPos> topLogs = new LinkedList<BlockPos>();
+        HashSet<BlockPos> processed = new HashSet<BlockPos>();
+        BlockPos topLog = pos;
 
         topLogs.add(getTopLogAtPos(logBlocks, world, topLog, false));
 
         while (topLogs.size() > 0)
         {
-            Coord nextLog = topLogs.pollFirst();
+            BlockPos nextLog = topLogs.pollFirst();
             processed.add(nextLog);
 
             // if the new pos is higher than what we've seen so far, save it as the new top log
-            if (nextLog.y > topLog.y)
+            if (nextLog.getY() > topLog.getY())
                 topLog = nextLog;
 
             int currentSize = topLogs.size();
-            Coord newPos;
+            BlockPos newPos;
 
             for (int x = -1; x <= 1; x++)
                 for (int z = -1; z <= 1; z++)
                 {
-                    newPos = new Coord(x, 1, z).add(nextLog);
+                    newPos = new BlockPos(x, 1, z).add(nextLog);
                     if (((x != 0) || (z != 0)) && logBlocks.contains(new BlockID(world, newPos))
                             && !topLogs.contains(newPos) && !processed.contains(newPos))
                         topLogs.add(getTopLogAtPos(logBlocks, world, newPos, false));
@@ -390,7 +409,7 @@ public class Treecapitator
                 for (int x = -1; x <= 1; x++)
                     for (int z = -1; z <= 1; z++)
                     {
-                        newPos = new Coord(x, 0, z).add(nextLog);
+                        newPos = new BlockPos(x, 0, z).add(nextLog);
                         if (((x != 0) || (z != 0)) && logBlocks.contains(new BlockID(world, newPos))
                                 && !topLogs.contains(newPos) && !processed.contains(newPos))
                             topLogs.add(getTopLogAtPos(logBlocks, world, newPos, false));
@@ -400,58 +419,58 @@ public class Treecapitator
         }
 
         if (shouldLog)
-            TCLog.debug("Top Log: " + pos.x + ", " + pos.y + ", " + pos.z);
+            TCLog.debug("Top Log: " + pos.toString());
 
         return topLog;
     }
 
-    private static Coord getTopLogAtPos(List<? extends BlockID> logBlocks, World world, Coord pos, boolean shouldLog)
+    private static BlockPos getTopLogAtPos(List<? extends BlockID> logBlocks, World world, BlockPos pos, boolean shouldLog)
     {
         while (logBlocks.contains(new BlockID(world, pos.up())))
-            pos.y++;
+            pos = pos.up();
 
         if (shouldLog)
-            TCLog.debug("Top Log: " + pos.x + ", " + pos.y + ", " + pos.z);
+            TCLog.debug("Top Log: " + pos.toString());
 
-        return pos.clone();
+        return pos;
     }
 
-    private static Coord getBottomLog(List<BlockID> logBlocks, World world, Coord pos, boolean shouldLog)
+    private static BlockPos getBottomLog(List<BlockID> logBlocks, World world, BlockPos pos, boolean shouldLog)
     {
-        LinkedList<Coord> bottomLogs = new LinkedList<Coord>();
-        HashSet<Coord> processed = new HashSet<Coord>();
-        Coord bottomLog = pos.clone();
+        LinkedList<BlockPos> bottomLogs = new LinkedList<BlockPos>();
+        HashSet<BlockPos> processed = new HashSet<BlockPos>();
+        BlockPos bottomLog = pos;
 
         bottomLogs.add(getBottomLogAtPos(logBlocks, world, bottomLog, false));
 
         while (bottomLogs.size() > 0)
         {
-            Coord nextLog = bottomLogs.pollFirst();
+            BlockPos nextLog = bottomLogs.pollFirst();
             processed.add(nextLog);
 
             // if the new pos is lower than what we've seen so far, save it as the new bottom log
-            if (nextLog.y < bottomLog.y)
+            if (nextLog.getY() < bottomLog.getY())
                 bottomLog = nextLog;
 
             int currentSize = bottomLogs.size();
-            Coord newPos;
+            BlockPos newPos;
 
             for (int x = -1; x <= 1; x++)
                 for (int z = -1; z <= 1; z++)
                 {
-                    newPos = new Coord(x, -1, z).add(nextLog);
+                    newPos = new BlockPos(x, -1, z).add(nextLog);
                     if (((x != 0) || (z != 0)) && logBlocks.contains(new BlockID(world, newPos))
                             && !bottomLogs.contains(newPos) && !processed.contains(newPos))
                         bottomLogs.add(getBottomLogAtPos(logBlocks, world, newPos, false));
                 }
 
-            // check if we found anything before adding adjacent coords
+            // check if we found anything before adding adjacent BlockPoss
             if (bottomLogs.size() == currentSize)
             {
                 for (int x = -1; x <= 1; x++)
                     for (int z = -1; z <= 1; z++)
                     {
-                        newPos = new Coord(x, 0, z).add(nextLog);
+                        newPos = new BlockPos(x, 0, z).add(nextLog);
                         if (((x != 0) || (z != 0)) && logBlocks.contains(new BlockID(world, newPos))
                                 && !bottomLogs.contains(newPos) && !processed.contains(newPos))
                             bottomLogs.add(getBottomLogAtPos(logBlocks, world, newPos, false));
@@ -461,23 +480,23 @@ public class Treecapitator
         }
 
         if (shouldLog)
-            TCLog.debug("Bottom Log: " + pos.x + ", " + pos.y + ", " + pos.z);
+            TCLog.debug("Bottom Log: " + pos.toString());
 
         return bottomLog;
     }
 
-    private static Coord getBottomLogAtPos(List<BlockID> logBlocks, World world, Coord pos, boolean shouldLog)
+    private static BlockPos getBottomLogAtPos(List<BlockID> logBlocks, World world, BlockPos pos, boolean shouldLog)
     {
         while (logBlocks.contains(new BlockID(world, pos.down())))
-            pos.y--;
+            pos = pos.down();
 
         if (shouldLog)
-            TCLog.debug("Bottom Log: " + pos.x + ", " + pos.y + ", " + pos.z);
+            TCLog.debug("Bottom Log: " + pos.toString());
 
         return pos;
     }
 
-    private static boolean hasXLeavesInDist(List<BlockID> leafBlocks, World world, Coord pos, int range, int limit, boolean shouldLog)
+    private static boolean hasXLeavesInDist(List<BlockID> leafBlocks, World world, BlockPos pos, int range, int limit, boolean shouldLog)
     {
         if (shouldLog)
             TCLog.debug("Attempting to identify tree...");
@@ -489,7 +508,7 @@ public class Treecapitator
                 for (int z = -range; z <= range; z++)
                     if ((x != 0) || (y != 0) || (z != 0))
                     {
-                        Coord otherPos = new Coord(x, y, z).add(pos);
+                        BlockPos otherPos = new BlockPos(x, y, z).add(pos);
                         BlockID blockID = new BlockID(world, otherPos);
                         if (blockID.isValid())
                             if (isLeafBlock(leafBlocks, blockID))
@@ -511,7 +530,7 @@ public class Treecapitator
         return false;
     }
 
-    private boolean hasXLeavesInDist(World world, Coord pos, int range, int limit)
+    private boolean hasXLeavesInDist(World world, BlockPos pos, int range, int limit)
     {
         return hasXLeavesInDist(treeDef.getLeafList(), world, pos, range, limit, true);
     }
@@ -553,20 +572,21 @@ public class Treecapitator
         return isLeafBlock(treeDef.getLeafList(), blockID);
     }
 
-    private void destroyBlocks(World world, LinkedList<Coord> list)
+    private void destroyBlocks(World world, LinkedList<BlockPos> list)
     {
         destroyBlocksWithChance(world, list, 1.0F, false);
     }
 
-    private void destroyBlocksWithChance(World world, List<Coord> list, float f, boolean canShear)
+    private void destroyBlocksWithChance(World world, List<BlockPos> list, float f, boolean canShear)
     {
         while (list.size() > 0)
         {
-            Coord pos = list.remove(0);
-            Block block = pos.getBlock(world);
+            BlockPos pos = list.remove(0);
+            IBlockState state = world.getBlockState(pos);
+            Block block = state.getBlock();
             if (!block.isAir(world, pos))
             {
-                int metadata = pos.getBlockMetadata(world);
+                int metadata = block.getMetaFromState(state);
 
                 BlockID blockID = new BlockID(block, metadata);
                 if ((block instanceof IShearable) && (((vineID.equals(blockID) && TCSettings.shearVines)
@@ -585,10 +605,10 @@ public class Treecapitator
                                 addDrops(drops);
                             else if (TCSettings.itemsDropInPlace)
                                 for (ItemStack itemStack : drops)
-                                    world.spawnEntityInWorld(new EntityItem(world, pos.x, pos.y, pos.z, itemStack));
+                                    world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), itemStack));
                             else
                                 for (ItemStack itemStack : drops)
-                                    world.spawnEntityInWorld(new EntityItem(world, startPos.x, startPos.y, startPos.z, itemStack));
+                                    world.spawnEntityInWorld(new EntityItem(world, startPos.getX(), startPos.getY(), startPos.getZ(), itemStack));
                         }
 
                         if (TCSettings.allowItemDamage && !player.capabilities.isCreativeMode && (shears != null) && (shears.stackSize > 0))
@@ -606,9 +626,9 @@ public class Treecapitator
                     if (TCSettings.stackDrops)
                         addDrop(block, metadata, pos);
                     else if (TCSettings.itemsDropInPlace)
-                        block.dropBlockAsItem(world, pos, pos.getBlockState(world), EnchantmentHelper.getFortuneModifier(player));
+                        block.dropBlockAsItem(world, pos, world.getBlockState(pos), EnchantmentHelper.getFortuneModifier(player));
                     else
-                        block.dropBlockAsItem(world, startPos, pos.getBlockState(world), EnchantmentHelper.getFortuneModifier(player));
+                        block.dropBlockAsItem(world, startPos, world.getBlockState(pos), EnchantmentHelper.getFortuneModifier(player));
 
                     if (TCSettings.allowItemDamage && !player.capabilities.isCreativeMode && (axe != null) && (axe.stackSize > 0)
                             && !vineID.equals(new BlockID(block, metadata)) && !isLeafBlock(new BlockID(block, metadata)) && !pos.equals(startPos))
@@ -635,12 +655,12 @@ public class Treecapitator
         }
     }
 
-    private void addDrop(Block block, int metadata, Coord pos)
+    private void addDrop(Block block, int metadata, BlockPos pos)
     {
         List<ItemStack> stacks = null;
 
-        dropPos = TCSettings.itemsDropInPlace ? pos.clone() : startPos.clone();
-        IBlockState state = pos.getBlockState(world);
+        dropPos = TCSettings.itemsDropInPlace ? pos : startPos;
+        IBlockState state = world.getBlockState(pos);
 
         if ((block.canSilkHarvest(world, pos, state, player) && EnchantmentHelper.getSilkTouchModifier(player)))
         {
@@ -690,7 +710,7 @@ public class Treecapitator
             {
                 int i = drop.stackSize - drop.getMaxStackSize();
                 drop.stackSize = drop.getMaxStackSize();
-                world.spawnEntityInWorld(new EntityItem(world, dropPos.x, dropPos.y, dropPos.z, drop));
+                world.spawnEntityInWorld(new EntityItem(world, dropPos.getX(), dropPos.getY(), dropPos.getZ(), drop));
                 if (i > 0)
                     drop.stackSize = i;
                 else
@@ -702,7 +722,7 @@ public class Treecapitator
     /**
      * Damages the axe-type item and returns true if we should continue destroying logs
      */
-    private boolean damageAxeAndContinue(World world, Block block, Coord pos)
+    private boolean damageAxeAndContinue(World world, Block block, BlockPos pos)
     {
         if (axe != null)
         {
@@ -722,7 +742,7 @@ public class Treecapitator
     /**
      * Damages the shear-type item and returns true if we should continue shearing leaves/vines
      */
-    private boolean damageShearsAndContinue(World world, Block block, Coord pos)
+    private boolean damageShearsAndContinue(World world, Block block, BlockPos pos)
     {
         if (shears != null)
         {
@@ -744,30 +764,30 @@ public class Treecapitator
         return TCSettings.allowMoreBlocksThanDamage || hasShearsInHotbar(player);
     }
 
-    private LinkedList<Coord> addLogs(World world, Coord pos)
+    private LinkedList<BlockPos> addLogs(World world, BlockPos pos)
     {
-        int index = 0, lowY = pos.y, x, y, z;
-        LinkedList<Coord> list = new LinkedList<Coord>();
-        Coord newPos;
+        int index = 0, lowY = pos.getY(), x, y, z;
+        LinkedList<BlockPos> list = new LinkedList<BlockPos>();
+        BlockPos newPos;
 
         list.add(pos);
 
         do
         {
-            Coord currentLog = list.get(index);
+            BlockPos currentLog = list.get(index);
 
             for (x = -1; x <= 1; x++)
                 for (y = (treeDef.onlyDestroyUpwards() ? 0 : -1); y <= 1; y++)
                     for (z = -1; z <= 1; z++)
                     {
-                        newPos = new Coord(currentLog.x + x, currentLog.y + y, currentLog.z + z);
+                        newPos = currentLog.add(x, y, z);
                         if (!world.isAirBlock(newPos))
                             if (treeDef.getLogList().contains(new BlockID(world, newPos)))
                             {
-                                if ((treeDef.maxHorLogBreakDist() == -1) || (((Math.abs(newPos.x - startPos.x) <= treeDef.maxHorLogBreakDist())
-                                        && (Math.abs(newPos.z - startPos.z) <= treeDef.maxHorLogBreakDist()))
-                                        && ((treeDef.maxVerLogBreakDist() == -1) || (Math.abs(newPos.y - startPos.y) <= treeDef.maxVerLogBreakDist()))
-                                        && !list.contains(newPos) && ((newPos.y >= lowY) || !treeDef.onlyDestroyUpwards())))
+                                if ((treeDef.maxHorLogBreakDist() == -1) || (((Math.abs(newPos.getX() - startPos.getX()) <= treeDef.maxHorLogBreakDist())
+                                        && (Math.abs(newPos.getZ() - startPos.getZ()) <= treeDef.maxHorLogBreakDist()))
+                                        && ((treeDef.maxVerLogBreakDist() == -1) || (Math.abs(newPos.getY() - startPos.getY()) <= treeDef.maxVerLogBreakDist()))
+                                        && !list.contains(newPos) && ((newPos.getY() >= lowY) || !treeDef.onlyDestroyUpwards())))
                                 {
                                     list.add(newPos);
                                     if ((TCSettings.maxNumberOfBlocksInTree != -1) && (++numLogsToBreak > TCSettings.maxNumberOfBlocksInTree))
@@ -789,11 +809,11 @@ public class Treecapitator
         return list;
     }
 
-    private void addLogsAbove(World world, Coord position, List<Coord> listFinal)
+    private void addLogsAbove(World world, BlockPos position, List<BlockPos> listFinal)
     {
-        List<Coord> listAbove = new ArrayList<Coord>();
-        List<Coord> list;
-        Coord newPosition;
+        List<BlockPos> listAbove = new ArrayList<BlockPos>();
+        List<BlockPos> list;
+        BlockPos newPosition;
         int counter, index, x, z;
 
         listAbove.add(position);
@@ -801,15 +821,15 @@ public class Treecapitator
         do
         {
             list = listAbove;
-            listAbove = new ArrayList<Coord>();
+            listAbove = new ArrayList<BlockPos>();
 
-            for (Coord pos : list)
+            for (BlockPos pos : list)
             {
                 counter = 0;
                 for (x = -1; x <= 1; x++)
                     for (z = -1; z <= 1; z++)
                     {
-                        newPosition = new Coord(pos.x + x, pos.y + 1, pos.z + z);
+                        newPosition = pos.add(x, 1, z);
                         if (treeDef.getLogList().contains(new BlockID(world, newPosition)))
                         {
                             if (!listAbove.contains(newPosition))
@@ -826,11 +846,11 @@ public class Treecapitator
             index = -1;
             while (++index < listAbove.size())
             {
-                Coord pos = listAbove.get(index);
+                BlockPos pos = listAbove.get(index);
                 for (x = -1; x <= 1; x++)
                     for (z = -1; z <= 1; z++)
                     {
-                        newPosition = new Coord(pos.x + x, pos.y, pos.z + z);
+                        newPosition = pos.add(x, 0, z);
                         if (treeDef.getLogList().contains(new BlockID(world, newPosition)) && !listAbove.contains(newPosition))
                             listAbove.add(newPosition);
                     }
@@ -839,18 +859,18 @@ public class Treecapitator
         while (listAbove.size() > 0);
     }
 
-    public List<Coord> addLeaves(World world, Coord pos, List<Coord> list)
+    public List<BlockPos> addLeaves(World world, BlockPos pos, List<BlockPos> list)
     {
         int index = -1;
 
         if (list == null)
-            list = new ArrayList<Coord>();
+            list = new ArrayList<BlockPos>();
 
         addLeavesInDistance(world, pos, treeDef.maxHorLeafBreakDist(), list);
 
         while (++index < list.size())
         {
-            Coord pos2 = list.get(index);
+            BlockPos pos2 = list.get(index);
             if ((treeDef.maxHorLeafBreakDist() == -1) || (CommonUtils.getHorSquaredDistance(pos, pos2) <= treeDef.maxHorLeafBreakDist()))
                 addLeavesInDistance(world, pos2, 1, list);
         }
@@ -858,7 +878,7 @@ public class Treecapitator
         return list;
     }
 
-    public void addLeavesInDistance(World world, Coord pos, int range, List<Coord> list)
+    public void addLeavesInDistance(World world, BlockPos pos, int range, List<BlockPos> list)
     {
         if (range == -1)
             range = 4;
@@ -867,12 +887,15 @@ public class Treecapitator
             for (int y = -range; y <= range; y++)
                 for (int z = -range; z <= range; z++)
                 {
-                    Coord newPos = new Coord(x, y, z).add(pos);
-                    Block block = newPos.getBlock(world);
-                    int md = newPos.getBlockMetadata(world);
-                    if (isLeafBlock(new BlockID(block, md)) || (vineID.equals(new BlockID(block))
-                            && (!treeDef.requireLeafDecayCheck() || (((((md & 8) != 0) && ((md & 4) == 0)))
-                            && !list.contains(newPos) && !hasLogClose(world, newPos, 1)))))
+                    BlockPos newPos = pos.add(x, y, z);
+                    if (world.isAirBlock(newPos))
+                        continue;
+                    IBlockState state = world.getBlockState(newPos);
+                    Block block = state.getBlock();
+                    int md = block.getMetaFromState(state);
+                    if ((isLeafBlock(new BlockID(block, md)) || vineID.equals(new BlockID(block)))
+                            && (!treeDef.requireLeafDecayCheck() || (((md & 8) != 0) && ((md & 4) == 0)))
+                            && !list.contains(newPos) && !hasLogClose(world, newPos, 1))
                         list.add(newPos);
                 }
     }
@@ -880,14 +903,14 @@ public class Treecapitator
     /**
      * Returns true if a log block is within i blocks of pos
      */
-    public boolean hasLogClose(World world, Coord pos, int i)
+    public boolean hasLogClose(World world, BlockPos pos, int i)
     {
         for (int x = -i; x <= i; x++)
             for (int y = -i; y <= i; y++)
                 for (int z = -i; z <= i; z++)
                 {
-                    Coord neighborPos = new Coord(x + pos.x, y + pos.y, z + pos.z);
-                    if (((x != 0) || (y != 0) || (z != 0)) && !neighborPos.isAirBlock(world) &&
+                    BlockPos neighborPos = pos.add(x, y, z);
+                    if (((x != 0) || (y != 0) || (z != 0)) && !world.isAirBlock(neighborPos) &&
                             treeDef.getLogList().contains(new BlockID(world, neighborPos))
                             && !neighborPos.equals(startPos))
                         return true;

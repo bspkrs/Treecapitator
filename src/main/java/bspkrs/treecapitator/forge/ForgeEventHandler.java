@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
@@ -20,7 +21,6 @@ import bspkrs.treecapitator.registry.ModConfigRegistry;
 import bspkrs.treecapitator.registry.TreeDefinition;
 import bspkrs.treecapitator.registry.TreeRegistry;
 import bspkrs.treecapitator.util.TCLog;
-import bspkrs.util.Coord;
 import bspkrs.util.ModulusBlockID;
 
 import com.google.common.base.Charsets;
@@ -47,7 +47,7 @@ public class ForgeEventHandler
     public void getPlayerBreakSpeed(BreakSpeed event)
     {
         ModulusBlockID blockID = new ModulusBlockID(event.state, 4);
-        Coord pos = new Coord(event.pos);
+        BlockPos pos = event.pos;
 
         if (TreecapitatorMod.proxy.isEnabled() && (TreeRegistry.instance().isRegistered(blockID)
                 || (TCSettings.allowAutoTreeDetection && TreeRegistry.canAutoDetect(event.entityPlayer.worldObj, event.state.getBlock(), pos)))
@@ -107,7 +107,7 @@ public class ForgeEventHandler
                         && TreeRegistry.canAutoDetect(event.world, event.state.getBlock(), event.pos)))
                         && Treecapitator.isBreakingPossible(event.getPlayer(), event.pos, TCSettings.allowDebugLogging))
                 {
-                    Coord pos = new Coord(event.pos);
+                    BlockPos pos = event.pos;
                     if (TreeRegistry.instance().trackTreeChopEventAt(pos))
                     {
                         TCLog.debug("BlockID " + blockID + " is a log.");

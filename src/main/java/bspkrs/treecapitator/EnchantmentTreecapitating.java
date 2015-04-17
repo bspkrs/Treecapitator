@@ -3,6 +3,7 @@ package bspkrs.treecapitator;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.registry.ToolRegistry;
 
@@ -10,7 +11,7 @@ public class EnchantmentTreecapitating extends Enchantment
 {
     public EnchantmentTreecapitating(int par1, int par2)
     {
-        super(par1, par2, EnumEnchantmentType.DIGGER);
+        super(par1, new ResourceLocation("treecapitating"), par2, EnumEnchantmentType.DIGGER);
     }
 
     @Override

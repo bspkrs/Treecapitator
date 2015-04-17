@@ -1,7 +1,0 @@
-{
-    "repo": "http://bspk.rs/MC/bspkrsCore",
-    "file": "${bscore_jar}",
-    "pattern": "${pattern}",
-    "class": "bspkrs.bspkrscore.fml.bspkrsCoreMod",
-    "version": "${bscore_version}"
-}

@@ -62,18 +62,18 @@ public class ThirdPartyModConfig
     protected ThirdPartyModConfig(String modID)
     {
         this.modID = modID;
-        this.overrideIMC = TCSettings.userConfigOverridesIMC;
-        this.axeList = new ArrayList<ItemID>();
-        this.shearsList = new ArrayList<ItemID>();
-        this.treesMap = new TreeMap<String, TreeDefinition>();
+        overrideIMC = TCSettings.userConfigOverridesIMC;
+        axeList = new ArrayList<ItemID>();
+        shearsList = new ArrayList<ItemID>();
+        treesMap = new TreeMap<String, TreeDefinition>();
     }
 
     public void merge(ThirdPartyModConfig toMerge)
     {
-        if (!this.modID.equals(toMerge.modID))
-            throw new IllegalArgumentException(String.format("Cannot merge ThirdPartyModConfig objects with different modID values! this.modID: %s  toMerge.modID: %s", this.modID, toMerge.modID));
+        if (!modID.equals(toMerge.modID))
+            throw new IllegalArgumentException(String.format("Cannot merge ThirdPartyModConfig objects with different modID values! this.modID: %s  toMerge.modID: %s", modID, toMerge.modID));
 
-        this.overrideIMC = this.overrideIMC || toMerge.overrideIMC;
+        overrideIMC = overrideIMC || toMerge.overrideIMC;
 
         for (ItemID itemID : toMerge.axeList)
             if (!axeList.contains(itemID))
@@ -85,25 +85,26 @@ public class ThirdPartyModConfig
 
         for (Entry<String, TreeDefinition> newEntry : toMerge.treesMap.entrySet())
         {
-            if (this.treesMap.containsKey(newEntry.getKey()))
+            if (treesMap.containsKey(newEntry.getKey()))
             {
-                this.treesMap.get(newEntry.getKey()).appendWithSettings(newEntry.getValue());
+                treesMap.get(newEntry.getKey()).appendWithSettings(newEntry.getValue());
                 continue;
             }
 
-            for (Entry<String, TreeDefinition> entry : this.treesMap.entrySet())
+            for (Entry<String, TreeDefinition> entry : treesMap.entrySet())
                 if (newEntry.getValue().hasCommonLog(entry.getValue()))
                 {
                     entry.getValue().appendWithSettings(newEntry.getValue());
                     continue;
                 }
 
-            this.treesMap.put(newEntry.getKey(), newEntry.getValue());
+            treesMap.put(newEntry.getKey(), newEntry.getValue());
         }
 
         isChanged = true;
     }
 
+    @SuppressWarnings("unchecked")
     public static boolean isValidNBT(NBTTagCompound tpModCfg)
     {
         for (String s : (Set<String>) tpModCfg.getKeySet())
@@ -214,7 +215,7 @@ public class ThirdPartyModConfig
         TreecapitatorMod.proxy.setCategoryConfigEntryClass(config, category);
         config.setCategoryPropertyOrder(category, orderedKeys);
 
-        this.isChanged = false;
+        isChanged = false;
     }
 
     public ThirdPartyModConfig addTreeDef(String key, TreeDefinition tree)
@@ -224,25 +225,25 @@ public class ThirdPartyModConfig
         else
             treesMap.get(key).appendWithSettings(tree);
 
-        this.isChanged = true;
+        isChanged = true;
         return this;
     }
 
     public ThirdPartyModConfig addAxe(ItemID axe)
     {
-        if (!this.axeList.contains(axe))
-            this.axeList.add(axe);
+        if (!axeList.contains(axe))
+            axeList.add(axe);
 
-        this.isChanged = true;
+        isChanged = true;
         return this;
     }
 
     public ThirdPartyModConfig addShears(ItemID shears)
     {
-        if (!this.shearsList.contains(shears))
-            this.shearsList.add(shears);
+        if (!shearsList.contains(shears))
+            shearsList.add(shears);
 
-        this.isChanged = true;
+        isChanged = true;
         return this;
     }
 
@@ -299,5 +300,6 @@ public class ThirdPartyModConfig
         validKeys.add(Reference.AXE_ID_LIST);
         validKeys.add(Reference.SHEARS_ID_LIST);
         validKeys.add(Reference.OVERRIDE_IMC);
+        validKeys.add(Reference.TREES);
     }
 }

@@ -197,6 +197,7 @@ public class TreeDefinition
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     public static boolean isValidNBT(NBTTagCompound treeDefNBT)
     {
         for (String s : (Set<String>) treeDefNBT.getKeySet())
@@ -241,12 +242,12 @@ public class TreeDefinition
         if (treeDefNBT.hasKey(Reference.USE_ADV_TOP_LOG_LOGIC))
             useAdvancedTopLogLogic = treeDefNBT.getBoolean(Reference.USE_ADV_TOP_LOG_LOGIC);
 
-        if (treeDefNBT.hasKey(Reference.LOGS) && treeDefNBT.getString(Reference.LOGS).length() > 0)
+        if (treeDefNBT.hasKey(Reference.LOGS) && (treeDefNBT.getString(Reference.LOGS).length() > 0))
             logBlocks = ListUtils.getDelimitedStringAsBlockIDList(treeDefNBT.getString(Reference.LOGS), ";");
         else
             logBlocks = new ArrayList<BlockID>();
 
-        if (treeDefNBT.hasKey(Reference.LEAVES) && treeDefNBT.getString(Reference.LEAVES).length() > 0)
+        if (treeDefNBT.hasKey(Reference.LEAVES) && (treeDefNBT.getString(Reference.LEAVES).length() > 0))
             leafBlocks = ListUtils.getDelimitedStringAsBlockIDList(treeDefNBT.getString(Reference.LEAVES), ";");
         else
             leafBlocks = new ArrayList<BlockID>();

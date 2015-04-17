@@ -99,6 +99,8 @@ public class Reference
     public static final String USE_ADV_TOP_LOG_LOGIC              = "useAdvancedTopLogLogic";
     public static final String USE_INCREASING_ITEM_DAMAGE         = "useIncreasingItemDamage";
     public static final String USE_STRICT_BLOCK_PAIRING           = "useStrictBlockPairing";
+    //    public static final String USE_TICK_BASED_CHOPPING            = "useTickBasedChopping";
+    //    public static final String BLOCKS_PER_TICK                    = "blocksPerTick";
 
     // IMC Message Key
     public static final String THIRD_PARTY_MOD_CONFIG             = "ThirdPartyModConfig";
@@ -199,6 +201,8 @@ public class Reference
                                                                           "enough leaf blocks are found the structure is considered a tree and is added to the TreeRegistry. Trees will\n" +
                                                                           "also be added to your local config file to allow for tweaking of settings if desired.\n" +
                                                                           "Set to true to enable this feature, false to disable.";
+    //    public static final String useTickBasedChoppingDesc           = "[Global] Set to true to use tick-based chopping (less lag inducing) or false to use the older chopping logic.";
+    //    public static final String blocksPerTickDesc                  = "[Global] The number of blocks per tick to process when useTickBasedChopping == true.";
     public static final String maxLeafIDDistDesc                  = "[Global, PerTree] If a tree's top log is not close enough to leaf blocks, the tree will not be chopped.\n" +
                                                                           "Increasing this value will search further.  I would try to keep it at or below 3.";
     public static final String maxLeafBreakDistDesc               = "[Global, PerTree] The maximum distance to instantly decay leaves from any log block that is removed by Treecapitator.";

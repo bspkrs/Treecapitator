@@ -62,6 +62,10 @@ public final class TCSettings
     public static boolean        useIncreasingItemDamage               = useIncreasingItemDamageDefault;
     private final static boolean useStrictBlockPairingDefault          = true;
     public static boolean        useStrictBlockPairing                 = useStrictBlockPairingDefault;
+    //    private final static boolean useTickBasedChoppingDefault           = true;
+    //    public static boolean        useTickBasedChopping                  = useTickBasedChoppingDefault;
+    //    private final static int     blocksPerTickDefault                  = 640;
+    //    public static int            blocksPerTick                         = blocksPerTickDefault;
 
     // Per-tree
     private final static boolean allowSmartTreeDetectionDefault        = true;
@@ -177,6 +181,8 @@ public final class TCSettings
         useAdvancedTopLogLogic = ntc.getBoolean(Reference.USE_ADV_TOP_LOG_LOGIC);
         useIncreasingItemDamage = ntc.getBoolean(Reference.USE_INCREASING_ITEM_DAMAGE);
         useStrictBlockPairing = ntc.getBoolean(Reference.USE_STRICT_BLOCK_PAIRING);
+        //        useTickBasedChopping = ntc.getBoolean(Reference.USE_TICK_BASED_CHOPPING);
+        //        blocksPerTick = ntc.getInteger(Reference.BLOCKS_PER_TICK);
     }
 
     public void writeToNBT(NBTTagCompound ntc)
@@ -219,6 +225,8 @@ public final class TCSettings
         ntc.setBoolean(Reference.USE_ADV_TOP_LOG_LOGIC, useAdvancedTopLogLogic);
         ntc.setBoolean(Reference.USE_INCREASING_ITEM_DAMAGE, useIncreasingItemDamage);
         ntc.setBoolean(Reference.USE_STRICT_BLOCK_PAIRING, useStrictBlockPairing);
+        //        ntc.setBoolean(Reference.USE_TICK_BASED_CHOPPING, useTickBasedChopping);
+        //        ntc.setInteger(Reference.BLOCKS_PER_TICK, blocksPerTick);
     }
 
     /**
@@ -306,6 +314,12 @@ public final class TCSettings
 
         orderedKeys = new ArrayList<String>();
         // Tree Chop Behavior settings
+        //        useTickBasedChopping = config.getBoolean(Reference.USE_TICK_BASED_CHOPPING, Reference.CTGY_TREE_CHOP_BEHAVIOR,
+        //                useTickBasedChoppingDefault, Reference.useTickBasedChoppingDesc, Reference.LANG_KEY_BASE + Reference.USE_TICK_BASED_CHOPPING);
+        //        orderedKeys.add(Reference.USE_TICK_BASED_CHOPPING);
+        //        blocksPerTick = config.getInt(Reference.BLOCKS_PER_TICK, Reference.CTGY_TREE_CHOP_BEHAVIOR,
+        //                blocksPerTickDefault, 1, 64000, Reference.blocksPerTickDesc, Reference.LANG_KEY_BASE + Reference.BLOCKS_PER_TICK);
+        //        orderedKeys.add(Reference.BLOCKS_PER_TICK);
         allowAutoTreeDetection = config.getBoolean(Reference.ALLOW_AUTO_TREE_DETECT, Reference.CTGY_TREE_CHOP_BEHAVIOR,
                 allowAutoTreeDetectionDefault, Reference.allowAutoTreeDetectionDesc, Reference.LANG_KEY_BASE + Reference.ALLOW_AUTO_TREE_DETECT);
         orderedKeys.add(Reference.ALLOW_AUTO_TREE_DETECT);

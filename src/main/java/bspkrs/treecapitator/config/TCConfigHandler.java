@@ -5,12 +5,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import bspkrs.treecapitator.TreecapitatorMod;
 import bspkrs.treecapitator.registry.ModConfigRegistry;
 import bspkrs.treecapitator.util.Reference;
 import bspkrs.treecapitator.util.TCLog;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class TCConfigHandler
 {
@@ -42,8 +42,7 @@ public class TCConfigHandler
     private TCConfigHandler(File file)
     {
         this();
-        this.fileRef = file;
-        TCLog.info("Loading configuration file %s", file.getAbsolutePath());
+        fileRef = file;
         try
         {
             config = new Configuration(fileRef, Reference.CONFIG_VERSION);
@@ -79,7 +78,7 @@ public class TCConfigHandler
 
     public void setShouldRefreshRegistries(boolean bol)
     {
-        this.shouldRefreshRegistries = bol;
+        shouldRefreshRegistries = bol;
     }
 
     public void syncConfig()
@@ -117,7 +116,7 @@ public class TCConfigHandler
             oldConfig = null;
         }
 
-        if (this.shouldRefreshRegistries)
+        if (shouldRefreshRegistries)
         {
             ModConfigRegistry.instance().applyPrioritizedModConfigs();
             TreecapitatorMod.instance.nbtManager().saveAllCurrentObjectsToLocalNBT();
