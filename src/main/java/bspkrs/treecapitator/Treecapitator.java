@@ -18,6 +18,7 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
+import net.minecraftforge.event.ForgeEventFactory;
 import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.registry.ToolRegistry;
 import bspkrs.treecapitator.registry.TreeDefinition;
@@ -648,6 +649,7 @@ public class Treecapitator
         else
         {
             stacks = block.getDrops(world, pos.x, pos.y, pos.z, metadata, EnchantmentHelper.getFortuneModifier(player));
+            ForgeEventFactory.fireBlockHarvesting((ArrayList<ItemStack>) stacks, world, block, pos.x, pos.y, pos.z, metadata, EnchantmentHelper.getFortuneModifier(player), 1.0f, EnchantmentHelper.getSilkTouchModifier(player), player);
         }
 
         addDrops(stacks);
