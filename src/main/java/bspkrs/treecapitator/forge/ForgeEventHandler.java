@@ -78,8 +78,9 @@ public class ForgeEventHandler
                                 int height = Treecapitator.getTreeHeight(treeDef, event.entityPlayer.worldObj, event.x, event.y, event.z, event.metadata, event.entityPlayer);
                                 if (height > 1)
                                 {
-                                    event.newSpeed = event.originalSpeed / (height * TCSettings.treeHeightModifier);
-                                    TCLog.debug("Old Break Speed: %s", event.originalSpeed);
+                                    float oldSpeed = event.newSpeed;
+                                    event.newSpeed = oldSpeed / (height * TCSettings.treeHeightModifier);
+                                    TCLog.debug("Old Break Speed: %s", oldSpeed);
                                     TCLog.debug("New Break Speed: %s", event.newSpeed);
                                     TCLog.debug("Tree Height    : %d", height);
                                     TCLog.debug("Tree Height Mod: %s", TCSettings.treeHeightModifier);
@@ -87,7 +88,7 @@ public class ForgeEventHandler
                             }
                         }
                         else if (Treecapitator.isBreakingEnabled(event.entityPlayer))
-                            event.newSpeed = event.originalSpeed * treeDef.breakSpeedModifier();
+                            event.newSpeed = event.newSpeed * treeDef.breakSpeedModifier();
                     }
                     else
                         event.newSpeed = 0.0f;
@@ -161,7 +162,7 @@ public class ForgeEventHandler
 
         public CachedBreakSpeed(BreakSpeed event, boolean swappedSneak)
         {
-            super(event.entityPlayer, event.block, event.metadata, event.originalSpeed, event.x, event.y, event.z);
+            super(event.entityPlayer, event.block, event.metadata, event.newSpeed, event.x, event.y, event.z);
             this.isSneaking = event.entityPlayer.isSneaking();
             this.swappedSneak = swappedSneak;
         }
@@ -186,7 +187,7 @@ public class ForgeEventHandler
                             : thisItem == null || thisItem.getItem() == null)
                     && GameData.getBlockRegistry().getNameForObject(bs.block).equals(GameData.getBlockRegistry().getNameForObject(this.block))
                     && bs.isSneaking == this.isSneaking && bs.swappedSneak == this.swappedSneak
-                    && bs.metadata == this.metadata && bs.originalSpeed == this.originalSpeed && bs.x == this.x && bs.y == this.y && bs.z == this.z;
+                    && bs.metadata == this.metadata && bs.newSpeed == this.newSpeed && bs.x == this.x && bs.y == this.y && bs.z == this.z;
         }
 
         @Override
@@ -200,7 +201,7 @@ public class ForgeEventHandler
                     .putBoolean(this.isSneaking)
                     .putBoolean(this.swappedSneak)
                     .putInt(this.metadata)
-                    .putFloat(this.originalSpeed)
+                    .putFloat(this.newSpeed)
                     .putInt(x + z << 8 + y << 16);
 
             if (thisItem != null && thisItem.getItem() != null)
