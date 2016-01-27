@@ -21,7 +21,7 @@ import bspkrs.treecapitator.registry.ModConfigRegistry;
 import bspkrs.treecapitator.registry.TreeDefinition;
 import bspkrs.treecapitator.registry.TreeRegistry;
 import bspkrs.treecapitator.util.TCLog;
-import bspkrs.util.ModulusBlockID;
+import bspkrs.util.BlockID;
 
 import com.google.common.base.Charsets;
 import com.google.common.hash.HashFunction;
@@ -46,7 +46,7 @@ public class ForgeEventHandler
     @SubscribeEvent
     public void getPlayerBreakSpeed(BreakSpeed event)
     {
-        ModulusBlockID blockID = new ModulusBlockID(event.state, 4);
+        BlockID blockID = new BlockID(event.state);
         BlockPos pos = event.pos;
 
         if (TreecapitatorMod.proxy.isEnabled() && (TreeRegistry.instance().isRegistered(blockID)
@@ -101,7 +101,7 @@ public class ForgeEventHandler
         {
             if (TreecapitatorMod.proxy.isEnabled() && !event.world.isRemote)
             {
-                ModulusBlockID blockID = new ModulusBlockID(event.state, 4);
+                BlockID blockID = new BlockID(event.state);
 
                 if ((TreeRegistry.instance().isRegistered(blockID) || (TCSettings.allowAutoTreeDetection
                         && TreeRegistry.canAutoDetect(event.world, event.state.getBlock(), event.pos)))
