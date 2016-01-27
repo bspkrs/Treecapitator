@@ -407,12 +407,13 @@ public class ModConfigRegistry
         //                "", true).setOverrideIMC(false));
 
         defaultModCfgs.put("Thaumcraft", new ThirdPartyModConfig("Thaumcraft")
-                .addAxe(new ItemID("Thaumcraft:ItemAxeThaumium"))
-                .addAxe(new ItemID("Thaumcraft:ItemAxeElemental"))
+                .addAxe(new ItemID("thaumcraft:thaumium_axe"))
+                .addAxe(new ItemID("thaumcraft:void_axe"))
+                .addAxe(new ItemID("thaumcraft:elemental_axe"))
                 .setOverrideIMC(false)
-                .addTreeDef("greatwood", new TreeDefinition().addLogID(new ModulusBlockID("Thaumcraft:blockMagicalLog", 0, 4)).addLeafID(new ModulusBlockID("Thaumcraft:blockMagicalLeaves", 0, 8))
+                .addTreeDef("greatwood", new TreeDefinition().addLogID(new BlockID("thaumcraft:log", 0)).addLogID(new BlockID("thaumcraft:log", 1)).addLogID(new BlockID("thaumcraft:log", 2)).addLeafID(new ModulusBlockID("thaumcraft:leaf", 0, 2))
                         .setMaxHorLeafBreakDist(7).setRequireLeafDecayCheck(false))
-                .addTreeDef("silverwood", new TreeDefinition().addLogID(new ModulusBlockID("Thaumcraft:blockMagicalLog", 1, 4)).addLeafID(new ModulusBlockID("Thaumcraft:blockMagicalLeaves", 1, 8))));
+                .addTreeDef("silverwood", new TreeDefinition().addLogID(new BlockID("thaumcraft:log", 3)).addLogID(new BlockID("thaumcraft:log", 4)).addLogID(new BlockID("thaumcraft:log", 5)).addLeafID(new ModulusBlockID("thaumcraft:leaf", 1, 2))));
 
         defaultModCfgs.put("TConstruct", new ThirdPartyModConfig("TConstruct")
                 .addAxe(new ItemID("TConstruct:hatchet"))

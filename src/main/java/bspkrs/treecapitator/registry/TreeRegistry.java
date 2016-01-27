@@ -256,6 +256,8 @@ public class TreeRegistry
             {
                 String treeKey = logToStringMap.get(blockID);
                 TreeDefinition treeDef = get(logToStringMap.get(blockID));
+                if(!treeKey.equals("vanilla_oak"))
+                    TCLog.debug(treeDef.toString());
 
                 if (treeDef != null)
                 {
@@ -313,7 +315,8 @@ public class TreeRegistry
             //            if (shouldLog)
             //                TCLog.debug("Auto Tree Detection: Block ID %s is a log, but not enough leaves were " +
             //                        "found to identify this structure as a tree. Found %d leaves.", blockID, leaves.size());
-            treeDef = null;
+            // Shhh... No need to be so aggressive...
+            // treeDef = null;
         }
 
         return treeDef;
