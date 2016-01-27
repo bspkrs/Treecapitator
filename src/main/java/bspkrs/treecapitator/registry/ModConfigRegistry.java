@@ -411,9 +411,9 @@ public class ModConfigRegistry
                 .addAxe(new ItemID("thaumcraft:void_axe"))
                 .addAxe(new ItemID("thaumcraft:elemental_axe"))
                 .setOverrideIMC(false)
-                .addTreeDef("greatwood", new TreeDefinition().addLogID(new BlockID("thaumcraft:log", 0)).addLogID(new BlockID("thaumcraft:log", 1)).addLogID(new BlockID("thaumcraft:log", 2)).addLeafID(new BlockID("thaumcraft:leaf", 0))
+                .addTreeDef("greatwood", new TreeDefinition().addLogID(new BlockID("thaumcraft:log", 0)).addLogID(new BlockID("thaumcraft:log", 1)).addLogID(new BlockID("thaumcraft:log", 2)).addLeafID(new ModulusBlockID("thaumcraft:leaf", 0, 2))
                         .setMaxHorLeafBreakDist(7).setRequireLeafDecayCheck(false))
-                .addTreeDef("silverwood", new TreeDefinition().addLogID(new BlockID("thaumcraft:log", 3)).addLogID(new BlockID("thaumcraft:log", 4)).addLogID(new BlockID("thaumcraft:log", 5)).addLeafID(new BlockID("thaumcraft:leaf", 1))));
+                .addTreeDef("silverwood", new TreeDefinition().addLogID(new BlockID("thaumcraft:log", 3)).addLogID(new BlockID("thaumcraft:log", 4)).addLogID(new BlockID("thaumcraft:log", 5)).addLeafID(new ModulusBlockID("thaumcraft:leaf", 1, 2))));
 
         defaultModCfgs.put("TConstruct", new ThirdPartyModConfig("TConstruct")
                 .addAxe(new ItemID("TConstruct:hatchet"))
