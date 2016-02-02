@@ -107,7 +107,7 @@ public class ThirdPartyModConfig
     @SuppressWarnings("unchecked")
     public static boolean isValidNBT(NBTTagCompound tpModCfg)
     {
-        for (String s : (Set<String>) tpModCfg.getKeySet())
+        for (String s : tpModCfg.getKeySet())
             if (!validKeys.contains(s))
                 TCLog.warning("Unknown tag \"%s\" found while verifying a ThirdPartyModConfig NBTTagCompound object", s);
 
@@ -178,7 +178,7 @@ public class ThirdPartyModConfig
     public static ThirdPartyModConfig readFromConfiguration(Configuration config, String category)
     {
         ConfigCategory cc = config.getCategory(category);
-        ThirdPartyModConfig tpmc = new ThirdPartyModConfig(config.get(category, Reference.MOD_ID, Reference.MINECRAFT, (String) null, Property.Type.MOD_ID)
+        ThirdPartyModConfig tpmc = new ThirdPartyModConfig(config.get(category, Reference.MOD_ID, Reference.MINECRAFT, null, Property.Type.MOD_ID)
                 .setLanguageKey("bspkrs.tc.configgui." + Reference.MOD_ID).getString());
         if (cc.containsKey(Reference.AXE_ID_LIST))
             for (ItemID itemID : ListUtils.getDelimitedStringAsItemIDList(cc.get(Reference.AXE_ID_LIST).setLanguageKey("bspkrs.tc.configgui." + Reference.AXE_ID_LIST).getString(), ";"))
@@ -201,7 +201,7 @@ public class ThirdPartyModConfig
 
     public void writeToConfiguration(Configuration config, String category)
     {
-        config.get(category, Reference.MOD_ID, modID, (String) null, Property.Type.MOD_ID).setLanguageKey("bspkrs.tc.configgui." + Reference.MOD_ID);
+        config.get(category, Reference.MOD_ID, modID, null, Property.Type.MOD_ID).setLanguageKey("bspkrs.tc.configgui." + Reference.MOD_ID);
         config.get(category, Reference.AXE_ID_LIST, ListUtils.getListAsDelimitedString(axeList, "; ")).setLanguageKey("bspkrs.tc.configgui." + Reference.AXE_ID_LIST);
         config.get(category, Reference.SHEARS_ID_LIST, ListUtils.getListAsDelimitedString(shearsList, "; ")).setLanguageKey("bspkrs.tc.configgui." + Reference.SHEARS_ID_LIST);
         config.getBoolean(Reference.OVERRIDE_IMC, category, overrideIMC, Reference.overrideIMCDesc, "bspkrs.tc.configgui." + Reference.OVERRIDE_IMC);

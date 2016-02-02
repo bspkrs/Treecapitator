@@ -10,7 +10,7 @@ import bspkrs.treecapitator.network.TCMessageToMessageCodec;
 import bspkrs.treecapitator.network.TCPacketConfig;
 import bspkrs.treecapitator.network.TCPacketLogin;
 import bspkrs.treecapitator.util.TCLog;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -28,7 +28,7 @@ public class CommonProxy
         networkChannel = NetworkRegistry.INSTANCE.newChannel(TreecapitatorMod.metadata.modId, new TCMessageToMessageCodec(),
                 new LoginPacketHandler(), new ConfigPacketHandler());
 
-        FMLCommonHandler.instance().bus().register(this);
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     public boolean isEnabled()

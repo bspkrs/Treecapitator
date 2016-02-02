@@ -1,56 +1,51 @@
 buildscript {
     repositories {
         mavenCentral()
+        jcenter()
         maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
+            name = 'forge'
+            url = 'http://files.minecraftforge.net/maven'
         }
         maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+            name = 'sonatype'
+            url = 'https://oss.sonatype.org/content/repositories/snapshots/'
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+        classpath 'com.matthewprenger:CurseGradle:1.0-SNAPSHOT'
     }
 }
 
-apply plugin: "forge"
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'com.matthewprenger.cursegradle'
 
-// define the properties file
-ext.configFile = file "build.properties"
-
-configFile.withReader {
-    // read config.  it shall from now on be referenced as simply config or as project.config
-    def prop = new Properties()
-    prop.load(it)
-    project.ext.config = new ConfigSlurper().parse prop
-}
+compileJava.options.encoding = 'UTF-8'
 
 repositories {
     ivy {
-        url "http://bspk.rs/MC"
-        layout "pattern", {
-            artifact "[module]/deobf/%5B${config.minecraft_version}%5D[module]-deobf-[revision].[ext]"
-            artifact "[module]/deobf/[${config.minecraft_version}][module]-deobf-[revision].[ext]"
+        url 'http://bspk.rs/MC'
+        layout 'pattern', {
+            artifact "[module]/%5B${project.minecraft_version}%5D[module]-universal-[revision].[ext]"
+            artifact "[module]/[${project.minecraft_version}][module]-universal-[revision].[ext]"
         }
     }
 }
 
 dependencies {
-    compile name: 'bspkrsCore', version: "${config.bscore_version}", ext: 'jar'
+    deobfCompile name: 'bspkrsCore', version: project.bscore_version, ext: 'jar'
 }
 
-group = config.group_name
-version = config.mod_version
-archivesBaseName = "[${config.minecraft_version}]${config.mod_id}"
+group = project.group_name
+version = project.mod_version
+archivesBaseName = "[${project.minecraft_version}]${project.mod_id}"
 
 minecraft {
-    version = config.minecraft_version + "-" + config.forge_version // grab latest forge
-    mappings = config.mappings_version
-    runDir = "run"
-    replace '@MOD_VERSION@', version
-    replace '@BSCORE_VERSION@', config.bscore_version
+    version = project.minecraft_version + '-' + project.forge_version // grab latest forge
+    mappings = project.mappings_version
+    runDir = 'run'
+    replace '@MOD_VERSION@', project.mod_version
+    replace '@BSCORE_VERSION@', project.bscore_version
 }
 
 processResources {
@@ -62,15 +57,13 @@ processResources {
         // replaces
         expand ([
             'mod_version': version,
-            'bscore_version': config.bscore_version,
-            'bscore_jar': "[${config.minecraft_version}]bspkrsCore-universal-${config.bscore_version}.jar",
-            'pattern': "\\\\[.+?\\\\](\\\\w+).*?([\\\\d\\\\.]+)[-\\\\w]*\\\\.[^\\\\d]+",
-            'forge_version': config.forge_version,
-            'minecraft_version': config.minecraft_version
+            'bscore_version': project.bscore_version,
+            'forge_version': project.forge_version,
+            'minecraft_version': project.minecraft_version
         ])
     }
 
-    // copy everything else, thats we didnt do before
+    // copy everything else that we didnt do before
     from(sourceSets.main.resources.srcDirs) {
         exclude '**/*.info'
         exclude '**/*.properties'
@@ -79,22 +72,33 @@ processResources {
 
 // change the name of my obfuscated jar
 jar {
-    appendix = config.appendix
+    appendix = project.appendix
 }
 
-// add a source jar
-task sourceJar(type: Jar) {
-    from sourceSets.main.allSource
+sourceJar {
     appendix = 'src'
-}
-
-// because the normal output has been made to be obfuscated
-task deobfJar(type: Jar) {
-    from sourceSets.main.output
-    appendix = 'deobf'
+    classifier = ''
 }
 
 artifacts {
     archives sourceJar
-    archives deobfJar
+}
+
+if (project.hasProperty('api_key_curse') && project.hasProperty('extra_curse_id')) {
+    tasks.curseforge.dependsOn signJars
+    curseforge {
+        apiKey = project.api_key_curse
+
+        project {
+            id = project.extra_curse_id
+            changelog = ''
+            releaseType = project.hasProperty('extra_curse_releasetype') ? project.extra_curse_releasetype : 'release'
+
+            addArtifact sourceJar
+
+            relations {
+                requiredLibrary 'bspkrscore'
+            }
+        }
+    }
 }

@@ -2,8 +2,6 @@ package bspkrs.treecapitator;
 
 import java.io.File;
 
-import net.minecraftforge.common.MinecraftForge;
-import bspkrs.bspkrscore.fml.bspkrsCoreMod;
 import bspkrs.treecapitator.config.TCConfigHandler;
 import bspkrs.treecapitator.config.TCSettings;
 import bspkrs.treecapitator.forge.ForgeEventHandler;
@@ -14,8 +12,7 @@ import bspkrs.treecapitator.util.Reference;
 import bspkrs.treecapitator.util.TCLog;
 import bspkrs.util.CommonUtils;
 import bspkrs.util.Const;
-import bspkrs.util.ModVersionChecker;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -29,13 +26,9 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(modid = Reference.MODID, name = Reference.NAME, version = "@MOD_VERSION@", dependencies = "required-after:bspkrsCore@[@BSCORE_VERSION@,)",
-        useMetadata = true, guiFactory = Reference.GUI_FACTORY)
+        useMetadata = true, guiFactory = Reference.GUI_FACTORY, updateJSON = Const.VERSION_URL_BASE + Reference.MODID + Const.VERSION_URL_EXT)
 public class TreecapitatorMod
 {
-    public static ModVersionChecker versionChecker;
-    private final String            versionURL = Const.VERSION_URL + "/Minecraft/" + Const.MCVERSION + "/treecapitator.version";
-    private final String            mcfTopic   = "http://www.minecraftforum.net/topic/1009577-";
-
     private RegistryNBTManager      nbtManager;
 
     @Metadata(value = Reference.MODID)
@@ -50,8 +43,6 @@ public class TreecapitatorMod
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-        metadata = event.getModMetadata();
-
         File file = event.getSuggestedConfigurationFile();
 
         if (!CommonUtils.isObfuscatedEnv())
@@ -81,14 +72,8 @@ public class TreecapitatorMod
     public void init(FMLInitializationEvent event)
     {
         MinecraftForge.EVENT_BUS.register(new ForgeEventHandler());
-        FMLCommonHandler.instance().bus().register(TCConfigHandler.instance());
+        MinecraftForge.EVENT_BUS.register(TCConfigHandler.instance());
         proxy.init(event);
-
-        if (bspkrsCoreMod.instance.allowUpdateCheck)
-        {
-            versionChecker = new ModVersionChecker(metadata.name, metadata.version, versionURL, mcfTopic);
-            versionChecker.checkVersionWithLogging();
-        }
     }
 
     @EventHandler

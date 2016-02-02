@@ -1,8 +1,23 @@
-/.settings/
-/bin/
-/release/
-/build/
-/.gradle/
-/run/
-.project
-.classpath
+## gradle
+/.gradle
+/build
+
+## ForgeGradle
+/run
+
+## eclipse
+/.settings
+/.metadata
+/.classpath
+/.project
+/bin
+
+## intellij
+/out
+/.idea
+/*.iml
+/*.ipr
+/*.iws
+
+## custom
+/release
