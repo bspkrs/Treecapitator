@@ -77,11 +77,11 @@ public class ForgeEventHandler
                             {
                                 int height = Treecapitator.getTreeHeight(treeDef, event.entityPlayer.worldObj, pos, event.entityPlayer);
                                 if (height > 1)
-                                    event.newSpeed = event.originalSpeed / (height * TCSettings.treeHeightModifier);
+                                    event.newSpeed = event.newSpeed / (height * TCSettings.treeHeightModifier);
                             }
                         }
                         else if (Treecapitator.isBreakingEnabled(event.entityPlayer))
-                            event.newSpeed = event.originalSpeed * treeDef.breakSpeedModifier();
+                            event.newSpeed = event.newSpeed * treeDef.breakSpeedModifier();
                     }
                     else
                         event.newSpeed = 0.0f;
@@ -156,7 +156,7 @@ public class ForgeEventHandler
 
         public CachedBreakSpeed(BreakSpeed event, boolean swappedSneak)
         {
-            super(event.entityPlayer, event.state, event.originalSpeed, event.pos);
+            super(event.entityPlayer, event.state, event.newSpeed, event.pos);
             isSneaking = event.entityPlayer.isSneaking();
             this.swappedSneak = swappedSneak;
         }
@@ -175,14 +175,10 @@ public class ForgeEventHandler
             ItemStack oItem = bs.entityPlayer.getCurrentEquippedItem();
             ItemStack thisItem = entityPlayer.getCurrentEquippedItem();
 
-            return bs.entityPlayer.getGameProfile().getName().equals(entityPlayer.getGameProfile().getName())
-                    && ((oItem != null) && (oItem.getItem() != null) ? ((thisItem != null) && (thisItem.getItem() != null)
-                            ? GameData.getItemRegistry().getNameForObject(thisItem.getItem()).equals(GameData.getItemRegistry().getNameForObject(oItem.getItem())) : false)
-                            : (thisItem == null) || (thisItem.getItem() == null))
-                    && GameData.getBlockRegistry().getNameForObject(bs.state.getBlock()).equals(GameData.getBlockRegistry().getNameForObject(state.getBlock()))
+            return  bs.entityPlayer.getGameProfile().getName().equals(entityPlayer.getGameProfile().getName())
+                    && (bs.state == state) && ItemStack.areItemsEqual(oItem, thisItem)
                     && (bs.isSneaking == isSneaking) && (bs.swappedSneak == swappedSneak)
-                    && (bs.state.getBlock().getMetaFromState(bs.state) == state.getBlock().getMetaFromState(state))
-                    && (bs.originalSpeed == originalSpeed) && (bs.pos.equals(pos));
+                    && (bs.newSpeed == newSpeed) && (bs.pos.equals(pos));
         }
 
         @Override
@@ -196,7 +192,7 @@ public class ForgeEventHandler
                     .putBoolean(isSneaking)
                     .putBoolean(swappedSneak)
                     .putInt(state.getBlock().getMetaFromState(state))
-                    .putFloat(originalSpeed)
+                    .putFloat(newSpeed)
                     .putInt(pos.hashCode());
 
             if ((thisItem != null) && (thisItem.getItem() != null))

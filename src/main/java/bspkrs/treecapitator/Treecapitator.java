@@ -759,7 +759,7 @@ public class Treecapitator
             currentShearsDamage -= Math.floor(currentShearsDamage);
 
             if ((shears != null) && (shears.stackSize < 1) && (shearsIndex != -1))
-                player.inventory.setInventorySlotContents(shearsIndex, (ItemStack) null);
+                player.inventory.setInventorySlotContents(shearsIndex, null);
         }
         return TCSettings.allowMoreBlocksThanDamage || hasShearsInHotbar(player);
     }
